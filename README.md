@@ -96,7 +96,7 @@ Tier-2 and tier-3 companies are **generated**, with names drawn from a fictional
 engine/     the model — graph, stress, contagion, criticality, ranking,
             intervention, disruption, plus mockgen and the CSV transform
 api/        FastAPI, four endpoints, stateless
-web/        React frontend (scaffold — see Status)
+web/        React + TypeScript frontend, force-directed graph
 data/       mock network, demo fixture, real collection CSVs
 tests/      85 tests across all three tracks
 ```
@@ -138,9 +138,11 @@ diff run1.json run2.json && echo DETERMINISTIC
 
 ## Status
 
-Engine, API and data pipeline are complete and tested end to end. 85 tests, lint clean, determinism verified for scoring, mock generation and the CSV transform.
+Engine, API, data pipeline and frontend are integrated on `main` and tested end to end. 85 Python tests plus the web suite, lint clean, determinism verified for scoring, mock generation and the CSV transform.
 
-**The frontend is still a scaffold.** `web/src/App.jsx` renders the ranked list from committed mocks and proves the seam works, but the network graph and the cascade animation — the things that actually sell this — are not built. The API already serves everything they need, including `summary.anchor_disruption` for the closing beat.
+The UI is TypeScript + React with a force-directed network graph, ranked list, intervention card and the anchor counterfactual. It runs against committed mocks with the backend switched off (`npm run dev`) or against the live API (`npm run dev:live`), and both return identical figures.
+
+**What is not finished:** `handleRunCascade` is still a timed animation rather than a call to `/api/simulate`, so the cascade is staged rather than driven by the engine. The scores it animates are real; the propagation you watch is not yet live.
 
 ---
 
