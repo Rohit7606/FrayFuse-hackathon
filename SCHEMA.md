@@ -280,7 +280,12 @@ One entry per node — **every** node, including unstressed ones.
   ],
   "intervention_cost_cr": 4.80,
   "estimated_exposure_cr": 61.40,
-  "propagation_depth": 2
+  "propagation_depth": 2,
+  "halt_risk": 0.5132,
+  "supply_disruption": 0.2514,
+  "disruption_band": "critical",
+  "disrupted_inflow_cr": 4.68,
+  "disruption_reason": "Precision Polymer Works Pvt Ltd is at risk of halting polymer compound deliveries — sole source, nothing else to buy it from. ₹4.68 cr of inbound supply at risk."
 }
 ```
 
@@ -298,6 +303,15 @@ One entry per node — **every** node, including unstressed ones.
 | `intervention_cost_cr` | float | Money needed to stabilise this supplier |
 | `estimated_exposure_cr` | float | Value at risk if this supplier fails |
 | `propagation_depth` | integer | Hops from the nearest originating stress node. `0` if self-stressed |
+| `halt_risk` | float 0–1 | Chance this node stops delivering — no cash, or no parts |
+| `supply_disruption` | float 0–1 | Chance this node's own line stops for want of an input it cannot replace |
+| `disruption_band` | enum | Same four values as `risk_band`, **separate thresholds** — §4.4 |
+| `disrupted_inflow_cr` | float | Expected inbound trade value that fails to arrive |
+| `disruption_reason` | string | **Mandatory, never empty.** Template-generated, deterministic |
+
+The last five are the **supply-disruption layer**, added in 1.2. They are a
+second propagation running in the opposite direction to the first, and they do
+not enter `final_score`, `risk_band` or `ranking` — those are unchanged.
 
 ### 4.2 How the numbers are produced
 
@@ -313,6 +327,16 @@ The second is weighted more heavily because it cannot be window-dressed.
 **Inherited stress** propagates from buyers to suppliers, scaled by `exposure_pct` and damped by the supplier's `cash_buffer_days`, iterating until convergence.
 
 **Criticality** blends normalised betweenness centrality, the single-source flag, and the node's share of total network flow.
+
+**Supply disruption** runs the other way — supplier to buyer, following the parts rather than
+the money. A node's halt risk is seeded by the part of its fragility it did *not* generate
+itself (`fragility − own_stress`), because a company stretching its own payables is conserving
+cash rather than stopping its line. Buyers combine their suppliers' halt risks by noisy-OR
+weighted by replaceability, so a confirmed sole source counts fully regardless of what the part
+costs. Full specification in `docs/PERSON_A.md` §3.8.
+
+> **In one sentence:** stress flows down the chain as invoices that were never paid; failure
+> flows back up it as parts that never arrived.
 
 ### 4.3 `ranking`
 
@@ -342,9 +366,18 @@ trigger and is absent from `ranking`.
   "total_intervention_cost_cr": 14.20,
   "total_estimated_exposure_cr": 189.60,
   "max_propagation_depth": 3,
-  "iterations_to_converge": 4
+  "iterations_to_converge": 4,
+  "disruption_iterations_to_converge": 4,
+  "anchor_disruption": [
+    { "node_id": "N001", "supply_disruption": 0.1076, "disruption_band": "high", "disrupted_inflow_cr": 848.96, "stopped_by": "N007" }
+  ]
 }
 ```
+
+`anchor_disruption` lists every tier-0 node, worst first, ties by `node_id`. It exists so the UI
+can drive `DEMO_SCENARIO.md` §6 without scanning four hundred score objects for the three
+anchors. `stopped_by` is the supplier contributing most of that anchor's disruption, or `null`
+where none does.
 
 **Risk band thresholds** — defined once, in `engine/config.py`:
 
@@ -361,6 +394,12 @@ original thresholds assumed — the whole non-origin population fits under 0.21.
 deep-tier supplier banded `stable`, including the sole-source chokepoint the demo is built
 around. **These are a calibration to an observed distribution, not a measured threshold for
 corporate distress.** What carries meaning is the ordering and the separation between bands.
+
+**Disruption band thresholds** are separate constants (`DISRUPTION_BAND_*`) and currently hold
+the same values. That is an observation about the two distributions, not a shortcut — and they
+are free to diverge. They are deliberately **not** calibrated to put the demo's anchor in the
+top band: at these thresholds `N001` bands `high` at baseline and drops to `watch` once `N042`
+is funded.
 
 ---
 
@@ -515,3 +554,4 @@ Five CSVs land in `data/real/`:
 |---|---|
 | 1.0 | Initial contract. Edge fields named `supplier_id`/`buyer_id` rather than `from`/`to`. MSMED flow figure designated primary signal. `has_not_due_column` added as a required comparability flag |
 | 1.1 | Carries the comparability flags the collection workstream measured: `ageing_basis`, `msme_book_material`, `series_break`, `liquidity_quality` on stress signals; `confidence`, `edge_provenance` and a nullable `is_single_source` on edges; `observation_completeness` on nodes. Risk-band thresholds recalibrated to the score distribution the engine actually produces (§4.4). Stressed origins excluded from `ranking` (§4.3). This entry also records the version bump that `schema.json` had already taken but which was never written up here — agreed with Person B and Person C |
+| 1.2 | **Supply-disruption layer.** Adds `halt_risk`, `supply_disruption`, `disruption_band`, `disrupted_inflow_cr` and `disruption_reason` to `Score`, and `anchor_disruption` plus `disruption_iterations_to_converge` to `Summary`. Purely additive and **output-only** — `NetworkInput` is untouched, so no data file's `meta.schema_version` moves and `mockgen`/`transform` are unchanged. `final_score`, `risk_band` and `ranking` are unchanged; nothing that was correct before returns a different number. Closes the `DEMO_SCENARIO.md` §6 counterfactual, which payment-stress propagation structurally could not reach. Needs Person B and Person C review |

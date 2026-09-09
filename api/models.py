@@ -138,6 +138,13 @@ class Score(BaseModel):
     estimated_exposure_cr: float
     propagation_depth: int
     rank: int | None = None
+    # Supply-disruption layer, schema 1.2. The second propagation, running with
+    # goods flow: whose line stops when a supplier stops delivering.
+    halt_risk: Annotated[float, Field(ge=0.0, le=1.0)]
+    supply_disruption: Annotated[float, Field(ge=0.0, le=1.0)]
+    disruption_band: RiskBand
+    disrupted_inflow_cr: Annotated[float, Field(ge=0.0)]
+    disruption_reason: str
 
 
 class BandCounts(BaseModel):
@@ -147,6 +154,22 @@ class BandCounts(BaseModel):
     high: Annotated[int, Field(ge=0)]
     watch: Annotated[int, Field(ge=0)]
     stable: Annotated[int, Field(ge=0)]
+
+
+class AnchorDisruption(BaseModel):
+    """One tier-0 anchor's supply-disruption state, lifted out for the UI.
+
+    DEMO_SCENARIO.md §6's closing beat reads these rather than scanning four
+    hundred score objects for the three anchors.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    node_id: NodeId
+    supply_disruption: Annotated[float, Field(ge=0.0, le=1.0)]
+    disruption_band: RiskBand
+    disrupted_inflow_cr: Annotated[float, Field(ge=0.0)]
+    stopped_by: NodeId | None = None
 
 
 class Summary(BaseModel):
@@ -160,6 +183,8 @@ class Summary(BaseModel):
     iterations_to_converge: int
     stressed_origin_nodes: list[str] | None = None
     max_propagation_depth: int | None = None
+    anchor_disruption: list[AnchorDisruption] = Field(default_factory=list)
+    disruption_iterations_to_converge: int | None = None
 
 
 class ScoredNetwork(BaseModel):

@@ -131,7 +131,7 @@ def propagate(
                     1.0, own_stress.get(supplier_id, 0.0) + received
                 )
 
-        delta = max(abs(next_fragility[n] - fragility[n]) for n in node_ids)
+        delta = max((abs(next_fragility[n] - fragility[n]) for n in node_ids), default=0.0)
         fragility, inherited, top_contributor = next_fragility, next_inherited, next_top
 
         if delta < config.CONVERGENCE_THRESHOLD:

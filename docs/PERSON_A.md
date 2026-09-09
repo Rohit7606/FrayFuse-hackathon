@@ -25,6 +25,7 @@ You own the entire intelligence layer:
 - Criticality — betweenness and single-source
 - Final ranking and reason generation
 - Intervention cost, exposure, and counterfactual scoring
+- Supply disruption — the second propagation, which is what makes the counterfactual reach the anchor
 - **The mock data generator** — everyone's day-one dependency
 - **The CSV → `network.json` transform** — the handoff when the real dataset lands
 
@@ -363,6 +364,65 @@ inherited_stress_after = inherited_stress × (1 − coverage)
 
 Then re-run propagation from scratch with that node's stress pinned. Do not patch scores in place — a full re-run is what makes downstream improvements appear, which is the whole point of step 7.
 
+### 3.8 Supply disruption — `engine/disruption.py`
+
+**A second propagation, running WITH goods flow.** Added in schema 1.2 to close the
+`DEMO_SCENARIO.md` §6 counterfactual, which §3.3 structurally cannot reach: the anchor is the
+top buyer, so no payment stress propagates into it and its fragility is `0.0` by construction.
+
+    contagion:   buyer -> supplier   (money that failed to arrive)
+    disruption:  supplier -> buyer   (parts that failed to arrive)
+
+**The seed is the decision that matters.** `own_stress` measures *payment behaviour*. A company
+stretching its payables is conserving cash, not stopping its line — it is exporting the problem
+downstream rather than absorbing it. Seeding halt risk from `own_stress` would say the visible
+tier-1 is the one about to stop, which is the belief this product exists to correct. So:
+
+```
+seed(n) = max(0.0, fragility(n) - own_stress(n))     # money owed that never arrived
+```
+
+For a funded node this is the *relieved* inherited stress, because `intervention.py` pins
+fragility to `own_stress + relieved`. **Do not seed from the reported `inherited_stress`** — the
+pin does not appear there, so the intervention would change nothing downstream, which is the
+whole demo beat. This bit me once; it is the easiest thing here to get subtly wrong.
+
+**Replaceability, not rupee value.**
+
+```
+supply_impact(s -> b) = 1.0                        if is_single_source is True
+                      = annual_value(s,b) / inbound_value(b)   otherwise
+```
+
+A confirmed sole source counts fully whatever the part costs — a ₹19 cr seal kit stops a
+₹1,241 cr brake assembly. Same insight as §3.4's within-tier normalisation: size is not
+importance. `is_single_source` of `None` takes the fallback, which implicitly assumes the part
+is replaceable — a real limitation on real data, where all 37 edges are `null`. Say so.
+
+**Noisy-OR, not a sum.** A line stops if *any* input it cannot replace stops:
+
+```
+disruption(b) = 1 - Π over suppliers s of (1 - halt(s) * supply_impact(s,b))
+halt(n)       = 1 - (1 - seed(n)) * (1 - disruption(n))
+```
+
+Two independent reasons to stop delivering: no cash, or no parts. Bounded in [0,1] by
+construction, so it needs no cap and no damping constant, and it converges on cycles because the
+iteration is monotone increasing and bounded. Summing instead would let forty mildly-wobbly
+suppliers halt a healthy plant.
+
+Synchronous update over sorted node ids, exactly as §3.3. `disrupted_inflow_cr` uses
+`halt(s) × annual_value(s,b)` with **no** impact weight — the weight answers "does the line
+stop", the money answers "how much trade fails to arrive", and they take different weights on
+purpose.
+
+**Bands** are their own constants (`DISRUPTION_BAND_*`), currently equal to the risk bands.
+They are deliberately not calibrated to put the demo's anchor in the top band — see
+`config.py`.
+
+**One sentence, out loud:** stress flows down the chain as invoices that were never paid;
+failure flows back up it as parts that never arrived.
+
 ---
 
 ## 4. Mock data generator — `engine/mockgen.py`
@@ -430,6 +490,11 @@ Two things that will silently corrupt the model if you get them wrong:
 | `test_null_vs_zero` | A `null` stress input and a `0.0` input produce different behaviour |
 | `test_intervention_monotonic` | Funding a node never *increases* fragility anywhere |
 | `test_no_input_mutation` | The input dict is unchanged after `score_network` |
+| `test_own_payment_stress_does_not_seed_a_halt` | A node stressed only by its own disclosures has halt risk entirely from *its* suppliers |
+| `test_disruption_reaches_the_anchor` | The tier-0 anchor carries non-zero `supply_disruption` despite fragility 0.0 |
+| `test_intervention_reduces_anchor_disruption` | Funding `N042` drains supply risk out of `N001` — `DEMO_SCENARIO.md` §6 |
+| `test_intervention_never_worsens_disruption` | Funding never raises `supply_disruption` anywhere |
+| `test_disruption_converges_on_a_cycle` | Noisy-OR settles on a cycle rather than ratcheting to 1.0 |
 
 `test_demo_scenario` is your safety net. If a tuning change breaks it, that is the system working — retune, or update the fixture deliberately with both others named on the PR.
 
@@ -461,7 +526,9 @@ Two things that will silently corrupt the model if you get them wrong:
 
 **Phase 4 — Hardening**
 - Edge cases, error messages, `config.py` comments
-- Be able to explain the propagation rule in one sentence, out loud
+- Be able to explain the propagation rule in one sentence, out loud:
+  *stress flows down the chain as invoices that were never paid; failure flows back up it as
+  parts that never arrived*
 
 ---
 

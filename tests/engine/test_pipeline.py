@@ -342,3 +342,20 @@ def test_demo_intervention_bands(network, demo):
     by_id = {s["node_id"]: s for s in result["scores"]}
     for node_id, expected_band in demo["expected_after_bands"].items():
         assert by_id[node_id]["risk_band"] == expected_band, node_id
+
+
+def test_empty_network_scores_rather_than_raising(network):
+    """A network with no nodes must score to an empty result, not blow up.
+
+    Both propagation loops take max() over the per-node deltas to test for
+    convergence, and max() of an empty sequence raises.  An operator who points
+    FRAYFUSE_NETWORK at an empty file should get an empty ranked list, not a
+    500 from the middle of the engine.
+    """
+    empty = {"meta": network["meta"], "nodes": [], "edges": [], "stress_signals": []}
+    result = score_network(empty)
+
+    assert result["summary"]["total_nodes"] == 0
+    assert result["ranking"] == []
+    assert result["summary"]["anchor_disruption"] == []
+    assert result["scores"] == []

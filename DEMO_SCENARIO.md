@@ -110,8 +110,16 @@ the ranked list answers "which suppliers are in trouble that you could not alrea
 N118 clears completely rather than easing to `watch`: its only stress path runs through
 N042, so fully covering N042 leaves nothing to inherit.
 
-**The line that lands:** ₹2.04 crore of early payment removes ₹278 crore of exposure. Well
-over 100× return. It should be visible on screen without being narrated.
+**At the anchor** (§6, the supply-disruption layer):
+
+| Metric | Baseline | After |
+|---|---|---|
+| `N001` supply disruption | 0.1076 (`high`) | 0.0392 (`watch`) |
+| `N001` inbound supply at risk | ₹848.96 cr | ₹308.36 cr |
+
+**The line that lands:** ₹2.04 crore of early payment removes ₹278 crore of exposure and
+₹540 crore of at-risk supply at the anchor. Well over 100× return. It should be visible on
+screen without being narrated.
 
 ---
 
@@ -128,30 +136,57 @@ The anchor going red is the emotional beat. It is also the honest one: the compa
 
 Do not over-narrate this. Let the graph do it.
 
-### ⚠ Not yet implemented — the engine cannot turn the anchor red
+### How the engine produces it
 
-This beat needs a mechanism the contagion model does not have, and it is the last real gap
-in the demo. Two independent reasons, both structural:
+`engine/disruption.py` — a **second propagation, running with goods flow**, added in schema 1.2.
+The payment-stress model alone can never reach the anchor: `N001` is the top buyer, so nothing
+propagates *into* it and its fragility is `0.0` by construction. What reaches it is its supplier
+failing to deliver, which is a different mechanism travelling the other way.
 
-1. **Stress only flows buyer → supplier.** `N001` is the top buyer, so nothing propagates
-   *into* it. Its fragility is 0.0 by construction. What this beat describes is the
-   opposite direction — a supplier failing and halting its buyer's line — which is
-   **supply disruption**, not payment stress. It is a second, distinct propagation.
-2. **A tier-0 anchor cannot score above zero on criticality.** It has no outgoing edges, so
-   betweenness and flow share are both 0 and `is_single_source` is unknown. `criticality`
-   is therefore 0.0, `final_score` is 0.0, and the band is permanently `stable`.
+    contagion:   buyer -> supplier   (money that failed to arrive)
+    disruption:  supplier -> buyer   (parts that failed to arrive)
 
-Neither is a bug. Both follow correctly from `PERSON_A.md` §3.3 and §3.4 as written.
-Closing it means adding a downstream disruption pass — reachability from a failing supplier
-to the anchors it feeds, weighted by `annual_value_cr` — and deciding how an anchor's
-criticality should be defined at all. That is a spec change and needs Person B's review.
+**The one decision that matters:** own payment stress does *not* seed a halt. `own_stress` is
+measured from payment behaviour, and a company stretching its payables is conserving cash, not
+stopping its line — it is exporting the problem downstream. So halt risk is seeded by the part
+of a node's fragility it did **not** generate itself, `fragility − own_stress`: money owed to it
+that never arrived. Seed it from `own_stress` instead and the model says the visible tier-1 is
+the one about to stop, which is the belief this product exists to correct.
 
-**Until then, step 7's second half cannot run.** Either build the disruption pass, or narrate
-the counterfactual against `estimated_exposure_cr`, which already carries the value that
-stops flowing to the anchor when a supplier fails (₹141.12 cr for N042) and needs no new
-model.
+That is also what makes the beat work. `N007`'s halt risk is *entirely* supply-driven, so
+funding `N042` drains it — and the anchor with it.
 
----
+**Measured on the mock at seed 42:**
+
+| | Baseline | After ₹2.04 cr to `N042` |
+|---|---|---|
+| `N001` supply disruption | **0.1076** (`high`) | **0.0392** (`watch`) |
+| `N001` inbound supply at risk | **₹848.96 cr** | **₹308.36 cr** |
+| `N007` supply disruption | 0.5916 (`critical`) | 0.1612 (`high`) |
+| `N042` halt risk | 0.5132 | 0.0003 |
+| `N118` halt risk | 0.1721 | 0.0000 |
+
+`N001` is the highest-disruption anchor in the network and the third-highest node of 412, behind
+only `N007` and `N042` — the two nodes the story runs through. Read `summary.anchor_disruption`
+rather than scanning the score list.
+
+**₹2.04 crore removes ₹540.6 crore of at-risk inbound supply at the anchor.** That is step 7's
+closing number, and it is on top of the ₹278.66 cr of exposure reduction already in §5.
+
+### ⚠ One honest caveat — the anchor bands `high`, not `critical`
+
+At the committed thresholds `N001` moves `high` → `watch`, not `critical` → `stable`. Setting
+`DISRUPTION_BAND_CRITICAL` to 0.10 would make it `critical`, and we deliberately did not: the
+gap between `N001`'s 0.1076 and the 0.0980 below it is 9%, which is not a break the distribution
+supports. Calibrating a threshold to flatter one node in the demo is the kind of thing a judge
+is right to catch.
+
+Two honest ways to stage it, both fine:
+
+- **Colour the disruption layer on its own scale.** `high` on an anchor that is normally `stable`
+  is already the reddest thing on that part of the graph. Person C's call
+- **Lead with the rupee figure.** "₹849 crore of Hindmark's parts inflow at risk, ₹308 crore
+  after" needs no band at all, and it is the number that lands
 
 ## 7. The fixture file
 
@@ -213,4 +248,5 @@ When the real dataset lands, real listed companies appear at tiers 0–1 with `d
 | Version | Change |
 |---|---|
 | 1.0 | Initial. Six fixed node IDs, seven-step flow, N042-vs-N203 contrast established as the core ranking argument |
+| 1.2 | §6's counterfactual **implemented** — `engine/disruption.py` adds a second propagation running with goods flow, so a supplier failing now reaches the anchor. §6 rewritten from "not yet implemented" to the measured behaviour; §5 gains the anchor figures. The six node IDs, the seven steps and the N042-vs-N203 argument are unchanged, and no baseline number in §3 or §5 moves — the layer is additive. `SCHEMA.md` 1.2. Caveat recorded in §6: the anchor bands `high`, not `critical`, and we declined to move the threshold to make it `critical`. Needs Person B and Person C review |
 | 1.1 | Numbers in §3, §5 and the fixture replaced with the engine's actual output. The originals were written against an undamped model and were arithmetically unreachable: N042's fragility is bounded by N007's own_stress (0.75) × its exposure (0.7773) = 0.583 before any damping, against the stated 0.63. The six node IDs, the seven steps, the cast's roles and the N042-vs-N203 argument are all unchanged. N203 is now the *better-connected* node and still ranks second, which sharpens the argument rather than weakening it. Stressed origins are excluded from `ranking` per `SCHEMA.md` §4.3. §6's counterfactual documented as not yet implemented. Agreed with Person B and Person C |
