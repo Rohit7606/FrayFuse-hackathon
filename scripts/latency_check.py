@@ -4,7 +4,7 @@ import urllib.request
 import sys
 
 def measure(name, path, method="GET", payload=None):
-    url = f"http://localhost:8000{path}"
+    url = f"http://127.0.0.1:8000{path}"
     req = urllib.request.Request(url, method=method)
     if payload:
         req.add_header("Content-Type", "application/json")
