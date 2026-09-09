@@ -42,6 +42,8 @@ async def lifespan(_app: FastAPI):
     """
     try:
         net = load_network()
+        # Warm the baseline cache so the first request doesn't pay the contagion cost
+        baseline_result()
         logger.info("Loaded network from %s (%d nodes)", NETWORK_PATH, len(net["nodes"]))
     except FileNotFoundError:
         raise SystemExit(f"FATAL: network file not found: {NETWORK_PATH}") from None
