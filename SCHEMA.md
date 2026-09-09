@@ -210,7 +210,13 @@ One entry per observable company-year. Nodes with `is_observable: false` have no
 |---|---|---|
 | `fy` | string | `"FY22"` … `"FY25"` |
 | `msme_*_cr` | float \| null | Schedule III ageing buckets. `null` where not disclosed |
-| `msmed_principal_paid_beyond_appointed_day_cr` | float \| null | **The primary signal.** A whole-year flow figure that cannot be tidied up before year end |
+| `msmed_principal_paid_beyond_appointed_day_cr` | float \| null | Whole-year flow figure. **Was designated the primary signal; it is not.** Collection found it disclosed in 3 of 46 verified company-years, all in one company. Keep the field — it is genuinely strong where it exists — but it cannot carry the model. See `docs/PERSON_A.md` §3.1 |
+| `msmed_interest_due_unpaid_cr` | float \| null | MSMED interest lines. **The largest of these three drives the primary signal** — a YoY rise is a statutory admission of late payment, and it needs no Not Due column, so it is available for every filer |
+| `msmed_interest_due_on_payments_beyond_appointed_day_cr` | float \| null | See above |
+| `ageing_basis` | `"due_date"` \| `"transaction_date"` | **Critical.** Schedule III says buckets run from the due date; some filers age from the transaction date instead. Two companies with different values here have incomparable buckets under the same column names |
+| `msme_book_material` | boolean | `false` where MSME dues are a rounding error and every MSMED line reads nil. Gates whether a *level* is comparable — never use it to suppress a growth signal |
+| `series_break` | string \| null | Set where a year is not comparable with the previous one (restatement, discontinued operations, GAAP transition). The stress ladder must skip that transition rather than compute a meaningless delta |
+| `liquidity_quality` | string \| null | Set where a liquidity component was excluded or is not what it appears. One collected company's ₹770 cr of "current investments" was unquoted equity pledged against loans |
 | `msmed_principal_unpaid_year_end_cr` | float \| null | Point-in-time snapshot |
 | `cost_of_materials_cr` | float \| null | Denominator for late-payment intensity |
 | `has_not_due_column` | boolean | **Critical.** `false` means the filer omitted the Not Due column, so `msme_under_1yr_cr` silently includes amounts not yet due and is **not comparable** with other companies. Code must branch on this |
@@ -224,7 +230,14 @@ The **ageing table** is a photograph taken on 31 March and can be tidied up befo
 
 A real observed example: one listed company's ageing table showed every rupee in "Not Due" for two consecutive years, while its MSMED note showed principal paid beyond the appointed day nearly doubling.
 
-**Therefore the model weights the MSMED flow figure more heavily than the ageing snapshot.** See §4.2.
+**Therefore the model prefers whole-year flow figures over the ageing snapshot.**
+
+**Amended after collection.** The specific flow figure this section was built around —
+`msmed_principal_paid_beyond_appointed_day_cr` — is disclosed by almost nobody: 3 of 46 verified
+company-years, all belonging to one company. The reasoning above survives; the field does not. The
+signal that carries it is the **MSMED interest lines**, which rise only past the appointed day and are
+therefore also a whole-year statutory admission — and which every filer discloses. See
+`docs/PERSON_A.md` §3.1 for the full ladder and the control-tested evidence behind each rung.
 
 ---
 

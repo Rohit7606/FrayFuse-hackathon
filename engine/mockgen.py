@@ -221,14 +221,31 @@ REVENUE_SHAPE_BY_TIER: dict[int, tuple[float, float, float, float]] = {
     3: (2.30, 0.70, 1.2, 34.0),
 }
 
-# Days of operating cost each tier can survive unpaid — the further down the
-# chain, the thinner the buffer.  This gradient is what makes deep tiers fail
-# first when an anchor stretches payment.
+# Days of operating cost each tier can survive unpaid.
+#
+# Tier 1 is EMPIRICAL.  Collection measured cash_buffer_days across 29 verified
+# company-years of listed Indian tier-1 manufacturers: median 12 days, quartiles
+# 4 and 30.5, maximum 266.  The previous 60–100 band was roughly 5x too generous
+# and put every real tier-1 below the mock's floor.  See data/real/findings.md.
+#
+# Tiers 0, 2 and 3 are STATED ASSUMPTIONS, not measurements.  The collected
+# cohort is entirely listed manufacturers, so there is no observation of an OEM
+# anchor or of an unlisted deep-tier supplier.  Do not describe them as measured.
+#
+# Note also that a real uniform draw is wrong: the observed distribution is
+# heavily right-skewed (median 12, max 266).  These ranges bracket the observed
+# IQR rather than reproducing the tail.
+#
+# The tier gradient is deliberately shallower than before.  Collection showed
+# buffer does not separate distress from healthy companies at all (AUC 0.569
+# over 44 company-years), so it is no longer the mechanism that makes deep tiers
+# fail first — exposure concentration is.  See engine/config.py
+# MAX_BUFFER_STRENGTH.
 BUFFER_RANGE_BY_TIER: dict[int, tuple[int, int]] = {
-    0: (150, 250),
-    1: (60, 100),
-    2: (15, 40),
-    3: (5, 25),
+    0: (60, 200),  # assumption — OEM anchors hold real cash, but none observed
+    1: (3, 45),    # empirical — brackets observed q1=4 to q3=30 with headroom
+    2: (2, 30),    # assumption — unobserved
+    3: (1, 20),    # assumption — unobserved
 }
 
 # Revenue in ₹ crore per employee, used to derive a plausible headcount.
