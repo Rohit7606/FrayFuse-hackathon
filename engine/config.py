@@ -138,6 +138,33 @@ BAND_WATCH = 0.012     # 0.012 - 0.06 -> "watch"
 # below 0.012 -> "stable"
 
 # ---------------------------------------------------------------------------
+# Supply-disruption bands  (engine/disruption.py, banded in engine/ranking.py)
+# ---------------------------------------------------------------------------
+
+# supply_disruption is a different quantity from final_score — the chance a
+# node's line stops for want of an input, not fragility x criticality — so it
+# gets its own thresholds rather than borrowing the ones above.
+#
+# They currently hold the SAME values, and that is an observation, not a
+# shortcut: measured on the mock at seed 42 the two distributions have
+# comparable shape.  Disruption tops out at 0.5916 (the tier-1 that cannot
+# source its sole-sourced seal kit), the next node sits at 0.2514, the two
+# anchors at 0.1076 and 0.1073, and the 90th percentile of the 124 nodes with
+# any disruption at all is 0.0423.
+#
+# Deliberately NOT calibrated to put the demo's anchor in the top band.  At
+# these thresholds N001 bands "high" at baseline and drops to "watch" once N042
+# is funded.  A DISRUPTION_BAND_CRITICAL of 0.10 would make it "critical"
+# instead, and it would be reverse-engineering a threshold to fit one node —
+# the gap between 0.1076 and the 0.0980 below it is 9%, which is not a break
+# the distribution supports.  Change these only with a reason that is about the
+# distribution, not about the demo.
+DISRUPTION_BAND_CRITICAL = 0.20  # supply_disruption >= 0.20 -> "critical"
+DISRUPTION_BAND_HIGH = 0.06      # 0.06 - 0.20 -> "high"
+DISRUPTION_BAND_WATCH = 0.012    # 0.012 - 0.06 -> "watch"
+# below 0.012 -> "stable"
+
+# ---------------------------------------------------------------------------
 # Intervention  (engine/intervention.py)
 # ---------------------------------------------------------------------------
 

@@ -17,6 +17,7 @@ import networkx as nx
 from engine import config
 from engine.contagion import ContagionResult
 from engine.criticality import CriticalityDetail
+from engine.disruption import DisruptionResult
 from engine.stress import StressDetail
 
 BAND_ORDER = ("critical", "high", "watch", "stable")
@@ -29,6 +30,22 @@ def band_for(final_score: float) -> str:
     if final_score >= config.BAND_HIGH:
         return "high"
     if final_score >= config.BAND_WATCH:
+        return "watch"
+    return "stable"
+
+
+def disruption_band_for(supply_disruption: float) -> str:
+    """Map a supply_disruption to its band.  Separate thresholds, in config.py.
+
+    Deliberately not the same function as band_for: the two quantities measure
+    different things and their thresholds are free to diverge, even though they
+    currently hold the same values.
+    """
+    if supply_disruption >= config.DISRUPTION_BAND_CRITICAL:
+        return "critical"
+    if supply_disruption >= config.DISRUPTION_BAND_HIGH:
+        return "high"
+    if supply_disruption >= config.DISRUPTION_BAND_WATCH:
         return "watch"
     return "stable"
 
@@ -157,6 +174,39 @@ def _compose_reason(factors: list[dict[str, Any]]) -> str:
     return ". ".join(f["detail"] for f in leading) + "."
 
 
+def _compose_disruption_reason(
+    graph: nx.DiGraph,
+    node_id: str,
+    disruption: DisruptionResult,
+    names: dict[str, str],
+) -> str:
+    """Why this node's line is or is not at risk of stopping.
+
+    Template-generated and deterministic, like reason_text, and never empty —
+    a node with no disruption says so rather than rendering blank.
+    """
+    stopped_by = disruption.top_source.get(node_id)
+    at_risk = disruption.disrupted_inflow_cr[node_id]
+
+    if disruption.disruption[node_id] <= 0.0 or not stopped_by:
+        if disruption.halt_risk[node_id] > 0.0:
+            return (
+                "No supplier of its own has stopped; its own delivery risk is "
+                "unpaid invoices, not missing parts."
+            )
+        return "No supplier failure reaches this node."
+
+    edge = graph.edges[stopped_by, node_id]
+    component = edge["component"].replace("_", " ")
+    supplier_name = names.get(stopped_by, stopped_by)
+
+    lead = f"{supplier_name} is at risk of halting {component} deliveries"
+    if edge["is_single_source"] is True:
+        lead += " — sole source, nothing else to buy it from"
+
+    return f"{lead}. ₹{at_risk:.2f} cr of inbound supply at risk."
+
+
 def build_scores(
     graph: nx.DiGraph,
     network: dict[str, Any],
@@ -165,6 +215,7 @@ def build_scores(
     criticality: dict[str, CriticalityDetail],
     costs: dict[str, float],
     exposures: dict[str, float],
+    disruption: DisruptionResult,
 ) -> list[dict[str, Any]]:
     """One Score object per node, ranked, with reasons.
 
@@ -199,6 +250,13 @@ def build_scores(
                 "intervention_cost_cr": round(costs[node_id], 2),
                 "estimated_exposure_cr": round(exposures[node_id], 2),
                 "propagation_depth": contagion.depth[node_id],
+                "halt_risk": round(disruption.halt_risk[node_id], 4),
+                "supply_disruption": round(disruption.disruption[node_id], 4),
+                "disruption_band": disruption_band_for(disruption.disruption[node_id]),
+                "disrupted_inflow_cr": round(disruption.disrupted_inflow_cr[node_id], 2),
+                "disruption_reason": _compose_disruption_reason(
+                    graph, node_id, disruption, names
+                ),
             }
         )
 
@@ -235,6 +293,8 @@ def ranking_of(scores: list[dict[str, Any]]) -> list[str]:
 def build_summary(
     scores: list[dict[str, Any]],
     contagion: ContagionResult,
+    disruption: DisruptionResult,
+    tier_of: dict[str, int],
 ) -> dict[str, Any]:
     """Network-level totals for the header panel."""
     band_counts = {band: 0 for band in BAND_ORDER}
@@ -243,7 +303,27 @@ def build_summary(
 
     at_risk = [s for s in scores if s["rank"] is not None]
 
+    # The anchors, lifted out so the UI can drive DEMO_SCENARIO.md §6 without
+    # scanning four hundred score objects for the three tier-0 nodes.  Ordered
+    # by disruption descending, ties by node_id — the same tiebreak as ranking.
+    anchors = sorted(
+        (
+            {
+                "node_id": s["node_id"],
+                "supply_disruption": s["supply_disruption"],
+                "disruption_band": s["disruption_band"],
+                "disrupted_inflow_cr": s["disrupted_inflow_cr"],
+                "stopped_by": disruption.top_source.get(s["node_id"]),
+            }
+            for s in scores
+            if tier_of.get(s["node_id"]) == 0
+        ),
+        key=lambda a: (-a["supply_disruption"], a["node_id"]),
+    )
+
     return {
+        "anchor_disruption": anchors,
+        "disruption_iterations_to_converge": disruption.iterations,
         "total_nodes": len(scores),
         "stressed_origin_nodes": list(contagion.origins),
         "at_risk_count": len(at_risk),

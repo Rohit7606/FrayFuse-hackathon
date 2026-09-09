@@ -62,7 +62,12 @@
       "intervention_cost_cr": 2.04,
       "estimated_exposure_cr": 141.12,
       "propagation_depth": 1,
-      "rank": 1
+      "rank": 1,
+      "halt_risk": 0.5132,
+      "supply_disruption": 0.2514,
+      "disruption_band": "critical",
+      "disrupted_inflow_cr": 4.68,
+      "disruption_reason": "Precision Polymer Works Pvt Ltd is at risk of halting polymer compound deliveries — sole source, nothing else to buy it from. ₹4.68 cr of inbound supply at risk."
     },
     {
       "node_id": "N087",
@@ -98,7 +103,12 @@
       "intervention_cost_cr": 3.23,
       "estimated_exposure_cr": 65.22,
       "propagation_depth": 1,
-      "rank": 3
+      "rank": 3,
+      "halt_risk": 0.2899,
+      "supply_disruption": 0.098,
+      "disruption_band": "high",
+      "disrupted_inflow_cr": 4.14,
+      "disruption_reason": "Panchvati Metalworks Industries Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹4.14 cr of inbound supply at risk."
     },
     {
       "node_id": "N118",
@@ -134,7 +144,12 @@
       "intervention_cost_cr": 0.39,
       "estimated_exposure_cr": 98.81,
       "propagation_depth": 2,
-      "rank": 4
+      "rank": 4,
+      "halt_risk": 0.1721,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N203",
@@ -165,7 +180,12 @@
       "intervention_cost_cr": 2.36,
       "estimated_exposure_cr": 64.77,
       "propagation_depth": 1,
-      "rank": 2
+      "rank": 2,
+      "halt_risk": 0.2821,
+      "supply_disruption": 0.076,
+      "disruption_band": "high",
+      "disrupted_inflow_cr": 4.27,
+      "disruption_reason": "Mahendra Treatments Industries Udyog Pvt Ltd is at risk of halting alloy steel deliveries. ₹4.27 cr of inbound supply at risk."
     },
     {
       "node_id": "N292",
@@ -201,7 +221,12 @@
       "intervention_cost_cr": 0.46,
       "estimated_exposure_cr": 29.25,
       "propagation_depth": 1,
-      "rank": 10
+      "rank": 10,
+      "halt_risk": 0.2172,
+      "supply_disruption": 0.0763,
+      "disruption_band": "high",
+      "disrupted_inflow_cr": 0.16,
+      "disruption_reason": "Meghdoot Works Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.16 cr of inbound supply at risk."
     },
     {
       "node_id": "N348",
@@ -232,7 +257,12 @@
       "intervention_cost_cr": 0.74,
       "estimated_exposure_cr": 29.44,
       "propagation_depth": 1,
-      "rank": 7
+      "rank": 7,
+      "halt_risk": 0.1853,
+      "supply_disruption": 0.0451,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.78,
+      "disruption_reason": "Trishul Industries Pvt Ltd is at risk of halting forgings deliveries. ₹0.78 cr of inbound supply at risk."
     },
     {
       "node_id": "N381",
@@ -268,7 +298,12 @@
       "intervention_cost_cr": 0.62,
       "estimated_exposure_cr": 32.65,
       "propagation_depth": 1,
-      "rank": 8
+      "rank": 8,
+      "halt_risk": 0.1453,
+      "supply_disruption": 0.0383,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 1.05,
+      "disruption_reason": "Aarvik Stampings Products Pvt Ltd is at risk of halting electroplating deliveries. ₹1.05 cr of inbound supply at risk."
     },
     {
       "node_id": "N387",
@@ -304,7 +339,12 @@
       "intervention_cost_cr": 4.11,
       "estimated_exposure_cr": 85.53,
       "propagation_depth": 1,
-      "rank": 5
+      "rank": 5,
+      "halt_risk": 0.2588,
+      "supply_disruption": 0.0534,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.96,
+      "disruption_reason": "Suryakant Engineering Industries Pvt Ltd is at risk of halting precision machining deliveries. ₹0.96 cr of inbound supply at risk."
     },
     {
       "node_id": "N394",
@@ -340,7 +380,12 @@
       "intervention_cost_cr": 0.95,
       "estimated_exposure_cr": 54.53,
       "propagation_depth": 1,
-      "rank": 6
+      "rank": 6,
+      "halt_risk": 0.1498,
+      "supply_disruption": 0.0489,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.76,
+      "disruption_reason": "Vaikunth Products Udyog Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.76 cr of inbound supply at risk."
     },
     {
       "node_id": "N407",
@@ -376,7 +421,12 @@
       "intervention_cost_cr": 0.16,
       "estimated_exposure_cr": 20.04,
       "propagation_depth": 1,
-      "rank": 9
+      "rank": 9,
+      "halt_risk": 0.1314,
+      "supply_disruption": 0.0468,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.49,
+      "disruption_reason": "Shreeyash Stampings Components Pvt Ltd is at risk of halting cold forming deliveries. ₹0.49 cr of inbound supply at risk."
     }
   ],
   "summary": {
@@ -394,6 +444,30 @@
     "stressed_origin_nodes": [
       "N007"
     ],
-    "max_propagation_depth": 2
+    "max_propagation_depth": 2,
+    "anchor_disruption": [
+      {
+        "node_id": "N001",
+        "supply_disruption": 0.1076,
+        "disruption_band": "high",
+        "disrupted_inflow_cr": 848.96,
+        "stopped_by": "N007"
+      },
+      {
+        "node_id": "N251",
+        "supply_disruption": 0.1073,
+        "disruption_band": "high",
+        "disrupted_inflow_cr": 435.95,
+        "stopped_by": "N007"
+      },
+      {
+        "node_id": "N268",
+        "supply_disruption": 0.0157,
+        "disruption_band": "watch",
+        "disrupted_inflow_cr": 93.63,
+        "stopped_by": "N238"
+      }
+    ],
+    "disruption_iterations_to_converge": 4
   }
 }

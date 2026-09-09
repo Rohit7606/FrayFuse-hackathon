@@ -61,6 +61,13 @@ def _make_score(
         intervention_cost_cr=4.8,
         estimated_exposure_cr=estimated_exposure_cr,
         propagation_depth=1,
+        # Schema 1.2 disruption layer. compute_delta does not read these, but
+        # Score requires them, so they carry inert defaults here.
+        halt_risk=0.0,
+        supply_disruption=0.0,
+        disruption_band="stable",
+        disrupted_inflow_cr=0.0,
+        disruption_reason=f"No supplier failure reaches {node_id}.",
     )
 
 
