@@ -545,6 +545,8 @@ def _generate_edges(
             "annual_value_cr": e["annual_value_cr"],
             "exposure_pct": e["exposure_pct"],
             "is_single_source": e["is_single_source"],
+            "confidence": "confirmed",
+            "edge_provenance": "synthetic",
             "data_source": e["data_source"],
         }
         for e in edges
@@ -712,6 +714,7 @@ def _generate_stress_signals(
                 {
                     "node_id": node_id,
                     **row,
+                    "ageing_basis": "due_date",
                     "basis": "standalone",
                     "data_source": "synthetic",
                 }
