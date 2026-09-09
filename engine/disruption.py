@@ -173,7 +173,7 @@ def propagate_disruption(
             for node_id in node_ids
         }
 
-        delta = max(abs(next_halt[n] - halt[n]) for n in node_ids)
+        delta = max((abs(next_halt[n] - halt[n]) for n in node_ids), default=0.0)
         halt, disruption, top_source = next_halt, next_disruption, next_top
 
         if delta < config.CONVERGENCE_THRESHOLD:
