@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "generated_at": "2026-08-27T00:00:00Z",
+    "generator": "mockgen",
+    "seed": 42,
+    "currency_unit": "INR_crore",
+    "node_count": 412,
+    "edge_count": 1183,
+    "observable_node_count": 6
+  },
+  "ranking": ["N042", "N203", "N087", "N118"],
+  "scores": [
+    {
+      "node_id": "N042",
+      "own_stress": 0.0,
+      "inherited_stress": 0.6314,
+      "fragility": 0.6314,
+      "criticality": 0.8820,
+      "final_score": 0.5569,
+      "risk_band": "critical",
+      "rank": 1,
+      "reason_text": "78% of revenue depends on Brakecraft Components, whose late supplier payments rose sharply in FY24. Sole source for hydraulic seal kit.",
+      "reason_factors": [
+        { "kind": "exposure", "detail": "78% revenue dependency on Brakecraft Components", "weight": 0.42 },
+        { "kind": "upstream_stress", "detail": "Brakecraft late payments rose 2.1x in FY24", "weight": 0.36 },
+        { "kind": "single_source", "detail": "Sole source for hydraulic seal kit", "weight": 0.22 }
+      ],
+      "intervention_cost_cr": 4.80,
+      "estimated_exposure_cr": 61.40,
+      "propagation_depth": 2
+    },
+    {
+      "node_id": "N203",
+      "own_stress": 0.0,
+      "inherited_stress": 0.4400,
+      "fragility": 0.4400,
+      "criticality": 0.3100,
+      "final_score": 0.1364,
+      "risk_band": "high",
+      "rank": 2,
+      "reason_text": "61% of revenue depends on Brakecraft Components, whose late supplier payments rose sharply in FY24.",
+      "reason_factors": [
+        { "kind": "exposure", "detail": "61% revenue dependency on Brakecraft Components", "weight": 0.60 },
+        { "kind": "upstream_stress", "detail": "Brakecraft late payments rose 2.1x in FY24", "weight": 0.40 }
+      ],
+      "intervention_cost_cr": 3.20,
+      "estimated_exposure_cr": 45.10,
+      "propagation_depth": 2
+    },
+    {
+      "node_id": "N087",
+      "own_stress": 0.0,
+      "inherited_stress": 0.3900,
+      "fragility": 0.3900,
+      "criticality": 0.4000,
+      "final_score": 0.1560,
+      "risk_band": "high",
+      "rank": 3,
+      "reason_text": "34% of revenue depends on Brakecraft Components, whose late supplier payments rose sharply in FY24.",
+      "reason_factors": [
+        { "kind": "exposure", "detail": "34% revenue dependency on Brakecraft Components", "weight": 0.50 },
+        { "kind": "upstream_stress", "detail": "Brakecraft late payments rose 2.1x in FY24", "weight": 0.50 }
+      ],
+      "intervention_cost_cr": 4.10,
+      "estimated_exposure_cr": 58.20,
+      "propagation_depth": 2
+    },
+    {
+      "node_id": "N118",
+      "own_stress": 0.0,
+      "inherited_stress": 0.5200,
+      "fragility": 0.5200,
+      "criticality": 0.7000,
+      "final_score": 0.3640,
+      "risk_band": "high",
+      "rank": 4,
+      "reason_text": "84% of revenue depends on Sealsworks Rubber Industries, which is experiencing severe inherited payment stress.",
+      "reason_factors": [
+        { "kind": "exposure", "detail": "84% revenue dependency on Sealsworks Rubber Industries", "weight": 0.60 },
+        { "kind": "upstream_stress", "detail": "Sealsworks Rubber Industries inherited stress is severe", "weight": 0.40 }
+      ],
+      "intervention_cost_cr": 2.10,
+      "estimated_exposure_cr": 24.90,
+      "propagation_depth": 3
+    }
+  ],
+  "summary": {
+    "total_nodes": 412,
+    "stressed_origin_nodes": ["N007"],
+    "at_risk_count": 4,
+    "band_counts": {
+      "critical": 1,
+      "high": 3,
+      "watch": 11,
+      "stable": 397
+    },
+    "total_intervention_cost_cr": 14.20,
+    "total_estimated_exposure_cr": 189.60,
+    "max_propagation_depth": 3,
+    "iterations_to_converge": 4
+  }
+}

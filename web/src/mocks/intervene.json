@@ -1,0 +1,656 @@
+{
+  "before": {
+    "meta": {
+      "schema_version": "1.0",
+      "generated_at": "2026-08-27T00:00:00Z",
+      "generator": "mockgen",
+      "seed": 42,
+      "currency_unit": "INR_crore",
+      "node_count": 412,
+      "edge_count": 1183,
+      "observable_node_count": 6
+    },
+    "nodes": [
+      {
+        "node_id": "N001",
+        "name": "Hindmark Motors India Ltd",
+        "tier": 0,
+        "sector": "automotive_oem",
+        "product_category": "passenger_vehicles",
+        "revenue_cr": 125000,
+        "cash_buffer_days": 45,
+        "employees": 15000,
+        "is_observable": true,
+        "data_source": "synthetic",
+        "cin": null
+      },
+      {
+        "node_id": "N007",
+        "name": "Brakecraft Components Ltd",
+        "tier": 1,
+        "sector": "auto_components",
+        "product_category": "braking_systems",
+        "revenue_cr": 2969.08,
+        "cash_buffer_days": 21,
+        "employees": 2100,
+        "is_observable": true,
+        "data_source": "real",
+        "cin": "U29320KA1984PTC006283"
+      },
+      {
+        "node_id": "N042",
+        "name": "Sealsworks Rubber Industries Pvt Ltd",
+        "tier": 2,
+        "sector": "auto_components",
+        "product_category": "sealing_systems",
+        "revenue_cr": 24.7,
+        "cash_buffer_days": 18,
+        "employees": 42,
+        "is_observable": false,
+        "data_source": "synthetic",
+        "cin": null
+      },
+      {
+        "node_id": "N118",
+        "name": "Precision Polymer Works Pvt Ltd",
+        "tier": 3,
+        "sector": "raw_materials",
+        "product_category": "specialty_polymers",
+        "revenue_cr": 8.5,
+        "cash_buffer_days": 14,
+        "employees": 15,
+        "is_observable": false,
+        "data_source": "synthetic",
+        "cin": null
+      },
+      {
+        "node_id": "N203",
+        "name": "Kalyani Fastener Systems Pvt Ltd",
+        "tier": 2,
+        "sector": "auto_components",
+        "product_category": "fasteners",
+        "revenue_cr": 18.2,
+        "cash_buffer_days": 34,
+        "employees": 60,
+        "is_observable": false,
+        "data_source": "synthetic",
+        "cin": null
+      },
+      {
+        "node_id": "N087",
+        "name": "Vaayu Thermal Products Pvt Ltd",
+        "tier": 2,
+        "sector": "auto_components",
+        "product_category": "thermal_management",
+        "revenue_cr": 45.1,
+        "cash_buffer_days": 25,
+        "employees": 110,
+        "is_observable": false,
+        "data_source": "synthetic",
+        "cin": null
+      }
+    ],
+    "edges": [
+      {
+        "edge_id": "E001",
+        "supplier_id": "N007",
+        "buyer_id": "N001",
+        "component": "braking_system_assembly",
+        "annual_value_cr": 1250,
+        "exposure_pct": 0.421,
+        "is_single_source": false,
+        "data_source": "synthetic"
+      },
+      {
+        "edge_id": "E042",
+        "supplier_id": "N042",
+        "buyer_id": "N007",
+        "component": "hydraulic_seal_kit",
+        "annual_value_cr": 19.2,
+        "exposure_pct": 0.7773,
+        "is_single_source": true,
+        "data_source": "synthetic"
+      },
+      {
+        "edge_id": "E118",
+        "supplier_id": "N118",
+        "buyer_id": "N042",
+        "component": "polymer_resin_grade_b",
+        "annual_value_cr": 7.1,
+        "exposure_pct": 0.8352,
+        "is_single_source": true,
+        "data_source": "synthetic"
+      },
+      {
+        "edge_id": "E203",
+        "supplier_id": "N203",
+        "buyer_id": "N007",
+        "component": "high_tensile_bolts",
+        "annual_value_cr": 11.1,
+        "exposure_pct": 0.6098,
+        "is_single_source": false,
+        "data_source": "synthetic"
+      },
+      {
+        "edge_id": "E087",
+        "supplier_id": "N087",
+        "buyer_id": "N007",
+        "component": "radiator_hoses",
+        "annual_value_cr": 15.3,
+        "exposure_pct": 0.3392,
+        "is_single_source": false,
+        "data_source": "synthetic"
+      }
+    ],
+    "scores": [
+      {
+        "node_id": "N042",
+        "own_stress": 0,
+        "inherited_stress": 0.6314,
+        "fragility": 0.6314,
+        "criticality": 0.882,
+        "final_score": 0.5569,
+        "risk_band": "critical",
+        "rank": 1,
+        "reason_text": "78% of revenue depends on Brakecraft Components, whose late supplier payments rose sharply in FY24. Sole source for hydraulic seal kit.",
+        "reason_factors": [
+          {
+            "kind": "exposure",
+            "detail": "78% revenue dependency on Brakecraft Components",
+            "weight": 0.42
+          },
+          {
+            "kind": "upstream_stress",
+            "detail": "Brakecraft late payments rose 2.1x in FY24",
+            "weight": 0.36
+          },
+          {
+            "kind": "single_source",
+            "detail": "Sole source for hydraulic seal kit",
+            "weight": 0.22
+          }
+        ],
+        "intervention_cost_cr": 4.8,
+        "estimated_exposure_cr": 61.4,
+        "propagation_depth": 2
+      },
+      {
+        "node_id": "N203",
+        "own_stress": 0,
+        "inherited_stress": 0.44,
+        "fragility": 0.44,
+        "criticality": 0.31,
+        "final_score": 0.1364,
+        "risk_band": "high",
+        "rank": 2,
+        "reason_text": "61% of revenue depends on Brakecraft Components, whose late supplier payments rose sharply in FY24.",
+        "reason_factors": [
+          {
+            "kind": "exposure",
+            "detail": "61% revenue dependency on Brakecraft Components",
+            "weight": 0.6
+          },
+          {
+            "kind": "upstream_stress",
+            "detail": "Brakecraft late payments rose 2.1x in FY24",
+            "weight": 0.4
+          }
+        ],
+        "intervention_cost_cr": 3.2,
+        "estimated_exposure_cr": 45.1,
+        "propagation_depth": 2
+      },
+      {
+        "node_id": "N087",
+        "own_stress": 0,
+        "inherited_stress": 0.39,
+        "fragility": 0.39,
+        "criticality": 0.4,
+        "final_score": 0.156,
+        "risk_band": "high",
+        "rank": 3,
+        "reason_text": "34% of revenue depends on Brakecraft Components, whose late supplier payments rose sharply in FY24.",
+        "reason_factors": [
+          {
+            "kind": "exposure",
+            "detail": "34% revenue dependency on Brakecraft Components",
+            "weight": 0.5
+          },
+          {
+            "kind": "upstream_stress",
+            "detail": "Brakecraft late payments rose 2.1x in FY24",
+            "weight": 0.5
+          }
+        ],
+        "intervention_cost_cr": 4.1,
+        "estimated_exposure_cr": 58.2,
+        "propagation_depth": 2
+      },
+      {
+        "node_id": "N118",
+        "own_stress": 0,
+        "inherited_stress": 0.52,
+        "fragility": 0.52,
+        "criticality": 0.7,
+        "final_score": 0.364,
+        "risk_band": "high",
+        "rank": 4,
+        "reason_text": "84% of revenue depends on Sealsworks Rubber Industries, which is experiencing severe inherited payment stress.",
+        "reason_factors": [
+          {
+            "kind": "exposure",
+            "detail": "84% revenue dependency on Sealsworks Rubber Industries",
+            "weight": 0.6
+          },
+          {
+            "kind": "upstream_stress",
+            "detail": "Sealsworks Rubber Industries inherited stress is severe",
+            "weight": 0.4
+          }
+        ],
+        "intervention_cost_cr": 2.1,
+        "estimated_exposure_cr": 24.9,
+        "propagation_depth": 3
+      },
+      {
+        "own_stress": 0,
+        "inherited_stress": 0,
+        "fragility": 0,
+        "criticality": 0.1,
+        "final_score": 0,
+        "risk_band": "stable",
+        "rank": null,
+        "reason_text": "Node is stable.",
+        "reason_factors": [
+          {
+            "kind": "own_stress",
+            "detail": "Stable operations",
+            "weight": 1
+          }
+        ],
+        "intervention_cost_cr": 0,
+        "estimated_exposure_cr": 0,
+        "propagation_depth": 0,
+        "node_id": "N001"
+      },
+      {
+        "own_stress": 0.85,
+        "inherited_stress": 0,
+        "fragility": 0.85,
+        "criticality": 0.5,
+        "final_score": 0.425,
+        "risk_band": "high",
+        "rank": null,
+        "reason_text": "Own stress is high.",
+        "reason_factors": [
+          {
+            "kind": "own_stress",
+            "detail": "Late payments",
+            "weight": 1
+          }
+        ],
+        "intervention_cost_cr": 0,
+        "estimated_exposure_cr": 0,
+        "propagation_depth": 0,
+        "node_id": "N007"
+      }
+    ],
+    "ranking": [
+      "N042",
+      "N203",
+      "N087",
+      "N118"
+    ],
+    "summary": {
+      "total_nodes": 412,
+      "stressed_origin_nodes": [
+        "N007"
+      ],
+      "at_risk_count": 4,
+      "band_counts": {
+        "critical": 1,
+        "high": 3,
+        "watch": 11,
+        "stable": 397
+      },
+      "total_intervention_cost_cr": 14.2,
+      "total_estimated_exposure_cr": 189.6,
+      "max_propagation_depth": 3,
+      "iterations_to_converge": 4
+    }
+  },
+  "after": {
+    "meta": {
+      "schema_version": "1.0",
+      "generated_at": "2026-08-27T00:00:00Z",
+      "generator": "mockgen",
+      "seed": 42,
+      "currency_unit": "INR_crore",
+      "node_count": 412,
+      "edge_count": 1183,
+      "observable_node_count": 6
+    },
+    "nodes": [
+      {
+        "node_id": "N001",
+        "name": "Hindmark Motors India Ltd",
+        "tier": 0,
+        "sector": "automotive_oem",
+        "product_category": "passenger_vehicles",
+        "revenue_cr": 125000,
+        "cash_buffer_days": 45,
+        "employees": 15000,
+        "is_observable": true,
+        "data_source": "synthetic",
+        "cin": null
+      },
+      {
+        "node_id": "N007",
+        "name": "Brakecraft Components Ltd",
+        "tier": 1,
+        "sector": "auto_components",
+        "product_category": "braking_systems",
+        "revenue_cr": 2969.08,
+        "cash_buffer_days": 21,
+        "employees": 2100,
+        "is_observable": true,
+        "data_source": "real",
+        "cin": "U29320KA1984PTC006283"
+      },
+      {
+        "node_id": "N042",
+        "name": "Sealsworks Rubber Industries Pvt Ltd",
+        "tier": 2,
+        "sector": "auto_components",
+        "product_category": "sealing_systems",
+        "revenue_cr": 24.7,
+        "cash_buffer_days": 18,
+        "employees": 42,
+        "is_observable": false,
+        "data_source": "synthetic",
+        "cin": null
+      },
+      {
+        "node_id": "N118",
+        "name": "Precision Polymer Works Pvt Ltd",
+        "tier": 3,
+        "sector": "raw_materials",
+        "product_category": "specialty_polymers",
+        "revenue_cr": 8.5,
+        "cash_buffer_days": 14,
+        "employees": 15,
+        "is_observable": false,
+        "data_source": "synthetic",
+        "cin": null
+      },
+      {
+        "node_id": "N203",
+        "name": "Kalyani Fastener Systems Pvt Ltd",
+        "tier": 2,
+        "sector": "auto_components",
+        "product_category": "fasteners",
+        "revenue_cr": 18.2,
+        "cash_buffer_days": 34,
+        "employees": 60,
+        "is_observable": false,
+        "data_source": "synthetic",
+        "cin": null
+      },
+      {
+        "node_id": "N087",
+        "name": "Vaayu Thermal Products Pvt Ltd",
+        "tier": 2,
+        "sector": "auto_components",
+        "product_category": "thermal_management",
+        "revenue_cr": 45.1,
+        "cash_buffer_days": 25,
+        "employees": 110,
+        "is_observable": false,
+        "data_source": "synthetic",
+        "cin": null
+      }
+    ],
+    "edges": [
+      {
+        "edge_id": "E001",
+        "supplier_id": "N007",
+        "buyer_id": "N001",
+        "component": "braking_system_assembly",
+        "annual_value_cr": 1250,
+        "exposure_pct": 0.421,
+        "is_single_source": false,
+        "data_source": "synthetic"
+      },
+      {
+        "edge_id": "E042",
+        "supplier_id": "N042",
+        "buyer_id": "N007",
+        "component": "hydraulic_seal_kit",
+        "annual_value_cr": 19.2,
+        "exposure_pct": 0.7773,
+        "is_single_source": true,
+        "data_source": "synthetic"
+      },
+      {
+        "edge_id": "E118",
+        "supplier_id": "N118",
+        "buyer_id": "N042",
+        "component": "polymer_resin_grade_b",
+        "annual_value_cr": 7.1,
+        "exposure_pct": 0.8352,
+        "is_single_source": true,
+        "data_source": "synthetic"
+      },
+      {
+        "edge_id": "E203",
+        "supplier_id": "N203",
+        "buyer_id": "N007",
+        "component": "high_tensile_bolts",
+        "annual_value_cr": 11.1,
+        "exposure_pct": 0.6098,
+        "is_single_source": false,
+        "data_source": "synthetic"
+      },
+      {
+        "edge_id": "E087",
+        "supplier_id": "N087",
+        "buyer_id": "N007",
+        "component": "radiator_hoses",
+        "annual_value_cr": 15.3,
+        "exposure_pct": 0.3392,
+        "is_single_source": false,
+        "data_source": "synthetic"
+      }
+    ],
+    "scores": [
+      {
+        "node_id": "N042",
+        "own_stress": 0,
+        "inherited_stress": 0.6314,
+        "fragility": 0.1102,
+        "criticality": 0.882,
+        "final_score": 0.1,
+        "risk_band": "stable",
+        "rank": null,
+        "reason_text": "78% of revenue depends on Brakecraft Components, whose late supplier payments rose sharply in FY24. Sole source for hydraulic seal kit.",
+        "reason_factors": [
+          {
+            "kind": "exposure",
+            "detail": "78% revenue dependency on Brakecraft Components",
+            "weight": 0.42
+          },
+          {
+            "kind": "upstream_stress",
+            "detail": "Brakecraft late payments rose 2.1x in FY24",
+            "weight": 0.36
+          },
+          {
+            "kind": "single_source",
+            "detail": "Sole source for hydraulic seal kit",
+            "weight": 0.22
+          }
+        ],
+        "intervention_cost_cr": 4.8,
+        "estimated_exposure_cr": 61.4,
+        "propagation_depth": 2
+      },
+      {
+        "node_id": "N203",
+        "own_stress": 0,
+        "inherited_stress": 0.44,
+        "fragility": 0.44,
+        "criticality": 0.31,
+        "final_score": 0.1364,
+        "risk_band": "high",
+        "rank": 2,
+        "reason_text": "61% of revenue depends on Brakecraft Components, whose late supplier payments rose sharply in FY24.",
+        "reason_factors": [
+          {
+            "kind": "exposure",
+            "detail": "61% revenue dependency on Brakecraft Components",
+            "weight": 0.6
+          },
+          {
+            "kind": "upstream_stress",
+            "detail": "Brakecraft late payments rose 2.1x in FY24",
+            "weight": 0.4
+          }
+        ],
+        "intervention_cost_cr": 3.2,
+        "estimated_exposure_cr": 45.1,
+        "propagation_depth": 2
+      },
+      {
+        "node_id": "N087",
+        "own_stress": 0,
+        "inherited_stress": 0.39,
+        "fragility": 0.39,
+        "criticality": 0.4,
+        "final_score": 0.156,
+        "risk_band": "high",
+        "rank": 3,
+        "reason_text": "34% of revenue depends on Brakecraft Components, whose late supplier payments rose sharply in FY24.",
+        "reason_factors": [
+          {
+            "kind": "exposure",
+            "detail": "34% revenue dependency on Brakecraft Components",
+            "weight": 0.5
+          },
+          {
+            "kind": "upstream_stress",
+            "detail": "Brakecraft late payments rose 2.1x in FY24",
+            "weight": 0.5
+          }
+        ],
+        "intervention_cost_cr": 4.1,
+        "estimated_exposure_cr": 58.2,
+        "propagation_depth": 2
+      },
+      {
+        "node_id": "N118",
+        "own_stress": 0,
+        "inherited_stress": 0.52,
+        "fragility": 0.2,
+        "criticality": 0.7,
+        "final_score": 0.2,
+        "risk_band": "watch",
+        "rank": 4,
+        "reason_text": "84% of revenue depends on Sealsworks Rubber Industries, which is experiencing severe inherited payment stress.",
+        "reason_factors": [
+          {
+            "kind": "exposure",
+            "detail": "84% revenue dependency on Sealsworks Rubber Industries",
+            "weight": 0.6
+          },
+          {
+            "kind": "upstream_stress",
+            "detail": "Sealsworks Rubber Industries inherited stress is severe",
+            "weight": 0.4
+          }
+        ],
+        "intervention_cost_cr": 2.1,
+        "estimated_exposure_cr": 24.9,
+        "propagation_depth": 3
+      },
+      {
+        "own_stress": 0,
+        "inherited_stress": 0,
+        "fragility": 0,
+        "criticality": 0.1,
+        "final_score": 0,
+        "risk_band": "stable",
+        "rank": null,
+        "reason_text": "Node is stable.",
+        "reason_factors": [
+          {
+            "kind": "own_stress",
+            "detail": "Stable operations",
+            "weight": 1
+          }
+        ],
+        "intervention_cost_cr": 0,
+        "estimated_exposure_cr": 0,
+        "propagation_depth": 0,
+        "node_id": "N001"
+      },
+      {
+        "own_stress": 0.85,
+        "inherited_stress": 0,
+        "fragility": 0.85,
+        "criticality": 0.5,
+        "final_score": 0.425,
+        "risk_band": "high",
+        "rank": null,
+        "reason_text": "Own stress is high.",
+        "reason_factors": [
+          {
+            "kind": "own_stress",
+            "detail": "Late payments",
+            "weight": 1
+          }
+        ],
+        "intervention_cost_cr": 0,
+        "estimated_exposure_cr": 0,
+        "propagation_depth": 0,
+        "node_id": "N007"
+      }
+    ],
+    "ranking": [
+      "N203",
+      "N087",
+      "N118"
+    ],
+    "summary": {
+      "total_nodes": 412,
+      "stressed_origin_nodes": [
+        "N007"
+      ],
+      "at_risk_count": 4,
+      "band_counts": {
+        "critical": 1,
+        "high": 3,
+        "watch": 11,
+        "stable": 397
+      },
+      "total_intervention_cost_cr": 14.2,
+      "total_estimated_exposure_cr": 189.6,
+      "max_propagation_depth": 3,
+      "iterations_to_converge": 4
+    }
+  },
+  "delta": {
+    "nodes_improved": 7,
+    "nodes_worsened": 0,
+    "total_exposure_reduced_cr": 148.3,
+    "total_intervention_cost_cr": 4.8,
+    "per_node": [
+      {
+        "node_id": "N042",
+        "fragility_before": 0.6314,
+        "fragility_after": 0.1102,
+        "band_before": "critical",
+        "band_after": "stable"
+      }
+    ]
+  }
+}
