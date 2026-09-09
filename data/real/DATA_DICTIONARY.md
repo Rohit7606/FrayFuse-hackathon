@@ -747,3 +747,90 @@ fragility input. The mock's assumption of 60-100 days for a tier-1 supplier shou
 not re-calibrated, and the field should be presented as context (with its comparability flags),
 never scored. Where a company's real liquidity sits in undrawn bank limits, the filings often do
 not disclose it at all (Balrampur FY2022 discloses no undrawn figure anywhere in the report).
+
+---
+
+# v2.3 (2026-09-09) — Session 3 backfill and bounded graph pass
+
+## Change log
+
+| # | Change |
+|---|---|
+| 1 | `total_expenses_includes_dep_fin` completed for all 15 rows the brief listed; now 45 of 46 (the 46th is GENSOL FY2022, which carries no `total_expenses_cr` at all). `financials.csv` is now recomputable from itself. |
+| 2 | `msmed_note_verbatim` 21 → 31 of 46, plus a new `msmed_note_format` taxonomy (§13). |
+| 3 | `undrawn_credit_facilities_cr` first values recorded (5 rows); `undrawn_source` recorded on 18 rows including the ones where the answer is "not disclosed" (§14). |
+| 4 | `companies.csv` 29 → 43 rows: 15 new counterparty identity rows, all named in a primary filing. |
+| 5 | `edges.csv` 21 → 37 rows: 15 new supplier edges, 1 new customer edge, 1 unnamed vendor-dispute aggregate. |
+| 6 | New `evidence_source` values: `related_party_note`, `contingent_liability_note`. |
+| 7 | LOKESH CIN recorded (`L29219TG1983PLC004319`). CIN coverage 6 of 43. |
+
+## §13 `msmed_note_format` — the taxonomy, and what it means for the primary signal
+
+The MSMED note has **no standard layout**. Across 10 companies we found six distinct formats,
+ranging from two lines to seven, and the "principal paid beyond the appointed day" figure — the
+engine's original primary signal — exists as a **standalone, populated line in exactly one company**.
+
+| Company | Format | Lines | "beyond the appointed day" | Figure present? |
+|---|---|---|---|---|
+| BGL (control) | `seven_line_incl_unpaid_beyond_45_days` | 7 | standalone line (iv) | **YES** — 920.62 / 319.93 / 832.49 lakh |
+| BHS (distress) | `six_line_standalone_beyond_appointed_day_caption_value_nil` | 6 | standalone line | no — nil both years |
+| BALRAMPUR_C (control) | `six_line_split_trade_payables_vs_capital_goods` | 6 | inside the s.16 line | no — nil |
+| SHIVAM (distress) | `five_line_a_to_e` | 5 | inside s.16 and delay lines | no — nil |
+| RICO_C (control) | `five_line_a_to_e_no_standalone_principal_beyond_appointed_day` | 5 | inside the s.16 line | no |
+| DHANUKA_C (control) | `five_line_appointed_day_caption_embedded_in_s16_line` | 5 | inside the s.16 line | no |
+| BESTAGRO (distress) | `five_line_appointed_day_caption_embedded_in_s16_line` | 5 | inside the s.16 line | no |
+| NEULAND_C (control) | `six_line_one_caption_duplicated` | 6 | standalone line | no — nil |
+| NECTAR (distress) | `narrative_prose_principal_and_s16_interest_only` | 2 (prose) | **absent entirely** | no |
+| SETCO (distress) | `two_line_principal_and_interest_only_no_appointed_day_caption` | 2 | **absent entirely** | no |
+
+Reading rules that follow from this:
+
+- **A missing figure is not a zero and not a nil.** In the five-line formats the phrase "beyond the
+  appointed day" is a sub-clause of the *interest paid under section 16* caption, so a dash against
+  that line means "no s.16 interest was paid", **not** "no payments were made late". These must
+  never be read as `msmed_principal_paid_beyond_appointed_day = 0`.
+- Two of ten filers (Setco, Nectar) omit the concept altogether, so for them the field is
+  structurally unobtainable, not merely undisclosed.
+- Nectar's disclosure is **narrative prose interleaved with employee-benefit policy text** in a
+  two-column layout, not a table. Any table-based extractor will miss it entirely.
+
+## §14 `undrawn_credit_facilities_cr` — what counts, and what does not
+
+Three kinds of "undrawn" appear in filings and they are **not interchangeable**:
+
+1. **Undrawn revolving working-capital limits** — the only kind that is liquidity for this purpose.
+   Recorded. Bharat Gears discloses this directly in a note titled "The Company had access to the
+   following undrawn borrowing facilities", split fund-based / non-fund-based.
+2. **Undrawn term-loan sanctions tied to a capex project** — NOT recorded as liquidity. Balrampur
+   Chini discloses ₹20,000 / ₹30,000 / ₹80,000 lakh of undrawn term loan, all tied to the Kumbhi
+   polylactic-acid plant. Project-tied and unusable for supplier payments.
+3. **Undisbursed debt instruments (NCDs)** — recorded, but labelled. Shivam Autotech's ₹88 crore is
+   undisbursed NCD from two alternative-investment managers: one-time, conditional, and not a
+   revolving line.
+
+Non-fund-based limits (letters of credit, bank guarantees) are excluded from the recorded figure
+and noted separately in `undrawn_source` — they finance trade documents, not cash payments.
+
+Where the figure comes from a rating rationale as *limit × (1 − average utilisation)*, the row
+carries `UNDRAWN_DERIVED_FROM_AVG_UTILISATION`, because an average over twelve months is not a
+31 March point-in-time balance.
+
+**`undrawn_source` is populated even when no number exists**, recording which documents were
+searched and what they said. An empty value means not yet searched; a populated one with no number
+means searched and not disclosed.
+
+## §15 Edge evidence: `related_party_note` and what it is worth
+
+Fourteen of the 37 edge rows now come from Ind AS 24 related-party notes. These carry exact annual
+amounts and named counterparties, which makes them the highest-quality edges in the set — but they
+are a **biased sample by construction**. A relationship appears there *because the counterparty is
+a related party*, not because deep-tier supply relationships are generally disclosed. Every such
+edge's `notes` field says so. Do not generalise from their existence to a claim that supplier
+graphs can be built from filings.
+
+Deliberately **not** recorded as edges, and why:
+- Purchases from a company's own subsidiaries (PreCam ← Memco, PreCam ← Emoss): intra-group
+  transfers already inside the consolidated numbers, not independent nodes that can fail.
+- One-off capital-asset purchases (Lokesh ← M L R Motors, ₹230.10 lakh): not recurring input supply.
+- Intra-group service companies (Autoline ← Autoline Design Software / Industrial Parks).
+- A related party with a closing balance but no transaction value (Autoline ← Shreeja Enterprises).

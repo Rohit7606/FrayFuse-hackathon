@@ -766,3 +766,187 @@ rose ahead of 6 of 8 events and 0 of the measurable control transitions. What ha
 we can now say, with measured evidence rather than assumption, that the balance-sheet liquidity
 proxy the mock relied on carries no signal at all, and the engine should drop it as an input and
 keep it only as displayed context.
+
+## Session 2026-09-09 (Session 3) — backfill and the supplier-edge ceiling
+
+Worked from the session copy of the data set, which matches the last handoff; the engine-side
+changes listed in the brief (`MAX_BUFFER_STRENGTH`, mockgen band, `PERSON_A.md`) do not touch
+`data/real/`.
+
+### Part A completion
+
+| Item | Before | After | Note |
+|---|---|---|---|
+| A1 `total_expenses_includes_dep_fin` | 31/46 | **45/46** | All 15 listed rows confirmed from source. The 46th (GENSOL FY2022) has no `total_expenses_cr`, so the flag is meaningless there. |
+| A2 `msmed_note_verbatim` | 21/46 | **31/46** | 15 remain; see below. |
+| A3 `undrawn_credit_facilities_cr` | 0/46 | **5/46 values, 18/46 searched** | See below. |
+| A4 CINs | 5/28 | **6/43** | Only LOKESH added. Denominator grew because Part B added 15 counterparty rows. |
+
+**A1 was confirmed, not assumed.** Every one of the 15 rows reads `true`, and in each case
+depreciation and finance costs were seen sitting inside the expenses block above the "Total
+expenses" subtotal in the row's own source table. Shivam FY2022's total expenses (₹489.44 cr)
+independently reconciled to the FY2023 report's comparative column.
+
+### A3 — undrawn facilities: the paradox is explained, but it does not become a clean signal
+
+| Row | cash days | undrawn ₹cr | undrawn days | total | cohort / rating |
+|---|---|---|---|---|---|
+| BALRAMPUR_C FY2025 | 0 | 1,056 | 82 | **82** | control, Crisil AA+/Stable |
+| SHIVAM FY2025 | 1 | 88 | 78 | **79** | distress, CARE BB-/Negative |
+| BGL FY2025 | 5 | 24.6 | 14 | **19** | control, CARE upgraded |
+| BGL FY2024 | 5 | 22.5 | 13 | 18 | control |
+| BGL FY2023 | 3 | 28.6 | 14 | 17 | control |
+
+**The Balrampur paradox is solved.** It runs a 0-day cash buffer because it holds a ₹2,400 crore
+revolving working-capital line drawn only 56% on average — about 82 days of committed headroom.
+It never needed cash on the balance sheet.
+
+**But undrawn headroom is not the missing discriminator.** Shivam Autotech — distress cohort,
+downgraded outlook, negative gross cash accruals — shows *more* total liquidity days (79) than
+Bharat Gears, an upgraded control (19). Swapping one liquidity metric for another does not fix
+the problem.
+
+What separates them on this small sample (n=5 rows, 3 companies) is the **kind** of headroom and
+whether the business generates accruals to service it:
+
+- Balrampur, BGL: **revolving** bank working-capital limits, renewable, drawn against current
+  assets, alongside positive accruals.
+- Shivam: **undisbursed NCDs** from two alternative-investment managers — one-time, conditional,
+  and set against negative gross cash accruals and term-debt repayments. CARE's own words:
+  "The liquidity profile of the company is stretched."
+- BHS and Gensol: **no headroom of any kind disclosed**, and both sit at CARE D.
+
+The two companies with no facility at all are the two that defaulted. That is the part of the
+signal that survives — presence or absence of committed headroom, not its size.
+
+**Gensol is the sharpest case in the whole data set.** It reported a 351-day cash buffer in FY2023
+and CARE's March 2025 press release says only: "GEL's liquidity remains poor as reflected by the
+ongoing delay in the debt servicing." A company with a year of reported cash was missing debt
+payments. Balance-sheet cash was not merely a weak signal there; it was the wrong number.
+
+### A2 — the "beyond the appointed day" pattern does NOT generalise
+
+The brief asked whether the PreCam/Shivam pattern (caption printed, no figure) is general. It is
+not. Across ten companies there are **three distinct regimes**, now catalogued in
+`DATA_DICTIONARY.md` §13:
+
+1. **Caption present, figure present — one company only.** Bharat Gears prints "The amount of
+   principal paid beyond the appointed day" as a standalone line **with real values**: 920.62 (FY23),
+   319.93 (FY24), 832.49 (FY25) lakh. It is also the only filer disclosing "principal remaining
+   unpaid beyond 45 days" as its own line.
+2. **Caption present, value nil** — PreCam, Shivam, BHS, Neuland, Balrampur, Rico, Dhanuka, Best Agrolife.
+3. **Caption absent entirely** — Setco (two-line note) and Nectar (narrative prose, no table at all).
+
+A reading trap this exposes: in the five-line formats the phrase "beyond the appointed day" is a
+**sub-clause of the section 16 interest caption**, so a dash there means "no s.16 interest was
+paid", not "nothing was paid late". Those dashes must never be loaded as
+`msmed_principal_paid_beyond_appointed_day = 0`.
+
+This vindicates the decision already taken to drop that field's weighting: it is populated in
+1 of 10 companies, and that one is a control.
+
+**15 rows remain unfilled** (Balrampur FY22/23, BGL FY22, BHS FY22, Dhanuka FY23, Gensol ×3,
+JPA ×2, Nectar FY23, Neuland FY25, Rico FY22/FY25, Setco FY24). The device bridge dropped
+mid-sweep; each needs one further document open. The analytical question A2 was set to answer is
+already answered.
+
+### Part B — the supplier-edge ceiling
+
+**Searched:** 7 automotive companies × 6 seams. **Recovered: 17 new edge rows** — 15 named supplier
+edges, 1 customer edge, 1 unnamed aggregate. All 16 named edges are `confirmed`; none were promoted.
+
+Yield by seam, which is the actual result:
+
+| Seam | Named supplier edges | Notes |
+|---|---|---|
+| **Related-party notes (Ind AS 24)** | **15** | The only productive seam. Exact annual amounts, named counterparties. |
+| Contingent liability / litigation | 0 named, 1 aggregate | Setco: "Lava Cast … has received legal notices from **19 vendors** for recovery of their outstanding overdues of ₹94.41 Lakhs". Vendors unnamed. |
+| Going concern / emphasis of matter | 0 | Setco's EOM concerns its own subsidiary, not a third-party supplier. |
+| Capital commitments | 0 | BGL ₹278.33 lakh, PreCam ₹4,403.59 lakh — amounts only, no vendor named anywhere. |
+| Awards / supplier-recognition pages | 0 new | Produced the existing Setco→Tata Motors edge in an earlier session; nothing new. |
+| ACMA directory | 0 | Exhibitor catalogues **do** carry a "Principal Automotive Customers" field, but none of our seven companies appear in them. |
+
+Per company: RICO_C 8, SHIVAM 3 (+1 customer), PRECAM_C 1, AUTOIND 1, BGL 1, SETCO 0 named,
+LOKESH 0.
+
+### Would more searching yield more? Mostly no — and that is the finding
+
+**The premise holds.** Five of six seams returned zero named suppliers across seven companies.
+The one that worked, related-party notes, works *only because a disclosure rule forces it*: a
+supplier appears there because it is a related party, not because supply relationships are public.
+Every one of the 15 edges is a promoter-affiliated or group entity. Not one arm's-length supplier
+was named by any of the seven companies in any filing.
+
+Three independent confirmations from inside the documents:
+
+- **Lokesh Machines**, on its own cost of materials: *"The details of Material Consumed are not
+  given as they consist of various types, which are not practicable to give."* An explicit refusal.
+- **Autoline Industries** discloses revenue by product line (components, tools, scrap, others) with
+  no customer named, despite a single-segment business and a known OEM dependence.
+- **Bharat Gears** gives customers as four industry percentages — agricultural machinery,
+  commercial vehicle, construction, others — and names nobody.
+
+So the honest ceiling is: **related-party notes are exhaustible and nearly exhausted; the other
+five seams are close to empty.** More searching would add a handful of edges of the same biased
+kind. The realistic remaining upside is in the *reverse* direction — supplier-recognition and
+award pages of large OEMs, which name their tier-1s — and in rating rationales, which sometimes
+name a supplier's top customer. Neither yields deep-tier structure.
+
+### What this did to the graph
+
+| Metric | Before | After |
+|---|---|---|
+| Nodes in graph | 20 | **36** |
+| Resolvable edges | 16 | **31** unique directed |
+| Components | 5 | 7 (sizes 11, 9, 7, 3, 2, 2, 2) |
+| Longest directed chain | 3 nodes | **3 nodes** |
+| Nodes with non-zero betweenness | **1** (Setco 0.0117) | **4** — Shivam 0.0092, Setco 0.0034, BGL 0.0008, Autoline 0.0008 |
+| Edges with `annual_value_cr` | 2 of 21 | **18 of 37** |
+
+Betweenness rose from one node to four because the new edges are *inbound* (supplier → our
+company) and several of our companies already had *outbound* buyer edges, so they now sit on a
+path. The values fell slightly because betweenness is normalised and 16 new leaf nodes dilute it.
+
+**The most actionable structural fact:** Rico Auto gained 8 supplier edges and still scores
+betweenness 0.0000, because it has **no outbound buyer edge**. Same for PreCam. Under
+`criticality = 0.45×betweenness + 0.35×single_source + 0.20×flow_share` they still score zero
+however stressed they get. One customer edge each would change that immediately — and Rico's
+customers are the likeliest thing to find in an OEM's supplier-award page.
+
+**The chain length did not move, and will not.** Three nodes (tier-2 → tier-1 → OEM) is the
+structural ceiling of this disclosure regime: a related-party note reveals exactly one hop
+upstream, and an awards page one hop downstream. There is no filing that reveals a supplier's
+supplier. If the product needs depth beyond three, it cannot come from public filings.
+
+`is_single_source` remains empty on all 37 edges. Not one filing made a sole-sourcing statement.
+
+### Things this session overturns or sharpens in earlier findings
+
+- **§4 (the "beyond the appointed day" caption).** Sharpened, and partly overturned: the pattern is
+  not general. One company (BGL) reports real values in that field across three years, and two
+  companies omit the concept entirely.
+- **§6 (automotive as the only viable graph cohort).** Confirmed and quantified: all 15 new edges
+  are automotive, and all come from one seam.
+- **The cash-buffer negative result.** Not overturned. Extended: the natural replacement metric
+  (undrawn headroom) does not separate the cohorts either. What does look meaningful, at n=5, is
+  binary *presence* of committed revolving headroom — both companies with none are at CARE D.
+- **A source inconsistency worth carrying:** Shivam's `msmed_interest_accrued_unpaid` for FY2024 is
+  78.99 lakh in the FY2024 report as filed but 72.99 lakh in the FY2025 report's comparative —
+  and 72.99 is exactly FY2023's figure, so the FY2025 comparative looks like a carry-forward slip
+  rather than a restatement. The row keeps 0.79 cr from the company's own FY2024 report.
+- Shivam also asserts in its trade-payables note that "There are no outstanding amounts payable
+  beyond the agreed period to micro, small and medium enterprise", while note 33 of the same
+  report shows ₹133.34 lakh of MSMED interest accrued and unpaid. Both are recorded as filed.
+
+### Verification
+
+```
+A1 filled                45 of 46 (46th has no total_expenses)
+A2 filled                31 of 46
+A3 values / searched     5 / 18
+cash_buffer recompute    44 verified, 0 failed
+duplicate company-years  none
+orphan ids               none (financials, edges)
+ragged rows              none in any CSV
+companies 43 | financials 46 | edges 37 | events 10 | panel 32
+```
