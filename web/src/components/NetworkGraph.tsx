@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useMemo } from 'react';
+import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 
 interface NetworkGraphProps {
@@ -10,8 +10,11 @@ export default function NetworkGraph({ data, simulationState = 'idle' }: Network
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const graphRef = useRef<any>(null);
-  
-  const [hoverNode, setHoverNode] = useState<any>(null);
+
+  // Use a ref for hover state — avoids React re-renders on every mouse move.
+  // The canvas redraws at ~60fps via requestAnimationFrame, so the ref value
+  // is picked up on the next frame without needing a state update.
+  const hoverNodeRef = useRef<any>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -22,22 +25,22 @@ export default function NetworkGraph({ data, simulationState = 'idle' }: Network
         });
       }
     };
-    
+
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
-    // Zoom to fit when data changes
     if (graphRef.current && data?.nodes?.length > 0) {
       setTimeout(() => {
         graphRef.current.zoomToFit(400, 50);
-      }, 100);
+      }, 300);
     }
   }, [data]);
 
-  const { nodes, links } = useMemo(() => {
+  // Memoise the graph data object itself so the reference is stable
+  const graphData = useMemo(() => {
     if (!data || !data.nodes || !data.edges) return { nodes: [], links: [] };
     return {
       nodes: data.nodes.map((n: any) => ({ ...n, id: n.node_id })),
@@ -45,110 +48,152 @@ export default function NetworkGraph({ data, simulationState = 'idle' }: Network
     };
   }, [data]);
 
-  if (!data || !data.nodes || !data.edges) return <div style={{ color: 'white', padding: '20px' }}>Loading network...</div>;
-
-  const getRiskColor = (nodeId: string, baseStress: number = 0) => {
-    // Find if we have a score for this node
+  const getRiskColor = useCallback((nodeId: string, baseStress: number = 0) => {
     const scoreObj = data?.scores?.find((s: any) => s.node_id === nodeId);
-    
+
     let stress = baseStress;
     let riskBand = 'stable';
-    
+
     if (scoreObj) {
       stress = scoreObj.own_stress || baseStress;
       riskBand = scoreObj.risk_band || 'stable';
     }
 
-    if (simulationState === 'idle') {
-      // In idle state, mostly dim unless it's a base anchor/tier1
-      return '#3b82f6'; 
-    }
+    if (simulationState === 'idle') return '#3b82f6';
 
     if (simulationState === 'intervened' && scoreObj && scoreObj.intervention_cost_cr > 0 && riskBand === 'stable') {
-      return '#10b981'; // Solved node
+      return '#10b981';
     }
 
-    if (riskBand === 'critical' || stress >= 0.7) return '#ef4444'; // critical
-    if (riskBand === 'watch' || stress >= 0.4) return '#f59e0b'; // watch
-    if (riskBand === 'stable') return '#10b981'; // stable
+    if (riskBand === 'critical' || stress >= 0.7) return '#ef4444';
+    if (riskBand === 'watch' || stress >= 0.4) return '#f59e0b';
+    if (riskBand === 'stable') return '#10b981';
 
     return '#3b82f6';
-  };
+  }, [data?.scores, simulationState]);
+
+  if (!data || !data.nodes || !data.edges) {
+    return <div style={{ color: 'white', padding: '20px' }}>Loading network...</div>;
+  }
+
+  /** Extracts a stable node id from a link endpoint (string before init, object after). */
+  const linkNodeId = (endpoint: any): string =>
+    typeof endpoint === 'object' ? endpoint.id : endpoint;
 
   return (
-    <div ref={containerRef} style={{ width: '100%', height: '100%', cursor: hoverNode ? 'pointer' : 'default' }}>
+    <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
       <ForceGraph2D
         ref={graphRef}
         width={dimensions.width}
         height={dimensions.height}
-        graphData={{ nodes, links }}
-        nodeColor={(node: any) => getRiskColor(node.id, node.stress_level || 0)}
+        graphData={graphData}
         nodeRelSize={6}
+        nodeLabel={() => ''}
         linkDirectionalArrowLength={3.5}
         linkDirectionalArrowRelPos={1}
+        onNodeHover={(node: any) => { hoverNodeRef.current = node || null; }}
         linkColor={(link: any) => {
-          if (hoverNode) {
-            const isConnected = link.source.id === hoverNode.id || link.target.id === hoverNode.id;
-            return isConnected ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.05)';
+          const hover = hoverNodeRef.current;
+          if (hover) {
+            const connected =
+              linkNodeId(link.source) === hover.id ||
+              linkNodeId(link.target) === hover.id;
+            return connected
+              ? 'rgba(255, 255, 255, 0.8)'
+              : 'rgba(255, 255, 255, 0.05)';
           }
           return 'rgba(255, 255, 255, 0.2)';
         }}
         linkWidth={(link: any) => {
-           if (hoverNode) {
-             return link.source.id === hoverNode.id || link.target.id === hoverNode.id ? 2 : 1;
-           }
-           return 1;
-        }}
-        onNodeHover={setHoverNode}
-        nodeCanvasObject={(node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
-          const isHovered = hoverNode === node;
-          const isConnected = hoverNode && links.some((l: any) => 
-            (l.source.id === hoverNode.id && l.target.id === node.id) ||
-            (l.target.id === hoverNode.id && l.source.id === node.id)
-          );
-          
-          const isFaded = hoverNode && !isHovered && !isConnected;
-
-          const label = node.id;
-          const fontSize = 12/globalScale;
-          const color = getRiskColor(node.id, node.stress_level || 0);
-          
-          // Draw Node Circle
-          ctx.beginPath();
-          ctx.arc(node.x, node.y, isHovered ? 8 : 6, 0, 2 * Math.PI, false);
-          ctx.fillStyle = color;
-          
-          if (isFaded) {
-             ctx.globalAlpha = 0.2;
-          } else if (isHovered) {
-             ctx.shadowColor = color;
-             ctx.shadowBlur = 15;
+          const hover = hoverNodeRef.current;
+          if (hover) {
+            const connected =
+              linkNodeId(link.source) === hover.id ||
+              linkNodeId(link.target) === hover.id;
+            return connected ? 2 : 0.5;
           }
-          
+          return 1;
+        }}
+        nodeCanvasObjectMode={() => 'replace'}
+        nodeCanvasObject={(node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
+          const hover = hoverNodeRef.current;
+          const isHovered = hover?.id === node.id;
+
+          // Check if this node is a direct neighbour of the hovered node
+          let isNeighbour = false;
+          if (hover && !isHovered) {
+            const gLinks = graphRef.current?.graphData()?.links || [];
+            isNeighbour = gLinks.some((l: any) => {
+              const src = linkNodeId(l.source);
+              const tgt = linkNodeId(l.target);
+              return (src === hover.id && tgt === node.id) ||
+                     (tgt === hover.id && src === node.id);
+            });
+          }
+
+          const isFaded = hover && !isHovered && !isNeighbour;
+          const color = getRiskColor(node.id, node.stress_level || 0);
+          const radius = isHovered ? 8 : 6;
+
+          // --- Draw circle ---
+          ctx.save();
+
+          if (isFaded) {
+            ctx.globalAlpha = 0.15;
+          } else if (isHovered) {
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 18;
+          }
+
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
+          ctx.fillStyle = color;
           ctx.fill();
-          
-          // Reset shadow/alpha
-          ctx.shadowBlur = 0;
-          ctx.globalAlpha = 1;
-          
-          // Draw Label
-          if (globalScale > 1.5 || isHovered) {
-            ctx.font = `${isHovered ? fontSize * 1.2 : fontSize}px Sans-Serif`;
+          ctx.restore();
+
+          // --- Draw label ---
+          const fontSize = 12 / globalScale;
+
+          if (isHovered) {
+            const nodeName = node.name || node.id;
+            ctx.font = `600 ${fontSize * 1.3}px Inter, Sans-Serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillStyle = isFaded ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.9)';
-            
-            // Draw background pill for hovered label
-            if (isHovered) {
-              const textWidth = ctx.measureText(label).width;
-              const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.8);
-              ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-              ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y + 10 - bckgDimensions[1] / 2, bckgDimensions[0], bckgDimensions[1]);
-              ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+
+            // Background pill
+            const tw = ctx.measureText(nodeName).width;
+            const px = fontSize * 0.5;
+            const py = fontSize * 0.35;
+            ctx.fillStyle = 'rgba(0,0,0,0.85)';
+            ctx.beginPath();
+            // Simple rounded rect
+            const rx = node.x - tw / 2 - px;
+            const ry = node.y + radius + 4 - py;
+            const rw = tw + px * 2;
+            const rh = fontSize + py * 2;
+            if (ctx.roundRect) {
+              ctx.roundRect(rx, ry, rw, rh, 3);
+            } else {
+              ctx.rect(rx, ry, rw, rh);
             }
-            
-            ctx.fillText(label, node.x, node.y + 10);
+            ctx.fill();
+
+            ctx.fillStyle = '#fff';
+            ctx.fillText(nodeName, node.x, node.y + radius + 4 + fontSize * 0.5 - py);
+          } else if (globalScale > 1.8 && !isFaded) {
+            ctx.font = `${fontSize}px Inter, Sans-Serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = 'rgba(255,255,255,0.6)';
+            ctx.fillText(node.id, node.x, node.y + radius + 4);
           }
+        }}
+        nodePointerAreaPaint={(node: any, color: string, ctx: CanvasRenderingContext2D) => {
+          // Invisible hit area for hover detection — must match or exceed the drawn radius
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, 10, 0, 2 * Math.PI);
+          ctx.fillStyle = color;
+          ctx.fill();
         }}
       />
     </div>

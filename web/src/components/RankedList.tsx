@@ -1,5 +1,5 @@
 interface RankedListProps {
-  scores: any[];
+  scores: any[] | undefined;
 }
 
 export default function RankedList({ scores }: RankedListProps) {
