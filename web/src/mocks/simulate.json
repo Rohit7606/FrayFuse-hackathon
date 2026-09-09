@@ -22282,7 +22282,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.1076,
+      "supply_disruption": 0.1076,
+      "disruption_band": "high",
+      "disrupted_inflow_cr": 848.96,
+      "disruption_reason": "Brakecraft Components Ltd is at risk of halting brake assembly deliveries. ₹848.96 cr of inbound supply at risk."
     },
     {
       "node_id": "N002",
@@ -22313,7 +22318,12 @@
       "intervention_cost_cr": 0.02,
       "estimated_exposure_cr": 0.96,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0154,
+      "supply_disruption": 0.0126,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.1,
+      "disruption_reason": "Harshad Rubber Works Udyog Pvt Ltd is at risk of halting cold forming deliveries. ₹0.10 cr of inbound supply at risk."
     },
     {
       "node_id": "N003",
@@ -22334,7 +22344,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N004",
@@ -22355,7 +22370,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N005",
@@ -22376,7 +22396,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N006",
@@ -22397,7 +22422,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N007",
@@ -22423,7 +22453,12 @@
       "intervention_cost_cr": 351.84,
       "estimated_exposure_cr": 228.69,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.5916,
+      "supply_disruption": 0.5916,
+      "disruption_band": "critical",
+      "disrupted_inflow_cr": 46.48,
+      "disruption_reason": "Sealsworks Rubber Industries Pvt Ltd is at risk of halting hydraulic seal kit deliveries — sole source, nothing else to buy it from. ₹46.48 cr of inbound supply at risk."
     },
     {
       "node_id": "N008",
@@ -22444,7 +22479,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.016,
+      "supply_disruption": 0.016,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 4.36,
+      "disruption_reason": "Kalyani Fastener Systems Pvt Ltd is at risk of halting cold forged bolts deliveries. ₹4.36 cr of inbound supply at risk."
     },
     {
       "node_id": "N009",
@@ -22465,7 +22505,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N010",
@@ -22486,7 +22531,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0121,
+      "supply_disruption": 0.0121,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 1.89,
+      "disruption_reason": "Indraprast Treatments Enterprises Pvt Ltd is at risk of halting sealing compounds deliveries. ₹1.89 cr of inbound supply at risk."
     },
     {
       "node_id": "N011",
@@ -22517,7 +22567,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.23,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0046,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N012",
@@ -22538,7 +22593,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0036,
+      "supply_disruption": 0.0036,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.07,
+      "disruption_reason": "Purnima Polymers Systems Pvt Ltd is at risk of halting cold forming deliveries. ₹0.07 cr of inbound supply at risk."
     },
     {
       "node_id": "N013",
@@ -22569,7 +22629,12 @@
       "intervention_cost_cr": 0.1,
       "estimated_exposure_cr": 2.07,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.1021,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N014",
@@ -22590,7 +22655,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N015",
@@ -22611,7 +22681,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N016",
@@ -22642,7 +22717,12 @@
       "intervention_cost_cr": 0.37,
       "estimated_exposure_cr": 5.49,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0971,
+      "supply_disruption": 0.0286,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.09,
+      "disruption_reason": "Kesariya Toolings Industries Pvt Ltd is at risk of halting powder coating deliveries. ₹0.09 cr of inbound supply at risk."
     },
     {
       "node_id": "N017",
@@ -22678,7 +22758,12 @@
       "intervention_cost_cr": 0.27,
       "estimated_exposure_cr": 4.39,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0721,
+      "supply_disruption": 0.0078,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.02,
+      "disruption_reason": "Yashodhan Metalworks Components Pvt Ltd is at risk of halting polymer compounds deliveries. ₹0.02 cr of inbound supply at risk."
     },
     {
       "node_id": "N018",
@@ -22699,7 +22784,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N019",
@@ -22720,7 +22810,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N020",
@@ -22741,7 +22836,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N021",
@@ -22762,7 +22862,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N022",
@@ -22783,7 +22888,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0003,
+      "supply_disruption": 0.0003,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "Anantham Industries Systems Pvt Ltd is at risk of halting engineering plastics deliveries. ₹0.00 cr of inbound supply at risk."
     },
     {
       "node_id": "N023",
@@ -22804,7 +22914,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0115,
+      "supply_disruption": 0.0115,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 1.2,
+      "disruption_reason": "Purnima Components Pvt Ltd is at risk of halting sealing compounds deliveries. ₹1.20 cr of inbound supply at risk."
     },
     {
       "node_id": "N024",
@@ -22825,7 +22940,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.008,
+      "supply_disruption": 0.008,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.26,
+      "disruption_reason": "Suryakant Springs Products Pvt Ltd is at risk of halting powder coating deliveries. ₹0.26 cr of inbound supply at risk."
     },
     {
       "node_id": "N025",
@@ -22846,7 +22966,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N026",
@@ -22877,7 +23002,12 @@
       "intervention_cost_cr": 0.05,
       "estimated_exposure_cr": 2.36,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0171,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N027",
@@ -22898,7 +23028,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N028",
@@ -22929,7 +23064,12 @@
       "intervention_cost_cr": 0.09,
       "estimated_exposure_cr": 6.55,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0232,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N029",
@@ -22960,7 +23100,12 @@
       "intervention_cost_cr": 0.03,
       "estimated_exposure_cr": 1.26,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0245,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N030",
@@ -22981,7 +23126,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N031",
@@ -23002,7 +23152,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.001,
+      "supply_disruption": 0.001,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.04,
+      "disruption_reason": "Udaygiri Works Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.04 cr of inbound supply at risk."
     },
     {
       "node_id": "N032",
@@ -23033,7 +23188,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.57,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0014,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N033",
@@ -23069,7 +23229,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.21,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0015,
+      "supply_disruption": 0.0003,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "Vaikunth Auto Systems Pvt Ltd is at risk of halting aluminium billets deliveries. ₹0.00 cr of inbound supply at risk."
     },
     {
       "node_id": "N034",
@@ -23090,7 +23255,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N035",
@@ -23121,7 +23291,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.52,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0088,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N036",
@@ -23157,7 +23332,12 @@
       "intervention_cost_cr": 0.49,
       "estimated_exposure_cr": 11.87,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0539,
+      "supply_disruption": 0.0162,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.28,
+      "disruption_reason": "Purnima Enterprises Udyog Pvt Ltd is at risk of halting electroplating deliveries. ₹0.28 cr of inbound supply at risk."
     },
     {
       "node_id": "N037",
@@ -23178,7 +23358,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.009,
+      "supply_disruption": 0.009,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.2,
+      "disruption_reason": "Aarvik Precision Engineering Pvt Ltd is at risk of halting rubber moulding deliveries. ₹0.20 cr of inbound supply at risk."
     },
     {
       "node_id": "N038",
@@ -23199,7 +23384,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N039",
@@ -23230,7 +23420,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.57,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0144,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N040",
@@ -23261,7 +23456,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.62,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0056,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N041",
@@ -23292,7 +23492,12 @@
       "intervention_cost_cr": 0.06,
       "estimated_exposure_cr": 4.58,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0308,
+      "supply_disruption": 0.0116,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.21,
+      "disruption_reason": "Siddhivin Castings Works Udyog Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.21 cr of inbound supply at risk."
     },
     {
       "node_id": "N042",
@@ -23333,7 +23538,12 @@
       "intervention_cost_cr": 2.04,
       "estimated_exposure_cr": 141.12,
       "propagation_depth": 1,
-      "rank": 1
+      "rank": 1,
+      "halt_risk": 0.5132,
+      "supply_disruption": 0.2514,
+      "disruption_band": "critical",
+      "disrupted_inflow_cr": 4.68,
+      "disruption_reason": "Precision Polymer Works Pvt Ltd is at risk of halting polymer compound deliveries — sole source, nothing else to buy it from. ₹4.68 cr of inbound supply at risk."
     },
     {
       "node_id": "N043",
@@ -23354,7 +23564,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N044",
@@ -23375,7 +23590,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N045",
@@ -23396,7 +23616,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N046",
@@ -23417,7 +23642,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N047",
@@ -23438,7 +23668,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N048",
@@ -23474,7 +23709,12 @@
       "intervention_cost_cr": 0.14,
       "estimated_exposure_cr": 12.31,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.08,
+      "supply_disruption": 0.0395,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.24,
+      "disruption_reason": "Saptagiri Castings Engineering Pvt Ltd is at risk of halting aluminium billets deliveries. ₹0.24 cr of inbound supply at risk."
     },
     {
       "node_id": "N049",
@@ -23495,7 +23735,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N050",
@@ -23516,7 +23761,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N051",
@@ -23547,7 +23797,12 @@
       "intervention_cost_cr": 0.06,
       "estimated_exposure_cr": 3.56,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0137,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N052",
@@ -23568,7 +23823,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N053",
@@ -23589,7 +23849,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N054",
@@ -23625,7 +23890,12 @@
       "intervention_cost_cr": 0.03,
       "estimated_exposure_cr": 1.2,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0133,
+      "supply_disruption": 0.0116,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.08,
+      "disruption_reason": "Amaravati Systems Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.08 cr of inbound supply at risk."
     },
     {
       "node_id": "N055",
@@ -23656,7 +23926,12 @@
       "intervention_cost_cr": 0.03,
       "estimated_exposure_cr": 2.68,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0122,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N056",
@@ -23677,7 +23952,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N057",
@@ -23698,7 +23978,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N058",
@@ -23719,7 +24004,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N059",
@@ -23750,7 +24040,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.03,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0008,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N060",
@@ -23771,7 +24066,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0059,
+      "supply_disruption": 0.0059,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.04,
+      "disruption_reason": "Bhavani Castings Components Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.04 cr of inbound supply at risk."
     },
     {
       "node_id": "N061",
@@ -23802,7 +24102,12 @@
       "intervention_cost_cr": 0.12,
       "estimated_exposure_cr": 5.66,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0707,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N062",
@@ -23823,7 +24128,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0071,
+      "supply_disruption": 0.0071,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.12,
+      "disruption_reason": "Bhavani Precision Components Pvt Ltd is at risk of halting sheet metal deliveries. ₹0.12 cr of inbound supply at risk."
     },
     {
       "node_id": "N063",
@@ -23854,7 +24164,12 @@
       "intervention_cost_cr": 0.13,
       "estimated_exposure_cr": 2.62,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.1016,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N064",
@@ -23875,7 +24190,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N065",
@@ -23906,7 +24226,12 @@
       "intervention_cost_cr": 0.03,
       "estimated_exposure_cr": 1.07,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0535,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N066",
@@ -23937,7 +24262,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.91,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0075,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N067",
@@ -23973,7 +24303,12 @@
       "intervention_cost_cr": 0.11,
       "estimated_exposure_cr": 18.99,
       "propagation_depth": 1,
-      "rank": 12
+      "rank": 12,
+      "halt_risk": 0.0642,
+      "supply_disruption": 0.0194,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.39,
+      "disruption_reason": "Sarvodaya Works Udyog Pvt Ltd is at risk of halting electroplating deliveries. ₹0.39 cr of inbound supply at risk."
     },
     {
       "node_id": "N068",
@@ -23994,7 +24329,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0009,
+      "supply_disruption": 0.0009,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.02,
+      "disruption_reason": "Virajpet Castings Products Udyog Pvt Ltd is at risk of halting sealing compounds deliveries. ₹0.02 cr of inbound supply at risk."
     },
     {
       "node_id": "N069",
@@ -24025,7 +24365,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.09,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0005,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N070",
@@ -24056,7 +24401,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 1.05,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0297,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N071",
@@ -24077,7 +24427,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0181,
+      "supply_disruption": 0.0181,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 3.54,
+      "disruption_reason": "Indraprast Treatments Enterprises Pvt Ltd is at risk of halting sealing compounds deliveries. ₹3.54 cr of inbound supply at risk."
     },
     {
       "node_id": "N072",
@@ -24098,7 +24453,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N073",
@@ -24119,7 +24479,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N074",
@@ -24140,7 +24505,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N075",
@@ -24161,7 +24531,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0091,
+      "supply_disruption": 0.0091,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.03,
+      "disruption_reason": "Sahyadri Products Udyog Pvt Ltd is at risk of halting precision machining deliveries. ₹0.03 cr of inbound supply at risk."
     },
     {
       "node_id": "N076",
@@ -24182,7 +24557,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N077",
@@ -24203,7 +24583,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N078",
@@ -24224,7 +24609,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N079",
@@ -24245,7 +24635,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0043,
+      "supply_disruption": 0.0043,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.13,
+      "disruption_reason": "Trishul Industries Pvt Ltd is at risk of halting forgings deliveries. ₹0.13 cr of inbound supply at risk."
     },
     {
       "node_id": "N080",
@@ -24266,7 +24661,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N081",
@@ -24287,7 +24687,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0044,
+      "supply_disruption": 0.0044,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.09,
+      "disruption_reason": "Zorawar Works Udyog Pvt Ltd is at risk of halting electroplating deliveries. ₹0.09 cr of inbound supply at risk."
     },
     {
       "node_id": "N082",
@@ -24308,7 +24713,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N083",
@@ -24329,7 +24739,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N084",
@@ -24350,7 +24765,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0004,
+      "supply_disruption": 0.0004,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.02,
+      "disruption_reason": "Kritika Forgings Industries Pvt Ltd is at risk of halting forgings deliveries. ₹0.02 cr of inbound supply at risk."
     },
     {
       "node_id": "N085",
@@ -24381,7 +24801,12 @@
       "intervention_cost_cr": 0.03,
       "estimated_exposure_cr": 2.65,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0141,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N086",
@@ -24402,7 +24827,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0008,
+      "supply_disruption": 0.0008,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.01,
+      "disruption_reason": "Chitrakoot Treatments Components Pvt Ltd is at risk of halting engineering plastics deliveries. ₹0.01 cr of inbound supply at risk."
     },
     {
       "node_id": "N087",
@@ -24438,7 +24868,12 @@
       "intervention_cost_cr": 3.23,
       "estimated_exposure_cr": 65.22,
       "propagation_depth": 1,
-      "rank": 3
+      "rank": 3,
+      "halt_risk": 0.2899,
+      "supply_disruption": 0.098,
+      "disruption_band": "high",
+      "disrupted_inflow_cr": 4.14,
+      "disruption_reason": "Panchvati Metalworks Industries Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹4.14 cr of inbound supply at risk."
     },
     {
       "node_id": "N088",
@@ -24459,7 +24894,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0393,
+      "supply_disruption": 0.0393,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 1.68,
+      "disruption_reason": "Vaikunth Autotech Engineering Pvt Ltd is at risk of halting sealing compounds deliveries. ₹1.68 cr of inbound supply at risk."
     },
     {
       "node_id": "N089",
@@ -24480,7 +24920,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0033,
+      "supply_disruption": 0.0033,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.04,
+      "disruption_reason": "Purnima Enterprises Udyog Pvt Ltd is at risk of halting electroplating deliveries. ₹0.04 cr of inbound supply at risk."
     },
     {
       "node_id": "N090",
@@ -24511,7 +24956,12 @@
       "intervention_cost_cr": 0.26,
       "estimated_exposure_cr": 10.97,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0745,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N091",
@@ -24542,7 +24992,12 @@
       "intervention_cost_cr": 0.03,
       "estimated_exposure_cr": 1.69,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0227,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N092",
@@ -24563,7 +25018,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N093",
@@ -24584,7 +25044,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.001,
+      "supply_disruption": 0.001,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.02,
+      "disruption_reason": "Saptagiri Works Pvt Ltd is at risk of halting cold forming deliveries. ₹0.02 cr of inbound supply at risk."
     },
     {
       "node_id": "N094",
@@ -24615,7 +25080,12 @@
       "intervention_cost_cr": 0.03,
       "estimated_exposure_cr": 1.74,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0286,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N095",
@@ -24636,7 +25106,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "Jagriti Industries Udyog Pvt Ltd is at risk of halting aluminium billets deliveries. ₹0.00 cr of inbound supply at risk."
     },
     {
       "node_id": "N096",
@@ -24657,7 +25132,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0035,
+      "supply_disruption": 0.0035,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.61,
+      "disruption_reason": "Rajhans Products Pvt Ltd is at risk of halting sensor modules deliveries. ₹0.61 cr of inbound supply at risk."
     },
     {
       "node_id": "N097",
@@ -24678,7 +25158,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N098",
@@ -24709,7 +25194,12 @@
       "intervention_cost_cr": 0.04,
       "estimated_exposure_cr": 1.97,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0476,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N099",
@@ -24740,7 +25230,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.59,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0111,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N100",
@@ -24761,7 +25256,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.01,
+      "supply_disruption": 0.01,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.04,
+      "disruption_reason": "Manthan Enterprises Udyog Pvt Ltd is at risk of halting alloy steel deliveries. ₹0.04 cr of inbound supply at risk."
     },
     {
       "node_id": "N101",
@@ -24782,7 +25282,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N102",
@@ -24803,7 +25308,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N103",
@@ -24824,7 +25334,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0004,
+      "supply_disruption": 0.0004,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "Aarvik Products Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.00 cr of inbound supply at risk."
     },
     {
       "node_id": "N104",
@@ -24845,7 +25360,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N105",
@@ -24866,7 +25386,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0003,
+      "supply_disruption": 0.0003,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.01,
+      "disruption_reason": "Vasundhara Forgings Systems Pvt Ltd is at risk of halting forgings deliveries. ₹0.01 cr of inbound supply at risk."
     },
     {
       "node_id": "N106",
@@ -24897,7 +25422,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.34,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0153,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N107",
@@ -24928,7 +25458,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.59,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0013,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N108",
@@ -24959,7 +25494,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.02,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0007,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N109",
@@ -24980,7 +25520,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N110",
@@ -25011,7 +25556,12 @@
       "intervention_cost_cr": 0.05,
       "estimated_exposure_cr": 2.46,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.015,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N111",
@@ -25032,7 +25582,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N112",
@@ -25053,7 +25608,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N113",
@@ -25074,7 +25634,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N114",
@@ -25095,7 +25660,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0039,
+      "supply_disruption": 0.0039,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.03,
+      "disruption_reason": "Meghdoot Products Udyog Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.03 cr of inbound supply at risk."
     },
     {
       "node_id": "N115",
@@ -25126,7 +25696,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.51,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0091,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N116",
@@ -25147,7 +25722,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N117",
@@ -25178,7 +25758,12 @@
       "intervention_cost_cr": 0.02,
       "estimated_exposure_cr": 0.96,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.013,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N118",
@@ -25214,7 +25799,12 @@
       "intervention_cost_cr": 0.39,
       "estimated_exposure_cr": 98.81,
       "propagation_depth": 2,
-      "rank": 4
+      "rank": 4,
+      "halt_risk": 0.1721,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N119",
@@ -25235,7 +25825,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N120",
@@ -25256,7 +25851,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N121",
@@ -25287,7 +25887,12 @@
       "intervention_cost_cr": 0.02,
       "estimated_exposure_cr": 1.05,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0144,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N122",
@@ -25308,7 +25913,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N123",
@@ -25329,7 +25939,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N124",
@@ -25350,7 +25965,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N125",
@@ -25371,7 +25991,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N126",
@@ -25392,7 +26017,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0087,
+      "supply_disruption": 0.0087,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 1.29,
+      "disruption_reason": "Adhira Works Pvt Ltd is at risk of halting precision machining deliveries. ₹1.29 cr of inbound supply at risk."
     },
     {
       "node_id": "N127",
@@ -25413,7 +26043,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N128",
@@ -25444,7 +26079,12 @@
       "intervention_cost_cr": 0.11,
       "estimated_exposure_cr": 2.3,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0915,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N129",
@@ -25475,7 +26115,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.04,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0008,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N130",
@@ -25496,7 +26141,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N131",
@@ -25527,7 +26177,12 @@
       "intervention_cost_cr": 0.02,
       "estimated_exposure_cr": 0.72,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0062,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N132",
@@ -25548,7 +26203,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N133",
@@ -25569,7 +26229,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N134",
@@ -25600,7 +26265,12 @@
       "intervention_cost_cr": 0.02,
       "estimated_exposure_cr": 1.35,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0397,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N135",
@@ -25636,7 +26306,12 @@
       "intervention_cost_cr": 0.09,
       "estimated_exposure_cr": 15.91,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0192,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N136",
@@ -25667,7 +26342,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.47,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0064,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N137",
@@ -25688,7 +26368,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N138",
@@ -25719,7 +26404,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.56,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.019,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N139",
@@ -25740,7 +26430,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.004,
+      "supply_disruption": 0.004,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.04,
+      "disruption_reason": "Mahendra Treatments Industries Udyog Pvt Ltd is at risk of halting alloy steel deliveries. ₹0.04 cr of inbound supply at risk."
     },
     {
       "node_id": "N140",
@@ -25761,7 +26456,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0033,
+      "supply_disruption": 0.0033,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.03,
+      "disruption_reason": "Madhuban Enterprises Udyog Pvt Ltd is at risk of halting heat treatment deliveries. ₹0.03 cr of inbound supply at risk."
     },
     {
       "node_id": "N141",
@@ -25782,7 +26482,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0221,
+      "supply_disruption": 0.0221,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 2.09,
+      "disruption_reason": "Somnath Enterprises Private Ltd is at risk of halting sealing compounds deliveries. ₹2.09 cr of inbound supply at risk."
     },
     {
       "node_id": "N142",
@@ -25813,7 +26518,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.39,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0037,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N143",
@@ -25834,7 +26544,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N144",
@@ -25865,7 +26580,12 @@
       "intervention_cost_cr": 0.04,
       "estimated_exposure_cr": 1.22,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0205,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N145",
@@ -25896,7 +26616,12 @@
       "intervention_cost_cr": 0.11,
       "estimated_exposure_cr": 6.42,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0401,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N146",
@@ -25917,7 +26642,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N147",
@@ -25938,7 +26668,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N148",
@@ -25969,7 +26704,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0001,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N149",
@@ -25990,7 +26730,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N150",
@@ -26011,7 +26756,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N151",
@@ -26042,7 +26792,12 @@
       "intervention_cost_cr": 0.13,
       "estimated_exposure_cr": 5.18,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0466,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N152",
@@ -26063,7 +26818,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N153",
@@ -26084,7 +26844,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0188,
+      "supply_disruption": 0.0188,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 1.69,
+      "disruption_reason": "Somnath Enterprises Private Ltd is at risk of halting sealing compounds deliveries. ₹1.69 cr of inbound supply at risk."
     },
     {
       "node_id": "N154",
@@ -26115,7 +26880,12 @@
       "intervention_cost_cr": 0.06,
       "estimated_exposure_cr": 4.36,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0152,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N155",
@@ -26151,7 +26921,12 @@
       "intervention_cost_cr": 0.04,
       "estimated_exposure_cr": 7.44,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.03,
+      "supply_disruption": 0.0118,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.19,
+      "disruption_reason": "Virajpet Stampings Enterprises Udyog Pvt Ltd is at risk of halting cold forming deliveries. ₹0.19 cr of inbound supply at risk."
     },
     {
       "node_id": "N156",
@@ -26172,7 +26947,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N157",
@@ -26193,7 +26973,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0219,
+      "supply_disruption": 0.0219,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 1.43,
+      "disruption_reason": "Vaikunth Rubber Engineering Pvt Ltd is at risk of halting brake systems deliveries. ₹1.43 cr of inbound supply at risk."
     },
     {
       "node_id": "N158",
@@ -26214,7 +26999,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N159",
@@ -26235,7 +27025,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N160",
@@ -26256,7 +27051,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N161",
@@ -26287,7 +27087,12 @@
       "intervention_cost_cr": 0.06,
       "estimated_exposure_cr": 4.02,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0763,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N162",
@@ -26308,7 +27113,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0002,
+      "supply_disruption": 0.0002,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "Vaikunth Engineering Products Udyog Pvt Ltd is at risk of halting forgings deliveries. ₹0.00 cr of inbound supply at risk."
     },
     {
       "node_id": "N163",
@@ -26339,7 +27149,12 @@
       "intervention_cost_cr": 0.03,
       "estimated_exposure_cr": 1.82,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0128,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N164",
@@ -26360,7 +27175,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N165",
@@ -26381,7 +27201,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N166",
@@ -26402,7 +27227,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N167",
@@ -26423,7 +27253,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0002,
+      "supply_disruption": 0.0002,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "Sarvodaya Industries Udyog Pvt Ltd is at risk of halting precision machining deliveries. ₹0.00 cr of inbound supply at risk."
     },
     {
       "node_id": "N168",
@@ -26454,7 +27289,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.3,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.003,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N169",
@@ -26475,7 +27315,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N170",
@@ -26506,7 +27351,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.51,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0043,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N171",
@@ -26537,7 +27387,12 @@
       "intervention_cost_cr": 0.16,
       "estimated_exposure_cr": 2.46,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0311,
+      "supply_disruption": 0.0144,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.03,
+      "disruption_reason": "Udaygiri Works Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.03 cr of inbound supply at risk."
     },
     {
       "node_id": "N172",
@@ -26558,7 +27413,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N173",
@@ -26579,7 +27439,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N174",
@@ -26600,7 +27465,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N175",
@@ -26631,7 +27501,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.02,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0008,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N176",
@@ -26662,7 +27537,12 @@
       "intervention_cost_cr": 0.12,
       "estimated_exposure_cr": 8.61,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0764,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N177",
@@ -26683,7 +27563,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N178",
@@ -26719,7 +27604,12 @@
       "intervention_cost_cr": 0.16,
       "estimated_exposure_cr": 13.43,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0742,
+      "supply_disruption": 0.0312,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.66,
+      "disruption_reason": "Trishul Products Udyog Pvt Ltd is at risk of halting injection moulding deliveries — sole source, nothing else to buy it from. ₹0.66 cr of inbound supply at risk."
     },
     {
       "node_id": "N179",
@@ -26740,7 +27630,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0285,
+      "supply_disruption": 0.0285,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.36,
+      "disruption_reason": "Suryakant Engineering Industries Pvt Ltd is at risk of halting precision machining deliveries. ₹0.36 cr of inbound supply at risk."
     },
     {
       "node_id": "N180",
@@ -26761,7 +27656,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N181",
@@ -26782,7 +27682,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0003,
+      "supply_disruption": 0.0003,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.01,
+      "disruption_reason": "Ratnadeep Industries Udyog Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.01 cr of inbound supply at risk."
     },
     {
       "node_id": "N182",
@@ -26803,7 +27708,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0304,
+      "supply_disruption": 0.0304,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 6.21,
+      "disruption_reason": "Purnima Components Pvt Ltd is at risk of halting sealing compounds deliveries. ₹6.21 cr of inbound supply at risk."
     },
     {
       "node_id": "N183",
@@ -26824,7 +27734,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N184",
@@ -26845,7 +27760,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N185",
@@ -26876,7 +27796,12 @@
       "intervention_cost_cr": 0.03,
       "estimated_exposure_cr": 1.82,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0103,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N186",
@@ -26897,7 +27822,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N187",
@@ -26918,7 +27848,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0322,
+      "supply_disruption": 0.0322,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 5.81,
+      "disruption_reason": "Vaayu Thermal Products Pvt Ltd is at risk of halting radiator cores deliveries. ₹5.81 cr of inbound supply at risk."
     },
     {
       "node_id": "N188",
@@ -26939,7 +27874,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N189",
@@ -26970,7 +27910,12 @@
       "intervention_cost_cr": 0.4,
       "estimated_exposure_cr": 7.89,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.1548,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N190",
@@ -26991,7 +27936,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N191",
@@ -27012,7 +27962,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N192",
@@ -27033,7 +27988,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0108,
+      "supply_disruption": 0.0108,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.04,
+      "disruption_reason": "Suryakant Springs Products Pvt Ltd is at risk of halting powder coating deliveries. ₹0.04 cr of inbound supply at risk."
     },
     {
       "node_id": "N193",
@@ -27064,7 +28024,12 @@
       "intervention_cost_cr": 0.02,
       "estimated_exposure_cr": 1.23,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0213,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N194",
@@ -27085,7 +28050,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N195",
@@ -27106,7 +28076,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N196",
@@ -27127,7 +28102,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N197",
@@ -27158,7 +28138,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.05,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0003,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N198",
@@ -27189,7 +28174,12 @@
       "intervention_cost_cr": 0.02,
       "estimated_exposure_cr": 1.08,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0096,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N199",
@@ -27225,7 +28215,12 @@
       "intervention_cost_cr": 0.02,
       "estimated_exposure_cr": 1.62,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0052,
+      "supply_disruption": 0.0014,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.02,
+      "disruption_reason": "Ratnadeep Industries Udyog Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.02 cr of inbound supply at risk."
     },
     {
       "node_id": "N200",
@@ -27261,7 +28256,12 @@
       "intervention_cost_cr": 0.06,
       "estimated_exposure_cr": 6.54,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0166,
+      "supply_disruption": 0.0052,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.17,
+      "disruption_reason": "Trishul Engineering Enterprises Pvt Ltd is at risk of halting aluminium billets deliveries. ₹0.17 cr of inbound supply at risk."
     },
     {
       "node_id": "N201",
@@ -27282,7 +28282,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N202",
@@ -27303,7 +28308,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N203",
@@ -27334,7 +28344,12 @@
       "intervention_cost_cr": 2.36,
       "estimated_exposure_cr": 64.77,
       "propagation_depth": 1,
-      "rank": 2
+      "rank": 2,
+      "halt_risk": 0.2821,
+      "supply_disruption": 0.076,
+      "disruption_band": "high",
+      "disrupted_inflow_cr": 4.27,
+      "disruption_reason": "Mahendra Treatments Industries Udyog Pvt Ltd is at risk of halting alloy steel deliveries. ₹4.27 cr of inbound supply at risk."
     },
     {
       "node_id": "N204",
@@ -27355,7 +28370,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N205",
@@ -27376,7 +28396,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N206",
@@ -27407,7 +28432,12 @@
       "intervention_cost_cr": 0.02,
       "estimated_exposure_cr": 1.43,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0078,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N207",
@@ -27428,7 +28458,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "Somnath Systems Udyog Pvt Ltd is at risk of halting electroplating deliveries. ₹0.00 cr of inbound supply at risk."
     },
     {
       "node_id": "N208",
@@ -27449,7 +28484,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N209",
@@ -27470,7 +28510,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N210",
@@ -27501,7 +28546,12 @@
       "intervention_cost_cr": 0.08,
       "estimated_exposure_cr": 1.65,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0977,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N211",
@@ -27532,7 +28582,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.03,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0011,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N212",
@@ -27553,7 +28608,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N213",
@@ -27584,7 +28644,12 @@
       "intervention_cost_cr": 0.04,
       "estimated_exposure_cr": 2.68,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0116,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N214",
@@ -27605,7 +28670,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N215",
@@ -27626,7 +28696,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N216",
@@ -27647,7 +28722,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N217",
@@ -27683,7 +28763,12 @@
       "intervention_cost_cr": 0.02,
       "estimated_exposure_cr": 0.88,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0239,
+      "supply_disruption": 0.016,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.12,
+      "disruption_reason": "Pratapgarh Turned Parts Systems Udyog Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.12 cr of inbound supply at risk."
     },
     {
       "node_id": "N218",
@@ -27714,7 +28799,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.83,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0122,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N219",
@@ -27735,7 +28825,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N220",
@@ -27771,7 +28866,12 @@
       "intervention_cost_cr": 0.3,
       "estimated_exposure_cr": 28.93,
       "propagation_depth": 1,
-      "rank": 14
+      "rank": 14,
+      "halt_risk": 0.0497,
+      "supply_disruption": 0.0133,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.09,
+      "disruption_reason": "Ashwamedh Products Pvt Ltd is at risk of halting sheet metal deliveries. ₹0.09 cr of inbound supply at risk."
     },
     {
       "node_id": "N221",
@@ -27802,7 +28902,12 @@
       "intervention_cost_cr": 0.03,
       "estimated_exposure_cr": 1.26,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0103,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N222",
@@ -27823,7 +28928,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N223",
@@ -27844,7 +28954,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N224",
@@ -27880,7 +28995,12 @@
       "intervention_cost_cr": 0.03,
       "estimated_exposure_cr": 10.63,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0169,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N225",
@@ -27911,7 +29031,12 @@
       "intervention_cost_cr": 0.25,
       "estimated_exposure_cr": 23.85,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0582,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N226",
@@ -27942,7 +29067,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.13,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0013,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N227",
@@ -27973,7 +29103,12 @@
       "intervention_cost_cr": 0.02,
       "estimated_exposure_cr": 1.2,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0467,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N228",
@@ -27994,7 +29129,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N229",
@@ -28015,7 +29155,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0191,
+      "supply_disruption": 0.0191,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 2.8,
+      "disruption_reason": "Sealsworks Rubber Industries Pvt Ltd is at risk of halting moulded seals deliveries. ₹2.80 cr of inbound supply at risk."
     },
     {
       "node_id": "N230",
@@ -28036,7 +29181,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N231",
@@ -28072,7 +29222,12 @@
       "intervention_cost_cr": 0.1,
       "estimated_exposure_cr": 9.67,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0484,
+      "supply_disruption": 0.0121,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.07,
+      "disruption_reason": "Shreeyash Springs Engineering Udyog Pvt Ltd is at risk of halting cold forming deliveries. ₹0.07 cr of inbound supply at risk."
     },
     {
       "node_id": "N232",
@@ -28093,7 +29248,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N233",
@@ -28114,7 +29274,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0066,
+      "supply_disruption": 0.0066,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.75,
+      "disruption_reason": "Amaravati Turned Parts Products Pvt Ltd is at risk of halting starter motors deliveries. ₹0.75 cr of inbound supply at risk."
     },
     {
       "node_id": "N234",
@@ -28135,7 +29300,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0221,
+      "supply_disruption": 0.0221,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 2.9,
+      "disruption_reason": "Purnima Components Pvt Ltd is at risk of halting sealing compounds deliveries. ₹2.90 cr of inbound supply at risk."
     },
     {
       "node_id": "N235",
@@ -28171,7 +29341,12 @@
       "intervention_cost_cr": 0.14,
       "estimated_exposure_cr": 14.59,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0609,
+      "supply_disruption": 0.0112,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.1,
+      "disruption_reason": "Chitrakoot Moulders Industries Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.10 cr of inbound supply at risk."
     },
     {
       "node_id": "N236",
@@ -28192,7 +29367,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N237",
@@ -28213,7 +29393,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N238",
@@ -28234,7 +29419,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0218,
+      "supply_disruption": 0.0218,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 4.99,
+      "disruption_reason": "Vaayu Thermal Products Pvt Ltd is at risk of halting heat shields deliveries. ₹4.99 cr of inbound supply at risk."
     },
     {
       "node_id": "N239",
@@ -28255,7 +29445,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0012,
+      "supply_disruption": 0.0012,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.01,
+      "disruption_reason": "Purnima Polymers Systems Pvt Ltd is at risk of halting cold forming deliveries. ₹0.01 cr of inbound supply at risk."
     },
     {
       "node_id": "N240",
@@ -28286,7 +29481,12 @@
       "intervention_cost_cr": 0.26,
       "estimated_exposure_cr": 13.75,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0859,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N241",
@@ -28307,7 +29507,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N242",
@@ -28328,7 +29533,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N243",
@@ -28349,7 +29559,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N244",
@@ -28370,7 +29585,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0132,
+      "supply_disruption": 0.0132,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.41,
+      "disruption_reason": "Suryakant Springs Components Pvt Ltd is at risk of halting cold forming deliveries. ₹0.41 cr of inbound supply at risk."
     },
     {
       "node_id": "N245",
@@ -28391,7 +29611,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N246",
@@ -28422,7 +29647,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.44,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0048,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N247",
@@ -28443,7 +29673,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0146,
+      "supply_disruption": 0.0146,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 1.84,
+      "disruption_reason": "Sealsworks Rubber Industries Pvt Ltd is at risk of halting o ring sets deliveries. ₹1.84 cr of inbound supply at risk."
     },
     {
       "node_id": "N248",
@@ -28464,7 +29699,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N249",
@@ -28485,7 +29725,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0019,
+      "supply_disruption": 0.0019,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.05,
+      "disruption_reason": "Udaygiri Works Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.05 cr of inbound supply at risk."
     },
     {
       "node_id": "N250",
@@ -28506,7 +29751,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N251",
@@ -28527,7 +29777,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.1073,
+      "supply_disruption": 0.1073,
+      "disruption_band": "high",
+      "disrupted_inflow_cr": 435.95,
+      "disruption_reason": "Brakecraft Components Ltd is at risk of halting drivetrain modules deliveries. ₹435.95 cr of inbound supply at risk."
     },
     {
       "node_id": "N252",
@@ -28548,7 +29803,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N253",
@@ -28579,7 +29839,12 @@
       "intervention_cost_cr": 0.06,
       "estimated_exposure_cr": 1.92,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0405,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N254",
@@ -28600,7 +29865,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N255",
@@ -28621,7 +29891,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N256",
@@ -28642,7 +29917,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N257",
@@ -28673,7 +29953,12 @@
       "intervention_cost_cr": 0.02,
       "estimated_exposure_cr": 1.05,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0068,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N258",
@@ -28694,7 +29979,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N259",
@@ -28715,7 +30005,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N260",
@@ -28736,7 +30031,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0011,
+      "supply_disruption": 0.0011,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.01,
+      "disruption_reason": "Pratapgarh Engineering Products Udyog Pvt Ltd is at risk of halting polymer compounds deliveries. ₹0.01 cr of inbound supply at risk."
     },
     {
       "node_id": "N261",
@@ -28767,7 +30067,12 @@
       "intervention_cost_cr": 0.22,
       "estimated_exposure_cr": 9.79,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0661,
+      "supply_disruption": 0.0265,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.64,
+      "disruption_reason": "Rameshwar Engineering Pvt Ltd is at risk of halting alloy steel deliveries. ₹0.64 cr of inbound supply at risk."
     },
     {
       "node_id": "N262",
@@ -28798,7 +30103,12 @@
       "intervention_cost_cr": 0.02,
       "estimated_exposure_cr": 1.47,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0099,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N263",
@@ -28834,7 +30144,12 @@
       "intervention_cost_cr": 0.03,
       "estimated_exposure_cr": 1.05,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0068,
+      "supply_disruption": 0.0023,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.03,
+      "disruption_reason": "Kesariya Auto Engineering Pvt Ltd is at risk of halting sealing compounds deliveries. ₹0.03 cr of inbound supply at risk."
     },
     {
       "node_id": "N264",
@@ -28870,7 +30185,12 @@
       "intervention_cost_cr": 0.28,
       "estimated_exposure_cr": 5.51,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0403,
+      "supply_disruption": 0.0122,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.01,
+      "disruption_reason": "Purnima Polymers Systems Pvt Ltd is at risk of halting cold forming deliveries. ₹0.01 cr of inbound supply at risk."
     },
     {
       "node_id": "N265",
@@ -28891,7 +30211,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0091,
+      "supply_disruption": 0.0091,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.01,
+      "disruption_reason": "Daksha Rubber Components Pvt Ltd is at risk of halting polymer compounds deliveries. ₹0.01 cr of inbound supply at risk."
     },
     {
       "node_id": "N266",
@@ -28912,7 +30237,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N267",
@@ -28933,7 +30263,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N268",
@@ -28954,7 +30289,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0157,
+      "supply_disruption": 0.0157,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 93.63,
+      "disruption_reason": "Indraprast Treatments Industries Industries Ltd is at risk of halting starter motors deliveries. ₹93.63 cr of inbound supply at risk."
     },
     {
       "node_id": "N269",
@@ -28985,7 +30325,12 @@
       "intervention_cost_cr": 0.02,
       "estimated_exposure_cr": 1.03,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0271,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N270",
@@ -29006,7 +30351,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0104,
+      "supply_disruption": 0.0104,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.21,
+      "disruption_reason": "Siddhivin Systems Udyog Pvt Ltd is at risk of halting rubber moulding deliveries. ₹0.21 cr of inbound supply at risk."
     },
     {
       "node_id": "N271",
@@ -29037,7 +30387,12 @@
       "intervention_cost_cr": 0.06,
       "estimated_exposure_cr": 2.79,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0644,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N272",
@@ -29058,7 +30413,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N273",
@@ -29079,7 +30439,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N274",
@@ -29110,7 +30475,12 @@
       "intervention_cost_cr": 0.05,
       "estimated_exposure_cr": 4.8,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0124,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N275",
@@ -29131,7 +30501,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N276",
@@ -29152,7 +30527,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0005,
+      "supply_disruption": 0.0005,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "Vajrapani Auto Systems Udyog Pvt Ltd is at risk of halting sheet metal deliveries. ₹0.00 cr of inbound supply at risk."
     },
     {
       "node_id": "N277",
@@ -29173,7 +30553,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0126,
+      "supply_disruption": 0.0126,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.76,
+      "disruption_reason": "Somnath Enterprises Private Ltd is at risk of halting sealing compounds deliveries. ₹0.76 cr of inbound supply at risk."
     },
     {
       "node_id": "N278",
@@ -29194,7 +30579,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0192,
+      "supply_disruption": 0.0192,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.13,
+      "disruption_reason": "Trishul Products Udyog Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.13 cr of inbound supply at risk."
     },
     {
       "node_id": "N279",
@@ -29215,7 +30605,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N280",
@@ -29246,7 +30641,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.06,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0022,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N281",
@@ -29267,7 +30667,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N282",
@@ -29288,7 +30693,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N283",
@@ -29324,7 +30734,12 @@
       "intervention_cost_cr": 0.08,
       "estimated_exposure_cr": 8.36,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0313,
+      "supply_disruption": 0.0133,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.25,
+      "disruption_reason": "Shivneri Systems Pvt Ltd is at risk of halting precision machining deliveries. ₹0.25 cr of inbound supply at risk."
     },
     {
       "node_id": "N284",
@@ -29345,7 +30760,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N285",
@@ -29366,7 +30786,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N286",
@@ -29402,7 +30827,12 @@
       "intervention_cost_cr": 0.03,
       "estimated_exposure_cr": 1.3,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.032,
+      "supply_disruption": 0.0216,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.05,
+      "disruption_reason": "Harshad Engineering Pvt Ltd is at risk of halting electroplating deliveries. ₹0.05 cr of inbound supply at risk."
     },
     {
       "node_id": "N287",
@@ -29423,7 +30853,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.003,
+      "supply_disruption": 0.003,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.02,
+      "disruption_reason": "Sahyadri Products Udyog Pvt Ltd is at risk of halting precision machining deliveries. ₹0.02 cr of inbound supply at risk."
     },
     {
       "node_id": "N288",
@@ -29444,7 +30879,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0192,
+      "supply_disruption": 0.0192,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 3.42,
+      "disruption_reason": "Purnima Components Pvt Ltd is at risk of halting sealing compounds deliveries. ₹3.42 cr of inbound supply at risk."
     },
     {
       "node_id": "N289",
@@ -29480,7 +30920,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 1.89,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0156,
+      "supply_disruption": 0.0029,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "Vajrapani Auto Systems Udyog Pvt Ltd is at risk of halting sheet metal deliveries. ₹0.00 cr of inbound supply at risk."
     },
     {
       "node_id": "N290",
@@ -29511,7 +30956,12 @@
       "intervention_cost_cr": 0.15,
       "estimated_exposure_cr": 6.11,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0264,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N291",
@@ -29542,7 +30992,12 @@
       "intervention_cost_cr": 0.05,
       "estimated_exposure_cr": 2.9,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0456,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N292",
@@ -29578,7 +31033,12 @@
       "intervention_cost_cr": 0.46,
       "estimated_exposure_cr": 29.25,
       "propagation_depth": 1,
-      "rank": 10
+      "rank": 10,
+      "halt_risk": 0.2172,
+      "supply_disruption": 0.0763,
+      "disruption_band": "high",
+      "disrupted_inflow_cr": 0.16,
+      "disruption_reason": "Meghdoot Works Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.16 cr of inbound supply at risk."
     },
     {
       "node_id": "N293",
@@ -29609,7 +31069,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.11,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0029,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N294",
@@ -29640,7 +31105,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.41,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0032,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N295",
@@ -29671,7 +31141,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.46,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0025,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N296",
@@ -29702,7 +31177,12 @@
       "intervention_cost_cr": 0.09,
       "estimated_exposure_cr": 4.01,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0476,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N297",
@@ -29723,7 +31203,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N298",
@@ -29754,7 +31239,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.54,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.005,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N299",
@@ -29775,7 +31265,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N300",
@@ -29811,7 +31306,12 @@
       "intervention_cost_cr": 0.03,
       "estimated_exposure_cr": 2.13,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0045,
+      "supply_disruption": 0.0014,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.03,
+      "disruption_reason": "Chandrika Works Pvt Ltd is at risk of halting rubber moulding deliveries. ₹0.03 cr of inbound supply at risk."
     },
     {
       "node_id": "N301",
@@ -29832,7 +31332,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N302",
@@ -29853,7 +31358,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N303",
@@ -29874,7 +31384,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0003,
+      "supply_disruption": 0.0003,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "Kaveri Industries Pvt Ltd is at risk of halting powder coating deliveries. ₹0.00 cr of inbound supply at risk."
     },
     {
       "node_id": "N304",
@@ -29895,7 +31410,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N305",
@@ -29926,7 +31446,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.12,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0023,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N306",
@@ -29957,7 +31482,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.1,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0009,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N307",
@@ -29978,7 +31508,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N308",
@@ -29999,7 +31534,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N309",
@@ -30030,7 +31570,12 @@
       "intervention_cost_cr": 0.5,
       "estimated_exposure_cr": 15.65,
       "propagation_depth": 2,
-      "rank": 11
+      "rank": 11,
+      "halt_risk": 0.1129,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N310",
@@ -30051,7 +31596,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0079,
+      "supply_disruption": 0.0079,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.06,
+      "disruption_reason": "Udaygiri Works Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.06 cr of inbound supply at risk."
     },
     {
       "node_id": "N311",
@@ -30072,7 +31622,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.001,
+      "supply_disruption": 0.001,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.01,
+      "disruption_reason": "Kaveri Enterprises Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.01 cr of inbound supply at risk."
     },
     {
       "node_id": "N312",
@@ -30093,7 +31648,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N313",
@@ -30124,7 +31684,12 @@
       "intervention_cost_cr": 0.05,
       "estimated_exposure_cr": 3.78,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0278,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N314",
@@ -30145,7 +31710,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N315",
@@ -30176,7 +31746,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.05,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0014,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N316",
@@ -30197,7 +31772,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0019,
+      "supply_disruption": 0.0019,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.06,
+      "disruption_reason": "Sarvodaya Works Udyog Pvt Ltd is at risk of halting electroplating deliveries. ₹0.06 cr of inbound supply at risk."
     },
     {
       "node_id": "N317",
@@ -30218,7 +31798,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.017,
+      "supply_disruption": 0.017,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 3.11,
+      "disruption_reason": "Kalyani Fastener Systems Pvt Ltd is at risk of halting stud assemblies deliveries. ₹3.11 cr of inbound supply at risk."
     },
     {
       "node_id": "N318",
@@ -30249,7 +31834,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.06,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0016,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N319",
@@ -30280,7 +31870,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.1,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0033,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N320",
@@ -30311,7 +31906,12 @@
       "intervention_cost_cr": 0.03,
       "estimated_exposure_cr": 1.56,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0312,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N321",
@@ -30332,7 +31932,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N322",
@@ -30353,7 +31958,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N323",
@@ -30384,7 +31994,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.31,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0182,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N324",
@@ -30405,7 +32020,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N325",
@@ -30426,7 +32046,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N326",
@@ -30457,7 +32082,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.29,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0037,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N327",
@@ -30488,7 +32118,12 @@
       "intervention_cost_cr": 0.12,
       "estimated_exposure_cr": 22.47,
       "propagation_depth": 1,
-      "rank": 15
+      "rank": 15,
+      "halt_risk": 0.0359,
+      "supply_disruption": 0.0114,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.7,
+      "disruption_reason": "Sanchita Metalworks Components Udyog Pvt Ltd is at risk of halting heat treatment deliveries. ₹0.70 cr of inbound supply at risk."
     },
     {
       "node_id": "N328",
@@ -30509,7 +32144,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N329",
@@ -30530,7 +32170,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N330",
@@ -30551,7 +32196,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0009,
+      "supply_disruption": 0.0009,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.04,
+      "disruption_reason": "Yashodhan Metalworks Components Pvt Ltd is at risk of halting polymer compounds deliveries. ₹0.04 cr of inbound supply at risk."
     },
     {
       "node_id": "N331",
@@ -30587,7 +32237,12 @@
       "intervention_cost_cr": 0.45,
       "estimated_exposure_cr": 30.78,
       "propagation_depth": 1,
-      "rank": 13
+      "rank": 13,
+      "halt_risk": 0.1146,
+      "supply_disruption": 0.0141,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.05,
+      "disruption_reason": "Saptagiri Polymers Enterprises Pvt Ltd is at risk of halting polymer compounds deliveries. ₹0.05 cr of inbound supply at risk."
     },
     {
       "node_id": "N332",
@@ -30618,7 +32273,12 @@
       "intervention_cost_cr": 0.17,
       "estimated_exposure_cr": 7.93,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0669,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N333",
@@ -30639,7 +32299,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N334",
@@ -30675,7 +32340,12 @@
       "intervention_cost_cr": 0.11,
       "estimated_exposure_cr": 4.94,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0278,
+      "supply_disruption": 0.0152,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.24,
+      "disruption_reason": "Saptagiri Polymers Products Pvt Ltd is at risk of halting powder coating deliveries. ₹0.24 cr of inbound supply at risk."
     },
     {
       "node_id": "N335",
@@ -30706,7 +32376,12 @@
       "intervention_cost_cr": 0.04,
       "estimated_exposure_cr": 1.89,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0085,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N336",
@@ -30727,7 +32402,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N337",
@@ -30748,7 +32428,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N338",
@@ -30779,7 +32464,12 @@
       "intervention_cost_cr": 0.02,
       "estimated_exposure_cr": 0.77,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0192,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N339",
@@ -30800,7 +32490,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N340",
@@ -30821,7 +32516,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0002,
+      "supply_disruption": 0.0002,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "Aarvik Products Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.00 cr of inbound supply at risk."
     },
     {
       "node_id": "N341",
@@ -30842,7 +32542,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N342",
@@ -30873,7 +32578,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.48,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.002,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N343",
@@ -30894,7 +32604,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N344",
@@ -30915,7 +32630,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0011,
+      "supply_disruption": 0.0011,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.01,
+      "disruption_reason": "Vasundhara Enterprises Pvt Ltd is at risk of halting sealing compounds deliveries. ₹0.01 cr of inbound supply at risk."
     },
     {
       "node_id": "N345",
@@ -30946,7 +32666,12 @@
       "intervention_cost_cr": 0.36,
       "estimated_exposure_cr": 8.67,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.1326,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N346",
@@ -30967,7 +32692,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0166,
+      "supply_disruption": 0.0166,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 2.5,
+      "disruption_reason": "Chitrakoot Enterprises Private Ltd is at risk of halting rubber moulding deliveries. ₹2.50 cr of inbound supply at risk."
     },
     {
       "node_id": "N347",
@@ -30988,7 +32718,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N348",
@@ -31019,7 +32754,12 @@
       "intervention_cost_cr": 0.74,
       "estimated_exposure_cr": 29.44,
       "propagation_depth": 1,
-      "rank": 7
+      "rank": 7,
+      "halt_risk": 0.1853,
+      "supply_disruption": 0.0451,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.78,
+      "disruption_reason": "Trishul Industries Pvt Ltd is at risk of halting forgings deliveries. ₹0.78 cr of inbound supply at risk."
     },
     {
       "node_id": "N349",
@@ -31050,7 +32790,12 @@
       "intervention_cost_cr": 0.3,
       "estimated_exposure_cr": 14.29,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.1428,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N350",
@@ -31081,7 +32826,12 @@
       "intervention_cost_cr": 0.12,
       "estimated_exposure_cr": 4.31,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0509,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N351",
@@ -31102,7 +32852,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N352",
@@ -31123,7 +32878,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N353",
@@ -31144,7 +32904,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "Somnath Systems Udyog Pvt Ltd is at risk of halting electroplating deliveries. ₹0.00 cr of inbound supply at risk."
     },
     {
       "node_id": "N354",
@@ -31165,7 +32930,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N355",
@@ -31186,7 +32956,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0099,
+      "supply_disruption": 0.0099,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.02,
+      "disruption_reason": "Bhavani Castings Components Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.02 cr of inbound supply at risk."
     },
     {
       "node_id": "N356",
@@ -31207,7 +32982,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N357",
@@ -31228,7 +33008,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N358",
@@ -31249,7 +33034,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N359",
@@ -31270,7 +33060,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N360",
@@ -31291,7 +33086,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.006,
+      "supply_disruption": 0.006,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 1.1,
+      "disruption_reason": "Vaikunth Autotech Engineering Pvt Ltd is at risk of halting sealing compounds deliveries. ₹1.10 cr of inbound supply at risk."
     },
     {
       "node_id": "N361",
@@ -31312,7 +33112,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.004,
+      "supply_disruption": 0.004,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.06,
+      "disruption_reason": "Saptagiri Castings Engineering Pvt Ltd is at risk of halting aluminium billets deliveries. ₹0.06 cr of inbound supply at risk."
     },
     {
       "node_id": "N362",
@@ -31333,7 +33138,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N363",
@@ -31354,7 +33164,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N364",
@@ -31375,7 +33190,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N365",
@@ -31406,7 +33226,12 @@
       "intervention_cost_cr": 0.01,
       "estimated_exposure_cr": 0.64,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0022,
+      "supply_disruption": 0.0005,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "Manthan Toolings Industries Pvt Ltd is at risk of halting powder coating deliveries. ₹0.00 cr of inbound supply at risk."
     },
     {
       "node_id": "N366",
@@ -31427,7 +33252,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N367",
@@ -31458,7 +33288,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.1,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0033,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N368",
@@ -31479,7 +33314,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N369",
@@ -31500,7 +33340,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N370",
@@ -31521,7 +33366,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "Kesariya Auto Engineering Pvt Ltd is at risk of halting sealing compounds deliveries. ₹0.00 cr of inbound supply at risk."
     },
     {
       "node_id": "N371",
@@ -31542,7 +33392,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N372",
@@ -31563,7 +33418,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N373",
@@ -31584,7 +33444,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N374",
@@ -31615,7 +33480,12 @@
       "intervention_cost_cr": 0.09,
       "estimated_exposure_cr": 6.44,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.064,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N375",
@@ -31636,7 +33506,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N376",
@@ -31657,7 +33532,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N377",
@@ -31678,7 +33558,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0155,
+      "supply_disruption": 0.0155,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 1.23,
+      "disruption_reason": "Ratnadeep Engineering Private Ltd is at risk of halting thermal products deliveries. ₹1.23 cr of inbound supply at risk."
     },
     {
       "node_id": "N378",
@@ -31699,7 +33584,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N379",
@@ -31730,7 +33620,12 @@
       "intervention_cost_cr": 0.14,
       "estimated_exposure_cr": 8.92,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0373,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N380",
@@ -31751,7 +33646,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N381",
@@ -31787,7 +33687,12 @@
       "intervention_cost_cr": 0.62,
       "estimated_exposure_cr": 32.65,
       "propagation_depth": 1,
-      "rank": 8
+      "rank": 8,
+      "halt_risk": 0.1453,
+      "supply_disruption": 0.0383,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 1.05,
+      "disruption_reason": "Aarvik Stampings Products Pvt Ltd is at risk of halting electroplating deliveries. ₹1.05 cr of inbound supply at risk."
     },
     {
       "node_id": "N382",
@@ -31808,7 +33713,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N383",
@@ -31829,7 +33739,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N384",
@@ -31850,7 +33765,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N385",
@@ -31871,7 +33791,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N386",
@@ -31892,7 +33817,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N387",
@@ -31928,7 +33858,12 @@
       "intervention_cost_cr": 4.11,
       "estimated_exposure_cr": 85.53,
       "propagation_depth": 1,
-      "rank": 5
+      "rank": 5,
+      "halt_risk": 0.2588,
+      "supply_disruption": 0.0534,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.96,
+      "disruption_reason": "Suryakant Engineering Industries Pvt Ltd is at risk of halting precision machining deliveries. ₹0.96 cr of inbound supply at risk."
     },
     {
       "node_id": "N388",
@@ -31959,7 +33894,12 @@
       "intervention_cost_cr": 0.03,
       "estimated_exposure_cr": 0.96,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0371,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N389",
@@ -31980,7 +33920,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0084,
+      "supply_disruption": 0.0084,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 1.71,
+      "disruption_reason": "Rajhans Products Pvt Ltd is at risk of halting sensor modules deliveries. ₹1.71 cr of inbound supply at risk."
     },
     {
       "node_id": "N390",
@@ -32011,7 +33956,12 @@
       "intervention_cost_cr": 0.11,
       "estimated_exposure_cr": 2.54,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.1089,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N391",
@@ -32042,7 +33992,12 @@
       "intervention_cost_cr": 0.16,
       "estimated_exposure_cr": 8.52,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0731,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N392",
@@ -32063,7 +34018,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0128,
+      "supply_disruption": 0.0128,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.18,
+      "disruption_reason": "Suryakant Engineering Industries Pvt Ltd is at risk of halting precision machining deliveries. ₹0.18 cr of inbound supply at risk."
     },
     {
       "node_id": "N393",
@@ -32084,7 +34044,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N394",
@@ -32120,7 +34085,12 @@
       "intervention_cost_cr": 0.95,
       "estimated_exposure_cr": 54.53,
       "propagation_depth": 1,
-      "rank": 6
+      "rank": 6,
+      "halt_risk": 0.1498,
+      "supply_disruption": 0.0489,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.76,
+      "disruption_reason": "Vaikunth Products Udyog Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.76 cr of inbound supply at risk."
     },
     {
       "node_id": "N395",
@@ -32141,7 +34111,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0157,
+      "supply_disruption": 0.0157,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 2.07,
+      "disruption_reason": "Indraprast Treatments Enterprises Pvt Ltd is at risk of halting sealing compounds deliveries. ₹2.07 cr of inbound supply at risk."
     },
     {
       "node_id": "N396",
@@ -32162,7 +34137,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0087,
+      "supply_disruption": 0.0087,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 1.32,
+      "disruption_reason": "Samarth Works Pvt Ltd is at risk of halting steering assemblies deliveries. ₹1.32 cr of inbound supply at risk."
     },
     {
       "node_id": "N397",
@@ -32183,7 +34163,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N398",
@@ -32214,7 +34199,12 @@
       "intervention_cost_cr": 0.09,
       "estimated_exposure_cr": 2.65,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.05,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N399",
@@ -32235,7 +34225,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0252,
+      "supply_disruption": 0.0252,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.23,
+      "disruption_reason": "Aarvik Stampings Products Pvt Ltd is at risk of halting electroplating deliveries. ₹0.23 cr of inbound supply at risk."
     },
     {
       "node_id": "N400",
@@ -32256,7 +34251,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N401",
@@ -32277,7 +34277,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N402",
@@ -32298,7 +34303,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N403",
@@ -32319,7 +34329,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0624,
+      "supply_disruption": 0.0624,
+      "disruption_band": "high",
+      "disrupted_inflow_cr": 0.33,
+      "disruption_reason": "Precision Polymer Works Pvt Ltd is at risk of halting masterbatch compound deliveries. ₹0.33 cr of inbound supply at risk."
     },
     {
       "node_id": "N404",
@@ -32350,7 +34365,12 @@
       "intervention_cost_cr": 0.1,
       "estimated_exposure_cr": 5.38,
       "propagation_depth": 2,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0824,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
     },
     {
       "node_id": "N405",
@@ -32381,7 +34401,12 @@
       "intervention_cost_cr": 0.37,
       "estimated_exposure_cr": 18.17,
       "propagation_depth": 1,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0564,
+      "supply_disruption": 0.0254,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.3,
+      "disruption_reason": "Meghdoot Stampings Industries Pvt Ltd is at risk of halting synthetic rubber deliveries — sole source, nothing else to buy it from. ₹0.30 cr of inbound supply at risk."
     },
     {
       "node_id": "N406",
@@ -32402,7 +34427,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0141,
+      "supply_disruption": 0.0141,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.08,
+      "disruption_reason": "Saptagiri Polymers Enterprises Pvt Ltd is at risk of halting polymer compounds deliveries. ₹0.08 cr of inbound supply at risk."
     },
     {
       "node_id": "N407",
@@ -32438,7 +34468,12 @@
       "intervention_cost_cr": 0.16,
       "estimated_exposure_cr": 20.04,
       "propagation_depth": 1,
-      "rank": 9
+      "rank": 9,
+      "halt_risk": 0.1314,
+      "supply_disruption": 0.0468,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.49,
+      "disruption_reason": "Shreeyash Stampings Components Pvt Ltd is at risk of halting cold forming deliveries. ₹0.49 cr of inbound supply at risk."
     },
     {
       "node_id": "N408",
@@ -32459,7 +34494,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0001,
+      "supply_disruption": 0.0001,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "Rameshwar Enterprises Pvt Ltd is at risk of halting sheet metal deliveries. ₹0.00 cr of inbound supply at risk."
     },
     {
       "node_id": "N409",
@@ -32480,7 +34520,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     },
     {
       "node_id": "N410",
@@ -32501,7 +34546,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0306,
+      "supply_disruption": 0.0306,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 4.37,
+      "disruption_reason": "Vaayu Thermal Products Pvt Ltd is at risk of halting oil coolers deliveries. ₹4.37 cr of inbound supply at risk."
     },
     {
       "node_id": "N411",
@@ -32522,7 +34572,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0127,
+      "supply_disruption": 0.0127,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.14,
+      "disruption_reason": "Zorawar Works Udyog Pvt Ltd is at risk of halting electroplating deliveries. ₹0.14 cr of inbound supply at risk."
     },
     {
       "node_id": "N412",
@@ -32543,7 +34598,12 @@
       "intervention_cost_cr": 0.0,
       "estimated_exposure_cr": 0.0,
       "propagation_depth": 0,
-      "rank": null
+      "rank": null,
+      "halt_risk": 0.0,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier failure reaches this node."
     }
   ],
   "ranking": [
@@ -32578,6 +34638,30 @@
     "stressed_origin_nodes": [
       "N007"
     ],
-    "max_propagation_depth": 2
+    "max_propagation_depth": 2,
+    "anchor_disruption": [
+      {
+        "node_id": "N001",
+        "supply_disruption": 0.1076,
+        "disruption_band": "high",
+        "disrupted_inflow_cr": 848.96,
+        "stopped_by": "N007"
+      },
+      {
+        "node_id": "N251",
+        "supply_disruption": 0.1073,
+        "disruption_band": "high",
+        "disrupted_inflow_cr": 435.95,
+        "stopped_by": "N007"
+      },
+      {
+        "node_id": "N268",
+        "supply_disruption": 0.0157,
+        "disruption_band": "watch",
+        "disrupted_inflow_cr": 93.63,
+        "stopped_by": "N238"
+      }
+    ],
+    "disruption_iterations_to_converge": 4
   }
 }

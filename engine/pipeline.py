@@ -15,6 +15,7 @@ from engine import intervention as intervention_mod
 from engine import ranking as ranking_mod
 from engine import stress as stress_mod
 from engine.contagion import propagate
+from engine.disruption import propagate_disruption
 from engine.graph import build_graph
 
 
@@ -117,6 +118,11 @@ def score_network(
     criticality = criticality_mod.compute_criticality(graph)
     tier_of = {node["node_id"]: node["tier"] for node in network["nodes"]}
 
+    # The second propagation, running WITH goods flow: whose line stops when a
+    # supplier stops delivering.  Runs on the post-intervention fragility, so
+    # funding a supplier is visible all the way up at the anchor.
+    disruption = propagate_disruption(graph, contagion.fragility, own_stress)
+
     costs: dict[str, Any] = {}
     exposures: dict[str, Any] = {}
     for node_id in sorted(graph.nodes):
@@ -131,7 +137,7 @@ def score_network(
         )
 
     scores = ranking_mod.build_scores(
-        graph, network, stress_detail, contagion, criticality, costs, exposures
+        graph, network, stress_detail, contagion, criticality, costs, exposures, disruption
     )
 
     return {
@@ -140,7 +146,7 @@ def score_network(
         "edges": network["edges"],
         "scores": scores,
         "ranking": ranking_mod.ranking_of(scores),
-        "summary": ranking_mod.build_summary(scores, contagion),
+        "summary": ranking_mod.build_summary(scores, contagion, disruption, tier_of),
     }
 
 
@@ -151,7 +157,15 @@ def main() -> None:
     """
     import argparse
     import json
+    import sys
     from pathlib import Path
+
+    # Reason strings carry ₹, and Windows consoles default to cp1252, which
+    # cannot encode it — the determinism check in AGENTS.md §5.2 redirects this
+    # output to a file and died on it.  Force UTF-8 rather than dropping the
+    # currency symbol, since every displayed number must carry its unit.
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
 
     parser = argparse.ArgumentParser(description="Score a FrayFuse network.")
     parser.add_argument("network", type=Path, help="path to a NetworkInput json file")
