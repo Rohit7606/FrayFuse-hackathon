@@ -14,7 +14,7 @@ import json
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -167,11 +167,15 @@ def get_network():
 
 
 @app.get("/api/at-risk", response_model=AtRiskResponse)
-def get_at_risk(limit: int = 10):
+def get_at_risk(limit: int = Query(default=10, ge=1, le=1000)):
     """Baseline scoring, ranked list only. The default view.
 
     Returns `scores` for the ranked nodes only, not all 412 — the UI renders a
     list of four and does not need four hundred score objects to do it.
+
+    `limit` is bounded below at 1 because it indexes a slice: a negative limit
+    read as `ranking[:-5]` silently returned the list minus its last five
+    entries with a 200, which is a wrong answer rather than an error.
     """
     result = baseline_result()
     ranking = result["ranking"][:limit]
