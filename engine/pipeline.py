@@ -206,6 +206,21 @@ def main() -> None:
             f"exposure ₹{score['estimated_exposure_cr']} cr | depth {score['propagation_depth']}"
         )
 
+    # The counterfactual beat, DEMO_SCENARIO.md §6.  Printed here so the demo's
+    # closing line can be rehearsed from the CLI without the API or the UI.
+    anchors = [a for a in summary["anchor_disruption"] if a["supply_disruption"] > 0.0]
+    if anchors:
+        print("\nanchors at risk from a supplier that stops delivering:")
+        for anchor in anchors:
+            stopped_by = anchor["stopped_by"]
+            through = f" via {stopped_by} {names[stopped_by]}" if stopped_by else ""
+            print(
+                f"     {anchor['node_id']} {names[anchor['node_id']]}  "
+                f"[{anchor['disruption_band']}] disruption "
+                f"{anchor['supply_disruption']:.4f}{through}"
+            )
+            print(f"     ₹{anchor['disrupted_inflow_cr']} cr of inbound supply at risk")
+
 
 if __name__ == "__main__":
     main()
