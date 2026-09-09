@@ -190,6 +190,7 @@ def build_nodes(
             "is_observable": company_id in observable,
             "data_source": "real",
             "cin": _text(row, "cin"),
+            "observation_completeness": _text(row, "observation_completeness"),
         }
         if substituted:
             node["substituted"] = substituted
@@ -390,6 +391,10 @@ def build_stress_signals(
                     "basis": _text(row, "basis") or "standalone",
                     "ageing_basis": _text(row, "ageing_basis") or "due_date",
                     "msme_book_material": _boolean(row, "msme_book_material"),
+                    "series_break": _text(row, "series_break"),
+                    "liquidity_quality": _text(row, "liquidity_quality"),
+                    "undrawn_credit_facilities_cr": _number(row, "undrawn_credit_facilities"),
+                    "undrawn_type": _text(row, "undrawn_type"),
                     "data_source": "real",
                 }
             )
