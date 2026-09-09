@@ -11,13 +11,15 @@ Endpoints:
 from __future__ import annotations
 
 import json
-import os
+import logging
 
 from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from api.adapters import compute_delta, to_engine_scenario
+from api.config import CORS_ORIGINS, NETWORK_PATH
 from api.models import (
     AtRiskResponse,
     BandCounts,
@@ -35,12 +37,7 @@ from api.models import (
 )
 from engine.pipeline import UnknownNodeError, score_network
 
-# ---------------------------------------------------------------------------
-# Config
-# ---------------------------------------------------------------------------
-
-NETWORK_PATH = os.getenv("FRAYFUSE_NETWORK", "data/mock/network.json")
-CORS_ORIGINS = ["http://localhost:5173", "http://localhost:3000"]
+logger = logging.getLogger("frayfuse")
 
 # ---------------------------------------------------------------------------
 # App
@@ -77,6 +74,20 @@ def load_network() -> dict:
     return _network_cache
 
 
+@app.on_event("startup")
+def startup_load_network() -> None:
+    """Eagerly load the network at startup — fail fast if the file is missing or malformed."""
+    try:
+        load_network()
+        logger.info("Loaded network from %s (%d nodes)", NETWORK_PATH, len(_network_cache["nodes"]))
+    except FileNotFoundError:
+        logger.error("Network file not found: %s", NETWORK_PATH)
+        raise SystemExit(f"FATAL: network file not found: {NETWORK_PATH}")
+    except (json.JSONDecodeError, KeyError) as exc:
+        logger.error("Malformed network file %s: %s", NETWORK_PATH, exc)
+        raise SystemExit(f"FATAL: malformed network file {NETWORK_PATH}: {exc}")
+
+
 # ---------------------------------------------------------------------------
 # Error handling
 # ---------------------------------------------------------------------------
@@ -90,6 +101,22 @@ async def unknown_node_handler(request: Request, exc: UnknownNodeError) -> JSONR
             "error": "unknown_node",
             "detail": f"{exc.node_id} not in network",
             "node_id": exc.node_id,
+        },
+    )
+
+
+@app.exception_handler(Exception)
+async def catch_all_handler(request: Request, exc: Exception) -> JSONResponse:
+    """Catch-all for unexpected exceptions — structured 500, not a default error page."""
+    # Let pydantic's RequestValidationError pass through as 422
+    if isinstance(exc, RequestValidationError):
+        raise exc
+    logger.exception("Unhandled exception: %s", exc)
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "engine_failure",
+            "detail": str(exc),
         },
     )
 
@@ -112,7 +139,8 @@ def validate_node_ids(scenario: Scenario, net: dict) -> None:
 @app.get("/health")
 def health():
     """Liveness check — is the backend up and which dataset did it load?"""
-    return {"status": "ok", "network": NETWORK_PATH}
+    net = load_network()
+    return {"status": "ok", "network": NETWORK_PATH, "nodes": len(net["nodes"])}
 
 
 @app.get("/api/network", response_model=NetworkResponse)
