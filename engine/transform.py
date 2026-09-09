@@ -38,6 +38,7 @@ from pathlib import Path
 from typing import Any
 
 from engine import config
+from engine.mockgen import synthesise_deep_tier
 
 # Recognised source units.  Provenance ONLY — see _number for why nothing here
 # is a divisor.
@@ -424,6 +425,27 @@ def transform(source_dir: Path) -> tuple[dict[str, Any], list[str]]:
     nodes = build_nodes(companies, financials, id_map, observable)
     revenue_by_node = {n["node_id"]: n["revenue_cr"] for n in nodes}
     edges, excluded = build_edges(edge_rows, id_map, revenue_by_node)
+
+    # SCHEMA.md §7.1 step 5 — hang a generated tier-2/tier-3 layer beneath the
+    # real companies.  Without it the collected graph bottoms out at three-node
+    # chains: nothing propagates, every node scores 0 and the contagion loop
+    # converges in one iteration.  The generator lives in mockgen because
+    # AGENTS.md §3.1 permits `random` there and nowhere else.
+    pool_path = source_dir / "entity_pool.csv"
+    if pool_path.exists():
+        pool_rows = _read_csv(pool_path)
+        synthetic_nodes, synthetic_edges = synthesise_deep_tier(pool_rows, nodes)
+        nodes = nodes + synthetic_nodes
+        edges = edges + synthetic_edges
+        # Re-number after merging so edge_id stays contiguous across both layers.
+        edges.sort(key=lambda e: (e["supplier_id"], e["buyer_id"]))
+        for index, edge in enumerate(edges, start=1):
+            edge["edge_id"] = f"E{index:03d}"
+    else:
+        excluded.append(
+            "entity_pool.csv absent - no synthetic deep tier generated; the real "
+            "graph bottoms out at three-node chains and will score 0 at risk"
+        )
     signals = build_stress_signals(financials, id_map)
     signals = [s for s in signals if s["node_id"] in {n["node_id"] for n in nodes if n["is_observable"]}]
 
