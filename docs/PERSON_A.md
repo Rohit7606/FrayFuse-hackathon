@@ -469,6 +469,49 @@ Reads the five collection CSVs (`SCHEMA.md` §7) and emits the **identical shape
 
 **This is the only module that knows CSVs exist.** No other file imports pandas for data loading.
 
+### 5.1 The synthetic deep tier — `SCHEMA.md` §7.1 step 5
+
+The collected cohort is 43 nodes that bottom out at three-node chains. Scored as-is it returns
+**0 at risk, converged in 1 iteration** — not a bug, and not something more model code fixes: there
+is simply nothing below tier-1 for stress to travel into. §7.1 step 5 always intended a generated
+tier-2/tier-3 layer beneath the real companies, and `transform.py` now builds one from
+`data/real/entity_pool.csv`.
+
+With it: **298 nodes, 29 at risk, 3 iterations**, and the anchor beat runs on real disclosed data —
+Hero MotoCorp at `critical` supply disruption, stopped by Shivam Autotech, across the ₹181.59 cr
+edge that is the only disclosed rupee figure in the collected set.
+
+**The generator lives in `mockgen.py`, not here.** `AGENTS.md` §3.1 permits `random` in that module
+and nowhere else. `transform.py` reads the CSV and calls `synthesise_deep_tier()`; the seed is fixed
+in `config.DEEP_TIER_SEED`, so the same CSVs always produce a byte-identical `network.json`.
+
+**Two rules from `DATA_DICTIONARY.md` §3b are enforced in code, not left to care:**
+
+- **No sole-source claim against a real company.** An edge flagged `is_single_source` whose buyer is
+  real asserts that real firm single-sources the part — a fabricated claim about its supply chain,
+  and §3b's "never synthetic under any circumstances" list names exactly this. Chokepoints are
+  confined to edges whose **buyer is synthetic**. It costs the demo nothing: the thesis is that the
+  irreplaceable supplier sits deep in the chain anyway
+- **No generated rupee figure beside a real name.** Real nodes keep their `null`s and their
+  `substituted` list; the synthetic layer never writes onto them
+
+Both have tests (`test_no_sole_source_claim_against_a_real_company`,
+`test_no_synthetic_rupee_figure_beside_a_real_name`). They are the tests to keep if any others go.
+
+**Sizing is pool-bound, and it fails loudly.** 9 of the 11 real tier-1 companies are auto
+ancillaries, as are all 14 real tier-2s, so nearly the whole demand lands on the pool's
+`auto_components` bucket. `DEEP_TIER1_FANOUT` is set so the generated auto layer needs ~190 of the
+264 available names. Raise it and `synthesise_deep_tier` raises rather than reusing a name — one
+company appearing in the graph twice would be worse than a build that stops.
+
+**A caveat to state plainly, not paper over.** 13 of the 30 real edges carry no disclosed
+`annual_value_cr`, because the filings do not give one. `estimated_exposure_cr` is computed from
+trade value on the path to an anchor, so on real data it **understates** — chains routing through a
+valueless real edge contribute nothing. That is the honest consequence of not inventing a figure
+beside a real company's name (§3b), and it is why the real network's exposure total sits below its
+intervention total. The mock network, where every edge carries a value, is the one to quote
+rupee-for-rupee.
+
 Two things that will silently corrupt the model if you get them wrong:
 
 - **Units.** Source reports mix ₹ million and ₹ crore. Convert once, here, and record the original in `meta`
