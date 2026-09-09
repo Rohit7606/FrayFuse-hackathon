@@ -1,14 +1,10 @@
 import json
+
 import pytest
 from fastapi.testclient import TestClient
 
 from api.main import app
-from api.models import (
-    NetworkResponse,
-    AtRiskResponse,
-    ScoredNetwork,
-    InterveneResponse
-)
+from api.models import AtRiskResponse, InterveneResponse, NetworkResponse, ScoredNetwork
 
 
 # Use a module-scoped TestClient because the API is stateless.
