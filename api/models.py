@@ -4,7 +4,7 @@ Pydantic v2 models mirroring the runtime contract.
 from datetime import datetime
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 NodeId = Annotated[str, Field(pattern=r"^N[0-9]{3,}$")]
 EdgeId = Annotated[str, Field(pattern=r"^E[0-9]{3,}$")]
@@ -184,7 +184,7 @@ class Intervention(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     node_id: NodeId
-    amount_cr: float
+    amount_cr: Annotated[float, Field(gt=0.0)]
 
 
 class Scenario(BaseModel):
@@ -192,6 +192,16 @@ class Scenario(BaseModel):
 
     stress_overrides: list[StressOverride] = Field(default_factory=list)
     interventions: list[Intervention] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def check_unique_node_ids(self) -> "Scenario":
+        override_ids = [o.node_id for o in self.stress_overrides]
+        if len(override_ids) != len(set(override_ids)):
+            raise ValueError("duplicate node_ids in stress_overrides")
+        intervention_ids = [i.node_id for i in self.interventions]
+        if len(intervention_ids) != len(set(intervention_ids)):
+            raise ValueError("duplicate node_ids in interventions")
+        return self
 
 
 class SimulateRequest(BaseModel):
@@ -205,6 +215,13 @@ class InterveneRequest(BaseModel):
 
     interventions: list[Intervention]
     baseline_scenario: Scenario | None = None
+
+    @model_validator(mode="after")
+    def check_unique_node_ids(self) -> "InterveneRequest":
+        intervention_ids = [i.node_id for i in self.interventions]
+        if len(intervention_ids) != len(set(intervention_ids)):
+            raise ValueError("duplicate node_ids in interventions")
+        return self
 
 
 class NetworkResponse(BaseModel):

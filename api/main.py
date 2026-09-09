@@ -166,8 +166,10 @@ def get_network():
     return {"meta": net["meta"], "nodes": net["nodes"], "edges": net["edges"]}
 
 
+from fastapi import Query
+
 @app.get("/api/at-risk", response_model=AtRiskResponse)
-def get_at_risk(limit: int = 10):
+def get_at_risk(limit: int = Query(10, gt=0)):
     """Baseline scoring, ranked list only. The default view.
 
     Returns `scores` for the ranked nodes only, not all 412 — the UI renders a
