@@ -1,0 +1,26 @@
+{
+  "name": "frayfuse-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:live": "vite --mode live",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src --ext js,jsx",
+    "test": "node --test tests/"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-force-graph-2d": "1.25.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "4.3.1",
+    "ajv": "8.17.1",
+    "eslint": "8.57.0",
+    "eslint-plugin-react": "7.35.0",
+    "vite": "5.4.2"
+  }
+}

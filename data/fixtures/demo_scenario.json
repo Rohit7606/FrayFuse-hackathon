@@ -11,11 +11,11 @@
   },
   "intervention": {
     "node_id": "N042",
-    "amount_cr": 4.80
+    "amount_cr": 2.04
   },
   "expected_after_bands": {
     "N042": "stable",
-    "N118": "watch"
+    "N118": "stable"
   },
   "counterfactual_anchor": "N001"
 }
