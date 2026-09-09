@@ -67,7 +67,7 @@ PINNED_NODES: tuple[dict[str, Any], ...] = (
         "sector": "auto_components",
         "product_category": "thermal_products",
         "revenue_cr": 61.35,
-        "cash_buffer_days": 27,
+        "cash_buffer_days": 16,
         "employees": 96,
         "is_observable": False,
     },
@@ -78,7 +78,7 @@ PINNED_NODES: tuple[dict[str, Any], ...] = (
         "sector": "polymers",
         "product_category": "polymer_compounds",
         "revenue_cr": 9.84,
-        "cash_buffer_days": 11,
+        "cash_buffer_days": 8,
         "employees": 23,
         "is_observable": False,
     },
@@ -124,14 +124,14 @@ PINNED_EDGES: tuple[dict[str, Any], ...] = (
         "supplier_id": "N087",
         "buyer_id": "N007",
         "component": "thermal_products",
-        "exposure_pct": 0.3400,
+        "exposure_pct": 0.4600,
         "is_single_source": False,
     },
     {
         "supplier_id": "N118",
         "buyer_id": "N042",
         "component": "polymer_compound",
-        "exposure_pct": 0.6600,
+        "exposure_pct": 0.7200,
         "is_single_source": True,
     },
 )
@@ -146,6 +146,19 @@ PINNED_SECONDARY_EXPOSURE: dict[str, tuple[tuple[str, float], ...]] = {
     "N087": (("radiator_cores", 0.2200), ("heat_shields", 0.1700), ("oil_coolers", 0.1400)),
     "N118": (("masterbatch_compound", 0.1900),),
 }
+
+# How many tier-3 suppliers each tier-2 cast member must have beneath it.
+#
+# Betweenness counts paths THROUGH a node, so a tier-2 firm with one supplier
+# sits on almost none and scores as replaceable however exposed it is.  Without
+# a supplier base the demo cast is out-ranked by generic filler and
+# DEMO_SCENARIO.md §3's contrast never appears in the list.
+#
+# N203 deliberately gets the LARGEST base.  It is the better-connected node and
+# still ranks below N042, which is the sharpest form of the argument: being
+# central is not the same as being irreplaceable.  N042 wins on the sole-source
+# term alone.
+PINNED_TIER2_FANIN: dict[str, int] = {"N042": 6, "N087": 9, "N203": 12}
 
 PINNED_IDS = tuple(n["node_id"] for n in PINNED_NODES)
 
@@ -221,14 +234,31 @@ REVENUE_SHAPE_BY_TIER: dict[int, tuple[float, float, float, float]] = {
     3: (2.30, 0.70, 1.2, 34.0),
 }
 
-# Days of operating cost each tier can survive unpaid — the further down the
-# chain, the thinner the buffer.  This gradient is what makes deep tiers fail
-# first when an anchor stretches payment.
+# Days of operating cost each tier can survive unpaid.
+#
+# Tier 1 is EMPIRICAL.  Collection measured cash_buffer_days across 29 verified
+# company-years of listed Indian tier-1 manufacturers: median 12 days, quartiles
+# 4 and 30.5, maximum 266.  The previous 60–100 band was roughly 5x too generous
+# and put every real tier-1 below the mock's floor.  See data/real/findings.md.
+#
+# Tiers 0, 2 and 3 are STATED ASSUMPTIONS, not measurements.  The collected
+# cohort is entirely listed manufacturers, so there is no observation of an OEM
+# anchor or of an unlisted deep-tier supplier.  Do not describe them as measured.
+#
+# Note also that a real uniform draw is wrong: the observed distribution is
+# heavily right-skewed (median 12, max 266).  These ranges bracket the observed
+# IQR rather than reproducing the tail.
+#
+# The tier gradient is deliberately shallower than before.  Collection showed
+# buffer does not separate distress from healthy companies at all (AUC 0.569
+# over 44 company-years), so it is no longer the mechanism that makes deep tiers
+# fail first — exposure concentration is.  See engine/config.py
+# MAX_BUFFER_STRENGTH.
 BUFFER_RANGE_BY_TIER: dict[int, tuple[int, int]] = {
-    0: (150, 250),
-    1: (60, 100),
-    2: (15, 40),
-    3: (5, 25),
+    0: (60, 200),  # assumption — OEM anchors hold real cash, but none observed
+    1: (3, 45),    # empirical — brackets observed q1=4 to q3=30 with headroom
+    2: (2, 30),    # assumption — unobserved
+    3: (1, 20),    # assumption — unobserved
 }
 
 # Revenue in ₹ crore per employee, used to derive a plausible headcount.
@@ -263,7 +293,16 @@ def _compose_name(rng: random.Random, tier: int, used: set[str]) -> str:
                 parts.append(trade)
         parts.append(kind)
         parts.append(rng.choice(NAME_SUFFIX_BY_TIER[tier]))
-        name = " ".join(parts)
+        # The trade-vs-kind guard above misses the suffix, which carries its own
+        # leading word: kind "Industries" plus suffix "Industries Ltd" produced
+        # "Chandrika Stampings Industries Industries Ltd".  Collapsed after
+        # assembly rather than by redrawing, so the RNG stream — and therefore
+        # every number in the committed network — is untouched.
+        words = " ".join(parts).split()
+        name = " ".join(
+            word for index, word in enumerate(words)
+            if index == 0 or word.lower() != words[index - 1].lower()
+        )
         if name not in used:
             used.add(name)
             return name
@@ -448,6 +487,16 @@ def _build_pairs(
         for supplier_id in rng.sample(free_tier3, count):
             add(supplier_id, buyer_id)
 
+    # The demo cast needs a real supplier base beneath it — see
+    # PINNED_TIER2_FANIN for why betweenness collapses without one.
+    for buyer_id in sorted(PINNED_TIER2_FANIN):
+        shortfall = PINNED_TIER2_FANIN[buyer_id] - sum(1 for _, b in pairs if b == buyer_id)
+        if shortfall <= 0:
+            continue
+        candidates = [n for n in free_tier3 if (n, buyer_id) not in seen]
+        for supplier_id in sorted(rng.sample(candidates, min(shortfall, len(candidates)))):
+            add(supplier_id, buyer_id)
+
     # Nobody is left stranded: a supplier with no buyer would sit outside the
     # graph entirely and could never carry or receive stress.
     has_buyer = {supplier_id for supplier_id, _ in pairs}
@@ -528,6 +577,8 @@ def _generate_edges(
             "annual_value_cr": e["annual_value_cr"],
             "exposure_pct": e["exposure_pct"],
             "is_single_source": e["is_single_source"],
+            "confidence": "confirmed",
+            "edge_provenance": "synthetic",
             "data_source": e["data_source"],
         }
         for e in edges
@@ -564,6 +615,18 @@ def _add_extra_chokepoints(rng: random.Random, edges: list[dict[str, Any]]) -> N
 
 FY_YEARS = ("FY23", "FY24")
 OBSERVABLE_COUNT = 8  # a handful of listed filers; everything below them is dark
+
+# Positions in the observable list whose disclosures deteriorate year on year.
+#
+# Empty by design.  DEMO_SCENARIO.md §5 specifies a single stressed origin,
+# N007, and the cascade story is that one trigger reaching four suppliers.  A
+# second deteriorating peer creates a parallel stress branch whose suppliers
+# interleave with the demo cast in the ranked list, so the list stops being "what
+# N007 did" and the narration no longer matches the screen.
+#
+# The peers still matter: they are the quiet control cohort that makes N007's
+# deterioration legible as a signal rather than as the only thing measured.
+DETERIORATING_POSITIONS: frozenset[int] = frozenset()
 
 # N007, both years, hand-built.  FY24 matches the worked example in SCHEMA.md
 # §3.4 exactly; FY23 is its prior year, giving a 2.1x rise in the MSMED flow
@@ -609,32 +672,69 @@ N007_SIGNALS: tuple[dict[str, Any], ...] = (
 
 
 def _peer_signals(
-    rng: random.Random, node: dict[str, Any], omit_not_due: bool, omit_materials: bool
+    rng: random.Random,
+    node: dict[str, Any],
+    omit_not_due: bool,
+    omit_materials: bool,
+    deteriorating: bool = False,
 ) -> list[dict[str, Any]]:
-    """Two years of unremarkable disclosures, so N007 stands out against peers."""
+    """Two years of disclosures for an observable peer.
+
+    The year-on-year direction of every figure the stress ladder reads is set
+    deliberately by `deteriorating`, not left to independent draws per year.
+    Drawing each year independently makes roughly half of all peers trip rung 1
+    by accident, which buries the demo's trigger in noise and — worse — puts a
+    stress score on the anchor, which DEMO_SCENARIO.md §2 says pays on time.
+    """
     revenue = node["revenue_cr"]
     materials_ratio = rng.uniform(0.58, 0.68)
     late_intensity = rng.uniform(0.06, 0.14)
-    late_drift = rng.uniform(0.92, 1.12)
     migration = rng.uniform(0.03, 0.11)
-    migration_drift = rng.uniform(0.90, 1.15)
     growth = rng.uniform(1.02, 1.09)
+
+    # Drift multipliers applied to year two.  A quiet filer's figures hold flat
+    # or improve; a deteriorating one's rise, but below N007's 2.1x so the
+    # trigger stays the clearest case in the network.
+    if deteriorating:
+        late_drift = rng.uniform(1.25, 1.60)
+        migration_drift = rng.uniform(1.05, 1.20)
+        payables_drift = rng.uniform(1.04, 1.10)
+        aged_drift = rng.uniform(1.10, 1.35)
+    else:
+        late_drift = rng.uniform(0.82, 0.97)
+        migration_drift = rng.uniform(0.88, 1.02)
+        payables_drift = rng.uniform(0.93, 0.99)
+        aged_drift = rng.uniform(0.80, 0.96)
+
+    # Every ratio is drawn once, before the year loop, then carried forward by
+    # its drift multiplier.  Redrawing inside the loop is what made a filer's
+    # direction accidental rather than intended.
+    msme_ratio = rng.uniform(0.014, 0.022)
+    nonmsme_ratio = rng.uniform(0.09, 0.16)
+    aged_1_2_ratio = rng.uniform(0.001, 0.006)
+    aged_2_3_ratio = rng.uniform(0.0002, 0.002)
+    aged_over_3_ratio = rng.uniform(0.0002, 0.0015)
+    unpaid_ratio = rng.uniform(0.5, 0.95)
+    interest_ratio = rng.uniform(0.01, 0.05)
+    turnover = rng.uniform(4.1, 7.3)
 
     rows: list[dict[str, Any]] = []
     for year_index, fy in enumerate(FY_YEARS):
-        scale = growth**year_index
         year_revenue = revenue / growth ** (len(FY_YEARS) - 1 - year_index)
         materials = year_revenue * materials_ratio
         year_migration = migration * migration_drift**year_index
         year_late = late_intensity * late_drift**year_index
+        year_payables = payables_drift**year_index
+        year_aged = aged_drift**year_index
 
-        msme_total = year_revenue * rng.uniform(0.014, 0.022) * scale
+        msme_total = year_revenue * msme_ratio * year_payables
         under_1yr = msme_total * year_migration
         not_due = msme_total - under_1yr
-        aged_1_2 = msme_total * rng.uniform(0.001, 0.006)
-        aged_2_3 = msme_total * rng.uniform(0.0002, 0.002)
-        aged_over_3 = msme_total * rng.uniform(0.0002, 0.0015)
-        nonmsme = year_revenue * rng.uniform(0.09, 0.16)
+        aged_1_2 = msme_total * aged_1_2_ratio * year_aged
+        aged_2_3 = msme_total * aged_2_3_ratio * year_aged
+        aged_over_3 = msme_total * aged_over_3_ratio * year_aged
+        nonmsme = year_revenue * nonmsme_ratio * year_payables
+        interest = msme_total * interest_ratio * late_drift**year_index
 
         rows.append(
             {
@@ -650,12 +750,12 @@ def _peer_signals(
                 "msme_total_cr": round(msme_total + aged_1_2 + aged_2_3 + aged_over_3, 2),
                 "nonmsme_total_cr": round(nonmsme, 2),
                 "total_trade_payables_cr": round(msme_total + nonmsme, 2),
-                "msmed_principal_unpaid_year_end_cr": round(msme_total * rng.uniform(0.5, 0.95), 2),
+                "msmed_principal_unpaid_year_end_cr": round(msme_total * unpaid_ratio, 2),
                 "msmed_principal_paid_beyond_appointed_day_cr": round(year_late * materials, 2),
-                "msmed_interest_accrued_unpaid_cr": round(msme_total * rng.uniform(0.01, 0.05), 2),
+                "msmed_interest_accrued_unpaid_cr": round(interest, 2),
                 "revenue_cr": round(year_revenue, 2),
                 "cost_of_materials_cr": None if omit_materials else round(materials, 2),
-                "trade_payables_turnover_ratio": round(rng.uniform(4.1, 7.3), 2),
+                "trade_payables_turnover_ratio": round(turnover, 2),
                 "has_not_due_column": not omit_not_due,
             }
         )
@@ -686,8 +786,17 @@ def _generate_stress_signals(
         else:
             # One peer omits the Not Due column and one omits cost of materials,
             # so both fallback branches are exercised by the committed mock.
+            #
+            # N001 is the anchor and must read clean: DEMO_SCENARIO.md §2 says it
+            # pays on time and has idle cash, and the counterfactual only lands
+            # if it starts the demo green.  Two peers deteriorate mildly so the
+            # ranked list is not suspiciously short, but none as sharply as N007.
             rows = _peer_signals(
-                rng, node, omit_not_due=position == 2, omit_materials=position == 3
+                rng,
+                node,
+                omit_not_due=position == 2,
+                omit_materials=position == 3,
+                deteriorating=position in DETERIORATING_POSITIONS,
             )
 
         for row in rows:
@@ -695,6 +804,7 @@ def _generate_stress_signals(
                 {
                     "node_id": node_id,
                     **row,
+                    "ageing_basis": "due_date",
                     "basis": "standalone",
                     "data_source": "synthetic",
                 }
@@ -813,3 +923,239 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+# ---------------------------------------------------------------------------
+# Synthetic deep tier for the real dataset — SCHEMA.md §7.1 step 5
+#
+# transform.py reads entity_pool.csv and calls synthesise_deep_tier() to hang a
+# generated tier-2/tier-3 layer beneath the real tier-0/1 companies.  It lives
+# here, not in transform.py, because AGENTS.md §3.1 permits `random` in this
+# module and nowhere else.  The seed is fixed in config, so the same CSVs always
+# produce a byte-identical network.json.
+#
+# Everything this function emits is `data_source: "synthetic"` at row level.
+# DATA_DICTIONARY.md §3b is explicit that tier-2 and tier-3 nodes, the edges
+# below tier-1, and `component` / `is_single_source` / `annual_value_cr` on
+# synthetic edges SHOULD be generated — and equally explicit that no rupee
+# figure may ever sit next to a real company's name, and that no real company
+# may be called a sole source.  Both rules are enforced below.
+# ---------------------------------------------------------------------------
+
+# product_category substrings -> sector, most specific first.  Ordered, because
+# "solar_junction_box" must not be caught by the generic metal-forming rules.
+# Anything unmatched is auto_components, which is both the pool's majority and
+# the real cohort's dominant sector.
+POOL_SECTOR_RULES: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("pharmaceuticals", (
+        "intermediate", "capsule", "ampoule", "blister", "vial", "excipient",
+        "stearate", "croscarmellose", "hydroxypropyl", "enteric", "gelatin",
+        "lidding", "tray_pack", "paracetamol", "ibuprofen",
+    )),
+    ("agrochemicals", (
+        "technical", "formulation", "herbicide", "insecticide", "fungicide",
+        "wettable", "granule", "coex_bottle", "agrochemical",
+    )),
+    ("sugar_and_ethanol", (
+        "sugar_", "bagasse", "distillery", "ethanol", "calandria", "molasses",
+        "centrifuge", "centrifugal_basket",
+    )),
+    ("cement_and_construction", (
+        "cement_", "concrete_", "aggregate", "ready_mix", "kiln", "raw_mill",
+        "admixture", "block_mould", "grinding_media",
+    )),
+    ("solar_ev", ("solar_", "battery_", "busbar", "ev_", "photovoltaic")),
+    ("tractor_and_farm_equipment", ("tractor_", "pto_", "harvester", "plough")),
+    ("power_tools", ("carbon_brush", "armature_winding")),
+)
+
+# Real buyer sector -> the pool sector its suppliers should come from.  An
+# unmapped sector falls back to auto_components: the collected cohort is mostly
+# auto ancillaries and their OEM customers.
+BUYER_SECTOR_TO_POOL: dict[str, str] = {
+    "pharmaceuticals": "pharmaceuticals",
+    "pharma_brand_owner": "pharmaceuticals",
+    "agrochemicals": "agrochemicals",
+    "sugar": "sugar_and_ethanol",
+    "cement_and_construction": "cement_and_construction",
+    "solar_epc_and_ev": "solar_ev",
+    "ev_fleet_operator": "solar_ev",
+    "tractor_oem": "tractor_and_farm_equipment",
+    "agricultural_equipment_oem": "tractor_and_farm_equipment",
+    "power_tools_oem": "power_tools",
+}
+
+
+def classify_pool_sector(product_category: str) -> str:
+    """Sector for one entity-pool row, from its product_category."""
+    lowered = product_category.lower()
+    for sector, needles in POOL_SECTOR_RULES:
+        if any(needle in lowered for needle in needles):
+            return sector
+    return "auto_components"
+
+
+def _pool_sector_for_buyer(buyer_sector: str) -> str:
+    return BUYER_SECTOR_TO_POOL.get(buyer_sector, "auto_components")
+
+
+def synthesise_deep_tier(
+    pool_rows: list[dict[str, str]],
+    real_nodes: list[dict[str, Any]],
+    seed: int = config.DEEP_TIER_SEED,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Generate a tier-2/tier-3 supplier layer beneath the real companies.
+
+    Args:
+        pool_rows:  entity_pool.csv rows — name, source, location, product_category
+        real_nodes: the nodes transform.py built from companies.csv
+        seed:       fixed in config, so the same CSVs give a byte-identical file
+
+    Returns (synthetic_nodes, synthetic_edges).  Edge ids are left unset; the
+    caller assigns them once the real and synthetic edges are merged, so the
+    numbering stays contiguous.
+
+    Raises RuntimeError if the pool cannot cover a sector the real graph needs,
+    rather than silently reusing a name or substituting a mismatched one.
+    """
+    rng = random.Random(seed)
+
+    by_sector: dict[str, list[dict[str, str]]] = {}
+    for row in sorted(pool_rows, key=lambda r: r["name"]):
+        by_sector.setdefault(classify_pool_sector(row["product_category"]), []).append(row)
+    for bucket in by_sector.values():
+        rng.shuffle(bucket)
+
+    taken_names = {node["name"] for node in real_nodes}
+    next_index = max(int(node["node_id"][1:]) for node in real_nodes) + 1
+
+    def draw(sector: str) -> dict[str, str]:
+        """Take one unused pool entry, preferring the asked-for sector.
+
+        Falls back to auto_components, then to whatever is left.  A slightly
+        off-sector supplier name is a cosmetic blemish; running dry and raising
+        mid-build is not, and reusing a name would put one company in the graph
+        twice.
+        """
+        order = [sector, "auto_components", *sorted(by_sector)]
+        for candidate_sector in order:
+            bucket = by_sector.get(candidate_sector, [])
+            while bucket:
+                row = bucket.pop()
+                if row["name"] not in taken_names:
+                    taken_names.add(row["name"])
+                    return row
+        raise RuntimeError(
+            f"entity_pool.csv exhausted for sector {sector!r} - add more rows "
+            f"or lower DEEP_TIER1_FANOUT/DEEP_TIER2_FANOUT in config.py"
+        )
+
+    nodes: list[dict[str, Any]] = []
+    edges: list[dict[str, Any]] = []
+
+    def make_node(row: dict[str, str], tier: int) -> dict[str, Any]:
+        nonlocal next_index
+        revenue = _draw_revenue(rng, tier)
+        low, high = BUFFER_RANGE_BY_TIER[tier]
+        node = {
+            "node_id": _node_id(next_index),
+            "name": row["name"],
+            "tier": tier,
+            "sector": classify_pool_sector(row["product_category"]),
+            "product_category": row["product_category"],
+            "revenue_cr": round(revenue, 2),
+            "cash_buffer_days": rng.randint(low, high),
+            "employees": max(4, int(revenue / REVENUE_PER_EMPLOYEE_CR)),
+            "is_observable": False,
+            # Row-level and never file-level, so the UI can always tell a
+            # generated firm from a real filer (DATA_DICTIONARY.md §3b).
+            "data_source": "synthetic",
+            "cin": None,
+            "substituted": [],
+        }
+        next_index += 1
+        nodes.append(node)
+        return node
+
+    # Remaining outgoing exposure per supplier.  exposure_pct is a fraction of
+    # the SUPPLIER's revenue, so a supplier's outgoing edges must not sum past
+    # 1.0 — graph.py raises if they do.
+    budget: dict[str, float] = {}
+
+    def connect(supplier: dict[str, Any], buyer: dict[str, Any]) -> None:
+        remaining = budget.get(supplier["node_id"], rng.uniform(*EXPOSURE_COVERAGE_RANGE))
+        if remaining <= 0.02:
+            return
+        exposure = round(min(remaining, rng.uniform(0.08, 0.62)), 4)
+        budget[supplier["node_id"]] = remaining - exposure
+        edges.append({
+            "supplier_id": supplier["node_id"],
+            "buyer_id": buyer["node_id"],
+            "component": supplier["product_category"],
+            "annual_value_cr": round(exposure * supplier["revenue_cr"], 2),
+            "exposure_pct": exposure,
+            # Set below, and only where the buyer is synthetic.
+            "is_single_source": False,
+            "confidence": "confirmed",
+            "edge_provenance": "synthetic",
+            "data_source": "synthetic",
+        })
+
+    real_by_tier: dict[int, list[dict[str, Any]]] = {}
+    for node in sorted(real_nodes, key=lambda n: n["node_id"]):
+        real_by_tier.setdefault(node["tier"], []).append(node)
+
+    # Tier 2 beneath every real tier-1.  Suppliers are shared across buyers in
+    # the same sector, which is what a real ancillary cluster looks like: one
+    # forging shop serves several tier-1s rather than exactly one.
+    tier2_by_sector: dict[str, list[dict[str, Any]]] = {}
+    for buyer in real_by_tier.get(1, []):
+        pool_sector = _pool_sector_for_buyer(buyer["sector"])
+        existing = tier2_by_sector.setdefault(pool_sector, [])
+        wanted = rng.randint(*config.DEEP_TIER1_FANOUT)
+
+        # Reuse part of an existing cluster before generating more.
+        reused = existing[:]
+        rng.shuffle(reused)
+        reused = reused[: wanted // 3]
+        for supplier in reused:
+            connect(supplier, buyer)
+
+        for _ in range(wanted - len(reused)):
+            supplier = make_node(draw(pool_sector), tier=2)
+            existing.append(supplier)
+            connect(supplier, buyer)
+
+    # Tier 3 beneath every tier-2, real ones included — a real tier-2 with no
+    # suppliers of its own is a leaf, and leaves cannot carry stress onward.
+    tier2_all = [n for n in nodes if n["tier"] == 2] + real_by_tier.get(2, [])
+    for buyer in sorted(tier2_all, key=lambda n: n["node_id"]):
+        pool_sector = _pool_sector_for_buyer(buyer["sector"])
+        for _ in range(rng.randint(*config.DEEP_TIER2_FANOUT)):
+            connect(make_node(draw(pool_sector), tier=3), buyer)
+
+    _place_deep_tier_chokepoints(rng, edges, {n["node_id"] for n in nodes})
+
+    edges.sort(key=lambda e: (e["supplier_id"], e["buyer_id"]))
+    return nodes, edges
+
+
+def _place_deep_tier_chokepoints(
+    rng: random.Random,
+    edges: list[dict[str, Any]],
+    synthetic_ids: set[str],
+) -> None:
+    """Flag a few genuine sole-source relationships inside the generated layer.
+
+    Only edges whose BUYER is synthetic are eligible.  Saying a real company
+    single-sources a part is a fabricated claim about that company's supply
+    chain, which DATA_DICTIONARY.md §3b puts in the "never synthetic under any
+    circumstances" list.  Criticality needs real chokepoints to find, and the
+    generated layer supplies them without making a claim about anybody real.
+    """
+    eligible = [
+        edge for edge in sorted(edges, key=lambda e: (e["supplier_id"], e["buyer_id"]))
+        if edge["buyer_id"] in synthetic_ids and edge["exposure_pct"] >= 0.25
+    ]
+    for edge in rng.sample(eligible, min(config.DEEP_TIER_CHOKEPOINTS, len(eligible))):
+        edge["is_single_source"] = True

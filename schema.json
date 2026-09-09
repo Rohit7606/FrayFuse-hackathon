@@ -1,332 +1,1050 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "FrayFuse Runtime Contract",
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "description": "Machine-readable contract for FrayFuse runtime input and output. See SCHEMA.md for prose and rationale.",
-
   "definitions": {
-
     "NodeId": {
       "type": "string",
       "pattern": "^N[0-9]{3,}$",
       "description": "Node identifier, zero-padded, e.g. N001"
     },
-
     "EdgeId": {
       "type": "string",
       "pattern": "^E[0-9]{3,}$"
     },
-
     "DataSource": {
       "type": "string",
-      "enum": ["real", "synthetic"],
+      "enum": [
+        "real",
+        "synthetic"
+      ],
       "description": "Never blur this. Drives honest UI labelling."
     },
-
     "RiskBand": {
       "type": "string",
-      "enum": ["critical", "high", "watch", "stable"]
+      "enum": [
+        "critical",
+        "high",
+        "watch",
+        "stable"
+      ]
     },
-
     "Meta": {
       "type": "object",
-      "required": ["schema_version", "generated_at", "generator", "currency_unit", "node_count", "edge_count"],
+      "required": [
+        "schema_version",
+        "generated_at",
+        "generator",
+        "currency_unit",
+        "node_count",
+        "edge_count"
+      ],
       "additionalProperties": false,
       "properties": {
-        "schema_version": { "type": "string", "const": "1.0" },
-        "generated_at": { "type": "string", "format": "date-time" },
-        "generator": { "type": "string", "enum": ["mockgen", "transform"] },
-        "seed": { "type": ["integer", "null"] },
-        "currency_unit": { "type": "string", "const": "INR_crore" },
-        "node_count": { "type": "integer", "minimum": 0 },
-        "edge_count": { "type": "integer", "minimum": 0 },
-        "observable_node_count": { "type": "integer", "minimum": 0 },
-        "source_units_note": { "type": ["string", "null"] }
+        "schema_version": {
+          "type": "string",
+          "enum": [
+            "1.0",
+            "1.1"
+          ],
+          "description": "Contract version this file was produced against. 1.0 files remain valid: 1.1 was additive on inputs."
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "generator": {
+          "type": "string",
+          "enum": [
+            "mockgen",
+            "transform"
+          ]
+        },
+        "seed": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "currency_unit": {
+          "type": "string",
+          "const": "INR_crore"
+        },
+        "node_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "edge_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "observable_node_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_units_note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
       }
     },
-
     "Node": {
       "type": "object",
-      "required": ["node_id", "name", "tier", "sector", "product_category", "revenue_cr", "cash_buffer_days", "is_observable", "data_source"],
+      "required": [
+        "node_id",
+        "name",
+        "tier",
+        "sector",
+        "product_category",
+        "is_observable",
+        "data_source"
+      ],
       "additionalProperties": false,
       "properties": {
-        "node_id": { "$ref": "#/definitions/NodeId" },
-        "name": { "type": "string", "minLength": 3 },
-        "tier": { "type": "integer", "minimum": 0, "maximum": 3, "description": "0 = OEM/anchor" },
-        "sector": { "type": "string" },
-        "product_category": { "type": "string" },
-        "revenue_cr": { "type": "number", "minimum": 0 },
-        "cash_buffer_days": { "type": "integer", "minimum": 0 },
-        "employees": { "type": ["integer", "null"], "minimum": 0 },
-        "is_observable": { "type": "boolean" },
-        "data_source": { "$ref": "#/definitions/DataSource" },
-        "cin": { "type": ["string", "null"] }
+        "node_id": {
+          "$ref": "#/definitions/NodeId"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 3
+        },
+        "tier": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3,
+          "description": "0 = OEM/anchor"
+        },
+        "sector": {
+          "type": "string"
+        },
+        "product_category": {
+          "type": "string"
+        },
+        "revenue_cr": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "description": "null means the figure was not disclosed for this real company. NEVER invent one - DATA_DICTIONARY.md 3b forbids a rupee figure beside a real company's name. The engine substitutes at runtime and records the node in `substituted`."
+        },
+        "cash_buffer_days": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "description": "null means not disclosed. Substituted at runtime and recorded in `substituted`."
+        },
+        "employees": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "is_observable": {
+          "type": "boolean"
+        },
+        "data_source": {
+          "$ref": "#/definitions/DataSource"
+        },
+        "cin": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "observation_completeness": {
+          "$ref": "#/definitions/ObservationCompleteness"
+        },
+        "substituted": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Field names the engine supplied a value for because the source did not disclose one. Present so a substitution is a VISIBLE modelling decision rather than a fact frozen into a data file. The UI must label these."
+        }
       }
     },
-
     "Edge": {
       "type": "object",
-      "required": ["edge_id", "supplier_id", "buyer_id", "component", "annual_value_cr", "exposure_pct", "is_single_source", "data_source"],
+      "required": [
+        "edge_id",
+        "supplier_id",
+        "buyer_id",
+        "component",
+        "annual_value_cr",
+        "exposure_pct",
+        "data_source",
+        "is_single_source",
+        "confidence"
+      ],
       "additionalProperties": false,
       "properties": {
-        "edge_id": { "$ref": "#/definitions/EdgeId" },
-        "supplier_id": { "$ref": "#/definitions/NodeId" },
-        "buyer_id": { "$ref": "#/definitions/NodeId" },
-        "component": { "type": "string" },
-        "annual_value_cr": { "type": "number", "minimum": 0 },
+        "edge_id": {
+          "$ref": "#/definitions/EdgeId"
+        },
+        "supplier_id": {
+          "$ref": "#/definitions/NodeId"
+        },
+        "buyer_id": {
+          "$ref": "#/definitions/NodeId"
+        },
+        "component": {
+          "type": "string"
+        },
+        "annual_value_cr": {
+          "type": "number",
+          "minimum": 0
+        },
         "exposure_pct": {
           "type": "number",
           "minimum": 0,
           "maximum": 1,
           "description": "Fraction of the SUPPLIER's revenue. The single most important number in the model."
         },
-        "is_single_source": { "type": "boolean" },
-        "data_source": { "$ref": "#/definitions/DataSource" }
+        "is_single_source": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "null means UNKNOWN — no filing stated sole-source status. false is itself a claim that alternatives exist and needs evidence. Do not coerce null to false; it carries 0.35 of criticality."
+        },
+        "data_source": {
+          "$ref": "#/definitions/DataSource"
+        },
+        "confidence": {
+          "$ref": "#/definitions/EdgeConfidence"
+        },
+        "edge_provenance": {
+          "$ref": "#/definitions/EdgeProvenance"
+        }
       }
     },
-
     "StressSignal": {
       "type": "object",
-      "required": ["node_id", "fy", "has_not_due_column", "basis", "data_source"],
+      "required": [
+        "node_id",
+        "fy",
+        "has_not_due_column",
+        "basis",
+        "data_source",
+        "ageing_basis"
+      ],
       "additionalProperties": false,
       "properties": {
-        "node_id": { "$ref": "#/definitions/NodeId" },
-        "fy": { "type": "string", "pattern": "^FY[0-9]{2}$" },
-
-        "msme_unbilled_cr": { "type": ["number", "null"] },
-        "msme_not_due_cr": { "type": ["number", "null"] },
-        "msme_under_1yr_cr": { "type": ["number", "null"] },
-        "msme_1_2yr_cr": { "type": ["number", "null"] },
-        "msme_2_3yr_cr": { "type": ["number", "null"] },
-        "msme_over_3yr_cr": { "type": ["number", "null"] },
-        "msme_total_cr": { "type": ["number", "null"] },
-        "nonmsme_total_cr": { "type": ["number", "null"] },
-        "total_trade_payables_cr": { "type": ["number", "null"] },
-
-        "msmed_principal_unpaid_year_end_cr": { "type": ["number", "null"] },
+        "node_id": {
+          "$ref": "#/definitions/NodeId"
+        },
+        "fy": {
+          "type": "string",
+          "pattern": "^FY[0-9]{2}$"
+        },
+        "msme_unbilled_cr": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "msme_not_due_cr": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "msme_under_1yr_cr": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "msme_1_2yr_cr": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "msme_2_3yr_cr": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "msme_over_3yr_cr": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "msme_total_cr": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "nonmsme_total_cr": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "total_trade_payables_cr": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "msmed_principal_unpaid_year_end_cr": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
         "msmed_principal_paid_beyond_appointed_day_cr": {
-          "type": ["number", "null"],
+          "type": [
+            "number",
+            "null"
+          ],
           "description": "PRIMARY SIGNAL. Whole-year flow; cannot be window-dressed at year end."
         },
-        "msmed_interest_accrued_unpaid_cr": { "type": ["number", "null"] },
-
-        "revenue_cr": { "type": ["number", "null"] },
-        "cost_of_materials_cr": { "type": ["number", "null"] },
-        "trade_payables_turnover_ratio": { "type": ["number", "null"] },
-
+        "msmed_interest_accrued_unpaid_cr": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "revenue_cr": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "cost_of_materials_cr": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "trade_payables_turnover_ratio": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
         "has_not_due_column": {
           "type": "boolean",
           "description": "If false, msme_under_1yr_cr includes not-yet-due amounts and is NOT comparable across companies. Code must branch on this."
         },
-        "basis": { "type": "string", "enum": ["standalone", "consolidated"] },
-        "data_source": { "$ref": "#/definitions/DataSource" }
+        "basis": {
+          "type": "string",
+          "enum": [
+            "standalone",
+            "consolidated"
+          ]
+        },
+        "data_source": {
+          "$ref": "#/definitions/DataSource"
+        },
+        "msmed_interest_due_unpaid_cr": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "MSMED interest due and unpaid. The LARGEST of the three interest lines drives the primary stress signal — a YoY rise is a statutory admission of late payment."
+        },
+        "msmed_interest_due_on_payments_beyond_appointed_day_cr": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "MSMED interest due on payments already made beyond the appointed day. In five-line note formats this is a SUB-CLAUSE of the s.16 caption: a dash means no s.16 interest was paid, NOT that nothing was paid late. Never load a dash here as 0."
+        },
+        "undrawn_credit_facilities_cr": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Committed but undrawn facilities. Context only — total liquidity days does not discriminate distress from healthy any better than cash alone."
+        },
+        "undrawn_type": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "revolving_working_capital",
+            "project_tied",
+            "undisbursed_instrument",
+            null
+          ],
+          "description": "The quality distinction that survived testing: renewable revolving headroom against current assets behaves very differently from a one-time undisbursed instrument."
+        },
+        "ageing_basis": {
+          "$ref": "#/definitions/AgeingBasis"
+        },
+        "msme_book_material": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "false where MSME dues are a rounding error and every MSMED line reads nil. Gates whether a LEVEL is comparable. Never use it to suppress a growth signal."
+        },
+        "series_break": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Set where this year is not comparable with the previous one (restatement, discontinued operations, GAAP transition). The stress ladder must SKIP that transition rather than compute a meaningless delta."
+        },
+        "liquidity_quality": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Set where a liquidity component was excluded or is not what it appears — e.g. current investments that are unquoted equity pledged against loans."
+        }
       }
     },
-
     "NetworkInput": {
       "type": "object",
-      "required": ["meta", "nodes", "edges", "stress_signals"],
+      "required": [
+        "meta",
+        "nodes",
+        "edges",
+        "stress_signals"
+      ],
       "additionalProperties": false,
       "properties": {
-        "meta": { "$ref": "#/definitions/Meta" },
-        "nodes": { "type": "array", "items": { "$ref": "#/definitions/Node" }, "minItems": 1 },
-        "edges": { "type": "array", "items": { "$ref": "#/definitions/Edge" } },
-        "stress_signals": { "type": "array", "items": { "$ref": "#/definitions/StressSignal" } }
-      }
-    },
-
-    "ReasonFactor": {
-      "type": "object",
-      "required": ["kind", "detail", "weight"],
-      "additionalProperties": false,
-      "properties": {
-        "kind": {
-          "type": "string",
-          "enum": ["exposure", "upstream_stress", "single_source", "chokepoint", "thin_buffer", "own_stress"]
+        "meta": {
+          "$ref": "#/definitions/Meta"
         },
-        "detail": { "type": "string", "minLength": 3 },
-        "weight": { "type": "number", "minimum": 0, "maximum": 1 }
-      }
-    },
-
-    "Score": {
-      "type": "object",
-      "required": ["node_id", "own_stress", "inherited_stress", "fragility", "criticality", "final_score", "risk_band", "reason_text", "reason_factors", "intervention_cost_cr", "estimated_exposure_cr", "propagation_depth"],
-      "additionalProperties": false,
-      "properties": {
-        "node_id": { "$ref": "#/definitions/NodeId" },
-        "own_stress": { "type": "number", "minimum": 0, "maximum": 1 },
-        "inherited_stress": { "type": "number", "minimum": 0, "maximum": 1 },
-        "fragility": { "type": "number", "minimum": 0, "maximum": 1 },
-        "criticality": { "type": "number", "minimum": 0, "maximum": 1 },
-        "final_score": { "type": "number", "minimum": 0, "maximum": 1 },
-        "risk_band": { "$ref": "#/definitions/RiskBand" },
-        "rank": { "type": ["integer", "null"], "minimum": 1 },
-        "reason_text": { "type": "string", "minLength": 10 },
-        "reason_factors": { "type": "array", "items": { "$ref": "#/definitions/ReasonFactor" }, "minItems": 1 },
-        "intervention_cost_cr": { "type": "number", "minimum": 0 },
-        "estimated_exposure_cr": { "type": "number", "minimum": 0 },
-        "propagation_depth": { "type": "integer", "minimum": 0 }
-      }
-    },
-
-    "Summary": {
-      "type": "object",
-      "required": ["total_nodes", "at_risk_count", "band_counts", "total_intervention_cost_cr", "total_estimated_exposure_cr", "iterations_to_converge"],
-      "additionalProperties": false,
-      "properties": {
-        "total_nodes": { "type": "integer", "minimum": 0 },
-        "stressed_origin_nodes": { "type": "array", "items": { "$ref": "#/definitions/NodeId" } },
-        "at_risk_count": { "type": "integer", "minimum": 0 },
-        "band_counts": {
-          "type": "object",
-          "required": ["critical", "high", "watch", "stable"],
-          "additionalProperties": false,
-          "properties": {
-            "critical": { "type": "integer", "minimum": 0 },
-            "high": { "type": "integer", "minimum": 0 },
-            "watch": { "type": "integer", "minimum": 0 },
-            "stable": { "type": "integer", "minimum": 0 }
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Node"
+          },
+          "minItems": 1
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Edge"
           }
         },
-        "total_intervention_cost_cr": { "type": "number", "minimum": 0 },
-        "total_estimated_exposure_cr": { "type": "number", "minimum": 0 },
-        "max_propagation_depth": { "type": "integer", "minimum": 0 },
-        "iterations_to_converge": { "type": "integer", "minimum": 0 }
-      }
-    },
-
-    "ScoredNetwork": {
-      "type": "object",
-      "required": ["meta", "nodes", "edges", "scores", "ranking", "summary"],
-      "additionalProperties": false,
-      "properties": {
-        "meta": { "$ref": "#/definitions/Meta" },
-        "nodes": { "type": "array", "items": { "$ref": "#/definitions/Node" } },
-        "edges": { "type": "array", "items": { "$ref": "#/definitions/Edge" } },
-        "scores": { "type": "array", "items": { "$ref": "#/definitions/Score" } },
-        "ranking": { "type": "array", "items": { "$ref": "#/definitions/NodeId" } },
-        "summary": { "$ref": "#/definitions/Summary" }
-      }
-    },
-
-    "StressOverride": {
-      "type": "object",
-      "required": ["node_id", "own_stress"],
-      "additionalProperties": false,
-      "properties": {
-        "node_id": { "$ref": "#/definitions/NodeId" },
-        "own_stress": { "type": "number", "minimum": 0, "maximum": 1 }
-      }
-    },
-
-    "Intervention": {
-      "type": "object",
-      "required": ["node_id", "amount_cr"],
-      "additionalProperties": false,
-      "properties": {
-        "node_id": { "$ref": "#/definitions/NodeId" },
-        "amount_cr": { "type": "number", "minimum": 0 }
-      }
-    },
-
-    "Scenario": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "stress_overrides": { "type": "array", "items": { "$ref": "#/definitions/StressOverride" }, "default": [] },
-        "interventions": { "type": "array", "items": { "$ref": "#/definitions/Intervention" }, "default": [] }
-      }
-    },
-
-    "NetworkResponse": {
-      "type": "object",
-      "required": ["meta", "nodes", "edges"],
-      "additionalProperties": false,
-      "properties": {
-        "meta": { "$ref": "#/definitions/Meta" },
-        "nodes": { "type": "array", "items": { "$ref": "#/definitions/Node" } },
-        "edges": { "type": "array", "items": { "$ref": "#/definitions/Edge" } }
-      }
-    },
-
-    "AtRiskResponse": {
-      "type": "object",
-      "required": ["meta", "ranking", "scores", "summary"],
-      "additionalProperties": false,
-      "properties": {
-        "meta": { "$ref": "#/definitions/Meta" },
-        "ranking": { "type": "array", "items": { "$ref": "#/definitions/NodeId" } },
-        "scores": { "type": "array", "items": { "$ref": "#/definitions/Score" } },
-        "summary": { "$ref": "#/definitions/Summary" }
-      }
-    },
-
-    "SimulateRequest": {
-      "type": "object",
-      "required": ["scenario"],
-      "additionalProperties": false,
-      "properties": {
-        "scenario": { "$ref": "#/definitions/Scenario" }
-      }
-    },
-
-    "InterveneRequest": {
-      "type": "object",
-      "required": ["interventions"],
-      "additionalProperties": false,
-      "properties": {
-        "baseline_scenario": { "$ref": "#/definitions/Scenario" },
-        "interventions": { "type": "array", "items": { "$ref": "#/definitions/Intervention" }, "minItems": 1 }
-      }
-    },
-
-    "PerNodeDelta": {
-      "type": "object",
-      "required": ["node_id", "fragility_before", "fragility_after", "band_before", "band_after"],
-      "additionalProperties": false,
-      "properties": {
-        "node_id": { "$ref": "#/definitions/NodeId" },
-        "fragility_before": { "type": "number", "minimum": 0, "maximum": 1 },
-        "fragility_after": { "type": "number", "minimum": 0, "maximum": 1 },
-        "band_before": { "$ref": "#/definitions/RiskBand" },
-        "band_after": { "$ref": "#/definitions/RiskBand" }
-      }
-    },
-
-    "InterveneResponse": {
-      "type": "object",
-      "required": ["before", "after", "delta"],
-      "additionalProperties": false,
-      "properties": {
-        "before": { "$ref": "#/definitions/ScoredNetwork" },
-        "after": { "$ref": "#/definitions/ScoredNetwork" },
-        "delta": {
-          "type": "object",
-          "required": ["nodes_improved", "nodes_worsened", "total_exposure_reduced_cr", "total_intervention_cost_cr", "per_node"],
-          "additionalProperties": false,
-          "properties": {
-            "nodes_improved": { "type": "integer", "minimum": 0 },
-            "nodes_worsened": { "type": "integer", "minimum": 0 },
-            "total_exposure_reduced_cr": { "type": "number" },
-            "total_intervention_cost_cr": { "type": "number", "minimum": 0 },
-            "per_node": { "type": "array", "items": { "$ref": "#/definitions/PerNodeDelta" } }
+        "stress_signals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StressSignal"
           }
         }
       }
     },
-
+    "ReasonFactor": {
+      "type": "object",
+      "required": [
+        "kind",
+        "detail",
+        "weight"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "exposure",
+            "upstream_stress",
+            "single_source",
+            "chokepoint",
+            "thin_buffer",
+            "own_stress"
+          ]
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 3
+        },
+        "weight": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "Score": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "own_stress",
+        "inherited_stress",
+        "fragility",
+        "criticality",
+        "final_score",
+        "risk_band",
+        "reason_text",
+        "reason_factors",
+        "intervention_cost_cr",
+        "estimated_exposure_cr",
+        "propagation_depth",
+        "halt_risk",
+        "supply_disruption",
+        "disruption_band",
+        "disrupted_inflow_cr",
+        "disruption_reason"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "node_id": {
+          "$ref": "#/definitions/NodeId"
+        },
+        "own_stress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "inherited_stress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "fragility": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "criticality": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "final_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "risk_band": {
+          "$ref": "#/definitions/RiskBand"
+        },
+        "rank": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "reason_text": {
+          "type": "string",
+          "minLength": 10
+        },
+        "reason_factors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ReasonFactor"
+          },
+          "minItems": 1
+        },
+        "intervention_cost_cr": {
+          "type": "number",
+          "minimum": 0
+        },
+        "estimated_exposure_cr": {
+          "type": "number",
+          "minimum": 0
+        },
+        "propagation_depth": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "halt_risk": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "supply_disruption": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "disruption_band": {
+          "$ref": "#/definitions/RiskBand"
+        },
+        "disrupted_inflow_cr": {
+          "type": "number",
+          "minimum": 0
+        },
+        "disruption_reason": {
+          "type": "string",
+          "minLength": 10
+        }
+      }
+    },
+    "Summary": {
+      "type": "object",
+      "required": [
+        "total_nodes",
+        "at_risk_count",
+        "band_counts",
+        "total_intervention_cost_cr",
+        "total_estimated_exposure_cr",
+        "iterations_to_converge",
+        "anchor_disruption",
+        "disruption_iterations_to_converge"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "total_nodes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "stressed_origin_nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NodeId"
+          }
+        },
+        "at_risk_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "band_counts": {
+          "type": "object",
+          "required": [
+            "critical",
+            "high",
+            "watch",
+            "stable"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "critical": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "high": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "watch": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "stable": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "total_intervention_cost_cr": {
+          "type": "number",
+          "minimum": 0
+        },
+        "total_estimated_exposure_cr": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max_propagation_depth": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "iterations_to_converge": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "anchor_disruption": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnchorDisruption"
+          }
+        },
+        "disruption_iterations_to_converge": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "ScoredNetwork": {
+      "type": "object",
+      "required": [
+        "meta",
+        "nodes",
+        "edges",
+        "scores",
+        "ranking",
+        "summary"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/Meta"
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Node"
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Edge"
+          }
+        },
+        "scores": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Score"
+          }
+        },
+        "ranking": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NodeId"
+          }
+        },
+        "summary": {
+          "$ref": "#/definitions/Summary"
+        }
+      }
+    },
+    "StressOverride": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "own_stress"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "node_id": {
+          "$ref": "#/definitions/NodeId"
+        },
+        "own_stress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "Intervention": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "amount_cr"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "node_id": {
+          "$ref": "#/definitions/NodeId"
+        },
+        "amount_cr": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "Scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "stress_overrides": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StressOverride"
+          },
+          "default": []
+        },
+        "interventions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Intervention"
+          },
+          "default": []
+        }
+      }
+    },
+    "NetworkResponse": {
+      "type": "object",
+      "required": [
+        "meta",
+        "nodes",
+        "edges"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/Meta"
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Node"
+          }
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Edge"
+          }
+        }
+      }
+    },
+    "AtRiskResponse": {
+      "type": "object",
+      "required": [
+        "meta",
+        "ranking",
+        "scores",
+        "summary"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "$ref": "#/definitions/Meta"
+        },
+        "ranking": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NodeId"
+          }
+        },
+        "scores": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Score"
+          }
+        },
+        "summary": {
+          "$ref": "#/definitions/Summary"
+        }
+      }
+    },
+    "SimulateRequest": {
+      "type": "object",
+      "required": [
+        "scenario"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "scenario": {
+          "$ref": "#/definitions/Scenario"
+        }
+      }
+    },
+    "InterveneRequest": {
+      "type": "object",
+      "required": [
+        "interventions"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "baseline_scenario": {
+          "$ref": "#/definitions/Scenario"
+        },
+        "interventions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Intervention"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "PerNodeDelta": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "fragility_before",
+        "fragility_after",
+        "band_before",
+        "band_after"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "node_id": {
+          "$ref": "#/definitions/NodeId"
+        },
+        "fragility_before": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "fragility_after": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "band_before": {
+          "$ref": "#/definitions/RiskBand"
+        },
+        "band_after": {
+          "$ref": "#/definitions/RiskBand"
+        }
+      }
+    },
+    "InterveneResponse": {
+      "type": "object",
+      "required": [
+        "before",
+        "after",
+        "delta"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "before": {
+          "$ref": "#/definitions/ScoredNetwork"
+        },
+        "after": {
+          "$ref": "#/definitions/ScoredNetwork"
+        },
+        "delta": {
+          "type": "object",
+          "required": [
+            "nodes_improved",
+            "nodes_worsened",
+            "total_exposure_reduced_cr",
+            "total_intervention_cost_cr",
+            "per_node"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "nodes_improved": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "nodes_worsened": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "total_exposure_reduced_cr": {
+              "type": "number"
+            },
+            "total_intervention_cost_cr": {
+              "type": "number",
+              "minimum": 0
+            },
+            "per_node": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PerNodeDelta"
+              }
+            }
+          }
+        }
+      }
+    },
     "ErrorResponse": {
       "type": "object",
-      "required": ["error", "detail"],
+      "required": [
+        "error",
+        "detail"
+      ],
       "properties": {
-        "error": { "type": "string", "enum": ["unknown_node", "invalid_scenario", "engine_failure"] },
-        "detail": { "type": "string" },
-        "node_id": { "$ref": "#/definitions/NodeId" }
+        "error": {
+          "type": "string",
+          "enum": [
+            "unknown_node",
+            "invalid_scenario",
+            "engine_failure"
+          ]
+        },
+        "detail": {
+          "type": "string"
+        },
+        "node_id": {
+          "$ref": "#/definitions/NodeId"
+        }
+      }
+    },
+    "AgeingBasis": {
+      "type": "string",
+      "enum": [
+        "due_date",
+        "transaction_date"
+      ],
+      "description": "Schedule III ages from the due date; some filers age from the transaction date. Buckets from different bases are NOT comparable under the same column names. Required - never null."
+    },
+    "EdgeConfidence": {
+      "type": "string",
+      "enum": [
+        "confirmed",
+        "probable",
+        "concentration_only"
+      ],
+      "description": "How well evidenced this relationship is. 'probable' is inference, not disclosure - the UI must never present it as fact. Required - never null."
+    },
+    "EdgeProvenance": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "related_party_note",
+        "related_party",
+        "mdna",
+        "segment_note",
+        "rating_agency",
+        "awards_page",
+        "press",
+        "auditor_note",
+        "contingent_liability_note",
+        "synthetic",
+        null
+      ],
+      "description": "Where the edge came from. related_party_note means a group or promoter-affiliated entity disclosed under Ind AS 24 - a real dependency, but not an arm's-length supply relationship. 'press' is the weakest: reported, not filed. null means not recorded."
+    },
+    "ObservationCompleteness": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "observed",
+        "partially_observed",
+        "not_observed",
+        null
+      ],
+      "description": "Whether this node's relationships were actually searched for. Without it, 'not critical' and 'not yet observed' are indistinguishable in the score — and the second is far more common. null means not recorded."
+    },
+    "AnchorDisruption": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "supply_disruption",
+        "disruption_band",
+        "disrupted_inflow_cr"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "node_id": {
+          "$ref": "#/definitions/NodeId"
+        },
+        "supply_disruption": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "disruption_band": {
+          "$ref": "#/definitions/RiskBand"
+        },
+        "disrupted_inflow_cr": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stopped_by": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/NodeId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
       }
     }
   },
-
   "examples": {
     "NetworkInput": {
       "meta": {

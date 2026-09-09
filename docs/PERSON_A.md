@@ -25,6 +25,7 @@ You own the entire intelligence layer:
 - Criticality — betweenness and single-source
 - Final ranking and reason generation
 - Intervention cost, exposure, and counterfactual scoring
+- Supply disruption — the second propagation, which is what makes the counterfactual reach the anchor
 - **The mock data generator** — everyone's day-one dependency
 - **The CSV → `network.json` transform** — the handoff when the real dataset lands
 
@@ -86,53 +87,97 @@ All constants live in `engine/config.py` with a one-line comment each. No magic 
 
 Produces `own_stress` ∈ [0, 1] for every observable node. Non-observable nodes get `0.0`.
 
-Two signals, from the two disclosures that can disagree.
+> **This section was rewritten after the collection workstream reported.** The original spec ranked
+> `msmed_principal_paid_beyond_appointed_day` as the primary signal at weight 0.65. Collection found
+> that field disclosed in **3 of 46 verified company-years, all belonging to a single control
+> company**. It cannot carry the model. The ladder below is what survived testing against a matched
+> control cohort. Evidence: `data/real/DATA_DICTIONARY.md` §6 and `data/real/findings.md` §5.
 
-**Signal 1 — migration ratio**
+**A ladder of four signals, not two.** Availability varies enormously between filers — most Indian
+small-caps omit the columns the original spec assumed — so you compute whichever rungs are
+available and **renormalise their weights over exactly those**. A company with only rung 1 available
+scores on rung 1 at full weight.
+
+**Rung 1 — MSMED interest direction (primary, `W_INTEREST_DIRECTION` 0.45)**
 
 ```
-migration(t) = under_1yr / (not_due + under_1yr)
+interest(t) = max(msmed_interest_accrued_unpaid_cr,
+                  msmed_interest_due_unpaid_cr,
+                  msmed_interest_due_on_payments_beyond_appointed_day_cr)
+
+rung1 = 1.0 if interest(t) > interest(t−1) else 0.0
 ```
 
-Money moving from "not yet due" into "overdue" means the company is slipping.
+Interest accrues under the MSMED Act only past the appointed day, so any rise is a **statutory
+admission of late payment**. It rose ahead of 6 of 8 documented distress events and in 0 of 7 control
+transitions, and — decisively — it needs no Not Due column, so it is available for every filer.
 
-**Unavailable when `has_not_due_column` is `false`** — that filer's `under_1yr` silently includes not-yet-due amounts. Do not compute it, do not substitute a default. Fall back to signal 2 alone and reweight.
+Two caveats to honour. Some companies report a *frozen* accrued figure carried forward unchanged for
+years (Bharat Gears at 2.37, Dhanuka at 13.65) — so trust a **rise**, never the absence of movement.
+And `nil → positive` is the strongest form of this signal.
 
-**Signal 2 — late-payment intensity (primary)**
+**Rung 2 — Not Due → overdue migration (`W_MIGRATION` 0.25)**
 
 ```
-late_intensity(t) = msmed_principal_paid_beyond_appointed_day_cr / cost_of_materials_cr
+overdue_share(t) = under_1yr / (not_due + under_1yr)
+rung2 = 1.0 if (overdue_share(t) − overdue_share(t−1)) * 100 > MIGRATION_THRESHOLD_PP else 0.0
 ```
 
-This is the whole-year flow figure. It cannot be tidied up before 31 March, which is why it carries more weight.
+**Unavailable when `has_not_due_column` is `false`** — that filer's `under_1yr` silently includes
+amounts not yet due. Do not compute it and do not substitute a default; drop the rung and
+renormalise.
 
-Fall back to `revenue_cr` as the denominator if `cost_of_materials_cr` is `null`, and record that you did.
+The +20pp threshold is measured, not assumed: across a FY22–FY25 panel, **18 no-event transitions
+top out at +15.5pp** while the 2 pre-event transitions are +25.2 and +22.1pp. Note the null is
+strongly asymmetric — healthy companies fall as far as −62.9pp but only one of eighteen rose above
++10pp. Weighted below rung 1 because n = 2 on the event side, and one of those two is disputed by a
+restatement.
+
+**Rung 3 — payables outgrowing revenue (`W_PAYABLES_REVENUE` 0.20)**
+
+```
+ratio(t) = total_trade_payables_cr / revenue_cr
+rung3 = 1.0 if (ratio(t) − ratio(t−1)) > 0 else 0.0
+```
+
+Used where the MSME book is immaterial (`msme_book_material` false) and every MSMED line reads nil.
+Distress cases moved +4.0 to +5.2pp; all three tested controls **fell**, −1.8 to −2.2pp.
+
+**Rung 4 — non-MSME aged-bucket growth (`W_NONMSME_AGEING` 0.10)**
+
+Last resort where nothing above is computable. Only partially control-tested — weight accordingly.
 
 **Combine**
 
 ```
-Δmigration = migration(t) − migration(t−1)
-Δlate      = late_intensity(t) − late_intensity(t−1)
-
-z_m = (Δmigration − sector_median_Δmigration) / max(sector_std_Δmigration, EPSILON)
-z_l = (Δlate      − sector_median_Δlate)      / max(sector_std_Δlate,      EPSILON)
-
-raw = W_MIGRATION * z_m + W_LATE * z_l          # W_MIGRATION 0.35, W_LATE 0.65
-own_stress = clamp(2 / (1 + exp(−raw)) − 1, 0.0, 1.0)
+available = [rungs whose inputs exist for this company]
+if not available: own_stress = 0.0        # never guess
+w_total   = Σ weight(r) for r in available
+raw       = Σ (weight(r) / w_total) * rung_value(r) for r in available
+own_stress = clamp(raw, 0.0, 1.0)
 ```
 
-That last transform maps `raw = 0` to `own_stress = 0` and rises monotonically. A plain logistic would give a stable company 0.5, which is wrong.
+**Do not z-score against sector statistics.** The original spec did; the collected cohort has 7
+industry groups across 16 companies, so all but automotive fall below `MIN_SECTOR_SAMPLE` and would
+silently use global stats — comparing an agrochemical trader against an auto ancillary. Cross-industry
+comparison is valid only for *changes and directions*, never levels, which is exactly what the rungs
+above encode. `MIN_SECTOR_SAMPLE` is retained for any future statistic that genuinely needs peers.
 
-**Sector statistics:** computed across all observable nodes in the same `sector`. With fewer than `MIN_SECTOR_SAMPLE` (3) nodes, fall back to global statistics and note it in the reason factors.
+**Retired — do not reinstate without re-testing against controls:** MSME balance growth. Control
+Bharat Gears posted **+629%** in a year CARE *upgraded* it, against distress case Nectar's +583%. The
+suspected cause is s.43B(h) reclassification, not payment behaviour, which also means **any FY23→FY24
+MSME level comparison is currently uninterpretable**.
 
 **Edge cases you must handle explicitly:**
 
 | Case | Behaviour |
 |---|---|
 | Only one year of data | `own_stress = 0.0`. Cannot compute a change. Record `insufficient_history` |
-| `has_not_due_column` false | Signal 1 unavailable. Use signal 2 at full weight |
-| Both signals null | `own_stress = 0.0`. Never guess |
+| `has_not_due_column` false | Rung 2 unavailable. Renormalise over the rest |
+| No rung computable | `own_stress = 0.0`. Never guess |
 | Explicit `0.0` vs `null` | Different. `0.0` is real data; `null` is absence. See `AGENTS.md` §3.6 |
+| `series_break` set on a year | That year is not comparable with the previous one. Skip the transition |
+| `ageing_basis` differs between two companies | Never compare their buckets. Due-date and transaction-date clocks measure different things |
 
 ### 3.2 Graph construction — `engine/graph.py`
 
@@ -148,16 +193,59 @@ G = networkx.DiGraph()
 - Validate that outgoing `exposure_pct` per supplier sums to ≤ 1.02
 - **Sort node and edge lists by ID before adding.** NetworkX preserves insertion order, and betweenness can differ on ties otherwise
 
+**Repeated supplier→buyer pairs — handle this explicitly.** `DiGraph.add_edge` on a pair that already
+exists **overwrites its attributes silently**. The collected dataset has multiple rows per pair,
+because a relationship is recorded once per financial year, and the naive loop loses data on both of
+them:
+
+- `SHIVAM → HERO` has three rows. Only one carries `annual_value_cr` (₹181.59 cr). Add them in row
+  order and the last row wins, discarding the only rupee figure on the most important edge in the set.
+- `LOKESH → MAHINDRA` has two rows, and the later one is `relationship_terminated` — the OFAC
+  sanctions edge deletion. Collapse them carelessly and you either lose the termination or silently
+  keep an edge that no longer exists.
+
+Required behaviour: **group rows by `(supplier_id, buyer_id)` first, then reduce each group to one
+edge deterministically.** Take the most recent `fy`; prefer `confirmed` over `probable` over
+`concentration_only`; and carry forward the best non-null value of each attribute across the group
+rather than taking them all from the winning row. A pair whose most recent row is
+`relationship_terminated` must not be added to the graph at all — record it in the summary so the UI
+can show that the edge existed and ended.
+
+**Related-party edges need their own caveat.** Every named supplier edge in the collected data comes
+from a related-party note under Ind AS 24 — meaning all of them are promoter-affiliated or group
+entities, because those are the only counterparties a filer is *compelled* to name. This is a real
+dependency and belongs in the graph, but it is not an arm's-length supply relationship: a group
+supplier's failure dynamics are entangled with the parent's, and the same promoter may support both.
+Do not present a related-party edge as evidence of an independent supply chain. `edge_provenance`
+(see `data/real/schema_change_request.md`) exists to carry this distinction into the UI.
+
 ### 3.3 Contagion — `engine/contagion.py`
 
 The core of the product.
 
 ```python
 buffer_strength(n) = clamp(cash_buffer_days / BUFFER_REF_DAYS, 0.0, MAX_BUFFER_STRENGTH)
-# BUFFER_REF_DAYS = 90, MAX_BUFFER_STRENGTH = 0.9
+# BUFFER_REF_DAYS = 90, MAX_BUFFER_STRENGTH = 0.35
 ```
 
-Nobody is fully immune — hence the 0.9 cap.
+Nobody is fully immune — hence the cap.
+
+**The cap was lowered from 0.9 to 0.35 after collection measured this field.** Across 44 verified
+company-years — 22 distress, 22 control — `cash_buffer_days` does **not** separate the two cohorts:
+AUC 0.569 against a 0.500 coin flip. The lowest buffers in the set belong to an investment-grade
+control (Balrampur Chini, 0 days) and the highest to a company that collapsed months later (Gensol,
+351 days, whose cash was later found not to be what the balance sheet claimed).
+
+Keep the term — surviving a payment delay longer when you hold more cash is mechanically real, and
+this is a shock-absorption term rather than a predictive signal, so the AUC does not condemn it. But
+a measurement this noisy must **nudge, not decide**. At 0.9 the buffer swung per-hop transmission by
+10x and dominated propagation; at 0.35 the swing is 1.54x.
+
+Two consequences worth internalising. First, real buffers are far thinner than the mock assumed
+(tier-1 median **12 days**, not 60–100), so on real data the buffer term damps almost nothing and
+contagion runs much deeper than any mock run will suggest. Second, reported cash is a poor proxy for
+usable liquidity — one company's ₹770 crore of "current investments" turned out to be unquoted equity
+pledged against loans. Prefer undrawn committed facilities once that field is populated.
 
 ```
 fragility⁰(n) = own_stress(n)
@@ -276,6 +364,65 @@ inherited_stress_after = inherited_stress × (1 − coverage)
 
 Then re-run propagation from scratch with that node's stress pinned. Do not patch scores in place — a full re-run is what makes downstream improvements appear, which is the whole point of step 7.
 
+### 3.8 Supply disruption — `engine/disruption.py`
+
+**A second propagation, running WITH goods flow.** Added in schema 1.2 to close the
+`DEMO_SCENARIO.md` §6 counterfactual, which §3.3 structurally cannot reach: the anchor is the
+top buyer, so no payment stress propagates into it and its fragility is `0.0` by construction.
+
+    contagion:   buyer -> supplier   (money that failed to arrive)
+    disruption:  supplier -> buyer   (parts that failed to arrive)
+
+**The seed is the decision that matters.** `own_stress` measures *payment behaviour*. A company
+stretching its payables is conserving cash, not stopping its line — it is exporting the problem
+downstream rather than absorbing it. Seeding halt risk from `own_stress` would say the visible
+tier-1 is the one about to stop, which is the belief this product exists to correct. So:
+
+```
+seed(n) = max(0.0, fragility(n) - own_stress(n))     # money owed that never arrived
+```
+
+For a funded node this is the *relieved* inherited stress, because `intervention.py` pins
+fragility to `own_stress + relieved`. **Do not seed from the reported `inherited_stress`** — the
+pin does not appear there, so the intervention would change nothing downstream, which is the
+whole demo beat. This bit me once; it is the easiest thing here to get subtly wrong.
+
+**Replaceability, not rupee value.**
+
+```
+supply_impact(s -> b) = 1.0                        if is_single_source is True
+                      = annual_value(s,b) / inbound_value(b)   otherwise
+```
+
+A confirmed sole source counts fully whatever the part costs — a ₹19 cr seal kit stops a
+₹1,241 cr brake assembly. Same insight as §3.4's within-tier normalisation: size is not
+importance. `is_single_source` of `None` takes the fallback, which implicitly assumes the part
+is replaceable — a real limitation on real data, where all 37 edges are `null`. Say so.
+
+**Noisy-OR, not a sum.** A line stops if *any* input it cannot replace stops:
+
+```
+disruption(b) = 1 - Π over suppliers s of (1 - halt(s) * supply_impact(s,b))
+halt(n)       = 1 - (1 - seed(n)) * (1 - disruption(n))
+```
+
+Two independent reasons to stop delivering: no cash, or no parts. Bounded in [0,1] by
+construction, so it needs no cap and no damping constant, and it converges on cycles because the
+iteration is monotone increasing and bounded. Summing instead would let forty mildly-wobbly
+suppliers halt a healthy plant.
+
+Synchronous update over sorted node ids, exactly as §3.3. `disrupted_inflow_cr` uses
+`halt(s) × annual_value(s,b)` with **no** impact weight — the weight answers "does the line
+stop", the money answers "how much trade fails to arrive", and they take different weights on
+purpose.
+
+**Bands** are their own constants (`DISRUPTION_BAND_*`), currently equal to the risk bands.
+They are deliberately not calibrated to put the demo's anchor in the top band — see
+`config.py`.
+
+**One sentence, out loud:** stress flows down the chain as invoices that were never paid;
+failure flows back up it as parts that never arrived.
+
 ---
 
 ## 4. Mock data generator — `engine/mockgen.py`
@@ -301,7 +448,7 @@ python -m engine.mockgen --seed 42 --out data/mock/network.json
 | Names | Realistic Indian manufacturing names. **Never `Company_47`** |
 | Fan-out | Tier-1 has 20–50 suppliers, not 3 |
 | Size distribution | Heavily skewed — a few large, many tiny |
-| Buffers by tier | Tier 0: 150–250 days. Tier 1: 60–100. Tier 2: 15–40. Tier 3: 5–25 |
+| Buffers by tier | Tier 1: 3–45 days, **empirical** (29 real company-years: median 12, quartiles 4 and 30.5). Tier 0: 60–200, Tier 2: 2–30, Tier 3: 1–20 — **stated assumptions, no observations exist** |
 | Chokepoints | 3–5 genuine single-source nodes so criticality has something real to find |
 | Numbers | Non-round. `24.70` not `25.00` |
 | Stress signals | 6–10 observable nodes with two years each, shaped like real Schedule III data |
@@ -321,6 +468,49 @@ python -m engine.transform --in data/real/ --out data/real/network.json
 Reads the five collection CSVs (`SCHEMA.md` §7) and emits the **identical shape** as `mockgen`. Steps are specified in `SCHEMA.md` §7.1.
 
 **This is the only module that knows CSVs exist.** No other file imports pandas for data loading.
+
+### 5.1 The synthetic deep tier — `SCHEMA.md` §7.1 step 5
+
+The collected cohort is 43 nodes that bottom out at three-node chains. Scored as-is it returns
+**0 at risk, converged in 1 iteration** — not a bug, and not something more model code fixes: there
+is simply nothing below tier-1 for stress to travel into. §7.1 step 5 always intended a generated
+tier-2/tier-3 layer beneath the real companies, and `transform.py` now builds one from
+`data/real/entity_pool.csv`.
+
+With it: **298 nodes, 29 at risk, 3 iterations**, and the anchor beat runs on real disclosed data —
+Hero MotoCorp at `critical` supply disruption, stopped by Shivam Autotech, across the ₹181.59 cr
+edge that is the only disclosed rupee figure in the collected set.
+
+**The generator lives in `mockgen.py`, not here.** `AGENTS.md` §3.1 permits `random` in that module
+and nowhere else. `transform.py` reads the CSV and calls `synthesise_deep_tier()`; the seed is fixed
+in `config.DEEP_TIER_SEED`, so the same CSVs always produce a byte-identical `network.json`.
+
+**Two rules from `DATA_DICTIONARY.md` §3b are enforced in code, not left to care:**
+
+- **No sole-source claim against a real company.** An edge flagged `is_single_source` whose buyer is
+  real asserts that real firm single-sources the part — a fabricated claim about its supply chain,
+  and §3b's "never synthetic under any circumstances" list names exactly this. Chokepoints are
+  confined to edges whose **buyer is synthetic**. It costs the demo nothing: the thesis is that the
+  irreplaceable supplier sits deep in the chain anyway
+- **No generated rupee figure beside a real name.** Real nodes keep their `null`s and their
+  `substituted` list; the synthetic layer never writes onto them
+
+Both have tests (`test_no_sole_source_claim_against_a_real_company`,
+`test_no_synthetic_rupee_figure_beside_a_real_name`). They are the tests to keep if any others go.
+
+**Sizing is pool-bound, and it fails loudly.** 9 of the 11 real tier-1 companies are auto
+ancillaries, as are all 14 real tier-2s, so nearly the whole demand lands on the pool's
+`auto_components` bucket. `DEEP_TIER1_FANOUT` is set so the generated auto layer needs ~190 of the
+264 available names. Raise it and `synthesise_deep_tier` raises rather than reusing a name — one
+company appearing in the graph twice would be worse than a build that stops.
+
+**A caveat to state plainly, not paper over.** 13 of the 30 real edges carry no disclosed
+`annual_value_cr`, because the filings do not give one. `estimated_exposure_cr` is computed from
+trade value on the path to an anchor, so on real data it **understates** — chains routing through a
+valueless real edge contribute nothing. That is the honest consequence of not inventing a figure
+beside a real company's name (§3b), and it is why the real network's exposure total sits below its
+intervention total. The mock network, where every edge carries a value, is the one to quote
+rupee-for-rupee.
 
 Two things that will silently corrupt the model if you get them wrong:
 
@@ -343,6 +533,11 @@ Two things that will silently corrupt the model if you get them wrong:
 | `test_null_vs_zero` | A `null` stress input and a `0.0` input produce different behaviour |
 | `test_intervention_monotonic` | Funding a node never *increases* fragility anywhere |
 | `test_no_input_mutation` | The input dict is unchanged after `score_network` |
+| `test_own_payment_stress_does_not_seed_a_halt` | A node stressed only by its own disclosures has halt risk entirely from *its* suppliers |
+| `test_disruption_reaches_the_anchor` | The tier-0 anchor carries non-zero `supply_disruption` despite fragility 0.0 |
+| `test_intervention_reduces_anchor_disruption` | Funding `N042` drains supply risk out of `N001` — `DEMO_SCENARIO.md` §6 |
+| `test_intervention_never_worsens_disruption` | Funding never raises `supply_disruption` anywhere |
+| `test_disruption_converges_on_a_cycle` | Noisy-OR settles on a cycle rather than ratcheting to 1.0 |
 
 `test_demo_scenario` is your safety net. If a tuning change breaks it, that is the system working — retune, or update the fixture deliberately with both others named on the PR.
 
@@ -374,7 +569,9 @@ Two things that will silently corrupt the model if you get them wrong:
 
 **Phase 4 — Hardening**
 - Edge cases, error messages, `config.py` comments
-- Be able to explain the propagation rule in one sentence, out loud
+- Be able to explain the propagation rule in one sentence, out loud:
+  *stress flows down the chain as invoices that were never paid; failure flows back up it as
+  parts that never arrived*
 
 ---
 

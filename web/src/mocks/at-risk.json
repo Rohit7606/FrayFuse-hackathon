@@ -3,101 +3,471 @@
     "schema_version": "1.0",
     "generated_at": "2026-08-27T00:00:00Z",
     "generator": "mockgen",
-    "seed": 42,
     "currency_unit": "INR_crore",
     "node_count": 412,
-    "edge_count": 1183,
-    "observable_node_count": 6
+    "edge_count": 1339,
+    "seed": 42,
+    "observable_node_count": 8,
+    "source_units_note": null
   },
-  "ranking": ["N042", "N203", "N087", "N118"],
+  "ranking": [
+    "N042",
+    "N203",
+    "N087",
+    "N118",
+    "N387",
+    "N394",
+    "N348",
+    "N381",
+    "N407",
+    "N292"
+  ],
   "scores": [
     {
       "node_id": "N042",
       "own_stress": 0.0,
-      "inherited_stress": 0.6314,
-      "fragility": 0.6314,
-      "criticality": 0.8820,
-      "final_score": 0.5569,
+      "inherited_stress": 0.3498,
+      "fragility": 0.3498,
+      "criticality": 0.5838,
+      "final_score": 0.2042,
       "risk_band": "critical",
+      "reason_text": "78% revenue dependency on Brakecraft Components Ltd, whose payment stress is propagating downstream. Sole source for hydraulic seal kit.",
+      "reason_factors": [
+        {
+          "kind": "exposure",
+          "detail": "78% revenue dependency on Brakecraft Components Ltd",
+          "weight": 0.3519
+        },
+        {
+          "kind": "upstream_stress",
+          "detail": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers",
+          "weight": 0.3395
+        },
+        {
+          "kind": "single_source",
+          "detail": "Sole source for hydraulic seal kit",
+          "weight": 0.1584
+        },
+        {
+          "kind": "chokepoint",
+          "detail": "7 downstream suppliers route through this node",
+          "weight": 0.0854
+        },
+        {
+          "kind": "thin_buffer",
+          "detail": "18 days of cash buffer",
+          "weight": 0.0648
+        }
+      ],
+      "intervention_cost_cr": 2.04,
+      "estimated_exposure_cr": 141.12,
+      "propagation_depth": 1,
       "rank": 1,
-      "reason_text": "78% of revenue depends on Brakecraft Components, whose late supplier payments rose sharply in FY24. Sole source for hydraulic seal kit.",
-      "reason_factors": [
-        { "kind": "exposure", "detail": "78% revenue dependency on Brakecraft Components", "weight": 0.42 },
-        { "kind": "upstream_stress", "detail": "Brakecraft late payments rose 2.1x in FY24", "weight": 0.36 },
-        { "kind": "single_source", "detail": "Sole source for hydraulic seal kit", "weight": 0.22 }
-      ],
-      "intervention_cost_cr": 4.80,
-      "estimated_exposure_cr": 61.40,
-      "propagation_depth": 2
-    },
-    {
-      "node_id": "N203",
-      "own_stress": 0.0,
-      "inherited_stress": 0.4400,
-      "fragility": 0.4400,
-      "criticality": 0.3100,
-      "final_score": 0.1364,
-      "risk_band": "high",
-      "rank": 2,
-      "reason_text": "61% of revenue depends on Brakecraft Components, whose late supplier payments rose sharply in FY24.",
-      "reason_factors": [
-        { "kind": "exposure", "detail": "61% revenue dependency on Brakecraft Components", "weight": 0.60 },
-        { "kind": "upstream_stress", "detail": "Brakecraft late payments rose 2.1x in FY24", "weight": 0.40 }
-      ],
-      "intervention_cost_cr": 3.20,
-      "estimated_exposure_cr": 45.10,
-      "propagation_depth": 2
+      "halt_risk": 0.5132,
+      "supply_disruption": 0.2514,
+      "disruption_band": "critical",
+      "disrupted_inflow_cr": 4.68,
+      "disruption_reason": "Precision Polymer Works Pvt Ltd is at risk of halting polymer compound deliveries — sole source, nothing else to buy it from. ₹4.68 cr of inbound supply at risk."
     },
     {
       "node_id": "N087",
       "own_stress": 0.0,
-      "inherited_stress": 0.3900,
-      "fragility": 0.3900,
-      "criticality": 0.4000,
-      "final_score": 0.1560,
+      "inherited_stress": 0.2128,
+      "fragility": 0.2128,
+      "criticality": 0.3683,
+      "final_score": 0.0784,
       "risk_band": "high",
-      "rank": 3,
-      "reason_text": "34% of revenue depends on Brakecraft Components, whose late supplier payments rose sharply in FY24.",
+      "reason_text": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers. 46% revenue dependency on Brakecraft Components Ltd. 9 downstream suppliers route through this node.",
       "reason_factors": [
-        { "kind": "exposure", "detail": "34% revenue dependency on Brakecraft Components", "weight": 0.50 },
-        { "kind": "upstream_stress", "detail": "Brakecraft late payments rose 2.1x in FY24", "weight": 0.50 }
+        {
+          "kind": "upstream_stress",
+          "detail": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers",
+          "weight": 0.4414
+        },
+        {
+          "kind": "exposure",
+          "detail": "46% revenue dependency on Brakecraft Components Ltd",
+          "weight": 0.2707
+        },
+        {
+          "kind": "chokepoint",
+          "detail": "9 downstream suppliers route through this node",
+          "weight": 0.1477
+        },
+        {
+          "kind": "thin_buffer",
+          "detail": "16 days of cash buffer",
+          "weight": 0.1402
+        }
       ],
-      "intervention_cost_cr": 4.10,
-      "estimated_exposure_cr": 58.20,
-      "propagation_depth": 2
+      "intervention_cost_cr": 3.23,
+      "estimated_exposure_cr": 65.22,
+      "propagation_depth": 1,
+      "rank": 3,
+      "halt_risk": 0.2899,
+      "supply_disruption": 0.098,
+      "disruption_band": "high",
+      "disrupted_inflow_cr": 4.14,
+      "disruption_reason": "Panchvati Metalworks Industries Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹4.14 cr of inbound supply at risk."
     },
     {
       "node_id": "N118",
       "own_stress": 0.0,
-      "inherited_stress": 0.5200,
-      "fragility": 0.5200,
-      "criticality": 0.7000,
-      "final_score": 0.3640,
+      "inherited_stress": 0.1721,
+      "fragility": 0.1721,
+      "criticality": 0.414,
+      "final_score": 0.0712,
       "risk_band": "high",
-      "rank": 4,
-      "reason_text": "84% of revenue depends on Sealsworks Rubber Industries, which is experiencing severe inherited payment stress.",
+      "reason_text": "72% revenue dependency on Sealsworks Rubber Industries Pvt Ltd. 8 days of cash buffer. Sole source for polymer compound.",
       "reason_factors": [
-        { "kind": "exposure", "detail": "84% revenue dependency on Sealsworks Rubber Industries", "weight": 0.60 },
-        { "kind": "upstream_stress", "detail": "Sealsworks Rubber Industries inherited stress is severe", "weight": 0.40 }
+        {
+          "kind": "exposure",
+          "detail": "72% revenue dependency on Sealsworks Rubber Industries Pvt Ltd",
+          "weight": 0.3531
+        },
+        {
+          "kind": "thin_buffer",
+          "detail": "8 days of cash buffer",
+          "weight": 0.3036
+        },
+        {
+          "kind": "single_source",
+          "detail": "Sole source for polymer compound",
+          "weight": 0.1717
+        },
+        {
+          "kind": "upstream_stress",
+          "detail": "Sealsworks Rubber Industries Pvt Ltd is under payment stress and is stretching its suppliers",
+          "weight": 0.1716
+        }
       ],
-      "intervention_cost_cr": 2.10,
-      "estimated_exposure_cr": 24.90,
-      "propagation_depth": 3
+      "intervention_cost_cr": 0.39,
+      "estimated_exposure_cr": 98.81,
+      "propagation_depth": 2,
+      "rank": 4,
+      "halt_risk": 0.1721,
+      "supply_disruption": 0.0,
+      "disruption_band": "stable",
+      "disrupted_inflow_cr": 0.0,
+      "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts."
+    },
+    {
+      "node_id": "N203",
+      "own_stress": 0.0,
+      "inherited_stress": 0.223,
+      "fragility": 0.223,
+      "criticality": 0.4034,
+      "final_score": 0.09,
+      "risk_band": "high",
+      "reason_text": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers. 61% revenue dependency on Brakecraft Components Ltd. 12 downstream suppliers route through this node.",
+      "reason_factors": [
+        {
+          "kind": "upstream_stress",
+          "detail": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers",
+          "weight": 0.446
+        },
+        {
+          "kind": "exposure",
+          "detail": "61% revenue dependency on Brakecraft Components Ltd",
+          "weight": 0.3628
+        },
+        {
+          "kind": "chokepoint",
+          "detail": "12 downstream suppliers route through this node",
+          "weight": 0.1912
+        }
+      ],
+      "intervention_cost_cr": 2.36,
+      "estimated_exposure_cr": 64.77,
+      "propagation_depth": 1,
+      "rank": 2,
+      "halt_risk": 0.2821,
+      "supply_disruption": 0.076,
+      "disruption_band": "high",
+      "disrupted_inflow_cr": 4.27,
+      "disruption_reason": "Mahendra Treatments Industries Udyog Pvt Ltd is at risk of halting alloy steel deliveries. ₹4.27 cr of inbound supply at risk."
+    },
+    {
+      "node_id": "N292",
+      "own_stress": 0.0,
+      "inherited_stress": 0.1526,
+      "fragility": 0.1526,
+      "criticality": 0.095,
+      "final_score": 0.0145,
+      "risk_band": "watch",
+      "reason_text": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers. 33% revenue dependency on Brakecraft Components Ltd. 16 days of cash buffer.",
+      "reason_factors": [
+        {
+          "kind": "upstream_stress",
+          "detail": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers",
+          "weight": 0.5396
+        },
+        {
+          "kind": "exposure",
+          "detail": "33% revenue dependency on Brakecraft Components Ltd",
+          "weight": 0.2374
+        },
+        {
+          "kind": "thin_buffer",
+          "detail": "16 days of cash buffer",
+          "weight": 0.1713
+        },
+        {
+          "kind": "chokepoint",
+          "detail": "1 downstream suppliers route through this node",
+          "weight": 0.0517
+        }
+      ],
+      "intervention_cost_cr": 0.46,
+      "estimated_exposure_cr": 29.25,
+      "propagation_depth": 1,
+      "rank": 10,
+      "halt_risk": 0.2172,
+      "supply_disruption": 0.0763,
+      "disruption_band": "high",
+      "disrupted_inflow_cr": 0.16,
+      "disruption_reason": "Meghdoot Works Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.16 cr of inbound supply at risk."
+    },
+    {
+      "node_id": "N348",
+      "own_stress": 0.0,
+      "inherited_stress": 0.1468,
+      "fragility": 0.1468,
+      "criticality": 0.1946,
+      "final_score": 0.0286,
+      "risk_band": "watch",
+      "reason_text": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers. 37% revenue dependency on Brakecraft Components Ltd. 4 downstream suppliers route through this node.",
+      "reason_factors": [
+        {
+          "kind": "upstream_stress",
+          "detail": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers",
+          "weight": 0.5894
+        },
+        {
+          "kind": "exposure",
+          "detail": "37% revenue dependency on Brakecraft Components Ltd",
+          "weight": 0.2883
+        },
+        {
+          "kind": "chokepoint",
+          "detail": "4 downstream suppliers route through this node",
+          "weight": 0.1223
+        }
+      ],
+      "intervention_cost_cr": 0.74,
+      "estimated_exposure_cr": 29.44,
+      "propagation_depth": 1,
+      "rank": 7,
+      "halt_risk": 0.1853,
+      "supply_disruption": 0.0451,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.78,
+      "disruption_reason": "Trishul Industries Pvt Ltd is at risk of halting forgings deliveries. ₹0.78 cr of inbound supply at risk."
+    },
+    {
+      "node_id": "N381",
+      "own_stress": 0.0,
+      "inherited_stress": 0.1113,
+      "fragility": 0.1113,
+      "criticality": 0.2479,
+      "final_score": 0.0276,
+      "risk_band": "watch",
+      "reason_text": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers. 9 days of cash buffer. 22% revenue dependency on Brakecraft Components Ltd.",
+      "reason_factors": [
+        {
+          "kind": "upstream_stress",
+          "detail": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers",
+          "weight": 0.4296
+        },
+        {
+          "kind": "thin_buffer",
+          "detail": "9 days of cash buffer",
+          "weight": 0.3273
+        },
+        {
+          "kind": "exposure",
+          "detail": "22% revenue dependency on Brakecraft Components Ltd",
+          "weight": 0.1259
+        },
+        {
+          "kind": "chokepoint",
+          "detail": "4 downstream suppliers route through this node",
+          "weight": 0.1172
+        }
+      ],
+      "intervention_cost_cr": 0.62,
+      "estimated_exposure_cr": 32.65,
+      "propagation_depth": 1,
+      "rank": 8,
+      "halt_risk": 0.1453,
+      "supply_disruption": 0.0383,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 1.05,
+      "disruption_reason": "Aarvik Stampings Products Pvt Ltd is at risk of halting electroplating deliveries. ₹1.05 cr of inbound supply at risk."
+    },
+    {
+      "node_id": "N387",
+      "own_stress": 0.0,
+      "inherited_stress": 0.2169,
+      "fragility": 0.2169,
+      "criticality": 0.3007,
+      "final_score": 0.0652,
+      "risk_band": "high",
+      "reason_text": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers. 49% revenue dependency on Brakecraft Components Ltd. 4 downstream suppliers route through this node.",
+      "reason_factors": [
+        {
+          "kind": "upstream_stress",
+          "detail": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers",
+          "weight": 0.5039
+        },
+        {
+          "kind": "exposure",
+          "detail": "49% revenue dependency on Brakecraft Components Ltd",
+          "weight": 0.3284
+        },
+        {
+          "kind": "chokepoint",
+          "detail": "4 downstream suppliers route through this node",
+          "weight": 0.1037
+        },
+        {
+          "kind": "thin_buffer",
+          "detail": "19 days of cash buffer",
+          "weight": 0.064
+        }
+      ],
+      "intervention_cost_cr": 4.11,
+      "estimated_exposure_cr": 85.53,
+      "propagation_depth": 1,
+      "rank": 5,
+      "halt_risk": 0.2588,
+      "supply_disruption": 0.0534,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.96,
+      "disruption_reason": "Suryakant Engineering Industries Pvt Ltd is at risk of halting precision machining deliveries. ₹0.96 cr of inbound supply at risk."
+    },
+    {
+      "node_id": "N394",
+      "own_stress": 0.0,
+      "inherited_stress": 0.1061,
+      "fragility": 0.1061,
+      "criticality": 0.3441,
+      "final_score": 0.0365,
+      "risk_band": "watch",
+      "reason_text": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers. 15 days of cash buffer. 4 downstream suppliers route through this node.",
+      "reason_factors": [
+        {
+          "kind": "upstream_stress",
+          "detail": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers",
+          "weight": 0.4879
+        },
+        {
+          "kind": "thin_buffer",
+          "detail": "15 days of cash buffer",
+          "weight": 0.1859
+        },
+        {
+          "kind": "chokepoint",
+          "detail": "4 downstream suppliers route through this node",
+          "weight": 0.179
+        },
+        {
+          "kind": "exposure",
+          "detail": "23% revenue dependency on Brakecraft Components Ltd",
+          "weight": 0.1472
+        }
+      ],
+      "intervention_cost_cr": 0.95,
+      "estimated_exposure_cr": 54.53,
+      "propagation_depth": 1,
+      "rank": 6,
+      "halt_risk": 0.1498,
+      "supply_disruption": 0.0489,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.76,
+      "disruption_reason": "Vaikunth Products Udyog Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.76 cr of inbound supply at risk."
+    },
+    {
+      "node_id": "N407",
+      "own_stress": 0.0,
+      "inherited_stress": 0.0887,
+      "fragility": 0.0887,
+      "criticality": 0.1825,
+      "final_score": 0.0162,
+      "risk_band": "watch",
+      "reason_text": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers. 14 days of cash buffer. 19% revenue dependency on Brakecraft Components Ltd.",
+      "reason_factors": [
+        {
+          "kind": "upstream_stress",
+          "detail": "Brakecraft Components Ltd is under payment stress and is stretching its suppliers",
+          "weight": 0.5213
+        },
+        {
+          "kind": "thin_buffer",
+          "detail": "14 days of cash buffer",
+          "weight": 0.2317
+        },
+        {
+          "kind": "exposure",
+          "detail": "19% revenue dependency on Brakecraft Components Ltd",
+          "weight": 0.1298
+        },
+        {
+          "kind": "chokepoint",
+          "detail": "3 downstream suppliers route through this node",
+          "weight": 0.1172
+        }
+      ],
+      "intervention_cost_cr": 0.16,
+      "estimated_exposure_cr": 20.04,
+      "propagation_depth": 1,
+      "rank": 9,
+      "halt_risk": 0.1314,
+      "supply_disruption": 0.0468,
+      "disruption_band": "watch",
+      "disrupted_inflow_cr": 0.49,
+      "disruption_reason": "Shreeyash Stampings Components Pvt Ltd is at risk of halting cold forming deliveries. ₹0.49 cr of inbound supply at risk."
     }
   ],
   "summary": {
     "total_nodes": 412,
-    "stressed_origin_nodes": ["N007"],
-    "at_risk_count": 4,
+    "at_risk_count": 15,
     "band_counts": {
-      "critical": 1,
-      "high": 3,
-      "watch": 11,
-      "stable": 397
+      "critical": 2,
+      "high": 4,
+      "watch": 10,
+      "stable": 396
     },
-    "total_intervention_cost_cr": 14.20,
-    "total_estimated_exposure_cr": 189.60,
-    "max_propagation_depth": 3,
-    "iterations_to_converge": 4
+    "total_intervention_cost_cr": 16.54,
+    "total_estimated_exposure_cr": 738.18,
+    "iterations_to_converge": 3,
+    "stressed_origin_nodes": [
+      "N007"
+    ],
+    "max_propagation_depth": 2,
+    "anchor_disruption": [
+      {
+        "node_id": "N001",
+        "supply_disruption": 0.1076,
+        "disruption_band": "high",
+        "disrupted_inflow_cr": 848.96,
+        "stopped_by": "N007"
+      },
+      {
+        "node_id": "N251",
+        "supply_disruption": 0.1073,
+        "disruption_band": "high",
+        "disrupted_inflow_cr": 435.95,
+        "stopped_by": "N007"
+      },
+      {
+        "node_id": "N268",
+        "supply_disruption": 0.0157,
+        "disruption_band": "watch",
+        "disrupted_inflow_cr": 93.63,
+        "stopped_by": "N238"
+      }
+    ],
+    "disruption_iterations_to_converge": 4
   }
 }
