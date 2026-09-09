@@ -1,0 +1,12 @@
+/* Mock API responses for offline development.
+ *
+ * These files must validate against schema.json definitions.
+ * A mock that doesn't validate is not a mock — it is a future
+ * integration bug.  See docs/PERSON_C.md §4.
+ *
+ * Expected files:
+ *   network.json      — GET /api/network response
+ *   at-risk.json      — GET /api/at-risk response
+ *   simulate.json     — POST /api/simulate response
+ *   intervene.json    — POST /api/intervene response
+ */

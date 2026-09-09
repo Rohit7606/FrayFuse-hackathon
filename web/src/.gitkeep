@@ -1,0 +1,7 @@
+/* FrayFuse web frontend — Person C's track.
+ *
+ * This directory will be initialised with Vite + React.
+ * See docs/PERSON_C.md for the full spec.
+ *
+ * Mocks in src/mocks/ must validate against schema.json.
+ */
