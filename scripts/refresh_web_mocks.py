@@ -41,6 +41,12 @@ def main() -> None:
             ).json(),
         }
 
+    # DEMO_SCENARIO.md §8: "Never hardcode these IDs in application logic. Read
+    # them from the fixture." The frontend cannot reach data/fixtures/ from
+    # inside web/, so the fixture ships alongside the mocks and the components
+    # import it like any other payload.
+    payloads["demo-scenario.json"] = demo
+
     for name, payload in payloads.items():
         path = OUT / name
         path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

@@ -1,0 +1,26 @@
+{
+  "scenario_id": "canonical_v1",
+  "description": "Brakecraft payment stretch cascades to deep-tier suppliers",
+  "trigger_node": "N007",
+  "expected_ranking": [
+    "N042",
+    "N203",
+    "N087",
+    "N118"
+  ],
+  "expected_bands": {
+    "N042": "critical",
+    "N203": "high",
+    "N087": "high",
+    "N118": "high"
+  },
+  "intervention": {
+    "node_id": "N042",
+    "amount_cr": 2.04
+  },
+  "expected_after_bands": {
+    "N042": "stable",
+    "N118": "stable"
+  },
+  "counterfactual_anchor": "N001"
+}
