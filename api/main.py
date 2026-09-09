@@ -17,6 +17,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from api.adapters import compute_delta, to_engine_scenario
 from api.models import (
     AtRiskResponse,
     BandCounts,
@@ -32,7 +33,7 @@ from api.models import (
     SimulateRequest,
     Summary,
 )
-from engine.pipeline import UnknownNodeError
+from engine.pipeline import UnknownNodeError, score_network
 
 # ---------------------------------------------------------------------------
 # Config
@@ -213,101 +214,122 @@ def get_at_risk(limit: int = 10):
 @app.post("/api/simulate", response_model=ScoredNetwork)
 def simulate(req: SimulateRequest):
     """Score the network under a scenario."""
-    # TODO(Phase 1): wire to engine.pipeline.score_network()
     net = load_network()
     validate_node_ids(req.scenario, net)
-    
-    # Internal call to get stub baseline
-    at_risk = get_at_risk(limit=4)
-    
-    return ScoredNetwork(
-        meta=at_risk.meta,
-        nodes=net["nodes"],
-        edges=net["edges"],
-        scores=at_risk.scores,
-        ranking=at_risk.ranking,
-        summary=at_risk.summary
-    )
+
+    try:
+        engine_scenario = to_engine_scenario(req.scenario)
+        result = score_network(net, engine_scenario)
+        return ScoredNetwork.model_validate(result)
+    except NotImplementedError:
+        # Engine not yet implemented — Phase 0 static fallback
+        at_risk = get_at_risk(limit=4)
+        return ScoredNetwork(
+            meta=at_risk.meta,
+            nodes=net["nodes"],
+            edges=net["edges"],
+            scores=at_risk.scores,
+            ranking=at_risk.ranking,
+            summary=at_risk.summary,
+        )
 
 
 @app.post("/api/intervene", response_model=InterveneResponse)
 def intervene(req: InterveneRequest):
     """Apply funding and return before, after, and delta."""
-    # TODO(Phase 1): wire to engine.pipeline.score_network()
     net = load_network()
-    
+
     if req.baseline_scenario is not None:
         validate_node_ids(req.baseline_scenario, net)
     validate_node_ids(Scenario(interventions=req.interventions), net)
-    
-    before_at_risk = get_at_risk(limit=4)
-    before = ScoredNetwork(
-        meta=before_at_risk.meta,
-        nodes=net["nodes"],
-        edges=net["edges"],
-        scores=before_at_risk.scores,
-        ranking=before_at_risk.ranking,
-        summary=before_at_risk.summary
-    )
-    
-    after_scores = []
-    for s in before.scores:
-        s_copy = s.model_copy()
-        if s_copy.node_id == "N042":
-            s_copy.risk_band = "stable"
-            s_copy.final_score = 0.0
-            s_copy.rank = None
-        elif s_copy.node_id == "N118":
-            s_copy.risk_band = "watch"
-            s_copy.final_score = 0.02
-        after_scores.append(s_copy)
-        
-    after_scores.sort(key=lambda x: x.final_score, reverse=True)
-    after_ranking = []
-    current_rank = 1
-    for s in after_scores:
-        if s.risk_band != "stable":
-            s.rank = current_rank
-            after_ranking.append(s.node_id)
-            current_rank += 1
-        else:
-            s.rank = None
-            
-    after_summary = before.summary.model_copy()
-    after_summary.total_intervention_cost_cr = 14.2 - 4.8
-    after_summary.total_estimated_exposure_cr = 189.6 - 148.3
-    after_summary.band_counts = BandCounts(critical=0, high=2, watch=12, stable=398)
-    
-    after = ScoredNetwork(
-        meta=before.meta,
-        nodes=net["nodes"],
-        edges=net["edges"],
-        scores=after_scores,
-        ranking=after_ranking,
-        summary=after_summary
-    )
-    
-    delta = Delta(
-        nodes_improved=7,
-        nodes_worsened=0,
-        total_exposure_reduced_cr=148.3,
-        total_intervention_cost_cr=4.8,
-        per_node=[
-            PerNodeDelta(
-                node_id="N042",
-                fragility_before=0.63,
-                fragility_after=0.10,
-                band_before="critical",
-                band_after="stable"
-            ),
-            PerNodeDelta(
-                node_id="N118",
-                fragility_before=0.30,
-                fragility_after=0.10,
-                band_before="high",
-                band_after="watch"
-            )
-        ]
-    )
-    
-    return InterveneResponse(before=before, after=after, delta=delta)
+
+    try:
+        baseline = req.baseline_scenario or Scenario()
+        engine_baseline = to_engine_scenario(baseline)
+        engine_after = engine_baseline.with_interventions(
+            to_engine_scenario(Scenario(interventions=req.interventions)).interventions
+        )
+
+        before_dict = score_network(net, engine_baseline)
+        after_dict = score_network(net, engine_after)
+
+        before = ScoredNetwork.model_validate(before_dict)
+        after = ScoredNetwork.model_validate(after_dict)
+        delta = compute_delta(before, after, interventions=req.interventions)
+
+        return InterveneResponse(before=before, after=after, delta=delta)
+    except NotImplementedError:
+        # Engine not yet implemented — Phase 0 static fallback
+        before_at_risk = get_at_risk(limit=4)
+        before = ScoredNetwork(
+            meta=before_at_risk.meta,
+            nodes=net["nodes"],
+            edges=net["edges"],
+            scores=before_at_risk.scores,
+            ranking=before_at_risk.ranking,
+            summary=before_at_risk.summary,
+        )
+
+        after_scores = []
+        for s in before.scores:
+            s_copy = s.model_copy()
+            if s_copy.node_id == "N042":
+                s_copy.risk_band = "stable"
+                s_copy.final_score = 0.0
+                s_copy.rank = None
+            elif s_copy.node_id == "N118":
+                s_copy.risk_band = "watch"
+                s_copy.final_score = 0.02
+            after_scores.append(s_copy)
+
+        after_scores.sort(key=lambda x: x.final_score, reverse=True)
+        after_ranking = []
+        current_rank = 1
+        for s in after_scores:
+            if s.risk_band != "stable":
+                s.rank = current_rank
+                after_ranking.append(s.node_id)
+                current_rank += 1
+            else:
+                s.rank = None
+
+        after_summary = before.summary.model_copy()
+        after_summary.total_intervention_cost_cr = 14.2 - 4.8
+        after_summary.total_estimated_exposure_cr = 189.6 - 148.3
+        after_summary.band_counts = BandCounts(
+            critical=0, high=2, watch=12, stable=398
+        )
+
+        after = ScoredNetwork(
+            meta=before.meta,
+            nodes=net["nodes"],
+            edges=net["edges"],
+            scores=after_scores,
+            ranking=after_ranking,
+            summary=after_summary,
+        )
+
+        delta = Delta(
+            nodes_improved=7,
+            nodes_worsened=0,
+            total_exposure_reduced_cr=148.3,
+            total_intervention_cost_cr=4.8,
+            per_node=[
+                PerNodeDelta(
+                    node_id="N042",
+                    fragility_before=0.63,
+                    fragility_after=0.10,
+                    band_before="critical",
+                    band_after="stable",
+                ),
+                PerNodeDelta(
+                    node_id="N118",
+                    fragility_before=0.30,
+                    fragility_after=0.10,
+                    band_before="high",
+                    band_after="watch",
+                ),
+            ],
+        )
+
+        return InterveneResponse(before=before, after=after, delta=delta)
