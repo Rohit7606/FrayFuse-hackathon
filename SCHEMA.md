@@ -1,6 +1,6 @@
 # SCHEMA.md — FrayFuse Data Contract
 
-**Schema version: 1.0**
+**Schema version: 1.1**
 
 This file is the boundary between all three tracks. It has **no single owner** — changes require both other team members to be named on the PR. See `AGENTS.md` §4.3.
 
@@ -322,7 +322,14 @@ Just the ordered `node_id` list, so the UI does not re-sort:
 ["N042", "N118", "N203", "N087"]
 ```
 
-Contains only nodes whose `risk_band` is not `"stable"`, ordered by `final_score` descending. Ties broken by `node_id` ascending — **this tiebreak is required for determinism.**
+Contains nodes whose `risk_band` is not `"stable"`, ordered by `final_score` descending. Ties broken by `node_id` ascending — **this tiebreak is required for determinism.**
+
+**Stressed origins are excluded.** A node whose stress comes from its own published
+disclosures is listed in `summary.stressed_origin_nodes` and keeps its `risk_band` and
+`final_score`, but carries `rank: null` and does not appear here. The ranked list answers
+"which suppliers are about to run out of cash *that you could not already see*" — an origin
+is the thing you already knew. The worked example above does exactly this: `N007` is the
+trigger and is absent from `ranking`.
 
 ### 4.4 `summary`
 
@@ -343,10 +350,17 @@ Contains only nodes whose `risk_band` is not `"stable"`, ordered by `final_score
 
 | Band | `final_score` |
 |---|---|
-| `critical` | ≥ 0.50 |
-| `high` | 0.30 – 0.50 |
-| `watch` | 0.15 – 0.30 |
-| `stable` | < 0.15 |
+| `critical` | ≥ 0.20 |
+| `high` | 0.06 – 0.20 |
+| `watch` | 0.012 – 0.06 |
+| `stable` | < 0.012 |
+
+Recalibrated in 1.1. `final_score` is the product of two sub-1 factors and fragility is
+damped twice on the way down the chain, so the realistic range is far narrower than the
+original thresholds assumed — the whole non-origin population fits under 0.21. At 0.50 every
+deep-tier supplier banded `stable`, including the sole-source chokepoint the demo is built
+around. **These are a calibration to an observed distribution, not a measured threshold for
+corporate distress.** What carries meaning is the ordering and the separation between bands.
 
 ---
 
@@ -500,3 +514,4 @@ Five CSVs land in `data/real/`:
 | Version | Change |
 |---|---|
 | 1.0 | Initial contract. Edge fields named `supplier_id`/`buyer_id` rather than `from`/`to`. MSMED flow figure designated primary signal. `has_not_due_column` added as a required comparability flag |
+| 1.1 | Carries the comparability flags the collection workstream measured: `ageing_basis`, `msme_book_material`, `series_break`, `liquidity_quality` on stress signals; `confidence`, `edge_provenance` and a nullable `is_single_source` on edges; `observation_completeness` on nodes. Risk-band thresholds recalibrated to the score distribution the engine actually produces (§4.4). Stressed origins excluded from `ranking` (§4.3). This entry also records the version bump that `schema.json` had already taken but which was never written up here — agreed with Person B and Person C |

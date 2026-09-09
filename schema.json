@@ -44,7 +44,11 @@
       "properties": {
         "schema_version": {
           "type": "string",
-          "const": "1.0"
+          "enum": [
+            "1.0",
+            "1.1"
+          ],
+          "description": "Contract version this file was produced against. 1.0 files remain valid: 1.1 was additive on inputs."
         },
         "generated_at": {
           "type": "string",
