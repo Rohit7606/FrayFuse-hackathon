@@ -2804,7 +2804,7 @@
       },
       {
         "node_id": "N187",
-        "name": "Chandrika Stampings Industries Industries Ltd",
+        "name": "Chandrika Stampings Industries Ltd",
         "tier": 1,
         "sector": "auto_electricals",
         "product_category": "sensor_modules",
@@ -3494,7 +3494,7 @@
       },
       {
         "node_id": "N233",
-        "name": "Udaygiri Metalworks Industries Industries Ltd",
+        "name": "Udaygiri Metalworks Industries Ltd",
         "tier": 1,
         "sector": "auto_electricals",
         "product_category": "starter_motors",
@@ -3569,7 +3569,7 @@
       },
       {
         "node_id": "N238",
-        "name": "Indraprast Treatments Industries Industries Ltd",
+        "name": "Indraprast Treatments Industries Ltd",
         "tier": 1,
         "sector": "auto_electricals",
         "product_category": "starter_motors",
@@ -30295,7 +30295,7 @@
         "supply_disruption": 0.0157,
         "disruption_band": "watch",
         "disrupted_inflow_cr": 93.63,
-        "disruption_reason": "Indraprast Treatments Industries Industries Ltd is at risk of halting starter motors deliveries. ₹93.63 cr of inbound supply at risk."
+        "disruption_reason": "Indraprast Treatments Industries Ltd is at risk of halting starter motors deliveries. ₹93.63 cr of inbound supply at risk."
       },
       {
         "node_id": "N269",
@@ -37471,7 +37471,7 @@
       },
       {
         "node_id": "N187",
-        "name": "Chandrika Stampings Industries Industries Ltd",
+        "name": "Chandrika Stampings Industries Ltd",
         "tier": 1,
         "sector": "auto_electricals",
         "product_category": "sensor_modules",
@@ -38161,7 +38161,7 @@
       },
       {
         "node_id": "N233",
-        "name": "Udaygiri Metalworks Industries Industries Ltd",
+        "name": "Udaygiri Metalworks Industries Ltd",
         "tier": 1,
         "sector": "auto_electricals",
         "product_category": "starter_motors",
@@ -38236,7 +38236,7 @@
       },
       {
         "node_id": "N238",
-        "name": "Indraprast Treatments Industries Industries Ltd",
+        "name": "Indraprast Treatments Industries Ltd",
         "tier": 1,
         "sector": "auto_electricals",
         "product_category": "starter_motors",
@@ -64912,7 +64912,7 @@
         "supply_disruption": 0.0133,
         "disruption_band": "watch",
         "disrupted_inflow_cr": 79.04,
-        "disruption_reason": "Indraprast Treatments Industries Industries Ltd is at risk of halting starter motors deliveries. ₹79.04 cr of inbound supply at risk."
+        "disruption_reason": "Indraprast Treatments Industries Ltd is at risk of halting starter motors deliveries. ₹79.04 cr of inbound supply at risk."
       },
       {
         "node_id": "N269",
