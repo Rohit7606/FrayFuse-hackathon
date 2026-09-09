@@ -69,6 +69,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+import time
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    latency_ms = (time.time() - start_time) * 1000
+    logger.info("%s %s - %s - %.2fms", request.method, request.url.path, response.status_code, latency_ms)
+    return response
+
 
 # ---------------------------------------------------------------------------
 # Network loading — cached at startup, not session state
