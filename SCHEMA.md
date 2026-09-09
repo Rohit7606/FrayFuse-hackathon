@@ -1,6 +1,6 @@
 # SCHEMA.md — FrayFuse Data Contract
 
-**Schema version: 1.0**
+**Schema version: 1.1**
 
 This file is the boundary between all three tracks. It has **no single owner** — changes require both other team members to be named on the PR. See `AGENTS.md` §4.3.
 
@@ -210,7 +210,13 @@ One entry per observable company-year. Nodes with `is_observable: false` have no
 |---|---|---|
 | `fy` | string | `"FY22"` … `"FY25"` |
 | `msme_*_cr` | float \| null | Schedule III ageing buckets. `null` where not disclosed |
-| `msmed_principal_paid_beyond_appointed_day_cr` | float \| null | **The primary signal.** A whole-year flow figure that cannot be tidied up before year end |
+| `msmed_principal_paid_beyond_appointed_day_cr` | float \| null | Whole-year flow figure. **Was designated the primary signal; it is not.** Collection found it disclosed in 3 of 46 verified company-years, all in one company. Keep the field — it is genuinely strong where it exists — but it cannot carry the model. See `docs/PERSON_A.md` §3.1 |
+| `msmed_interest_due_unpaid_cr` | float \| null | MSMED interest lines. **The largest of these three drives the primary signal** — a YoY rise is a statutory admission of late payment, and it needs no Not Due column, so it is available for every filer |
+| `msmed_interest_due_on_payments_beyond_appointed_day_cr` | float \| null | See above |
+| `ageing_basis` | `"due_date"` \| `"transaction_date"` | **Critical.** Schedule III says buckets run from the due date; some filers age from the transaction date instead. Two companies with different values here have incomparable buckets under the same column names |
+| `msme_book_material` | boolean | `false` where MSME dues are a rounding error and every MSMED line reads nil. Gates whether a *level* is comparable — never use it to suppress a growth signal |
+| `series_break` | string \| null | Set where a year is not comparable with the previous one (restatement, discontinued operations, GAAP transition). The stress ladder must skip that transition rather than compute a meaningless delta |
+| `liquidity_quality` | string \| null | Set where a liquidity component was excluded or is not what it appears. One collected company's ₹770 cr of "current investments" was unquoted equity pledged against loans |
 | `msmed_principal_unpaid_year_end_cr` | float \| null | Point-in-time snapshot |
 | `cost_of_materials_cr` | float \| null | Denominator for late-payment intensity |
 | `has_not_due_column` | boolean | **Critical.** `false` means the filer omitted the Not Due column, so `msme_under_1yr_cr` silently includes amounts not yet due and is **not comparable** with other companies. Code must branch on this |
@@ -224,7 +230,14 @@ The **ageing table** is a photograph taken on 31 March and can be tidied up befo
 
 A real observed example: one listed company's ageing table showed every rupee in "Not Due" for two consecutive years, while its MSMED note showed principal paid beyond the appointed day nearly doubling.
 
-**Therefore the model weights the MSMED flow figure more heavily than the ageing snapshot.** See §4.2.
+**Therefore the model prefers whole-year flow figures over the ageing snapshot.**
+
+**Amended after collection.** The specific flow figure this section was built around —
+`msmed_principal_paid_beyond_appointed_day_cr` — is disclosed by almost nobody: 3 of 46 verified
+company-years, all belonging to one company. The reasoning above survives; the field does not. The
+signal that carries it is the **MSMED interest lines**, which rise only past the appointed day and are
+therefore also a whole-year statutory admission — and which every filer discloses. See
+`docs/PERSON_A.md` §3.1 for the full ladder and the control-tested evidence behind each rung.
 
 ---
 
@@ -267,7 +280,12 @@ One entry per node — **every** node, including unstressed ones.
   ],
   "intervention_cost_cr": 4.80,
   "estimated_exposure_cr": 61.40,
-  "propagation_depth": 2
+  "propagation_depth": 2,
+  "halt_risk": 0.5132,
+  "supply_disruption": 0.2514,
+  "disruption_band": "critical",
+  "disrupted_inflow_cr": 4.68,
+  "disruption_reason": "Precision Polymer Works Pvt Ltd is at risk of halting polymer compound deliveries — sole source, nothing else to buy it from. ₹4.68 cr of inbound supply at risk."
 }
 ```
 
@@ -285,6 +303,15 @@ One entry per node — **every** node, including unstressed ones.
 | `intervention_cost_cr` | float | Money needed to stabilise this supplier |
 | `estimated_exposure_cr` | float | Value at risk if this supplier fails |
 | `propagation_depth` | integer | Hops from the nearest originating stress node. `0` if self-stressed |
+| `halt_risk` | float 0–1 | Chance this node stops delivering — no cash, or no parts |
+| `supply_disruption` | float 0–1 | Chance this node's own line stops for want of an input it cannot replace |
+| `disruption_band` | enum | Same four values as `risk_band`, **separate thresholds** — §4.4 |
+| `disrupted_inflow_cr` | float | Expected inbound trade value that fails to arrive |
+| `disruption_reason` | string | **Mandatory, never empty.** Template-generated, deterministic |
+
+The last five are the **supply-disruption layer**, added in 1.2. They are a
+second propagation running in the opposite direction to the first, and they do
+not enter `final_score`, `risk_band` or `ranking` — those are unchanged.
 
 ### 4.2 How the numbers are produced
 
@@ -301,6 +328,16 @@ The second is weighted more heavily because it cannot be window-dressed.
 
 **Criticality** blends normalised betweenness centrality, the single-source flag, and the node's share of total network flow.
 
+**Supply disruption** runs the other way — supplier to buyer, following the parts rather than
+the money. A node's halt risk is seeded by the part of its fragility it did *not* generate
+itself (`fragility − own_stress`), because a company stretching its own payables is conserving
+cash rather than stopping its line. Buyers combine their suppliers' halt risks by noisy-OR
+weighted by replaceability, so a confirmed sole source counts fully regardless of what the part
+costs. Full specification in `docs/PERSON_A.md` §3.8.
+
+> **In one sentence:** stress flows down the chain as invoices that were never paid; failure
+> flows back up it as parts that never arrived.
+
 ### 4.3 `ranking`
 
 Just the ordered `node_id` list, so the UI does not re-sort:
@@ -309,7 +346,14 @@ Just the ordered `node_id` list, so the UI does not re-sort:
 ["N042", "N118", "N203", "N087"]
 ```
 
-Contains only nodes whose `risk_band` is not `"stable"`, ordered by `final_score` descending. Ties broken by `node_id` ascending — **this tiebreak is required for determinism.**
+Contains nodes whose `risk_band` is not `"stable"`, ordered by `final_score` descending. Ties broken by `node_id` ascending — **this tiebreak is required for determinism.**
+
+**Stressed origins are excluded.** A node whose stress comes from its own published
+disclosures is listed in `summary.stressed_origin_nodes` and keeps its `risk_band` and
+`final_score`, but carries `rank: null` and does not appear here. The ranked list answers
+"which suppliers are about to run out of cash *that you could not already see*" — an origin
+is the thing you already knew. The worked example above does exactly this: `N007` is the
+trigger and is absent from `ranking`.
 
 ### 4.4 `summary`
 
@@ -322,18 +366,40 @@ Contains only nodes whose `risk_band` is not `"stable"`, ordered by `final_score
   "total_intervention_cost_cr": 14.20,
   "total_estimated_exposure_cr": 189.60,
   "max_propagation_depth": 3,
-  "iterations_to_converge": 4
+  "iterations_to_converge": 4,
+  "disruption_iterations_to_converge": 4,
+  "anchor_disruption": [
+    { "node_id": "N001", "supply_disruption": 0.1076, "disruption_band": "high", "disrupted_inflow_cr": 848.96, "stopped_by": "N007" }
+  ]
 }
 ```
+
+`anchor_disruption` lists every tier-0 node, worst first, ties by `node_id`. It exists so the UI
+can drive `DEMO_SCENARIO.md` §6 without scanning four hundred score objects for the three
+anchors. `stopped_by` is the supplier contributing most of that anchor's disruption, or `null`
+where none does.
 
 **Risk band thresholds** — defined once, in `engine/config.py`:
 
 | Band | `final_score` |
 |---|---|
-| `critical` | ≥ 0.50 |
-| `high` | 0.30 – 0.50 |
-| `watch` | 0.15 – 0.30 |
-| `stable` | < 0.15 |
+| `critical` | ≥ 0.20 |
+| `high` | 0.06 – 0.20 |
+| `watch` | 0.012 – 0.06 |
+| `stable` | < 0.012 |
+
+Recalibrated in 1.1. `final_score` is the product of two sub-1 factors and fragility is
+damped twice on the way down the chain, so the realistic range is far narrower than the
+original thresholds assumed — the whole non-origin population fits under 0.21. At 0.50 every
+deep-tier supplier banded `stable`, including the sole-source chokepoint the demo is built
+around. **These are a calibration to an observed distribution, not a measured threshold for
+corporate distress.** What carries meaning is the ordering and the separation between bands.
+
+**Disruption band thresholds** are separate constants (`DISRUPTION_BAND_*`) and currently hold
+the same values. That is an observation about the two distributions, not a shortcut — and they
+are free to diverge. They are deliberately **not** calibrated to put the demo's anchor in the
+top band: at these thresholds `N001` bands `high` at baseline and drops to `watch` once `N042`
+is funded.
 
 ---
 
@@ -475,7 +541,7 @@ Five CSVs land in `data/real/`:
 2. **Map IDs** — `company_id` → `node_id` in `N###` format, deterministically ordered
 3. **Assign tiers** — from `tier_role`, defaulting to `1` for listed manufacturers
 4. **Compute `exposure_pct`** — from `edges.csv` `weight_pct` where disclosed; otherwise from `annual_value / supplier_revenue`
-5. **Stitch the synthetic layer** — real nodes at tier 0–1, generated nodes at tier 2–3, using names from `entity_pool.csv`
+5. **Stitch the synthetic layer** — real nodes at tier 0–1, generated nodes at tier 2–3, using names from `entity_pool.csv`. **Implemented.** The generator lives in `mockgen.py` (AGENTS.md §3.1 confines `random` to it) and is seeded from `config.DEEP_TIER_SEED`. Two invariants are enforced in code: no `is_single_source` edge may point at a real buyer, and no generated figure may be written onto a real node — both from `DATA_DICTIONARY.md` §3b
 6. **Set `data_source` honestly** — `"real"` only where the figure came from a filing
 7. **Preserve `has_not_due_column`** — do not silently default it to `true`
 8. **Validate the output** against `NetworkInput` before writing
@@ -487,3 +553,5 @@ Five CSVs land in `data/real/`:
 | Version | Change |
 |---|---|
 | 1.0 | Initial contract. Edge fields named `supplier_id`/`buyer_id` rather than `from`/`to`. MSMED flow figure designated primary signal. `has_not_due_column` added as a required comparability flag |
+| 1.1 | Carries the comparability flags the collection workstream measured: `ageing_basis`, `msme_book_material`, `series_break`, `liquidity_quality` on stress signals; `confidence`, `edge_provenance` and a nullable `is_single_source` on edges; `observation_completeness` on nodes. Risk-band thresholds recalibrated to the score distribution the engine actually produces (§4.4). Stressed origins excluded from `ranking` (§4.3). This entry also records the version bump that `schema.json` had already taken but which was never written up here — agreed with Person B and Person C |
+| 1.2 | **Supply-disruption layer.** Adds `halt_risk`, `supply_disruption`, `disruption_band`, `disrupted_inflow_cr` and `disruption_reason` to `Score`, and `anchor_disruption` plus `disruption_iterations_to_converge` to `Summary`. Purely additive and **output-only** — `NetworkInput` is untouched, so no data file's `meta.schema_version` moves and `mockgen`/`transform` are unchanged. `final_score`, `risk_band` and `ranking` are unchanged; nothing that was correct before returns a different number. Closes the `DEMO_SCENARIO.md` §6 counterfactual, which payment-stress propagation structurally could not reach. Needs Person B and Person C review |

@@ -1,6 +1,6 @@
 # FrayFuse — Data Dictionary and Comparability Rules
 
-**Version 2.0 · Stage 1B-2  · Last updated 2026-09-08**
+**Version 2.1 · Stage 1B-2  · Last updated 2026-09-08**
 
 This document is the contract for the FrayFuse evidence set. If you are adding a company, adding an
 industry, or building a model on these files, read sections 2 and 5 first — they are where silent
@@ -298,6 +298,39 @@ out of our own ignorance.
 `relationship_type = concentration_disclosure_unnamed` marks a real disclosed percentage against an
 unnamed counterparty. Those rows have no `to_company_id` by design and are **not** graph edges.
 
+### Columns added in v2.1 (Session-2 verified sweep)
+
+| Field | Meaning |
+|---|---|
+| `undrawn_credit_facilities_cr` | Committed but unutilised working-capital limits. A company with 3 days of cash and large undrawn lines is not as fragile as the cash figure implies |
+| `undrawn_source` | `rating_rationale` \| `annual_report_note` \| `not_disclosed` |
+| `plausibility_flags` | Pipe-separated gate hits: `BUFFER_<n>d` (buffer <2 or >400), `DEP_GT_25PCT`, `FIN_GT_20PCT`, `TEXP_VS_REV_GT_40PCT`, `DEP_MISMATCH pl=… cf=…`. **A flag is a "read this row before using it" marker, not an error** |
+| `total_expenses_includes_dep_fin` | `true` \| `false`. **Load-bearing for the cash-buffer formula** — see below |
+
+### `total_expenses_includes_dep_fin` — a formula trap
+
+Most filers present `Total expenses` **including** finance costs and depreciation, so the operating
+cash cost is `total_expenses − depreciation − finance_costs`.
+
+Precision Camshafts does not. It presents `Total expenses (II)` **above** an EBITDA subtotal, with
+finance costs and depreciation disclosed *below* it. Its `Total expenses` already excludes both.
+Applying the standard formula would subtract them twice and understate the denominator, inflating the
+buffer.
+
+**Always read this flag before recomputing `cash_buffer_days`.** Where it is `false`, the denominator
+is `total_expenses` as printed, with no subtraction.
+
+### The depreciation cross-check
+
+Every `depreciation_amortisation_cr` in v2.1 was verified against a second disclosure of the same
+figure — normally the cash-flow add-back, or the depreciation note where the cash flow presents it
+differently (Precision Camshafts discloses only "Depreciation on ROU asset" separately in its cash
+flow, so Note 27's total was used). Where the two disagreed the value was **not recorded** and the row
+carries `DEP_MISMATCH`.
+
+This exists because a keyword match previously captured an EBITDA subtotal caption containing the word
+"depreciation" instead of the expense line — ₹110 cr against a true ₹57 cr.
+
 ---
 
 ## 5. Comparability — the three traps
@@ -526,7 +559,8 @@ Read alongside the `notes` column in `companies.csv`.
 | **JPA** | `financial_structure` mechanism. Ages **from transaction date**. No Not Due column. Rows cover **current trade payables only** — non-current payables (₹77.06 cr FY23 / ₹66.96 cr FY22) are excluded, and the ageing table folds in liabilities held for sale. Do not reconcile to the balance-sheet total without adjusting. Signal is `mixed_partial`: MSME principal fell 64% while MSMED interest accrued rose 66% and the turnover ratio deteriorated 14% |
 | **BGL_C** *(control)* | The calibration case. MSE balance rose 7.3× and MSE overdue share rose 20.5%→36.1% in a company CARE **upgraded** — a false positive on two signals. Yet it is the ONLY company in the dataset disclosing "principal paid beyond the appointed day", which **fell 65%** and correctly says healthy. Note 32.2 principal differs slightly from Note 23 MSE payables; both recorded as printed |
 | **RICO_C** *(control)* | Splits under-1-year into "<6 months" and "6 months–1 year"; these are SUMMED into `msme_under_1yr`. Balance-sheet Note 22 shows FY23 MSME of ₹17.84 cr against the ageing table's ₹18.90 cr; the ageing figure is used |
-| **PRECAM_C, NEULAND_C, DHANUKA_C, BALRAMPUR_C** *(controls)* | All behave as controls should. Neuland's FY24 ageing table has two footing typos (Others printed 18,874.47 and total 19,858.88 against components summing to 18,879.47 and 19,853.88, which match Note 17); component-derived figures are used. Dhanuka's MSMED Note 41 principal differs slightly from its Note 18 MSME payables; both recorded as printed |
+| **PRECAM_C** *(control)* | `total_expenses_includes_dep_fin = false` — its Total expenses sits above the EBITDA subtotal and already excludes finance costs and depreciation, so the standard cash-buffer denominator must NOT subtract them again. Depreciation cross-checked to Note 27, not the cash flow, which discloses only "Depreciation on ROU asset" separately. Current investments are large (₹170–312 cr) and sit under current assets — an earlier reading mistook the non-current Investments line for them. **OPEN ITEM: a "Corrigendum to the Annual Report for FY 2023-24" was filed 06-07-2024 for "certain typographical errors"; the covering letter was read but the list of corrections was not reached before tooling failed. It carries a 314-page attachment which may be a revised annual report. The FY2023/FY2024 rows may need re-checking against it** |
+| **NEULAND_C, DHANUKA_C, BALRAMPUR_C** *(controls)* | All behave as controls should. Neuland's FY24 ageing table has two footing typos (Others printed 18,874.47 and total 19,858.88 against components summing to 18,879.47 and 19,853.88, which match Note 17); component-derived figures are used. Dhanuka's MSMED Note 41 principal differs slightly from its Note 18 MSME payables; both recorded as printed |
 | **BGL** *(merged identity)* | Was carried as two rows, `BGL` (abandoned distress candidate) and `BGL_C` (control), both NSE `BHARATGEAR`. Merged 2026-09-08 to a single row `BGL`, cohort `control`, with the abandoned-distress reasoning preserved in `role_history`. All references in the other files updated |
 | **Anchors** *(cohort `counterparty`)* | 13 identity-only rows: HERO, TATAMOTORS, ASHOKLEY, MAHINDRA, EICHER, KIRLOSKAROIL, INTLTRACTORS, DEERE, HILTI, MANDO, GSK, BLUSMART, LAVACAST. No financial extraction performed. **TATAMOTORS identity caution:** BSE scrip 500570 now returns "Tata Motors Passenger Vehicles Limited" after the CV/PV demerger; edges reference "Tata Motors Limited" as disclosed at the time, so do not assume the code maps to the pre-demerger entity |
 | **AUTOIND** | Abandoned. No qualifying FY22+ event — both were reaffirmations/upgrades. Kept as documented negatives |
@@ -543,6 +577,12 @@ Read alongside the `notes` column in `companies.csv`.
 
 **v1.1 (2026-09-08)** — added `financial_structure` to `distress_mechanism`; added section 5b
 (industry-specific rules) after the sugar finding.
+
+**v2.1 (2026-09-08)** — Session-2 verified financial sweep. Added `undrawn_credit_facilities_cr`,
+`undrawn_source`, `plausibility_flags`, `total_expenses_includes_dep_fin`. Every figure read from its
+own labelled line, with the depreciation cross-check, an explicit standalone/consolidated section
+confirmation per page, and note-anchored rather than page-anchored location. Setco FY2023 revenue
+corrected to its own report's figure after a restatement was found.
 
 **v2.0 (2026-09-08)** — Stage-2 collection. Added §3b (the real/synthetic boundary) and the v2.0
 column set: cash-buffer components, cost-base type, MSMED note shape, `data_source`, `entity_status`,
@@ -583,3 +623,214 @@ been written with unescaped quotes and parsed one column wide on some rows.
 3. `msme_book_material` threshold is set at 5% of trade payables. The current cohort splits cleanly
    (27.4 / 16.2 / 9.0 vs 2.8 / 0.04), so the threshold is untested in the 3–8% band.
 4. No company yet has more than one distress event with independent pre-event windows.
+
+---
+
+# v2.2 additions (2026-09-09)
+
+## §5c New comparability traps found during the verified financial sweep
+
+These are all real, observed in the filings named. Each one silently corrupts a cross-company
+or cross-year comparison if it is not carried with the data.
+
+### T1 — Duplicate BSE index rows; the authoritative filing may have a NULL date
+`AnnualReport_New` can return several rows for one company-year. The superseding filing is
+identified by `status = "Revised"` and a `revised_date_time`, and its `Fld_AuthoriseDate` is
+**null**. Ranking by `Fld_AuthoriseDate` therefore selects the SUPERSEDED copy.
+Rule: rank candidates by `revised_date_time || Fld_AuthoriseDate`, take the newest, and record
+`status` and `Fld_ReSubmit` next to the filing date.
+Observed: Neuland FY2023-24 (original 5 Jul 2024; revised 15 Jul 2024 adding BRSR Core indicators).
+
+### T2 — Malformed attachment URLs
+At least one index row returns a path containing a stray backslash
+(`.../AttachHis/\29fe1a51-....pdf`, Neuland FY2023). It fails as a generic fetch error.
+Rule: strip backslashes from `PDFDownload` before fetching.
+
+### T3 — Two statements printed side by side on one page
+Neuland FY2025 prints the balance sheet and the P&L as two columns of one physical page.
+Reading by text line interleaves them, producing lines like "Revenue from operations …" followed
+by "Right-of-use assets …". Rule: split text items by x-coordinate at the page midpoint before
+assembling lines whenever a page matches more than one statement heading.
+
+### T4 — The expenses total may have no caption
+Nectar Lifesciences prints its total expenses as a **bare number line** with no "Total expenses"
+label, in all three years. Rule: never take an uncaptioned number without confirming its identity
+at least twice — components must sum to it, AND total income minus it must equal the stated
+profit before tax. Rows built this way carry `plausibility_flags = TEXP_CAPTION_ABSENT_DERIVED_TOTAL_VERIFIED`.
+
+### T5 — Presentation units can change between years for the same company
+Best Agrolife reports in **lakhs** for FY2023 and in **millions** for FY2024. A single
+`units_as_reported` value per company would be wrong. Rule: read the unit caption from the page
+the figure is on, every time; `units_as_reported` is a per-row field and must stay that way.
+
+### T6 — "Current investments" are not necessarily liquid
+Bajaj Hindusthan Sugar FY2022 carries ₹770.13 cr of *Current Investments* which note 10 discloses
+as unquoted equity shares of Lalitpur Power Generation Company Ltd, **pledged against loans**.
+Counting them as liquidity would have reported a ~55-day cash buffer for a distressed company
+whose real buffer is 3 days. Rule: read the investments note before including the figure in any
+liquidity measure; where excluded, keep the disclosed balance-sheet figure in
+`current_investments_cr` and record the exclusion in `cash_components_basis` plus the flag
+`CURRENT_INV_ILLIQUID_EXCLUDED`. (The company itself reclassified this holding out of current
+assets in FY2023, restating FY2022 total current assets from 6,558.76 to 5,788.63.)
+
+### T7 — Not every filer splits "bank balances other than cash equivalents"
+Nectar reports a single *Cash & Cash Equivalents* line whose note 2.10 already contains fixed
+deposits and dividend accounts — the components other filers show separately. Rule: where the
+separate line is absent, check the cash note before treating it as nil, and record what the
+single line contains in `cash_components_basis`.
+
+### T8 — Discontinued operations create a scope break, not a restatement
+Jaiprakash Associates' FY2023 report restates FY2022 revenue from 422,006 to 296,741 lakh while
+the bottom line is unchanged at (123,188) — the difference is FY2022 activity reclassified as
+discontinued. This is a **change of scope**, so Rule 1 (prefer the later report's comparative)
+does NOT apply: the two years are simply not comparable and both rows carry
+`SCOPE_BREAK_DISCONTINUED_OPS_FY23`. Symptom to watch for: the cash flow statement's depreciation
+add-back covers total operations while the P&L line covers continuing operations only
+(JPA FY2023: 36,605 vs 23,525), which correctly trips the depreciation cross-check.
+
+### T9 — An Ind AS transition breaks the series
+Gensol Engineering adopted Ind AS with a transition date of **1 April 2022**, shown by the
+three-column balance sheet in its FY2024 report. FY2022 and earlier are previous-GAAP and cannot
+be compared with FY2023 onward. Rule: a third balance-sheet column dated "April 1, YYYY" is the
+signal; treat the transition date as a hard break in the series.
+
+### T10 — Image-only annual reports
+Some filers submit scans with no text layer: Gensol FY2022 and FY2023, and Setco FY2024
+(a 29 MB scan). Rule: where the company's own report is an image, the next-best PRIMARY source is
+the following year's report comparative column, which must be recorded as the source. Where even
+that is unavailable, leave the row empty and record why — never estimate.
+
+### T11 — BSE displays a company's CURRENT name against its HISTORIC filings
+Every annual report filed under scrip 500570 from FY2022 to FY2025 — filings of the undivided
+Tata Motors Limited — is now labelled "TATA MOTORS PASSENGER VEHICLES LIMITED", because that
+scrip and ISIN were retained by the passenger-vehicle company after the demerger. Rule: resolve
+counterparty identity by scrip code and ISIN as at the period of the edge, never by the name the
+exchange shows today. See `role_history` on TATAMOTORS and TATAMOTORS_CV.
+
+## §11 Entity identity over time — Tata Motors (worked example)
+
+| | company_id TATAMOTORS | company_id TATAMOTORS_CV |
+|---|---|---|
+| BSE scrip | 500570 | 544569 |
+| ISIN | INE155A01022 | INE1TAE01010 |
+| BSE ticker | TMPV | TMCV |
+| BSE industry | Passenger Cars & Utility Vehicles | Commercial Vehicles |
+| Current name | Tata Motors Passenger Vehicles Limited | Tata Motors Limited |
+| Holds pre-demerger history | **yes** (undivided company, to FY2025) | no (first AR is FY2026) |
+
+All six values verified against the BSE `ComHeader` and `PeerSmartSearch` APIs on 2026-09-09.
+CINs were not obtainable from a primary source and are deliberately left empty.
+
+The counter-intuitive part: the entity that kept the original listing is the **passenger-vehicle**
+company, while the **commercial-vehicle** company took the "Tata Motors Limited" name on a new
+listing. Setco supplies medium and heavy commercial-vehicle clutches, so any edge dated FY2026 or
+later belongs to TATAMOTORS_CV; edges up to FY2025 belong to the undivided company on scrip 500570.
+
+## §12 cash_buffer_days — measured, and NOT a stress signal
+
+Across 44 verified company-years the buffer runs from **0 to 351 days**, and it does not separate
+the cohorts.
+
+| | n | min | Q1 | median | Q3 | max |
+|---|---|---|---|---|---|---|
+| distress | 22 | 1 | 3.0 | **10.5** | 18.0 | 351 |
+| control | 22 | 0 | 3.75 | **14.5** | 57.25 | 266 |
+
+**AUC = 0.569** (probability a randomly chosen control has a higher buffer than a randomly chosen
+distress company-year; 0.5 is no separation at all). The controls hold both the lowest observed
+value (Balrampur Chini, 0 days in three of four years, investment grade throughout) and one of the
+highest (Precision Camshafts, 149-266). The distress cohort holds the single highest value in the
+data set — **Gensol Engineering at 351 days in FY2023**, the year before it collapsed.
+
+Consequence for the engine: `cash_buffer_days` is a working-capital-structure variable, not a
+fragility input. The mock's assumption of 60-100 days for a tier-1 supplier should be **removed**,
+not re-calibrated, and the field should be presented as context (with its comparability flags),
+never scored. Where a company's real liquidity sits in undrawn bank limits, the filings often do
+not disclose it at all (Balrampur FY2022 discloses no undrawn figure anywhere in the report).
+
+---
+
+# v2.3 (2026-09-09) — Session 3 backfill and bounded graph pass
+
+## Change log
+
+| # | Change |
+|---|---|
+| 1 | `total_expenses_includes_dep_fin` completed for all 15 rows the brief listed; now 45 of 46 (the 46th is GENSOL FY2022, which carries no `total_expenses_cr` at all). `financials.csv` is now recomputable from itself. |
+| 2 | `msmed_note_verbatim` 21 → 31 of 46, plus a new `msmed_note_format` taxonomy (§13). |
+| 3 | `undrawn_credit_facilities_cr` first values recorded (5 rows); `undrawn_source` recorded on 18 rows including the ones where the answer is "not disclosed" (§14). |
+| 4 | `companies.csv` 29 → 43 rows: 15 new counterparty identity rows, all named in a primary filing. |
+| 5 | `edges.csv` 21 → 37 rows: 15 new supplier edges, 1 new customer edge, 1 unnamed vendor-dispute aggregate. |
+| 6 | New `evidence_source` values: `related_party_note`, `contingent_liability_note`. |
+| 7 | LOKESH CIN recorded (`L29219TG1983PLC004319`). CIN coverage 6 of 43. |
+
+## §13 `msmed_note_format` — the taxonomy, and what it means for the primary signal
+
+The MSMED note has **no standard layout**. Across 10 companies we found six distinct formats,
+ranging from two lines to seven, and the "principal paid beyond the appointed day" figure — the
+engine's original primary signal — exists as a **standalone, populated line in exactly one company**.
+
+| Company | Format | Lines | "beyond the appointed day" | Figure present? |
+|---|---|---|---|---|
+| BGL (control) | `seven_line_incl_unpaid_beyond_45_days` | 7 | standalone line (iv) | **YES** — 920.62 / 319.93 / 832.49 lakh |
+| BHS (distress) | `six_line_standalone_beyond_appointed_day_caption_value_nil` | 6 | standalone line | no — nil both years |
+| BALRAMPUR_C (control) | `six_line_split_trade_payables_vs_capital_goods` | 6 | inside the s.16 line | no — nil |
+| SHIVAM (distress) | `five_line_a_to_e` | 5 | inside s.16 and delay lines | no — nil |
+| RICO_C (control) | `five_line_a_to_e_no_standalone_principal_beyond_appointed_day` | 5 | inside the s.16 line | no |
+| DHANUKA_C (control) | `five_line_appointed_day_caption_embedded_in_s16_line` | 5 | inside the s.16 line | no |
+| BESTAGRO (distress) | `five_line_appointed_day_caption_embedded_in_s16_line` | 5 | inside the s.16 line | no |
+| NEULAND_C (control) | `six_line_one_caption_duplicated` | 6 | standalone line | no — nil |
+| NECTAR (distress) | `narrative_prose_principal_and_s16_interest_only` | 2 (prose) | **absent entirely** | no |
+| SETCO (distress) | `two_line_principal_and_interest_only_no_appointed_day_caption` | 2 | **absent entirely** | no |
+
+Reading rules that follow from this:
+
+- **A missing figure is not a zero and not a nil.** In the five-line formats the phrase "beyond the
+  appointed day" is a sub-clause of the *interest paid under section 16* caption, so a dash against
+  that line means "no s.16 interest was paid", **not** "no payments were made late". These must
+  never be read as `msmed_principal_paid_beyond_appointed_day = 0`.
+- Two of ten filers (Setco, Nectar) omit the concept altogether, so for them the field is
+  structurally unobtainable, not merely undisclosed.
+- Nectar's disclosure is **narrative prose interleaved with employee-benefit policy text** in a
+  two-column layout, not a table. Any table-based extractor will miss it entirely.
+
+## §14 `undrawn_credit_facilities_cr` — what counts, and what does not
+
+Three kinds of "undrawn" appear in filings and they are **not interchangeable**:
+
+1. **Undrawn revolving working-capital limits** — the only kind that is liquidity for this purpose.
+   Recorded. Bharat Gears discloses this directly in a note titled "The Company had access to the
+   following undrawn borrowing facilities", split fund-based / non-fund-based.
+2. **Undrawn term-loan sanctions tied to a capex project** — NOT recorded as liquidity. Balrampur
+   Chini discloses ₹20,000 / ₹30,000 / ₹80,000 lakh of undrawn term loan, all tied to the Kumbhi
+   polylactic-acid plant. Project-tied and unusable for supplier payments.
+3. **Undisbursed debt instruments (NCDs)** — recorded, but labelled. Shivam Autotech's ₹88 crore is
+   undisbursed NCD from two alternative-investment managers: one-time, conditional, and not a
+   revolving line.
+
+Non-fund-based limits (letters of credit, bank guarantees) are excluded from the recorded figure
+and noted separately in `undrawn_source` — they finance trade documents, not cash payments.
+
+Where the figure comes from a rating rationale as *limit × (1 − average utilisation)*, the row
+carries `UNDRAWN_DERIVED_FROM_AVG_UTILISATION`, because an average over twelve months is not a
+31 March point-in-time balance.
+
+**`undrawn_source` is populated even when no number exists**, recording which documents were
+searched and what they said. An empty value means not yet searched; a populated one with no number
+means searched and not disclosed.
+
+## §15 Edge evidence: `related_party_note` and what it is worth
+
+Fourteen of the 37 edge rows now come from Ind AS 24 related-party notes. These carry exact annual
+amounts and named counterparties, which makes them the highest-quality edges in the set — but they
+are a **biased sample by construction**. A relationship appears there *because the counterparty is
+a related party*, not because deep-tier supply relationships are generally disclosed. Every such
+edge's `notes` field says so. Do not generalise from their existence to a claim that supplier
+graphs can be built from filings.
+
+Deliberately **not** recorded as edges, and why:
+- Purchases from a company's own subsidiaries (PreCam ← Memco, PreCam ← Emoss): intra-group
+  transfers already inside the consolidated numbers, not independent nodes that can fail.
+- One-off capital-asset purchases (Lokesh ← M L R Motors, ₹230.10 lakh): not recurring input supply.
+- Intra-group service companies (Autoline ← Autoline Design Software / Industrial Parks).
+- A related party with a closing balance but no transaction value (Autoline ← Shreeja Enterprises).

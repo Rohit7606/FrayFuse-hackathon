@@ -39,7 +39,11 @@ describe('Mock Data Validation', () => {
   };
 
   test('test_mocks_valid', () => {
-    validateMock('network.json', 'NetworkInput');
+    // NetworkResponse, not NetworkInput: this mock is what GET /api/network
+    // returns, and that endpoint serves {meta, nodes, edges} without
+    // stress_signals. Matches tests/web/test_mocks_valid.py, which is the
+    // same assertion on the Python side.
+    validateMock('network.json', 'NetworkResponse');
     validateMock('at-risk.json', 'AtRiskResponse');
     validateMock('simulate.json', 'ScoredNetwork');
     validateMock('intervene.json', 'InterveneResponse');
