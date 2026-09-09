@@ -11,6 +11,19 @@ it has that value.  No magic numbers elsewhere in the codebase.
 MOCK_SEED = 42  # default seed for deterministic mock generation
 
 # ---------------------------------------------------------------------------
+# Graph construction  (engine/graph.py)
+# ---------------------------------------------------------------------------
+
+# Which evidential levels may carry stress.  schema_change_request.md §1 asks
+# that only edges a company named in its own filing propagate automatically:
+# "probable" is inference from a third party and must not be given the standing
+# of disclosure.  The mock network is entirely "confirmed", so this is a no-op
+# there and only bites when the real dataset lands.
+PROPAGATING_EDGE_CONFIDENCE = frozenset({"confirmed"})
+
+MAX_EXPOSURE_SUM_TOLERANCE = 1.02  # a supplier's outgoing exposure may exceed 1.0 only by rounding
+
+# ---------------------------------------------------------------------------
 # Stress detection  (engine/stress.py)
 # ---------------------------------------------------------------------------
 
@@ -88,6 +101,12 @@ BAND_WATCH = 0.15     # 0.15 – 0.30 → "watch"
 # ---------------------------------------------------------------------------
 # Intervention  (engine/intervention.py)
 # ---------------------------------------------------------------------------
+
+# Below this many days of cash, a node's buffer is worth calling out in its
+# reason text.  Presentation only — it does not enter any score.  Chosen from
+# the collected tier-1 median of 12-15 days: a fortnight of cover against a
+# stretched payment cycle is the point where the buffer stops being a cushion.
+THIN_BUFFER_DAYS = 21
 
 DISRUPTION_MONTHS = 3  # assumed disruption window for exposure calculation — a stated assumption, not measured
 

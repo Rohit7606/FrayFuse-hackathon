@@ -5,8 +5,17 @@ Person B calls exactly one function: score_network().
 
 from __future__ import annotations
 
+import copy
 from collections.abc import Sequence
 from dataclasses import dataclass
+from typing import Any
+
+from engine import criticality as criticality_mod
+from engine import intervention as intervention_mod
+from engine import ranking as ranking_mod
+from engine import stress as stress_mod
+from engine.contagion import propagate
+from engine.graph import build_graph
 
 
 class UnknownNodeError(Exception):
@@ -53,6 +62,20 @@ class Scenario:
         )
 
 
+def _validate_scenario(scenario: Scenario, node_ids: set[str]) -> None:
+    """Reject a scenario naming a node the network does not contain.
+
+    Raised as UnknownNodeError so the API can map it to a 400 that names the
+    offending ID, rather than letting a typo surface as a 500.
+    """
+    for override in scenario.stress_overrides:
+        if override.node_id not in node_ids:
+            raise UnknownNodeError(override.node_id)
+    for funding in scenario.interventions:
+        if funding.node_id not in node_ids:
+            raise UnknownNodeError(funding.node_id)
+
+
 def score_network(
     network: dict,
     scenario: Scenario | None = None,
@@ -68,4 +91,107 @@ def score_network(
 
     Pure. Deterministic. No I/O, no globals, no mutation of the input.
     """
-    raise NotImplementedError("Pipeline not yet implemented — Phase 1 work")
+    scenario = scenario or Scenario()
+    network = copy.deepcopy(network)
+
+    node_ids = {node["node_id"] for node in network["nodes"]}
+    _validate_scenario(scenario, node_ids)
+
+    graph = build_graph(network)
+
+    stress_detail = stress_mod.compute_own_stress(network)
+    own_stress = {node_id: detail.own_stress for node_id, detail in stress_detail.items()}
+    for override in sorted(scenario.stress_overrides, key=lambda o: o.node_id):
+        own_stress[override.node_id] = min(max(override.own_stress, 0.0), 1.0)
+
+    baseline = propagate(graph, own_stress)
+
+    funding = {
+        node_id: sum(
+            f.amount_cr for f in scenario.interventions if f.node_id == node_id
+        )
+        for node_id in sorted({f.node_id for f in scenario.interventions})
+    }
+    contagion = intervention_mod.apply_interventions(graph, own_stress, baseline, funding)
+
+    criticality = criticality_mod.compute_criticality(graph)
+    tier_of = {node["node_id"]: node["tier"] for node in network["nodes"]}
+
+    costs: dict[str, Any] = {}
+    exposures: dict[str, Any] = {}
+    for node_id in sorted(graph.nodes):
+        costs[node_id] = intervention_mod.intervention_cost(
+            graph, node_id, contagion.fragility[node_id]
+        )
+        exposures[node_id] = intervention_mod.estimated_exposure(
+            graph,
+            node_id,
+            tier_of,
+            contagion.fragility[node_id] * criticality[node_id].criticality,
+        )
+
+    scores = ranking_mod.build_scores(
+        graph, network, stress_detail, contagion, criticality, costs, exposures
+    )
+
+    return {
+        "meta": network["meta"],
+        "nodes": network["nodes"],
+        "edges": network["edges"],
+        "scores": scores,
+        "ranking": ranking_mod.ranking_of(scores),
+        "summary": ranking_mod.build_summary(scores, contagion),
+    }
+
+
+def main() -> None:
+    """Score a network file and print the ranked list.
+
+    Usage: python -m engine.pipeline data/mock/network.json
+    """
+    import argparse
+    import json
+    from pathlib import Path
+
+    parser = argparse.ArgumentParser(description="Score a FrayFuse network.")
+    parser.add_argument("network", type=Path, help="path to a NetworkInput json file")
+    parser.add_argument("--json", action="store_true", help="print the full ScoredNetwork")
+    args = parser.parse_args()
+
+    network = json.loads(args.network.read_text(encoding="utf-8"))
+    result = score_network(network)
+
+    if args.json:
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+        return
+
+    names = {n["node_id"]: n["name"] for n in result["nodes"]}
+    by_id = {s["node_id"]: s for s in result["scores"]}
+    summary = result["summary"]
+
+    print(
+        f"{summary['total_nodes']} nodes, "
+        f"{summary['at_risk_count']} at risk, "
+        f"converged in {summary['iterations_to_converge']} iterations"
+    )
+    print(f"bands: {summary['band_counts']}")
+    print(
+        f"intervention ₹{summary['total_intervention_cost_cr']} cr "
+        f"vs exposure ₹{summary['total_estimated_exposure_cr']} cr\n"
+    )
+    for node_id in result["ranking"]:
+        score = by_id[node_id]
+        print(
+            f"{score['rank']:>3}. {node_id} {names[node_id]}  "
+            f"[{score['risk_band']}] score {score['final_score']:.4f} "
+            f"= fragility {score['fragility']:.4f} x criticality {score['criticality']:.4f}"
+        )
+        print(f"     {score['reason_text']}")
+        print(
+            f"     stabilise ₹{score['intervention_cost_cr']} cr | "
+            f"exposure ₹{score['estimated_exposure_cr']} cr | depth {score['propagation_depth']}"
+        )
+
+
+if __name__ == "__main__":
+    main()
