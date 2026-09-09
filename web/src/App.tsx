@@ -15,6 +15,7 @@ function App() {
   
   type SimState = 'idle' | 'cascading' | 'cascaded' | 'intervened';
   const [simulationState, setSimulationState] = useState<SimState>('idle');
+  const [currentWave, setCurrentWave] = useState(0);
 
   useEffect(() => {
     async function loadData() {
@@ -36,11 +37,23 @@ function App() {
 
   const handleRunCascade = async () => {
     setSimulationState('cascading');
-    // In a real app we'd fetch apiClient.simulate(scenario) here
-    // For demo, we just wait a bit to simulate the animation, then switch to 'cascaded'
-    setTimeout(() => {
-      setSimulationState('cascaded');
-    }, 2500);
+    setCurrentWave(0);
+    
+    // Find the max propagation depth from the scores
+    const maxDepth = atRiskData?.scores?.reduce((max: number, score: any) => {
+      return Math.max(max, score.propagation_depth || 0);
+    }, 0) || 0;
+
+    let wave = 0;
+    const interval = setInterval(() => {
+      if (wave >= maxDepth) {
+        clearInterval(interval);
+        setSimulationState('cascaded');
+      } else {
+        wave += 1;
+        setCurrentWave(wave);
+      }
+    }, 1500); // 1500ms per wave for dramatic effect
   };
 
   const handleIntervene = async () => {
@@ -64,6 +77,7 @@ function App() {
   const handleReset = () => {
     setSimulationState('idle');
     setInterveneData(null);
+    setCurrentWave(0);
   };
 
   const stats = useMemo(() => {
@@ -163,7 +177,7 @@ function App() {
           {loading ? (
             <div style={{ padding: '5rem', color: 'var(--text-secondary)' }}>Initializing FrayFuse Engine...</div>
           ) : (
-            <NetworkGraph data={graphData} simulationState={simulationState} />
+            <NetworkGraph data={graphData} simulationState={simulationState} currentWave={currentWave} />
           )}
           
           {simulationState === 'cascading' && (
@@ -196,7 +210,12 @@ function App() {
             {loading ? (
               <div style={{ color: 'var(--text-secondary)' }}>Loading...</div>
             ) : (
-              <RankedList scores={simulationState === 'intervened' ? interveneData?.after?.scores : atRiskData?.scores} />
+              <RankedList 
+                scores={simulationState === 'intervened' ? interveneData?.after?.scores : atRiskData?.scores} 
+                nodes={networkData?.nodes} 
+                simulationState={simulationState}
+                currentWave={currentWave}
+              />
             )}
           </div>
 
