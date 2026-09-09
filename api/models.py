@@ -99,7 +99,7 @@ class StressSignal(BaseModel):
     msmed_interest_due_unpaid_cr: float | None = None
     msmed_interest_due_on_payments_beyond_appointed_day_cr: float | None = None
     undrawn_credit_facilities_cr: float | None = None
-    undrawn_type: str | None = None
+    undrawn_type: Literal["revolving_working_capital", "project_tied", "undisbursed_instrument"] | None = None
     msme_book_material: bool | None = None
     series_break: str | None = None
     liquidity_quality: str | None = None
