@@ -14,12 +14,13 @@ import json
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from api.adapters import compute_delta, to_engine_scenario
+from api import errors, scoring
+from api.adapters import compute_delta
 from api.config import CORS_ORIGINS, NETWORK_PATH
 from api.models import (
     AtRiskResponse,
@@ -30,7 +31,7 @@ from api.models import (
     ScoredNetwork,
     SimulateRequest,
 )
-from engine.pipeline import UnknownNodeError, score_network
+from engine.pipeline import UnknownNodeError
 
 logger = logging.getLogger("frayfuse")
 
@@ -86,22 +87,6 @@ def load_network() -> dict:
     return _network_cache
 
 
-_baseline_cache: dict | None = None
-
-
-def baseline_result() -> dict:
-    """The unscenario'd ScoredNetwork, computed once.
-
-    This is a cache of a pure function of the network file, which AGENTS.md
-    §3.4 permits: it never changes for a given dataset and holds no per-client
-    state. Every scenario-bearing request is scored fresh.
-    """
-    global _baseline_cache
-    if _baseline_cache is None:
-        _baseline_cache = score_network(load_network())
-    return _baseline_cache
-
-
 
 
 # ---------------------------------------------------------------------------
@@ -111,14 +96,7 @@ def baseline_result() -> dict:
 @app.exception_handler(UnknownNodeError)
 async def unknown_node_handler(request: Request, exc: UnknownNodeError) -> JSONResponse:
     """Map engine UnknownNodeError to a 400 with the offending node_id named."""
-    return JSONResponse(
-        status_code=400,
-        content={
-            "error": "unknown_node",
-            "detail": f"{exc.node_id} not in network",
-            "node_id": exc.node_id,
-        },
-    )
+    return errors.unknown_node(exc.node_id)
 
 
 @app.exception_handler(Exception)
@@ -128,24 +106,7 @@ async def catch_all_handler(request: Request, exc: Exception) -> JSONResponse:
     if isinstance(exc, RequestValidationError):
         raise exc
     logger.exception("Unhandled exception: %s", exc)
-    return JSONResponse(
-        status_code=500,
-        content={
-            "error": "engine_failure",
-            "detail": str(exc),
-        },
-    )
-
-
-def validate_node_ids(scenario: Scenario, net: dict) -> None:
-    """Raise UnknownNodeError if any referenced node_id isn't in the network."""
-    known_ids = {n["node_id"] for n in net["nodes"]}
-    for override in scenario.stress_overrides:
-        if override.node_id not in known_ids:
-            raise UnknownNodeError(override.node_id)
-    for intervention in scenario.interventions:
-        if intervention.node_id not in known_ids:
-            raise UnknownNodeError(intervention.node_id)
+    return errors.engine_failure(str(exc))
 
 
 # ---------------------------------------------------------------------------
@@ -167,13 +128,17 @@ def get_network():
 
 
 @app.get("/api/at-risk", response_model=AtRiskResponse)
-def get_at_risk(limit: int = 10):
+def get_at_risk(limit: int = Query(default=10, ge=1, le=1000)):
     """Baseline scoring, ranked list only. The default view.
 
     Returns `scores` for the ranked nodes only, not all 412 — the UI renders a
     list of four and does not need four hundred score objects to do it.
+
+    `limit` is bounded below at 1 because it indexes a slice: a negative limit
+    read as `ranking[:-5]` silently returned the list minus its last five
+    entries with a 200, which is a wrong answer rather than an error.
     """
-    result = baseline_result()
+    result = scoring.baseline(load_network())
     ranking = result["ranking"][:limit]
     wanted = set(ranking)
     scores = [s for s in result["scores"] if s["node_id"] in wanted]
@@ -189,9 +154,7 @@ def get_at_risk(limit: int = 10):
 @app.post("/api/simulate", response_model=ScoredNetwork)
 def simulate(req: SimulateRequest):
     """Score the network under a scenario. Drives the what-if controls."""
-    net = load_network()
-    validate_node_ids(req.scenario, net)
-    return ScoredNetwork.model_validate(score_network(net, to_engine_scenario(req.scenario)))
+    return ScoredNetwork.model_validate(scoring.simulate(load_network(), req.scenario))
 
 
 @app.post("/api/intervene", response_model=InterveneResponse)
@@ -201,19 +164,11 @@ def intervene(req: InterveneRequest):
     Two scoring calls per request is correct and deliberate — the comparison is
     the product. Do not optimise it into one.
     """
-    net = load_network()
-
-    baseline = req.baseline_scenario or Scenario()
-    validate_node_ids(baseline, net)
-    validate_node_ids(Scenario(interventions=req.interventions), net)
-
-    engine_baseline = to_engine_scenario(baseline)
-    engine_after = engine_baseline.with_interventions(
-        to_engine_scenario(Scenario(interventions=req.interventions)).interventions
+    before_raw, after_raw = scoring.intervene(
+        load_network(), req.baseline_scenario or Scenario(), req.interventions
     )
-
-    before = ScoredNetwork.model_validate(score_network(net, engine_baseline))
-    after = ScoredNetwork.model_validate(score_network(net, engine_after))
+    before = ScoredNetwork.model_validate(before_raw)
+    after = ScoredNetwork.model_validate(after_raw)
 
     return InterveneResponse(
         before=before,

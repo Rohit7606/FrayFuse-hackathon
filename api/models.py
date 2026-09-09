@@ -202,14 +202,20 @@ class StressOverride(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     node_id: NodeId
-    own_stress: float
+    # Bounded, so an out-of-range value is a readable 422 rather than being
+    # silently clamped by the engine into something the caller did not ask for.
+    own_stress: Annotated[float, Field(ge=0.0, le=1.0)]
 
 
 class Intervention(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     node_id: NodeId
-    amount_cr: float
+    # Funding cannot be negative. Unbounded, this reached compute_delta and
+    # failed Delta's own ge=0 constraint at *response* construction, which the
+    # catch-all turned into a 500 — SCHEMA.md §5.6 forbids a 500 for a bad
+    # request. Constrained here, it is a 422 naming the field.
+    amount_cr: Annotated[float, Field(ge=0.0)]
 
 
 class Scenario(BaseModel):
