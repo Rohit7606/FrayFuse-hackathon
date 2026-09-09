@@ -3,16 +3,16 @@
  *
  * "What happens if the tier-1's payment stress gets worse?" is the question
  * this exists to answer, and it answers it by asking the engine — every stop
- * on this slider is a real `/api/simulate` result, not an interpolation
- * between two endpoints drawn on this side of the wire.
+ * on this slider is a real `/api/simulate` result, not an interpolation drawn
+ * between two endpoints on this side of the wire.
  *
  * It is a native range input on purpose: keyboard, screen reader and touch all
  * work without a line of code, which a div with a drag handler never manages.
  */
 
-import { cr, num, pct, shortName } from '../lib/format';
 import { STRESS_LEVELS } from '../api';
 import { bandStyle } from '../lib/bands';
+import { cr, num, pct, shortName } from '../lib/format';
 import type { RiskBand, Summary } from '../types';
 
 interface Props {
@@ -27,11 +27,11 @@ interface Props {
   onChange: (index: number) => void;
 }
 
-/** Only the ends and the baseline get a printed tick — the rest are noise. */
+/** Only the ends and the filed baseline get a printed tick; the rest are noise. */
 function tickLabel(level: number, index: number, baselineIndex: number): string | null {
   if (index === 0) return '0%';
   if (index === STRESS_LEVELS.length - 1) return '100%';
-  if (index === baselineIndex) return `${Math.round(level * 100)}% filed`;
+  if (index === baselineIndex) return `${Math.round(level * 100)}% as filed`;
   return null;
 }
 
@@ -89,26 +89,22 @@ export default function WhatIfBar({
         </div>
       </div>
 
-      <div className="ff-whatif-out">
-        <div className="ff-out">
-          <span className="ff-label">{watchedName}</span>
-          <span className="ff-out-value">
+      <div className="ff-readouts">
+        <div className="ff-readout">
+          <span className="ff-readout-label">{shortName(watchedName)}</span>
+          <span className="ff-readout-value">
             <span className="ff-chip" style={bandStyle(watchedBand)}>
               {watchedBand ?? '—'}
             </span>
           </span>
         </div>
-        <div className="ff-out">
-          <span className="ff-label">At risk</span>
-          <span className="ff-out-value">{num(summary?.at_risk_count ?? 0)}</span>
+        <div className="ff-readout">
+          <span className="ff-readout-label">Suppliers at risk</span>
+          <span className="ff-readout-value">{num(summary?.at_risk_count ?? 0)}</span>
         </div>
-        <div className="ff-out">
-          <span className="ff-label">Anchor inflow at risk</span>
-          <span className="ff-out-value">{anchorInflow === null ? '—' : cr(anchorInflow, 0)}</span>
-        </div>
-        <div className="ff-out">
-          <span className="ff-label">Deepest hop</span>
-          <span className="ff-out-value">{summary?.max_propagation_depth ?? 0}</span>
+        <div className="ff-readout">
+          <span className="ff-readout-label">Anchor inflow at risk</span>
+          <span className="ff-readout-value">{anchorInflow === null ? '—' : cr(anchorInflow, 0)}</span>
         </div>
       </div>
 

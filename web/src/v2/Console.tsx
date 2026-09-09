@@ -18,10 +18,10 @@
  * is the engine's own `propagation_depth`, revealed in order.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import './console.css';
 import { STRESS_LEVELS, api, type StressStep } from './api';
-import { CHROME } from './lib/bands';
+import { PAPER } from './lib/bands';
 import { anchorAtRisk, buildIndex, buildWaves, dependencyPath, scoresById } from './lib/derive';
 import { cr, num, pct } from './lib/format';
 import EvidenceSheet from './components/EvidenceSheet';
@@ -44,13 +44,15 @@ const STEP_INDEX = new Map(STEPS.map((step, index) => [step.id, index]));
 function BrandMark() {
   return (
     <svg className="ff-brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      {/* One anchor, two tiers, a frayed strand. The logo is the product. */}
-      <circle cx="12" cy="4" r="2.4" fill={CHROME.limeDeep} />
-      <circle cx="5" cy="13" r="1.8" fill={CHROME.ink} opacity="0.55" />
-      <circle cx="19" cy="13" r="1.8" fill={CHROME.ink} opacity="0.55" />
-      <circle cx="12" cy="21" r="2.2" fill="#D9315C" />
-      <path d="M12 6.4 5 11.2M12 6.4l7 4.8" stroke={CHROME.ink} strokeWidth="1" opacity="0.35" />
-      <path d="M5 14.8 12 18.8M19 14.8 12 18.8" stroke="#D9315C" strokeWidth="1.2" opacity="0.75" />
+      {/* An anchor at the top, two tiers below it, and one strand that has
+          parted. The mark is the argument. */}
+      <circle cx="12" cy="4" r="2.3" fill={PAPER.forest} />
+      <circle cx="5" cy="13" r="1.7" fill={PAPER.ink} opacity="0.4" />
+      <circle cx="19" cy="13" r="1.7" fill={PAPER.ink} opacity="0.4" />
+      <circle cx="12" cy="21" r="2.1" fill="#8E1230" />
+      <path d="M12 6.3 5 11.3M12 6.3l7 5" stroke={PAPER.ink} strokeWidth="1" opacity="0.28" />
+      <path d="M5 14.7 12 18.9" stroke="#8E1230" strokeWidth="1.3" />
+      <path d="M19 14.7 16 16.5" stroke="#8E1230" strokeWidth="1.3" opacity="0.5" />
     </svg>
   );
 }
@@ -77,9 +79,18 @@ export default function Console() {
   const [intervention, setIntervention] = useState<InterveneResponse | null>(null);
   const [counterfactual, setCounterfactual] = useState(false);
 
-  const reducedMotion = useRef(false);
+  // Read synchronously on the first render, then kept in state, because the
+  // wave offsets are computed during render and a ref set in an effect arrives
+  // one render too late: the person who asked for less motion would get all of
+  // it, once, and no recompute.
+  const [reducedMotion, setReducedMotion] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
   useEffect(() => {
-    reducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const onChange = () => setReducedMotion(query.matches);
+    query.addEventListener('change', onChange);
+    return () => query.removeEventListener('change', onChange);
   }, []);
 
   // ---- Load ---------------------------------------------------------------
@@ -150,7 +161,7 @@ export default function Console() {
 
   const scores = useMemo(() => scoresById(scored?.scores ?? []), [scored]);
   const summary = scored?.summary ?? null;
-  const ranking = scored?.ranking ?? [];
+  const ranking = useMemo(() => scored?.ranking ?? [], [scored]);
 
   const waves = useMemo(
     () => (scored && summary ? buildWaves(scored.scores, summary) : []),
@@ -162,11 +173,11 @@ export default function Console() {
     if (waves.length === 0) return null;
     const map = new Map<string, number>();
     for (const wave of waves) {
-      const offset = reducedMotion.current ? 0 : wave.depth * WAVE_MS;
+      const offset = reducedMotion ? 0 : wave.depth * WAVE_MS;
       for (const nodeId of wave.nodeIds) map.set(nodeId, offset);
     }
     return map;
-  }, [waves]);
+  }, [waves, reducedMotion]);
 
   const path = useMemo(() => {
     if (!index || !selectedId) return null;
@@ -190,16 +201,15 @@ export default function Console() {
 
   const runCascade = useCallback(() => {
     setCascadeAt(performance.now());
-    setWaveIndex(0);
-  }, []);
+    // Reduced motion jumps straight to the settled state: the waves still
+    // happened and the readout still names the last one, there is just nothing
+    // travelling across the screen to watch.
+    setWaveIndex(reducedMotion ? Math.max(waves.length - 1, 0) : 0);
+  }, [reducedMotion, waves.length]);
 
   useEffect(() => {
     if (cascadeAt === null || waveIndex < 0) return;
     if (waveIndex >= waves.length - 1) return;
-    if (reducedMotion.current) {
-      setWaveIndex(waves.length - 1);
-      return;
-    }
     const timer = window.setTimeout(() => setWaveIndex((current) => current + 1), WAVE_MS);
     return () => window.clearTimeout(timer);
   }, [cascadeAt, waveIndex, waves.length]);
@@ -474,7 +484,9 @@ export default function Console() {
           onClick={() => (primary.to ? goTo(primary.to) : restart())}
           disabled={scoring && step === 'act'}
         >
-          <span className="ff-primary-step">{primary.code}</span>
+          <span className="ff-primary-disc" aria-hidden="true">
+            {primary.code}
+          </span>
           {primary.label}
         </button>
 
@@ -512,6 +524,7 @@ export default function Console() {
               pathEdgeIds={pathEdgeIds}
               selectedId={selectedId}
               triggerNode={triggerNode}
+              bottomInset={(showWhatIf ? 112 : 0) + (step === 'cascade' || step === 'path' ? 76 : 0)}
               onSelect={setSelectedId}
             />
           ) : (
@@ -556,7 +569,8 @@ export default function Console() {
                     return (
                       <span key={nodeId} style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
                         <span className="ff-path-node">
-                          {nodeId} <em>{node?.name ?? ''}</em>
+                          <span className="ff-path-id">{nodeId}</span>
+                          <span className="ff-path-name">{node?.name ?? ''}</span>
                         </span>
                         {hop && (
                           <span

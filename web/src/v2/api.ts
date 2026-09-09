@@ -55,7 +55,10 @@ async function post<T>(path: string, body: unknown): Promise<T> {
     // which field the frontend got wrong.
     let detail = response.statusText;
     try {
-      const payload = await response.json();
+      const payload = (await response.json()) as {
+        error?: { message?: string };
+        detail?: string;
+      };
       detail = payload?.error?.message ?? payload?.detail ?? detail;
     } catch {
       /* non-JSON error body; the status text is all there is */
