@@ -71,6 +71,7 @@ app.add_middleware(
 
 import time
 
+
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     start_time = time.time()
@@ -177,6 +178,7 @@ def get_network():
 
 
 from fastapi import Query
+
 
 @app.get("/api/at-risk", response_model=AtRiskResponse)
 def get_at_risk(limit: int = Query(10, gt=0)):
