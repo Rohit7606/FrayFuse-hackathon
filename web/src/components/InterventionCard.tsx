@@ -20,8 +20,8 @@ export default function InterventionCard({ delta, onCounterfactual }: Interventi
         <div className="intervention-header">
           <div className="intervention-icon pay">₹</div>
           <div>
-            <div className="intervention-title">Early Payment to {targetNode}</div>
-            <div className="intervention-desc">Release payment through Tier-1 channel</div>
+            <div className="intervention-title">Intervene: {targetNode}</div>
+            <div className="intervention-desc">Stabilise supplier with early payment (₹{delta.total_intervention_cost_cr.toFixed(1)} Cr)</div>
           </div>
         </div>
         <div className="intervention-comparison">

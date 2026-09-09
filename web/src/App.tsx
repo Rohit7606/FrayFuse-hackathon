@@ -100,26 +100,23 @@ function App() {
         <div className="nav-brand">
           <div className="nav-logo">
             <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="14" cy="14" r="12" stroke="#60a5fa" strokeWidth="1.5" opacity="0.3"/>
-              <circle cx="14" cy="14" r="7" stroke="#60a5fa" strokeWidth="1.5" opacity="0.6"/>
-              <circle cx="14" cy="14" r="3" fill="#60a5fa"/>
-              <line x1="14" y1="2" x2="14" y2="7" stroke="#60a5fa" strokeWidth="1" opacity="0.4"/>
-              <line x1="14" y1="21" x2="14" y2="26" stroke="#60a5fa" strokeWidth="1" opacity="0.4"/>
-              <line x1="2" y1="14" x2="7" y2="14" stroke="#60a5fa" strokeWidth="1" opacity="0.4"/>
-              <line x1="21" y1="14" x2="26" y2="14" stroke="#60a5fa" strokeWidth="1" opacity="0.4"/>
+              {/* Network graph icon — nodes connected by edges */}
+              <circle cx="14" cy="6" r="3" fill="#f87171" opacity="0.9"/>
+              <circle cx="6" cy="18" r="2.5" fill="#fbbf24" opacity="0.8"/>
+              <circle cx="22" cy="18" r="2.5" fill="#fbbf24" opacity="0.8"/>
+              <circle cx="14" cy="24" r="2" fill="#34d399" opacity="0.7"/>
+              <line x1="14" y1="9" x2="6" y2="15.5" stroke="#60a5fa" strokeWidth="1.2" opacity="0.5"/>
+              <line x1="14" y1="9" x2="22" y2="15.5" stroke="#60a5fa" strokeWidth="1.2" opacity="0.5"/>
+              <line x1="6" y1="20.5" x2="14" y2="22" stroke="#60a5fa" strokeWidth="1" opacity="0.3"/>
+              <line x1="22" y1="20.5" x2="14" y2="22" stroke="#60a5fa" strokeWidth="1" opacity="0.3"/>
             </svg>
           </div>
-          <div className="nav-brand-name">Chain<span>Watch</span></div>
-        </div>
-        <div className="nav-links">
-          <button className="nav-link active">Network</button>
-          <button className="nav-link">Signals</button>
-          <button className="nav-link">History</button>
+          <div className="nav-brand-name">Fray<span>Fuse</span></div>
         </div>
         <div className="nav-stakeholder-switcher">
-          <button className="stakeholder-btn active">Anchor Treasury</button>
+          <button className="stakeholder-btn active">Anchor</button>
           <button className="stakeholder-btn">Bank / NBFC</button>
-          <button className="stakeholder-btn">MSME Supplier</button>
+          <button className="stakeholder-btn">Supplier</button>
         </div>
       </nav>
 
@@ -157,9 +154,9 @@ function App() {
           <div className="panel-section">
             <div className="panel-section-title">Stakeholder View</div>
             <div className="stakeholder-context">
-              <div className="stakeholder-context-title">Anchor Treasury</div>
+              <div className="stakeholder-context-title">Anchor View</div>
               <div className="stakeholder-context-desc">
-                You see your Tier-1 vendors and a payment calendar. Everything below Tier-1 is invisible to you today.
+                Full network, ranked list, intervention controls, and total exposure across all tiers.
               </div>
             </div>
           </div>

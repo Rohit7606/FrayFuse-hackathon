@@ -10,7 +10,7 @@ export default function HeaderBar({ stats, simulationState, onRunCascade, onInte
   return (
     <div className="header-bar">
       <div className="header-left">
-        <div className="header-title">Auto Manufacturing Supply Chain</div>
+        <div className="header-title">Supply Chain Stress Monitor</div>
         <div className="header-stats">
           <div className="header-stat">
             <div className="dot dot-green"></div>
