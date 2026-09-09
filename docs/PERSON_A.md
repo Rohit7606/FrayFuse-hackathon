@@ -192,6 +192,32 @@ G = networkx.DiGraph()
 - Validate that outgoing `exposure_pct` per supplier sums to ≤ 1.02
 - **Sort node and edge lists by ID before adding.** NetworkX preserves insertion order, and betweenness can differ on ties otherwise
 
+**Repeated supplier→buyer pairs — handle this explicitly.** `DiGraph.add_edge` on a pair that already
+exists **overwrites its attributes silently**. The collected dataset has multiple rows per pair,
+because a relationship is recorded once per financial year, and the naive loop loses data on both of
+them:
+
+- `SHIVAM → HERO` has three rows. Only one carries `annual_value_cr` (₹181.59 cr). Add them in row
+  order and the last row wins, discarding the only rupee figure on the most important edge in the set.
+- `LOKESH → MAHINDRA` has two rows, and the later one is `relationship_terminated` — the OFAC
+  sanctions edge deletion. Collapse them carelessly and you either lose the termination or silently
+  keep an edge that no longer exists.
+
+Required behaviour: **group rows by `(supplier_id, buyer_id)` first, then reduce each group to one
+edge deterministically.** Take the most recent `fy`; prefer `confirmed` over `probable` over
+`concentration_only`; and carry forward the best non-null value of each attribute across the group
+rather than taking them all from the winning row. A pair whose most recent row is
+`relationship_terminated` must not be added to the graph at all — record it in the summary so the UI
+can show that the edge existed and ended.
+
+**Related-party edges need their own caveat.** Every named supplier edge in the collected data comes
+from a related-party note under Ind AS 24 — meaning all of them are promoter-affiliated or group
+entities, because those are the only counterparties a filer is *compelled* to name. This is a real
+dependency and belongs in the graph, but it is not an arm's-length supply relationship: a group
+supplier's failure dynamics are entangled with the parent's, and the same promoter may support both.
+Do not present a related-party edge as evidence of an independent supply chain. `edge_provenance`
+(see `data/real/schema_change_request.md`) exists to carry this distinction into the UI.
+
 ### 3.3 Contagion — `engine/contagion.py`
 
 The core of the product.
