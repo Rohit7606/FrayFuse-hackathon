@@ -40,7 +40,7 @@ export default function NetworkGraph({ data, simulationState = 'idle' }: Network
     if (!data || !data.nodes || !data.edges) return { nodes: [], links: [] };
     return {
       nodes: data.nodes.map((n: any) => ({ ...n, id: n.node_id })),
-      links: data.edges.map((e: any) => ({ ...e, source: e.source_id, target: e.target_id }))
+      links: data.edges.map((e: any) => ({ ...e, source: e.supplier_id, target: e.buyer_id }))
     };
   }, [data]);
 
@@ -97,8 +97,8 @@ export default function NetworkGraph({ data, simulationState = 'idle' }: Network
         onNodeDragEnd={(node: any) => {
           if (containerRef.current) containerRef.current.style.cursor = 'grab';
           // Release node to allow force simulation to take over again
-          node.fx = undefined;
-          node.fy = undefined;
+          delete node.fx;
+          delete node.fy;
         }}
         linkColor={(link: any) => {
           try {
