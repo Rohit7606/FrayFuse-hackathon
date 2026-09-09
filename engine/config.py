@@ -195,3 +195,36 @@ MOCK_TIER1_FANOUT = (20, 42)  # suppliers per tier-1 buyer — real Tier-1s have
 MOCK_TIER2_FANOUT = (1, 4)    # tier-3 suppliers per tier-2 buyer
 MOCK_TIER0_FANOUT = (1, 2)    # anchors each tier-1 supplies
 MOCK_MAX_EXPOSURE_SUM = 1.0   # a supplier's outgoing exposure_pct may not exceed its whole revenue
+
+
+# ---------------------------------------------------------------------------
+# Synthetic deep tier for the real dataset  (engine/mockgen.py, called by
+# engine/transform.py)
+# ---------------------------------------------------------------------------
+
+# The collected cohort is 43 nodes that bottom out at 3-node chains, so nothing
+# propagates: the real network scores 0 at-risk and converges in 1 iteration.
+# SCHEMA.md §7.1 step 5 always intended a generated tier-2/tier-3 layer beneath
+# the real tier-0/1 companies; this is that layer's shape.
+DEEP_TIER_SEED = 42  # fixed, so the same CSVs always produce a byte-identical network.json
+
+# Synthetic tier-2 suppliers per real tier-1 buyer, and tier-3 per tier-2.
+# Lower than MOCK_TIER1_FANOUT (20-42) because the real cohort has 11 tier-1
+# companies rather than 28, and a 400-node layer under a 43-node real graph
+# would make the synthetic tail visibly the whole product.
+# Sized against the pool rather than guessed.  9 of the 11 real tier-1 companies
+# are auto ancillaries, as are all 14 real tier-2s, so essentially the whole
+# demand lands on the pool's auto_components bucket (264 of 358 names).  At an
+# average fanout of 9 the generated auto layer needs ~190 of those 264, which
+# leaves headroom for the draw to vary.  Raise this and the pool runs dry —
+# synthesise_deep_tier raises rather than reusing a name.
+DEEP_TIER1_FANOUT = (6, 12)   # tier-2 suppliers each real tier-1 buys from
+DEEP_TIER2_FANOUT = (1, 3)    # tier-3 suppliers each tier-2 buys from
+
+# Sole-source edges are placed ONLY where the BUYER is synthetic.  An edge
+# saying "this supplier is the sole source for <real company>" is a fabricated
+# claim about a real company's sourcing arrangements, which DATA_DICTIONARY.md
+# §3b forbids outright.  Confining chokepoints to synthetic buyers keeps the
+# claim inside the generated layer, and costs the demo nothing: the product's
+# thesis is that the irreplaceable supplier sits deep in the chain anyway.
+DEEP_TIER_CHOKEPOINTS = 5  # genuine sole-source relationships in the generated layer

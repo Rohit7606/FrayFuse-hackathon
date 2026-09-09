@@ -85,8 +85,68 @@ def test_sole_source_is_never_inferred(real_network):
 
     Inferring `false` from the sparsity of our own edge collection would
     manufacture the product's headline finding out of our own ignorance.
+
+    Scoped to REAL edges since the synthetic deep tier landed. Generated edges
+    carry a generated flag on purpose — DATA_DICTIONARY.md §3b puts
+    `is_single_source` on synthetic edges in the "should be synthetic" list.
     """
-    assert all(e["is_single_source"] is None for e in real_network["edges"])
+    real_edges = [e for e in real_network["edges"] if e["data_source"] == "real"]
+    assert real_edges, "the collected set should contribute edges"
+    assert all(e["is_single_source"] is None for e in real_edges)
+
+
+def test_no_sole_source_claim_against_a_real_company(real_network):
+    """The generated layer must never call anybody real single-sourced.
+
+    DATA_DICTIONARY.md §3b: "any statement that a real company is a sole
+    source" is on the never-synthetic-under-any-circumstances list. An edge
+    flagged `is_single_source` whose BUYER is real asserts that real company
+    single-sources the part, which is a fabricated claim about its supply
+    chain. Chokepoints are therefore confined to synthetic buyers.
+    """
+    real_ids = {n["node_id"] for n in real_network["nodes"] if n["data_source"] == "real"}
+    offenders = [
+        e["edge_id"]
+        for e in real_network["edges"]
+        if e["is_single_source"] is True and e["buyer_id"] in real_ids
+    ]
+    assert offenders == [], f"sole-source claim against a real buyer: {offenders}"
+
+
+def test_no_synthetic_rupee_figure_beside_a_real_name(real_network):
+    """A real company's node carries only disclosed figures, or null.
+
+    §3b again: no rupee figure may sit next to a real company's name unless it
+    came from a filing. The synthetic layer must not have leaked a generated
+    revenue onto a real node.
+    """
+    for node in real_network["nodes"]:
+        if node["data_source"] != "real":
+            continue
+        for field in node.get("substituted", []):
+            assert node[field] is None, f"{node['node_id']}.{field} was invented"
+
+
+def test_synthetic_layer_gives_the_real_graph_depth(real_network):
+    """Without the generated tier-2/3 layer nothing propagates.
+
+    The collected graph bottoms out at three-node chains, which is why the real
+    network scored 0 at risk and converged in one iteration. This asserts the
+    layer is actually present and labelled, not that any particular node is at
+    risk — that is the scoring tests' job.
+    """
+    tiers = {}
+    for node in real_network["nodes"]:
+        tiers.setdefault(node["tier"], []).append(node)
+
+    assert tiers.get(3), "no tier-3 layer was generated"
+    assert len(tiers.get(2, [])) > 20, "tier-2 layer too thin to propagate"
+
+    for tier in (2, 3):
+        for node in tiers.get(tier, []):
+            if node["data_source"] == "synthetic":
+                assert node["is_observable"] is False
+                assert node["cin"] is None
 
 
 def test_unnamed_counterparty_rows_are_not_edges(real_network):
