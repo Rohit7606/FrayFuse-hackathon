@@ -14,6 +14,7 @@ import pytest
 
 from engine import config
 from engine.contagion import propagate
+from engine.criticality import compute_criticality
 from engine.graph import build_graph
 from engine.pipeline import (
     Intervention,
@@ -268,6 +269,32 @@ def test_demo_nodes_present(network, demo):
     assert expected <= node_ids
 
 
+def test_sole_source_outranks_equally_fragile_peer(network):
+    """N042 must outrank N203 on criticality — DEMO_SCENARIO.md §3.
+
+    Both are tier-2 and comparably stressed; only N042 is irreplaceable. This is
+    the contrast the whole ranking argument rests on ("fragility alone is not
+    enough — we rank by fragile x irreplaceable"), so it gets a test of its own
+    rather than riding on the fixture's exact band values.
+    """
+    by_id = {s["node_id"]: s for s in score_network(network)["scores"]}
+    assert by_id["N042"]["criticality"] > 2.0 * by_id["N203"]["criticality"]
+    assert by_id["N042"]["final_score"] > by_id["N203"]["final_score"]
+
+
+def test_deep_tier_criticality_is_not_crushed_by_the_hub(network):
+    """A deep-tier chokepoint must be able to out-score the tier-1 hub on criticality.
+
+    Betweenness and flow share are size-correlated, so normalising them across
+    the whole network makes criticality a proxy for revenue and buries exactly
+    the suppliers the product exists to find. Guards config.NORMALISE_CRITICALITY_WITHIN_TIER.
+    """
+    graph = build_graph(network)
+    criticality = compute_criticality(graph)
+    assert criticality["N042"].criticality > 0.4
+    assert criticality["N118"].criticality > criticality["N203"].criticality
+
+
 def test_demo_anchor_pays_on_time(network):
     """N001 is the anchor: DEMO_SCENARIO.md §2 says it pays on time.
 
@@ -280,17 +307,20 @@ def test_demo_anchor_pays_on_time(network):
 @pytest.mark.xfail(
     strict=True,
     reason=(
-        "The committed fixture is not reachable under the algorithm as specified in "
-        "PERSON_A.md §3. Two causes, both documented rather than silently tuned away: "
-        "(1) criticality normalises betweenness by the network maximum, so the tier-1 hub "
-        "takes bt_norm 1.0 and deep-tier chokepoints like N042 are crushed to 0.14, giving "
-        "criticality 0.41 against the fixture's 0.88; (2) with MAX_BUFFER_STRENGTH at 0.35 "
-        "and DAMPING at 0.75, a 0.75 trigger across a 0.7773 exposure edge caps N042's "
-        "fragility at 0.35 against the fixture's 0.63 — 0.58 even with no damping at all. "
-        "DEMO_SCENARIO.md is also internally inconsistent: its §3 table gives N203 a "
-        "final_score of ~0.14, which the §4.4 thresholds band as stable, while the fixture "
-        "asserts high. Resolving this needs a deliberate decision with both other team "
-        "members named on the PR (DEMO_SCENARIO.md §7, AGENTS.md §4.3)."
+        "The committed fixture's numbers are arithmetically unreachable, and the remaining "
+        "gap is fragility, not criticality. Tier-relative normalisation fixed the "
+        "criticality half: N042 now scores 0.475 against a comparably stressed "
+        "non-sole-source peer's 0.178, preserving the DEMO_SCENARIO.md §3 contrast. But "
+        "N042's fragility is bounded by its only stress path: N007's own_stress 0.75 x "
+        "exposure 0.7773 = 0.583 BEFORE any damping, against the fixture's 0.63. No "
+        "setting of DAMPING or MAX_BUFFER_STRENGTH reaches it, because both only subtract. "
+        "Raising it needs N007's own_stress above 0.81, which requires the migration rung "
+        "to fire — and N007's ageing table is deliberately clean, because that contrast IS "
+        "demo step 3. DEMO_SCENARIO.md is also internally inconsistent: its §3 table gives "
+        "N203 a final_score of ~0.14, which the §4.4 thresholds band as stable, while the "
+        "fixture asserts high. Resolving this means updating the fixture to the model's "
+        "actual output, which needs both other team members named on the PR "
+        "(DEMO_SCENARIO.md §7, AGENTS.md §4.3)."
     ),
 )
 def test_demo_scenario(network, demo):
