@@ -122,9 +122,19 @@ def health():
 
 @app.get("/api/network", response_model=NetworkResponse)
 def get_network():
-    """Raw network for initial render. No scoring."""
+    """Raw network for initial render. No scoring.
+
+    Carries `stress_signals` through verbatim so the UI can show the published
+    ageing and MSMED lines behind a stress score instead of restating them.
+    A network file without signals serves an empty list rather than failing.
+    """
     net = load_network()
-    return {"meta": net["meta"], "nodes": net["nodes"], "edges": net["edges"]}
+    return {
+        "meta": net["meta"],
+        "nodes": net["nodes"],
+        "edges": net["edges"],
+        "stress_signals": net.get("stress_signals", []),
+    }
 
 
 @app.get("/api/at-risk", response_model=AtRiskResponse)

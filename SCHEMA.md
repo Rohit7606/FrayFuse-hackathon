@@ -428,7 +428,14 @@ Both arrays default to empty. An empty scenario means "score the baseline."
 
 Returns the raw network for initial render. No scoring.
 
-**Response:** `{ "meta": {...}, "nodes": [...], "edges": [...] }`
+**Response:** `{ "meta": {...}, "nodes": [...], "edges": [...], "stress_signals": [...] }`
+
+`stress_signals` is **optional and additive in 1.2**, and carries the published
+ageing and MSMED rows verbatim — the same rows `engine/stress.py` reads. It is
+there so a client can show *where a stress score came from* rather than
+restating the figures: the year-end ageing snapshot beside the whole-year MSMED
+payment lines. A network file without signals serves `[]`, and no client may
+require the field to render.
 
 ### 5.3 `GET /api/at-risk?limit=10`
 
@@ -554,4 +561,5 @@ Five CSVs land in `data/real/`:
 |---|---|
 | 1.0 | Initial contract. Edge fields named `supplier_id`/`buyer_id` rather than `from`/`to`. MSMED flow figure designated primary signal. `has_not_due_column` added as a required comparability flag |
 | 1.1 | Carries the comparability flags the collection workstream measured: `ageing_basis`, `msme_book_material`, `series_break`, `liquidity_quality` on stress signals; `confidence`, `edge_provenance` and a nullable `is_single_source` on edges; `observation_completeness` on nodes. Risk-band thresholds recalibrated to the score distribution the engine actually produces (§4.4). Stressed origins excluded from `ranking` (§4.3). This entry also records the version bump that `schema.json` had already taken but which was never written up here — agreed with Person B and Person C |
+| 1.2 | **`stress_signals` on `GET /api/network`.** Optional, additive, pass-through — the endpoint already had the rows in memory and was dropping them. Required so the UI can display a filer's own disclosure beside the score derived from it; the alternative was hardcoding rupee figures in the frontend, which AGENTS.md §3.6 forbids. No engine, no scoring and no data file changes; an older client is unaffected because the field is optional. Needs Person B review |
 | 1.2 | **Supply-disruption layer.** Adds `halt_risk`, `supply_disruption`, `disruption_band`, `disrupted_inflow_cr` and `disruption_reason` to `Score`, and `anchor_disruption` plus `disruption_iterations_to_converge` to `Summary`. Purely additive and **output-only** — `NetworkInput` is untouched, so no data file's `meta.schema_version` moves and `mockgen`/`transform` are unchanged. `final_score`, `risk_band` and `ranking` are unchanged; nothing that was correct before returns a different number. Closes the `DEMO_SCENARIO.md` §6 counterfactual, which payment-stress propagation structurally could not reach. Needs Person B and Person C review |
