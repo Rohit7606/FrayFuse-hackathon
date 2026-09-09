@@ -7,6 +7,7 @@ from unittest.mock import patch
 import pytest
 from fastapi.testclient import TestClient
 
+from api import errors
 from api.main import app
 
 
@@ -114,3 +115,60 @@ def test_valid_limit_still_works(client):
     response = client.get("/api/at-risk?limit=4")
     assert response.status_code == 200
     assert len(response.json()["ranking"]) <= 4
+
+
+# ---------------------------------------------------------------------------
+# Error bodies must match schema.json ErrorResponse — SCHEMA.md §5.6
+# ---------------------------------------------------------------------------
+
+
+def _error_validator():
+    import json
+    from pathlib import Path
+
+    import jsonschema
+
+    schema = json.loads(
+        (Path(__file__).resolve().parents[2] / "schema.json").read_text(encoding="utf-8")
+    )
+    return jsonschema.Draft7Validator(
+        {
+            "$schema": schema["$schema"],
+            "definitions": schema["definitions"],
+            "$ref": "#/definitions/ErrorResponse",
+        }
+    )
+
+
+def test_unknown_node_body_matches_schema(client):
+    """The 400 body validates, and its code is in the closed enum."""
+    response = client.post(
+        "/api/simulate",
+        json={
+            "scenario": {
+                "stress_overrides": [{"node_id": "N999", "own_stress": 0.5}],
+                "interventions": [],
+            }
+        },
+    )
+    assert response.status_code == 400
+    body = response.json()
+    assert list(_error_validator().iter_errors(body)) == []
+    assert body["error"] == errors.UNKNOWN_NODE
+    assert body["node_id"] == "N999"
+
+
+def test_engine_failure_body_matches_schema():
+    """The 500 body validates too — the one legitimate 500."""
+    error_client = TestClient(app, raise_server_exceptions=False)
+
+    def _boom() -> dict:
+        raise RuntimeError("something broke unexpectedly")
+
+    with patch("api.main.load_network", side_effect=_boom):
+        response = error_client.get("/api/network")
+
+    assert response.status_code == 500
+    body = response.json()
+    assert list(_error_validator().iter_errors(body)) == []
+    assert body["error"] == errors.ENGINE_FAILURE
