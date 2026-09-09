@@ -923,3 +923,239 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+# ---------------------------------------------------------------------------
+# Synthetic deep tier for the real dataset — SCHEMA.md §7.1 step 5
+#
+# transform.py reads entity_pool.csv and calls synthesise_deep_tier() to hang a
+# generated tier-2/tier-3 layer beneath the real tier-0/1 companies.  It lives
+# here, not in transform.py, because AGENTS.md §3.1 permits `random` in this
+# module and nowhere else.  The seed is fixed in config, so the same CSVs always
+# produce a byte-identical network.json.
+#
+# Everything this function emits is `data_source: "synthetic"` at row level.
+# DATA_DICTIONARY.md §3b is explicit that tier-2 and tier-3 nodes, the edges
+# below tier-1, and `component` / `is_single_source` / `annual_value_cr` on
+# synthetic edges SHOULD be generated — and equally explicit that no rupee
+# figure may ever sit next to a real company's name, and that no real company
+# may be called a sole source.  Both rules are enforced below.
+# ---------------------------------------------------------------------------
+
+# product_category substrings -> sector, most specific first.  Ordered, because
+# "solar_junction_box" must not be caught by the generic metal-forming rules.
+# Anything unmatched is auto_components, which is both the pool's majority and
+# the real cohort's dominant sector.
+POOL_SECTOR_RULES: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("pharmaceuticals", (
+        "intermediate", "capsule", "ampoule", "blister", "vial", "excipient",
+        "stearate", "croscarmellose", "hydroxypropyl", "enteric", "gelatin",
+        "lidding", "tray_pack", "paracetamol", "ibuprofen",
+    )),
+    ("agrochemicals", (
+        "technical", "formulation", "herbicide", "insecticide", "fungicide",
+        "wettable", "granule", "coex_bottle", "agrochemical",
+    )),
+    ("sugar_and_ethanol", (
+        "sugar_", "bagasse", "distillery", "ethanol", "calandria", "molasses",
+        "centrifuge", "centrifugal_basket",
+    )),
+    ("cement_and_construction", (
+        "cement_", "concrete_", "aggregate", "ready_mix", "kiln", "raw_mill",
+        "admixture", "block_mould", "grinding_media",
+    )),
+    ("solar_ev", ("solar_", "battery_", "busbar", "ev_", "photovoltaic")),
+    ("tractor_and_farm_equipment", ("tractor_", "pto_", "harvester", "plough")),
+    ("power_tools", ("carbon_brush", "armature_winding")),
+)
+
+# Real buyer sector -> the pool sector its suppliers should come from.  An
+# unmapped sector falls back to auto_components: the collected cohort is mostly
+# auto ancillaries and their OEM customers.
+BUYER_SECTOR_TO_POOL: dict[str, str] = {
+    "pharmaceuticals": "pharmaceuticals",
+    "pharma_brand_owner": "pharmaceuticals",
+    "agrochemicals": "agrochemicals",
+    "sugar": "sugar_and_ethanol",
+    "cement_and_construction": "cement_and_construction",
+    "solar_epc_and_ev": "solar_ev",
+    "ev_fleet_operator": "solar_ev",
+    "tractor_oem": "tractor_and_farm_equipment",
+    "agricultural_equipment_oem": "tractor_and_farm_equipment",
+    "power_tools_oem": "power_tools",
+}
+
+
+def classify_pool_sector(product_category: str) -> str:
+    """Sector for one entity-pool row, from its product_category."""
+    lowered = product_category.lower()
+    for sector, needles in POOL_SECTOR_RULES:
+        if any(needle in lowered for needle in needles):
+            return sector
+    return "auto_components"
+
+
+def _pool_sector_for_buyer(buyer_sector: str) -> str:
+    return BUYER_SECTOR_TO_POOL.get(buyer_sector, "auto_components")
+
+
+def synthesise_deep_tier(
+    pool_rows: list[dict[str, str]],
+    real_nodes: list[dict[str, Any]],
+    seed: int = config.DEEP_TIER_SEED,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Generate a tier-2/tier-3 supplier layer beneath the real companies.
+
+    Args:
+        pool_rows:  entity_pool.csv rows — name, source, location, product_category
+        real_nodes: the nodes transform.py built from companies.csv
+        seed:       fixed in config, so the same CSVs give a byte-identical file
+
+    Returns (synthetic_nodes, synthetic_edges).  Edge ids are left unset; the
+    caller assigns them once the real and synthetic edges are merged, so the
+    numbering stays contiguous.
+
+    Raises RuntimeError if the pool cannot cover a sector the real graph needs,
+    rather than silently reusing a name or substituting a mismatched one.
+    """
+    rng = random.Random(seed)
+
+    by_sector: dict[str, list[dict[str, str]]] = {}
+    for row in sorted(pool_rows, key=lambda r: r["name"]):
+        by_sector.setdefault(classify_pool_sector(row["product_category"]), []).append(row)
+    for bucket in by_sector.values():
+        rng.shuffle(bucket)
+
+    taken_names = {node["name"] for node in real_nodes}
+    next_index = max(int(node["node_id"][1:]) for node in real_nodes) + 1
+
+    def draw(sector: str) -> dict[str, str]:
+        """Take one unused pool entry, preferring the asked-for sector.
+
+        Falls back to auto_components, then to whatever is left.  A slightly
+        off-sector supplier name is a cosmetic blemish; running dry and raising
+        mid-build is not, and reusing a name would put one company in the graph
+        twice.
+        """
+        order = [sector, "auto_components", *sorted(by_sector)]
+        for candidate_sector in order:
+            bucket = by_sector.get(candidate_sector, [])
+            while bucket:
+                row = bucket.pop()
+                if row["name"] not in taken_names:
+                    taken_names.add(row["name"])
+                    return row
+        raise RuntimeError(
+            f"entity_pool.csv exhausted for sector {sector!r} - add more rows "
+            f"or lower DEEP_TIER1_FANOUT/DEEP_TIER2_FANOUT in config.py"
+        )
+
+    nodes: list[dict[str, Any]] = []
+    edges: list[dict[str, Any]] = []
+
+    def make_node(row: dict[str, str], tier: int) -> dict[str, Any]:
+        nonlocal next_index
+        revenue = _draw_revenue(rng, tier)
+        low, high = BUFFER_RANGE_BY_TIER[tier]
+        node = {
+            "node_id": _node_id(next_index),
+            "name": row["name"],
+            "tier": tier,
+            "sector": classify_pool_sector(row["product_category"]),
+            "product_category": row["product_category"],
+            "revenue_cr": round(revenue, 2),
+            "cash_buffer_days": rng.randint(low, high),
+            "employees": max(4, int(revenue / REVENUE_PER_EMPLOYEE_CR)),
+            "is_observable": False,
+            # Row-level and never file-level, so the UI can always tell a
+            # generated firm from a real filer (DATA_DICTIONARY.md §3b).
+            "data_source": "synthetic",
+            "cin": None,
+            "substituted": [],
+        }
+        next_index += 1
+        nodes.append(node)
+        return node
+
+    # Remaining outgoing exposure per supplier.  exposure_pct is a fraction of
+    # the SUPPLIER's revenue, so a supplier's outgoing edges must not sum past
+    # 1.0 — graph.py raises if they do.
+    budget: dict[str, float] = {}
+
+    def connect(supplier: dict[str, Any], buyer: dict[str, Any]) -> None:
+        remaining = budget.get(supplier["node_id"], rng.uniform(*EXPOSURE_COVERAGE_RANGE))
+        if remaining <= 0.02:
+            return
+        exposure = round(min(remaining, rng.uniform(0.08, 0.62)), 4)
+        budget[supplier["node_id"]] = remaining - exposure
+        edges.append({
+            "supplier_id": supplier["node_id"],
+            "buyer_id": buyer["node_id"],
+            "component": supplier["product_category"],
+            "annual_value_cr": round(exposure * supplier["revenue_cr"], 2),
+            "exposure_pct": exposure,
+            # Set below, and only where the buyer is synthetic.
+            "is_single_source": False,
+            "confidence": "confirmed",
+            "edge_provenance": "synthetic",
+            "data_source": "synthetic",
+        })
+
+    real_by_tier: dict[int, list[dict[str, Any]]] = {}
+    for node in sorted(real_nodes, key=lambda n: n["node_id"]):
+        real_by_tier.setdefault(node["tier"], []).append(node)
+
+    # Tier 2 beneath every real tier-1.  Suppliers are shared across buyers in
+    # the same sector, which is what a real ancillary cluster looks like: one
+    # forging shop serves several tier-1s rather than exactly one.
+    tier2_by_sector: dict[str, list[dict[str, Any]]] = {}
+    for buyer in real_by_tier.get(1, []):
+        pool_sector = _pool_sector_for_buyer(buyer["sector"])
+        existing = tier2_by_sector.setdefault(pool_sector, [])
+        wanted = rng.randint(*config.DEEP_TIER1_FANOUT)
+
+        # Reuse part of an existing cluster before generating more.
+        reused = existing[:]
+        rng.shuffle(reused)
+        reused = reused[: wanted // 3]
+        for supplier in reused:
+            connect(supplier, buyer)
+
+        for _ in range(wanted - len(reused)):
+            supplier = make_node(draw(pool_sector), tier=2)
+            existing.append(supplier)
+            connect(supplier, buyer)
+
+    # Tier 3 beneath every tier-2, real ones included — a real tier-2 with no
+    # suppliers of its own is a leaf, and leaves cannot carry stress onward.
+    tier2_all = [n for n in nodes if n["tier"] == 2] + real_by_tier.get(2, [])
+    for buyer in sorted(tier2_all, key=lambda n: n["node_id"]):
+        pool_sector = _pool_sector_for_buyer(buyer["sector"])
+        for _ in range(rng.randint(*config.DEEP_TIER2_FANOUT)):
+            connect(make_node(draw(pool_sector), tier=3), buyer)
+
+    _place_deep_tier_chokepoints(rng, edges, {n["node_id"] for n in nodes})
+
+    edges.sort(key=lambda e: (e["supplier_id"], e["buyer_id"]))
+    return nodes, edges
+
+
+def _place_deep_tier_chokepoints(
+    rng: random.Random,
+    edges: list[dict[str, Any]],
+    synthetic_ids: set[str],
+) -> None:
+    """Flag a few genuine sole-source relationships inside the generated layer.
+
+    Only edges whose BUYER is synthetic are eligible.  Saying a real company
+    single-sources a part is a fabricated claim about that company's supply
+    chain, which DATA_DICTIONARY.md §3b puts in the "never synthetic under any
+    circumstances" list.  Criticality needs real chokepoints to find, and the
+    generated layer supplies them without making a claim about anybody real.
+    """
+    eligible = [
+        edge for edge in sorted(edges, key=lambda e: (e["supplier_id"], e["buyer_id"]))
+        if edge["buyer_id"] in synthetic_ids and edge["exposure_pct"] >= 0.25
+    ]
+    for edge in rng.sample(eligible, min(config.DEEP_TIER_CHOKEPOINTS, len(eligible))):
+        edge["is_single_source"] = True

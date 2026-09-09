@@ -541,7 +541,7 @@ Five CSVs land in `data/real/`:
 2. **Map IDs** — `company_id` → `node_id` in `N###` format, deterministically ordered
 3. **Assign tiers** — from `tier_role`, defaulting to `1` for listed manufacturers
 4. **Compute `exposure_pct`** — from `edges.csv` `weight_pct` where disclosed; otherwise from `annual_value / supplier_revenue`
-5. **Stitch the synthetic layer** — real nodes at tier 0–1, generated nodes at tier 2–3, using names from `entity_pool.csv`
+5. **Stitch the synthetic layer** — real nodes at tier 0–1, generated nodes at tier 2–3, using names from `entity_pool.csv`. **Implemented.** The generator lives in `mockgen.py` (AGENTS.md §3.1 confines `random` to it) and is seeded from `config.DEEP_TIER_SEED`. Two invariants are enforced in code: no `is_single_source` edge may point at a real buyer, and no generated figure may be written onto a real node — both from `DATA_DICTIONARY.md` §3b
 6. **Set `data_source` honestly** — `"real"` only where the figure came from a filing
 7. **Preserve `has_not_due_column`** — do not silently default it to `true`
 8. **Validate the output** against `NetworkInput` before writing
