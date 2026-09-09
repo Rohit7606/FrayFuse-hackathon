@@ -244,6 +244,15 @@ class NetworkResponse(BaseModel):
     meta: Meta
     nodes: list[Node]
     edges: list[Edge]
+    # The published disclosures the stress ladder reads, passed through
+    # unchanged. Additive and optional, so an older client that forbids extras
+    # is unaffected and a network file without signals still serves.
+    #
+    # The evidence panel shows a judge WHERE own_stress came from: the year-end
+    # ageing snapshot beside the whole-year MSMED payment lines. Without this
+    # the frontend would have to hardcode those rupee figures, which is exactly
+    # the fabrication AGENTS.md 3.6 forbids.
+    stress_signals: list[StressSignal] = Field(default_factory=list)
 
 
 class AtRiskResponse(BaseModel):

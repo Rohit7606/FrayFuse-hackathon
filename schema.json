@@ -787,6 +787,13 @@
           "items": {
             "$ref": "#/definitions/Edge"
           }
+        },
+        "stress_signals": {
+          "type": "array",
+          "description": "OPTIONAL, additive in 1.2. The published ageing and MSMED rows the stress ladder reads, passed through unchanged so a client can show the disclosure behind a score rather than restating it. Absent or empty is valid — not every network file carries signals, and no client may require them.",
+          "items": {
+            "$ref": "#/definitions/StressSignal"
+          }
         }
       }
     },
