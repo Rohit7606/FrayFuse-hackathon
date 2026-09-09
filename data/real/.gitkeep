@@ -1,0 +1,10 @@
+# Real data directory — populated when the collection dataset arrives.
+# See AGENTS.md §7 for the handoff process.
+#
+# Files expected here:
+#   companies.csv
+#   financials.csv
+#   edges.csv
+#   distress_events.csv
+#   entity_pool.csv
+#   network.json  (output of engine/transform.py)
