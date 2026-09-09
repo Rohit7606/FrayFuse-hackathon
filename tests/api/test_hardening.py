@@ -7,7 +7,7 @@ from unittest.mock import patch
 import pytest
 from fastapi.testclient import TestClient
 
-from api.main import _network_cache, app, load_network
+from api.main import app
 
 
 # Safe to reuse — API is stateless, no state to reset between tests.
@@ -35,7 +35,7 @@ def test_startup_loads_network():
     # make this test pass for the wrong reason.
     main_module._network_cache = None
 
-    with TestClient(main_module.app) as ctx_client:
+    with TestClient(main_module.app):
         # Entering the `with` block runs FastAPI's startup event.
         # Assert the cache is populated *before* making any HTTP request.
         assert main_module._network_cache is not None

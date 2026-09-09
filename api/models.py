@@ -11,12 +11,19 @@ EdgeId = Annotated[str, Field(pattern=r"^E[0-9]{3,}$")]
 
 DataSource = Literal["real", "synthetic"]
 RiskBand = Literal["critical", "high", "watch", "stable"]
+AgeingBasis = Literal["due_date", "transaction_date"]
+EdgeConfidence = Literal["confirmed", "probable", "concentration_only"]
+EdgeProvenance = Literal[
+    "related_party_note", "related_party", "mdna", "segment_note", "rating_agency",
+    "awards_page", "press", "auditor_note", "contingent_liability_note", "synthetic",
+]
+ObservationCompleteness = Literal["observed", "partially_observed", "not_observed"]
 
 
 class Meta(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    schema_version: Literal["1.0"]
+    schema_version: Literal["1.0", "1.1"]
     generated_at: datetime
     generator: Literal["mockgen", "transform"]
     currency_unit: Literal["INR_crore"]
@@ -35,12 +42,17 @@ class Node(BaseModel):
     tier: Annotated[int, Field(ge=0, le=3)]
     sector: str
     product_category: str
-    revenue_cr: Annotated[float, Field(ge=0.0)]
-    cash_buffer_days: Annotated[int, Field(ge=0)]
     is_observable: bool
     data_source: DataSource
+    # Nullable since schema 1.1: a real company whose filings do not disclose the
+    # figure carries null and names the field in `substituted`, rather than
+    # having a number invented for it (DATA_DICTIONARY.md §3b).
+    revenue_cr: Annotated[float | None, Field(ge=0.0)] = None
+    cash_buffer_days: Annotated[int | None, Field(ge=0)] = None
+    substituted: list[str] = Field(default_factory=list)
     employees: Annotated[int | None, Field(ge=0)] = None
     cin: str | None = None
+    observation_completeness: ObservationCompleteness | None = None
 
 
 class Edge(BaseModel):
@@ -52,8 +64,12 @@ class Edge(BaseModel):
     component: str
     annual_value_cr: float
     exposure_pct: Annotated[float, Field(ge=0.0, le=1.0)]
-    is_single_source: bool
     data_source: DataSource
+    # null means UNKNOWN — no filing stated sole-source status. `false` is
+    # itself a claim that alternatives exist. Never coerce one to the other.
+    is_single_source: bool | None = None
+    confidence: EdgeConfidence = "confirmed"
+    edge_provenance: EdgeProvenance | None = None
 
 
 class StressSignal(BaseModel):
@@ -64,6 +80,7 @@ class StressSignal(BaseModel):
     has_not_due_column: bool
     basis: Literal["standalone", "consolidated"]
     data_source: DataSource
+    ageing_basis: AgeingBasis = "due_date"
     msme_unbilled_cr: float | None = None
     msme_not_due_cr: float | None = None
     msme_under_1yr_cr: float | None = None
@@ -79,6 +96,13 @@ class StressSignal(BaseModel):
     revenue_cr: float | None = None
     cost_of_materials_cr: float | None = None
     trade_payables_turnover_ratio: float | None = None
+    msmed_interest_due_unpaid_cr: float | None = None
+    msmed_interest_due_on_payments_beyond_appointed_day_cr: float | None = None
+    undrawn_credit_facilities_cr: float | None = None
+    undrawn_type: str | None = None
+    msme_book_material: bool | None = None
+    series_break: str | None = None
+    liquidity_quality: str | None = None
 
 
 class NetworkInput(BaseModel):

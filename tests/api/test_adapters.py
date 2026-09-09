@@ -5,11 +5,8 @@ from __future__ import annotations
 from api.adapters import compute_delta, to_engine_scenario
 from api.models import (
     BandCounts,
-    Delta,
     Intervention,
     Meta,
-    PerNodeDelta,
-    ReasonFactor,
     Scenario,
     Score,
     ScoredNetwork,
@@ -19,7 +16,6 @@ from api.models import (
 from engine.pipeline import Intervention as EngineIntervention
 from engine.pipeline import Scenario as EngineScenario
 from engine.pipeline import StressOverride as EngineStressOverride
-
 
 # ---------------------------------------------------------------------------
 # Shared helpers — build minimal valid objects for testing

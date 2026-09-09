@@ -925,7 +925,7 @@
         "due_date",
         "transaction_date"
       ],
-      "description": "Schedule III ages from the due date; some filers age from the transaction date. Buckets from different bases are NOT comparable under the same column names."
+      "description": "Schedule III ages from the due date; some filers age from the transaction date. Buckets from different bases are NOT comparable under the same column names. Required - never null."
     },
     "EdgeConfidence": {
       "type": "string",
@@ -934,10 +934,13 @@
         "probable",
         "concentration_only"
       ],
-      "description": "How well evidenced this relationship is. 'probable' is inference, not disclosure — the UI must never present it as fact."
+      "description": "How well evidenced this relationship is. 'probable' is inference, not disclosure - the UI must never present it as fact. Required - never null."
     },
     "EdgeProvenance": {
-      "type": "string",
+      "type": [
+        "string",
+        "null"
+      ],
       "enum": [
         "related_party_note",
         "related_party",
@@ -948,18 +951,23 @@
         "press",
         "auditor_note",
         "contingent_liability_note",
-        "synthetic"
+        "synthetic",
+        null
       ],
-      "description": "Where the edge came from. related_party_note means a group or promoter-affiliated entity disclosed under Ind AS 24 - a real dependency, but not an arm's-length supply relationship. 'press' is the weakest: reported, not filed."
+      "description": "Where the edge came from. related_party_note means a group or promoter-affiliated entity disclosed under Ind AS 24 - a real dependency, but not an arm's-length supply relationship. 'press' is the weakest: reported, not filed. null means not recorded."
     },
     "ObservationCompleteness": {
-      "type": "string",
+      "type": [
+        "string",
+        "null"
+      ],
       "enum": [
         "observed",
         "partially_observed",
-        "not_observed"
+        "not_observed",
+        null
       ],
-      "description": "Whether this node's relationships were actually searched for. Without it, 'not critical' and 'not yet observed' are indistinguishable in the score — and the second is far more common."
+      "description": "Whether this node's relationships were actually searched for. Without it, 'not critical' and 'not yet observed' are indistinguishable in the score — and the second is far more common. null means not recorded."
     }
   },
   "examples": {
