@@ -8,7 +8,7 @@ def load_schema():
         return json.load(f)
 
 def validate_endpoint(schema, def_name, name, path, payload=None):
-    url = f"http://localhost:8000{path}"
+    url = f"http://127.0.0.1:8000{path}"
     req = urllib.request.Request(url, method="POST" if payload else "GET")
     if payload:
         req.add_header("Content-Type", "application/json")
@@ -38,7 +38,7 @@ def validate_endpoint(schema, def_name, name, path, payload=None):
         sys.exit(1)
 
 def check_health():
-    url = "http://localhost:8000/health"
+    url = "http://127.0.0.1:8000/health"
     try:
         with urllib.request.urlopen(url) as resp:
             data = json.loads(resp.read().decode())
