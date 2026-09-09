@@ -1,0 +1,13 @@
+# FrayFuse Python dependencies
+# Intentionally short. Do not add without justification in the PR.
+# See AGENTS.md §5.1
+
+networkx
+numpy
+pandas
+fastapi
+uvicorn
+pydantic
+pytest
+ruff
+jsonschema
