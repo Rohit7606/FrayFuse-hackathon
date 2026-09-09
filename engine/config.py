@@ -85,6 +85,18 @@ MAX_BUFFER_STRENGTH = 0.35
 # Criticality  (engine/criticality.py)
 # ---------------------------------------------------------------------------
 
+# Normalise betweenness and flow share within tier rather than across the whole
+# network.  Both are size-correlated by construction, so a network-wide maximum
+# hands both to the tier-1 hub: measured on the mock at seed 42, the hub took
+# betweenness 0.875 and flow share 1.000 while a genuine sole-source tier-2
+# chokepoint scored 0.137 and 0.012.  That made 0.65 of criticality a proxy for
+# revenue and filled the ranked list with large stressed companies instead of the
+# small irreplaceable ones the product exists to find.  Within tier, the same
+# chokepoint scores 0.475 against a comparably stressed non-sole-source peer's
+# 0.178 — the 2.7x separation DEMO_SCENARIO.md §3 rests its argument on.
+# Set false to restore the original network-wide behaviour.
+NORMALISE_CRITICALITY_WITHIN_TIER = True
+
 W_BETWEENNESS = 0.45    # graph position — how many paths pass through this node
 W_SINGLE_SOURCE = 0.35  # irreplaceability — sole-source edges have outsized supply-chain impact
 W_FLOW_SHARE = 0.20     # share of total network trade flowing through this node
