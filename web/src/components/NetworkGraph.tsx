@@ -2,10 +2,11 @@ import { useEffect, useRef, useState, useMemo } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 
 interface NetworkGraphProps {
-  data: any; // { nodes, edges }
+  data: any; // { nodes, edges, scores }
+  simulationState?: 'idle' | 'cascading' | 'cascaded' | 'intervened';
 }
 
-export default function NetworkGraph({ data }: NetworkGraphProps) {
+export default function NetworkGraph({ data, simulationState = 'idle' }: NetworkGraphProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const graphRef = useRef<any>(null);
@@ -46,10 +47,32 @@ export default function NetworkGraph({ data }: NetworkGraphProps) {
 
   if (!data || !data.nodes || !data.edges) return <div style={{ color: 'white', padding: '20px' }}>Loading network...</div>;
 
-  const getRiskColor = (stress: number) => {
-    if (stress >= 0.7) return '#ef4444'; // critical
-    if (stress >= 0.4) return '#f59e0b'; // watch
-    return '#10b981'; // stable
+  const getRiskColor = (nodeId: string, baseStress: number = 0) => {
+    // Find if we have a score for this node
+    const scoreObj = data?.scores?.find((s: any) => s.node_id === nodeId);
+    
+    let stress = baseStress;
+    let riskBand = 'stable';
+    
+    if (scoreObj) {
+      stress = scoreObj.own_stress || baseStress;
+      riskBand = scoreObj.risk_band || 'stable';
+    }
+
+    if (simulationState === 'idle') {
+      // In idle state, mostly dim unless it's a base anchor/tier1
+      return '#3b82f6'; 
+    }
+
+    if (simulationState === 'intervened' && scoreObj && scoreObj.intervention_cost_cr > 0 && riskBand === 'stable') {
+      return '#10b981'; // Solved node
+    }
+
+    if (riskBand === 'critical' || stress >= 0.7) return '#ef4444'; // critical
+    if (riskBand === 'watch' || stress >= 0.4) return '#f59e0b'; // watch
+    if (riskBand === 'stable') return '#10b981'; // stable
+
+    return '#3b82f6';
   };
 
   return (
@@ -59,7 +82,7 @@ export default function NetworkGraph({ data }: NetworkGraphProps) {
         width={dimensions.width}
         height={dimensions.height}
         graphData={{ nodes, links }}
-        nodeColor={(node: any) => getRiskColor(node.stress_level || 0)}
+        nodeColor={(node: any) => getRiskColor(node.id, node.stress_level || 0)}
         nodeRelSize={6}
         linkDirectionalArrowLength={3.5}
         linkDirectionalArrowRelPos={1}
@@ -88,7 +111,7 @@ export default function NetworkGraph({ data }: NetworkGraphProps) {
 
           const label = node.id;
           const fontSize = 12/globalScale;
-          const color = getRiskColor(node.stress_level || 0);
+          const color = getRiskColor(node.id, node.stress_level || 0);
           
           // Draw Node Circle
           ctx.beginPath();
