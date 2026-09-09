@@ -697,3 +697,23 @@ body {
 .animate-in {
   animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Anchor beat — the closing demo moment (DEMO_SCENARIO.md §6/§7).
+   The supply-disruption layer reaching the tier-0 anchor, and the funding
+   draining it back off. */
+.anchor-beat {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  border-radius: 8px;
+  background: rgba(248, 113, 113, 0.05);
+}
+.anchor-beat-values {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.35rem 0;
+}
+.anchor-beat-arrow {
+  color: var(--text-secondary, #9ca3af);
+}

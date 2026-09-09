@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { apiClient } from './api/client';
+import demoScenario from './mocks/demo-scenario.json';
 import NetworkGraph from './components/NetworkGraph';
 import RankedList from './components/RankedList';
 import HeaderBar from './components/HeaderBar';
@@ -44,7 +45,15 @@ function App() {
 
   const handleIntervene = async () => {
     try {
-      const data = await apiClient.intervene({}, []);
+      // DEMO_SCENARIO.md §8: read the node and amount from the fixture rather
+      // than hardcoding them here. This sent an EMPTY interventions array,
+      // which mock mode hid because it returns a pre-baked intervene.json —
+      // against the live API it funded nothing and before/after came back
+      // identical.
+      const data = await apiClient.intervene(
+        { stress_overrides: [], interventions: [] },
+        [demoScenario.intervention]
+      );
       setInterveneData(data);
       setSimulationState('intervened');
     } catch (err) {
@@ -58,25 +67,46 @@ function App() {
   };
 
   const stats = useMemo(() => {
-    if (!networkData?.nodes) return { healthy: 0, stressed: 0, critical: 0 };
-    
-    // If we have intervene data and state is intervened, use after.scores, else atRiskData.scores
-    const activeScores = (simulationState === 'intervened' && interveneData?.after?.scores) 
-      ? interveneData.after.scores 
-      : atRiskData?.scores || [];
-      
-    // Count from the active scores
-    let critical = 0;
-    let stressed = 0;
-    
-    activeScores.forEach((s: any) => {
-      if (s.final_score > 0.6) critical++;
-      else if (s.final_score > 0.3) stressed++;
-    });
-    
-    const healthy = networkData.nodes.length - critical - stressed;
-    return { healthy, stressed, critical };
-  }, [networkData, atRiskData, interveneData, simulationState]);
+    // Read summary.band_counts rather than re-deriving bands from final_score.
+    //
+    // This used to count `final_score > 0.6` as critical and `> 0.3` as
+    // stressed, which were the ORIGINAL thresholds. Schema 1.1 recalibrated
+    // them to 0.20 / 0.06 / 0.012 because the model's real range is far
+    // narrower — nothing in the network scores above 0.21 — so both counters
+    // were permanently zero and the header read "412 Healthy, 0 Stressed,
+    // 0 Critical" while the engine was flagging a critical supplier.
+    //
+    // The engine bands every node from engine/config.py and reports the totals
+    // in summary.band_counts. That covers all 412 nodes, where `scores` here
+    // holds only the ranked top ten, so this is both correct and complete.
+    const summary = (simulationState === 'intervened' && interveneData?.after?.summary)
+      ? interveneData.after.summary
+      : atRiskData?.summary;
+
+    const counts = summary?.band_counts;
+    if (!counts) return { healthy: 0, stressed: 0, critical: 0 };
+
+    return {
+      critical: counts.critical ?? 0,
+      stressed: (counts.high ?? 0) + (counts.watch ?? 0),
+      healthy: counts.stable ?? 0,
+    };
+  }, [atRiskData, interveneData, simulationState]);
+
+  // The worst-hit anchor before funding, and THE SAME anchor after.
+  //
+  // summary.anchor_disruption is sorted by disruption descending, and the
+  // order changes once the intervention lands: N001 leads at 0.1076 before,
+  // but afterwards N251 (0.0394) edges past N001 (0.0392). Taking [0] from
+  // each list would pair one anchor's "before" with another's "after" and
+  // print a number that belongs to neither.
+  const anchorBeat = useMemo(() => {
+    const before = interveneData?.before?.summary?.anchor_disruption?.[0];
+    if (!before) return {};
+    const after = interveneData?.after?.summary?.anchor_disruption
+      ?.find((a: any) => a.node_id === before.node_id);
+    return after ? { anchorBefore: before, anchorAfter: after } : {};
+  }, [interveneData]);
 
   // Determine which data to pass to the graph
   const graphData = useMemo(() => {
@@ -173,6 +203,7 @@ function App() {
           {simulationState === 'intervened' && interveneData?.delta && (
             <InterventionCard 
               delta={interveneData.delta} 
+              {...anchorBeat}
               onCounterfactual={() => setSimulationState('cascaded')}
             />
           )}
