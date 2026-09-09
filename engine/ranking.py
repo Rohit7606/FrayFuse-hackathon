@@ -202,8 +202,17 @@ def build_scores(
             }
         )
 
+    # Stressed origins are reported separately in summary.stressed_origin_nodes
+    # and are deliberately not ranked.  The product's question is "which
+    # suppliers are about to run out of cash *that you could not see*" — an
+    # origin is stressed by its own published disclosures, so it is the thing
+    # you already knew, not a finding.  SCHEMA.md §4.3/§4.4's own worked example
+    # does exactly this: ranking lists N042, N118, N203 and N087 while N007, the
+    # trigger, appears only under stressed_origin_nodes.  They keep their scores
+    # and bands, so nothing is hidden — they simply do not compete for rank.
+    origins = set(contagion.origins)
     ranked = sorted(
-        (s for s in scores if s["risk_band"] != "stable"),
+        (s for s in scores if s["risk_band"] != "stable" and s["node_id"] not in origins),
         key=lambda s: (-s["final_score"], s["node_id"]),
     )
     for position, score in enumerate(ranked, start=1):

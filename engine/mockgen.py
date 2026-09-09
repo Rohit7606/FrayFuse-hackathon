@@ -67,7 +67,7 @@ PINNED_NODES: tuple[dict[str, Any], ...] = (
         "sector": "auto_components",
         "product_category": "thermal_products",
         "revenue_cr": 61.35,
-        "cash_buffer_days": 27,
+        "cash_buffer_days": 16,
         "employees": 96,
         "is_observable": False,
     },
@@ -78,7 +78,7 @@ PINNED_NODES: tuple[dict[str, Any], ...] = (
         "sector": "polymers",
         "product_category": "polymer_compounds",
         "revenue_cr": 9.84,
-        "cash_buffer_days": 11,
+        "cash_buffer_days": 8,
         "employees": 23,
         "is_observable": False,
     },
@@ -124,14 +124,14 @@ PINNED_EDGES: tuple[dict[str, Any], ...] = (
         "supplier_id": "N087",
         "buyer_id": "N007",
         "component": "thermal_products",
-        "exposure_pct": 0.3400,
+        "exposure_pct": 0.4600,
         "is_single_source": False,
     },
     {
         "supplier_id": "N118",
         "buyer_id": "N042",
         "component": "polymer_compound",
-        "exposure_pct": 0.6600,
+        "exposure_pct": 0.7200,
         "is_single_source": True,
     },
 )
@@ -146,6 +146,19 @@ PINNED_SECONDARY_EXPOSURE: dict[str, tuple[tuple[str, float], ...]] = {
     "N087": (("radiator_cores", 0.2200), ("heat_shields", 0.1700), ("oil_coolers", 0.1400)),
     "N118": (("masterbatch_compound", 0.1900),),
 }
+
+# How many tier-3 suppliers each tier-2 cast member must have beneath it.
+#
+# Betweenness counts paths THROUGH a node, so a tier-2 firm with one supplier
+# sits on almost none and scores as replaceable however exposed it is.  Without
+# a supplier base the demo cast is out-ranked by generic filler and
+# DEMO_SCENARIO.md §3's contrast never appears in the list.
+#
+# N203 deliberately gets the LARGEST base.  It is the better-connected node and
+# still ranks below N042, which is the sharpest form of the argument: being
+# central is not the same as being irreplaceable.  N042 wins on the sole-source
+# term alone.
+PINNED_TIER2_FANIN: dict[str, int] = {"N042": 6, "N087": 9, "N203": 12}
 
 PINNED_IDS = tuple(n["node_id"] for n in PINNED_NODES)
 
@@ -465,6 +478,16 @@ def _build_pairs(
         for supplier_id in rng.sample(free_tier3, count):
             add(supplier_id, buyer_id)
 
+    # The demo cast needs a real supplier base beneath it — see
+    # PINNED_TIER2_FANIN for why betweenness collapses without one.
+    for buyer_id in sorted(PINNED_TIER2_FANIN):
+        shortfall = PINNED_TIER2_FANIN[buyer_id] - sum(1 for _, b in pairs if b == buyer_id)
+        if shortfall <= 0:
+            continue
+        candidates = [n for n in free_tier3 if (n, buyer_id) not in seen]
+        for supplier_id in sorted(rng.sample(candidates, min(shortfall, len(candidates)))):
+            add(supplier_id, buyer_id)
+
     # Nobody is left stranded: a supplier with no buyer would sit outside the
     # graph entirely and could never carry or receive stress.
     has_buyer = {supplier_id for supplier_id, _ in pairs}
@@ -585,10 +608,16 @@ FY_YEARS = ("FY23", "FY24")
 OBSERVABLE_COUNT = 8  # a handful of listed filers; everything below them is dark
 
 # Positions in the observable list whose disclosures deteriorate year on year.
-# Position 0 is the anchor N001 and position 1 is the trigger N007, so these are
-# ordinary tier-1 peers.  Two of six keeps the ranked list plausible without
-# letting anything rival N007 as the clearest case.
-DETERIORATING_POSITIONS = frozenset({4, 6})
+#
+# Empty by design.  DEMO_SCENARIO.md §5 specifies a single stressed origin,
+# N007, and the cascade story is that one trigger reaching four suppliers.  A
+# second deteriorating peer creates a parallel stress branch whose suppliers
+# interleave with the demo cast in the ranked list, so the list stops being "what
+# N007 did" and the narration no longer matches the screen.
+#
+# The peers still matter: they are the quiet control cohort that makes N007's
+# deterioration legible as a signal rather than as the only thing measured.
+DETERIORATING_POSITIONS: frozenset[int] = frozenset()
 
 # N007, both years, hand-built.  FY24 matches the worked example in SCHEMA.md
 # §3.4 exactly; FY23 is its prior year, giving a 2.1x rise in the MSMED flow

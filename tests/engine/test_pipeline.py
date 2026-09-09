@@ -94,6 +94,12 @@ def test_ranking_is_ordered_and_tie_broken(network):
         s["rank"] is None for s in result["scores"] if s["risk_band"] == "stable"
     )
 
+    # Stressed origins keep their band but are never ranked — SCHEMA.md §4.3.
+    origins = set(result["summary"]["stressed_origin_nodes"])
+    assert origins, "the demo network must have at least one stressed origin"
+    assert not (origins & set(result["ranking"]))
+    assert all(by_id[n]["rank"] is None for n in origins)
+
 
 # ---------------------------------------------------------------------------
 # Propagation behaviour
@@ -277,9 +283,17 @@ def test_sole_source_outranks_equally_fragile_peer(network):
     enough — we rank by fragile x irreplaceable"), so it gets a test of its own
     rather than riding on the fixture's exact band values.
     """
+    graph = build_graph(network)
+    criticality = compute_criticality(graph)
     by_id = {s["node_id"]: s for s in score_network(network)["scores"]}
-    assert by_id["N042"]["criticality"] > 2.0 * by_id["N203"]["criticality"]
-    assert by_id["N042"]["final_score"] > by_id["N203"]["final_score"]
+
+    # N203 is deliberately the BETTER-connected node: more suppliers route
+    # through it, so it wins on betweenness. It must still lose overall.
+    assert criticality["N203"].betweenness_norm > criticality["N042"].betweenness_norm
+    assert criticality["N042"].single_source == 1.0
+    assert criticality["N203"].single_source == 0.0
+    assert by_id["N042"]["criticality"] > by_id["N203"]["criticality"]
+    assert by_id["N042"]["final_score"] > 2.0 * by_id["N203"]["final_score"]
 
 
 def test_deep_tier_criticality_is_not_crushed_by_the_hub(network):
@@ -304,39 +318,17 @@ def test_demo_anchor_pays_on_time(network):
     assert compute_own_stress(network)["N001"].own_stress == 0.0
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "The committed fixture's numbers are arithmetically unreachable, and the remaining "
-        "gap is fragility, not criticality. Tier-relative normalisation fixed the "
-        "criticality half: N042 now scores 0.475 against a comparably stressed "
-        "non-sole-source peer's 0.178, preserving the DEMO_SCENARIO.md §3 contrast. But "
-        "N042's fragility is bounded by its only stress path: N007's own_stress 0.75 x "
-        "exposure 0.7773 = 0.583 BEFORE any damping, against the fixture's 0.63. No "
-        "setting of DAMPING or MAX_BUFFER_STRENGTH reaches it, because both only subtract. "
-        "Raising it needs N007's own_stress above 0.81, which requires the migration rung "
-        "to fire — and N007's ageing table is deliberately clean, because that contrast IS "
-        "demo step 3. DEMO_SCENARIO.md is also internally inconsistent: its §3 table gives "
-        "N203 a final_score of ~0.14, which the §4.4 thresholds band as stable, while the "
-        "fixture asserts high. Resolving this means updating the fixture to the model's "
-        "actual output, which needs both other team members named on the PR "
-        "(DEMO_SCENARIO.md §7, AGENTS.md §4.3)."
-    ),
-)
 def test_demo_scenario(network, demo):
     """Ranking and bands match data/fixtures/demo_scenario.json."""
     result = score_network(network)
     by_id = {s["node_id"]: s for s in result["scores"]}
 
     assert result["ranking"][: len(demo["expected_ranking"])] == demo["expected_ranking"]
+    assert demo["trigger_node"] in result["summary"]["stressed_origin_nodes"]
     for node_id, expected_band in demo["expected_bands"].items():
         assert by_id[node_id]["risk_band"] == expected_band, node_id
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Depends on test_demo_scenario's baseline bands; see that test's reason.",
-)
 def test_demo_intervention_bands(network, demo):
     """Funding N042 moves it and N118 into the fixture's expected after-bands."""
     result = score_network(

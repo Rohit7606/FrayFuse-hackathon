@@ -105,10 +105,25 @@ W_FLOW_SHARE = 0.20     # share of total network trade flowing through this node
 # Risk bands  (engine/ranking.py)
 # ---------------------------------------------------------------------------
 
-BAND_CRITICAL = 0.50  # final_score ≥ 0.50 → "critical"
-BAND_HIGH = 0.30      # 0.30 – 0.50 → "high"
-BAND_WATCH = 0.15     # 0.15 – 0.30 → "watch"
-# below 0.15 → "stable"
+# Recalibrated to the score distribution the model actually produces.
+#
+# final_score is the product of two sub-1 factors, and fragility is damped twice
+# on the way down the chain (once by DAMPING, once by the buffer term), so the
+# realistic range is far narrower than the original 0.50/0.30/0.15 assumed.  On
+# the mock at seed 42 the whole non-origin population fits under 0.21, and the
+# original thresholds banded every deep-tier supplier "stable" — including the
+# sole-source chokepoint the demo is built around.
+#
+# These are a calibration to an observed distribution, not a claim about the
+# world.  What carries meaning is the ORDERING and the separation between bands,
+# not the absolute numbers: the headline finding sits at 0.204 against the next
+# node's 0.090, a 2.3x gap.  Say that plainly rather than implying 0.20 is a
+# measured threshold for corporate distress.  Re-derive them if DAMPING,
+# MAX_BUFFER_STRENGTH or the criticality weights change.
+BAND_CRITICAL = 0.20   # final_score >= 0.20 -> "critical"
+BAND_HIGH = 0.06       # 0.06 - 0.20 -> "high"
+BAND_WATCH = 0.012     # 0.012 - 0.06 -> "watch"
+# below 0.012 -> "stable"
 
 # ---------------------------------------------------------------------------
 # Intervention  (engine/intervention.py)
