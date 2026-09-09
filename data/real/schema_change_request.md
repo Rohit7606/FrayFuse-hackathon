@@ -94,3 +94,57 @@ than leaving it to the caller.
   counterparty. They are not graph edges and should be excluded from graph construction.
 - **Real-layer size for the engine team:** 28 company rows (15 researched + 13 counterparty anchors)
   and 19 real graph edges. Everything below tier-1 needs generating.
+
+---
+
+## Gap 6 — liquidity components need a quality flag, not just a number
+
+**Observed:** Bajaj Hindusthan Sugar FY2022 discloses ₹770.13 cr of "current investments" that
+note 10 identifies as unquoted equity in a related power company, **pledged against loans**.
+Taken at face value it turns a 3-day cash buffer into roughly 55 days for a company that was in
+severe distress. Nectar, conversely, reports one combined cash line that already contains the
+fixed deposits other filers disclose separately.
+
+**Why the current schema cannot express this:** a liquidity field holds a number. It cannot say
+"disclosed but excluded because pledged", or "this single line already includes what others split
+out". The engine would either overstate BHS's liquidity or, if we simply omitted the figure,
+misrepresent the balance sheet.
+
+**Requested:** every liquidity component needs an accompanying quality enum, at minimum
+`liquid | pledged_or_restricted | not_disclosed | included_in_another_line`, and the engine must
+sum only `liquid`. We are currently carrying this in `cash_components_basis` as free text plus a
+`plausibility_flags` entry, which is not machine-readable.
+
+## Gap 7 — a node needs identity over time, not one immutable id
+
+**Observed:** the Tata Motors demerger. The original listing and ISIN (scrip 500570 /
+INE155A01022) were retained by the **passenger-vehicle** company and renamed, while the
+**commercial-vehicle** business — the one Setco actually supplies — was listed afresh as scrip
+544569 under the name "Tata Motors Limited". BSE now shows the current name against every
+historic filing, so all of Tata Motors' FY2022-FY2025 annual reports display as
+"Tata Motors Passenger Vehicles Limited".
+
+**Why this matters to the graph:** an edge is only meaningful together with the date at which the
+counterparty identity is resolved. An edge dated FY2025 and one dated FY2026 that both say
+"Tata Motors" point at two different companies. A demerger, a merger, or an insolvency transfer
+will silently repoint every historic edge if identity is a single mutable field.
+
+**Requested:** node identity should be a list of `(from_date, to_date, name, exchange_code, isin)`
+periods, and every edge should resolve its counterparty as at the edge's `fy`. Failing that, the
+engine must at least refuse to merge two nodes on name alone.
+
+## Gap 8 — the schema has no way to say "this year is not comparable with the previous one"
+
+**Observed, three distinct causes, all real:**
+- Jaiprakash Associates: FY2022 revenue restated 422,006 -> 296,741 lakh by reclassifying part of
+  the year as discontinued operations. Bottom line unchanged.
+- Gensol Engineering: Ind AS transition dated 1 April 2022 — FY2022 is previous-GAAP.
+- Best Agrolife: presentation units changed from lakhs to millions between FY2023 and FY2024.
+
+**Why the current schema cannot express this:** the back-test panel computes year-on-year
+movements. Each of these produces a large spurious movement that looks exactly like a signal.
+
+**Requested:** a `series_break` field on the company-year (enum: `discontinued_ops_reclass |
+accounting_standard_transition | presentation_change | scope_change | none`), and the back-test
+must skip any transition whose endpoints straddle a break. We currently carry this as
+`plausibility_flags` text, which the panel does not read.
