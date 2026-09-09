@@ -293,7 +293,16 @@ def _compose_name(rng: random.Random, tier: int, used: set[str]) -> str:
                 parts.append(trade)
         parts.append(kind)
         parts.append(rng.choice(NAME_SUFFIX_BY_TIER[tier]))
-        name = " ".join(parts)
+        # The trade-vs-kind guard above misses the suffix, which carries its own
+        # leading word: kind "Industries" plus suffix "Industries Ltd" produced
+        # "Chandrika Stampings Industries Industries Ltd".  Collapsed after
+        # assembly rather than by redrawing, so the RNG stream — and therefore
+        # every number in the committed network — is untouched.
+        words = " ".join(parts).split()
+        name = " ".join(
+            word for index, word in enumerate(words)
+            if index == 0 or word.lower() != words[index - 1].lower()
+        )
         if name not in used:
             used.add(name)
             return name

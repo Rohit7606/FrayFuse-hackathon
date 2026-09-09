@@ -74,6 +74,7 @@ frayfuse/
 │   ├── stress.py              # stress detection
 │   ├── contagion.py           # propagation
 │   ├── criticality.py         # betweenness + single-source
+│   ├── disruption.py          # supply disruption — the reverse propagation
 │   ├── ranking.py             # final score, ordering, reasons
 │   ├── intervention.py        # cost, exposure, counterfactual
 │   ├── pipeline.py            # the single public entry point

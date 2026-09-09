@@ -488,7 +488,12 @@
         "reason_factors",
         "intervention_cost_cr",
         "estimated_exposure_cr",
-        "propagation_depth"
+        "propagation_depth",
+        "halt_risk",
+        "supply_disruption",
+        "disruption_band",
+        "disrupted_inflow_cr",
+        "disruption_reason"
       ],
       "additionalProperties": false,
       "properties": {
@@ -552,6 +557,27 @@
         "propagation_depth": {
           "type": "integer",
           "minimum": 0
+        },
+        "halt_risk": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "supply_disruption": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "disruption_band": {
+          "$ref": "#/definitions/RiskBand"
+        },
+        "disrupted_inflow_cr": {
+          "type": "number",
+          "minimum": 0
+        },
+        "disruption_reason": {
+          "type": "string",
+          "minLength": 10
         }
       }
     },
@@ -563,7 +589,9 @@
         "band_counts",
         "total_intervention_cost_cr",
         "total_estimated_exposure_cr",
-        "iterations_to_converge"
+        "iterations_to_converge",
+        "anchor_disruption",
+        "disruption_iterations_to_converge"
       ],
       "additionalProperties": false,
       "properties": {
@@ -622,6 +650,16 @@
           "minimum": 0
         },
         "iterations_to_converge": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "anchor_disruption": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AnchorDisruption"
+          }
+        },
+        "disruption_iterations_to_converge": {
           "type": "integer",
           "minimum": 0
         }
@@ -968,6 +1006,43 @@
         null
       ],
       "description": "Whether this node's relationships were actually searched for. Without it, 'not critical' and 'not yet observed' are indistinguishable in the score — and the second is far more common. null means not recorded."
+    },
+    "AnchorDisruption": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "supply_disruption",
+        "disruption_band",
+        "disrupted_inflow_cr"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "node_id": {
+          "$ref": "#/definitions/NodeId"
+        },
+        "supply_disruption": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "disruption_band": {
+          "$ref": "#/definitions/RiskBand"
+        },
+        "disrupted_inflow_cr": {
+          "type": "number",
+          "minimum": 0
+        },
+        "stopped_by": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/NodeId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
     }
   },
   "examples": {
