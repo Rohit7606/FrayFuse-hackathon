@@ -81,6 +81,18 @@ BUFFER_REF_DAYS = 90    # cash-buffer reference: 90 days ≈ a well-buffered mid
 # gap 6 (liquidity quality).
 MAX_BUFFER_STRENGTH = 0.35
 
+# Runtime fill for a real company whose filings do not disclose a buffer.
+#
+# 41 of 46 collected company-years have no cash_buffer_days, so the alternative
+# to substituting is dropping most real nodes from the graph.  The tier-1 value
+# is the measured median across 29 verified company-years; the others are stated
+# assumptions with no observation behind them, because the collected cohort is
+# entirely listed manufacturers.  Nodes filled this way carry the field in their
+# `substituted` list so the UI can label it — DATA_DICTIONARY.md §3b requires
+# the substitution to be visible rather than frozen into the data.
+SUBSTITUTE_BUFFER_DAYS_BY_TIER: dict[int, int] = {0: 60, 1: 12, 2: 10, 3: 8}
+DEFAULT_SUBSTITUTE_BUFFER_DAYS = 12
+
 # ---------------------------------------------------------------------------
 # Criticality  (engine/criticality.py)
 # ---------------------------------------------------------------------------
@@ -136,6 +148,14 @@ BAND_WATCH = 0.012     # 0.012 - 0.06 -> "watch"
 THIN_BUFFER_DAYS = 21
 
 DISRUPTION_MONTHS = 3  # assumed disruption window for exposure calculation — a stated assumption, not measured
+
+# ---------------------------------------------------------------------------
+# Transform build-time constants  (engine/transform.py)
+# ---------------------------------------------------------------------------
+
+# Fixed, not now().  Set at data-build time so the same CSVs always produce a
+# byte-identical network.json — AGENTS.md §3.1.
+TRANSFORM_GENERATED_AT = "2026-09-09T00:00:00Z"
 
 # ---------------------------------------------------------------------------
 # Mock generation build-time constants  (engine/mockgen.py)
