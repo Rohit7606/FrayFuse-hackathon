@@ -88,7 +88,12 @@ def test_stateless(client):
         "interventions": [{"node_id": "N042", "amount_cr": 4.8}],
         "baseline_scenario": {"stress_overrides": [], "interventions": []}
     }
-    client.post("/api/intervene", json=payload)
+    resp_int1 = client.post("/api/intervene", json=payload)
+    resp_int2 = client.post("/api/intervene", json=payload)
+    
+    assert resp_int1.status_code == 200
+    assert resp_int2.status_code == 200
+    assert resp_int1.content == resp_int2.content, "Two identical intervene calls must be byte-identical"
 
     # Call at-risk again
     resp3 = client.get("/api/at-risk")
@@ -136,3 +141,69 @@ def test_empty_scenario(client):
         node_id = risk_score["node_id"]
         assert node_id in sim_scores_by_id, f"{node_id} in at-risk but missing from simulate"
         assert risk_score == sim_scores_by_id[node_id]
+
+
+def test_empty_interventions(client):
+    payload = {
+        "interventions": [],
+        "baseline_scenario": {"stress_overrides": [], "interventions": []}
+    }
+    response = client.post("/api/intervene", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["delta"]["total_intervention_cost_cr"] == 0.0
+
+
+def test_negative_zero_amount(client):
+    for bad_amount in [0.0, -10.0]:
+        payload = {
+            "interventions": [{"node_id": "N042", "amount_cr": bad_amount}],
+            "baseline_scenario": {"stress_overrides": [], "interventions": []}
+        }
+        response = client.post("/api/intervene", json=payload)
+        assert response.status_code == 422
+
+
+def test_limit_edge_cases(client):
+    # limit=0 should be 422
+    resp_zero = client.get("/api/at-risk?limit=0")
+    assert resp_zero.status_code == 422
+
+    # limit > total nodes should just return all at-risk nodes (graceful)
+    resp_huge = client.get("/api/at-risk?limit=999999")
+    assert resp_huge.status_code == 200
+
+
+def test_duplicate_node_ids(client):
+    payload = {
+        "scenario": {
+            "stress_overrides": [
+                {"node_id": "N042", "own_stress": 0.5},
+                {"node_id": "N042", "own_stress": 0.8}
+            ],
+            "interventions": []
+        }
+    }
+    response = client.post("/api/simulate", json=payload)
+    assert response.status_code == 422
+    assert "duplicate node_ids" in response.text
+
+    payload_int = {
+        "interventions": [
+            {"node_id": "N042", "amount_cr": 5.0},
+            {"node_id": "N042", "amount_cr": 10.0}
+        ],
+        "baseline_scenario": {"stress_overrides": [], "interventions": []}
+    }
+    response_int = client.post("/api/intervene", json=payload_int)
+    assert response_int.status_code == 422
+    assert "duplicate node_ids" in response_int.text
+
+
+def test_missing_optional_fields(client):
+    # baseline_scenario is optional on intervene
+    payload = {
+        "interventions": [{"node_id": "N042", "amount_cr": 4.8}]
+    }
+    response = client.post("/api/intervene", json=payload)
+    assert response.status_code == 200
