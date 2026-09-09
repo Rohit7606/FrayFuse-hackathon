@@ -59,7 +59,7 @@ export default function NetworkGraph({ data, simulationState = 'idle' }: Network
       return '#10b981';
     }
     if (riskBand === 'critical' || stress >= 0.7) return '#ef4444';
-    if (riskBand === 'watch' || stress >= 0.4) return '#f59e0b';
+    if (riskBand === 'high' || riskBand === 'watch' || stress >= 0.4) return '#f59e0b';
     if (riskBand === 'stable') return '#10b981';
 
     return '#3b82f6';
@@ -215,6 +215,28 @@ export default function NetworkGraph({ data, simulationState = 'idle' }: Network
           ctx.arc(node.x, node.y, 10, 0, 2 * Math.PI);
           ctx.fillStyle = color;
           ctx.fill();
+
+          // Expand hit area to cover the custom label to prevent flicker when mouse moves onto the label
+          const hover = hoverNodeRef.current;
+          if (hover && hover.id === node.id) {
+            const globalScale = graphRef.current?.zoom() || 1;
+            const fontSize = Math.max(12 / globalScale, 2);
+            const nodeName = String(node.name || node.id);
+            ctx.font = `600 ${fontSize * 1.3}px Inter, Sans-Serif`;
+            const tw = ctx.measureText(nodeName).width;
+            const px = fontSize * 0.5;
+            const py = fontSize * 0.35;
+            const radius = 8;
+            
+            const rx = node.x - tw / 2 - px;
+            const ry = node.y + radius + 4 - py;
+            const rw = tw + px * 2;
+            const rh = fontSize + py * 2;
+
+            ctx.beginPath();
+            ctx.rect(rx, ry, rw, rh);
+            ctx.fill();
+          }
         }}
       />
     </div>
