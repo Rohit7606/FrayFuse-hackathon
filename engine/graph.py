@@ -38,6 +38,23 @@ class ExposureOverflowError(ValueError):
     """A supplier's outgoing exposure_pct sums to more than the whole of its revenue."""
 
 
+def _buffer_days(node: dict[str, Any]) -> int:
+    """A node's cash buffer, substituting a tier default where undisclosed.
+
+    A real company whose filings do not give this figure carries null rather
+    than an invented number (DATA_DICTIONARY.md §3b), and 41 of 46 collected
+    company-years are in that position.  The engine has to put something in the
+    damping term, so it fills from the tier default and the node already names
+    the field in `substituted`, keeping the decision visible.
+    """
+    disclosed = node.get("cash_buffer_days")
+    if disclosed is not None:
+        return disclosed
+    return config.SUBSTITUTE_BUFFER_DAYS_BY_TIER.get(
+        node["tier"], config.DEFAULT_SUBSTITUTE_BUFFER_DAYS
+    )
+
+
 def propagating_edges(edges: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Return the edges evidenced well enough to carry stress, sorted by edge_id.
 
@@ -69,8 +86,8 @@ def build_graph(network: dict[str, Any]) -> nx.DiGraph:
         graph.add_node(
             node["node_id"],
             tier=node["tier"],
-            revenue_cr=node["revenue_cr"],
-            cash_buffer_days=node["cash_buffer_days"],
+            revenue_cr=node.get("revenue_cr") or 0.0,
+            cash_buffer_days=_buffer_days(node),
             name=node["name"],
             sector=node["sector"],
             product_category=node["product_category"],
