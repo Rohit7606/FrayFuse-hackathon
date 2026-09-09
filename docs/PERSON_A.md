@@ -86,53 +86,97 @@ All constants live in `engine/config.py` with a one-line comment each. No magic 
 
 Produces `own_stress` ∈ [0, 1] for every observable node. Non-observable nodes get `0.0`.
 
-Two signals, from the two disclosures that can disagree.
+> **This section was rewritten after the collection workstream reported.** The original spec ranked
+> `msmed_principal_paid_beyond_appointed_day` as the primary signal at weight 0.65. Collection found
+> that field disclosed in **3 of 46 verified company-years, all belonging to a single control
+> company**. It cannot carry the model. The ladder below is what survived testing against a matched
+> control cohort. Evidence: `data/real/DATA_DICTIONARY.md` §6 and `data/real/findings.md` §5.
 
-**Signal 1 — migration ratio**
+**A ladder of four signals, not two.** Availability varies enormously between filers — most Indian
+small-caps omit the columns the original spec assumed — so you compute whichever rungs are
+available and **renormalise their weights over exactly those**. A company with only rung 1 available
+scores on rung 1 at full weight.
+
+**Rung 1 — MSMED interest direction (primary, `W_INTEREST_DIRECTION` 0.45)**
 
 ```
-migration(t) = under_1yr / (not_due + under_1yr)
+interest(t) = max(msmed_interest_accrued_unpaid_cr,
+                  msmed_interest_due_unpaid_cr,
+                  msmed_interest_due_on_payments_beyond_appointed_day_cr)
+
+rung1 = 1.0 if interest(t) > interest(t−1) else 0.0
 ```
 
-Money moving from "not yet due" into "overdue" means the company is slipping.
+Interest accrues under the MSMED Act only past the appointed day, so any rise is a **statutory
+admission of late payment**. It rose ahead of 6 of 8 documented distress events and in 0 of 7 control
+transitions, and — decisively — it needs no Not Due column, so it is available for every filer.
 
-**Unavailable when `has_not_due_column` is `false`** — that filer's `under_1yr` silently includes not-yet-due amounts. Do not compute it, do not substitute a default. Fall back to signal 2 alone and reweight.
+Two caveats to honour. Some companies report a *frozen* accrued figure carried forward unchanged for
+years (Bharat Gears at 2.37, Dhanuka at 13.65) — so trust a **rise**, never the absence of movement.
+And `nil → positive` is the strongest form of this signal.
 
-**Signal 2 — late-payment intensity (primary)**
+**Rung 2 — Not Due → overdue migration (`W_MIGRATION` 0.25)**
 
 ```
-late_intensity(t) = msmed_principal_paid_beyond_appointed_day_cr / cost_of_materials_cr
+overdue_share(t) = under_1yr / (not_due + under_1yr)
+rung2 = 1.0 if (overdue_share(t) − overdue_share(t−1)) * 100 > MIGRATION_THRESHOLD_PP else 0.0
 ```
 
-This is the whole-year flow figure. It cannot be tidied up before 31 March, which is why it carries more weight.
+**Unavailable when `has_not_due_column` is `false`** — that filer's `under_1yr` silently includes
+amounts not yet due. Do not compute it and do not substitute a default; drop the rung and
+renormalise.
 
-Fall back to `revenue_cr` as the denominator if `cost_of_materials_cr` is `null`, and record that you did.
+The +20pp threshold is measured, not assumed: across a FY22–FY25 panel, **18 no-event transitions
+top out at +15.5pp** while the 2 pre-event transitions are +25.2 and +22.1pp. Note the null is
+strongly asymmetric — healthy companies fall as far as −62.9pp but only one of eighteen rose above
++10pp. Weighted below rung 1 because n = 2 on the event side, and one of those two is disputed by a
+restatement.
+
+**Rung 3 — payables outgrowing revenue (`W_PAYABLES_REVENUE` 0.20)**
+
+```
+ratio(t) = total_trade_payables_cr / revenue_cr
+rung3 = 1.0 if (ratio(t) − ratio(t−1)) > 0 else 0.0
+```
+
+Used where the MSME book is immaterial (`msme_book_material` false) and every MSMED line reads nil.
+Distress cases moved +4.0 to +5.2pp; all three tested controls **fell**, −1.8 to −2.2pp.
+
+**Rung 4 — non-MSME aged-bucket growth (`W_NONMSME_AGEING` 0.10)**
+
+Last resort where nothing above is computable. Only partially control-tested — weight accordingly.
 
 **Combine**
 
 ```
-Δmigration = migration(t) − migration(t−1)
-Δlate      = late_intensity(t) − late_intensity(t−1)
-
-z_m = (Δmigration − sector_median_Δmigration) / max(sector_std_Δmigration, EPSILON)
-z_l = (Δlate      − sector_median_Δlate)      / max(sector_std_Δlate,      EPSILON)
-
-raw = W_MIGRATION * z_m + W_LATE * z_l          # W_MIGRATION 0.35, W_LATE 0.65
-own_stress = clamp(2 / (1 + exp(−raw)) − 1, 0.0, 1.0)
+available = [rungs whose inputs exist for this company]
+if not available: own_stress = 0.0        # never guess
+w_total   = Σ weight(r) for r in available
+raw       = Σ (weight(r) / w_total) * rung_value(r) for r in available
+own_stress = clamp(raw, 0.0, 1.0)
 ```
 
-That last transform maps `raw = 0` to `own_stress = 0` and rises monotonically. A plain logistic would give a stable company 0.5, which is wrong.
+**Do not z-score against sector statistics.** The original spec did; the collected cohort has 7
+industry groups across 16 companies, so all but automotive fall below `MIN_SECTOR_SAMPLE` and would
+silently use global stats — comparing an agrochemical trader against an auto ancillary. Cross-industry
+comparison is valid only for *changes and directions*, never levels, which is exactly what the rungs
+above encode. `MIN_SECTOR_SAMPLE` is retained for any future statistic that genuinely needs peers.
 
-**Sector statistics:** computed across all observable nodes in the same `sector`. With fewer than `MIN_SECTOR_SAMPLE` (3) nodes, fall back to global statistics and note it in the reason factors.
+**Retired — do not reinstate without re-testing against controls:** MSME balance growth. Control
+Bharat Gears posted **+629%** in a year CARE *upgraded* it, against distress case Nectar's +583%. The
+suspected cause is s.43B(h) reclassification, not payment behaviour, which also means **any FY23→FY24
+MSME level comparison is currently uninterpretable**.
 
 **Edge cases you must handle explicitly:**
 
 | Case | Behaviour |
 |---|---|
 | Only one year of data | `own_stress = 0.0`. Cannot compute a change. Record `insufficient_history` |
-| `has_not_due_column` false | Signal 1 unavailable. Use signal 2 at full weight |
-| Both signals null | `own_stress = 0.0`. Never guess |
+| `has_not_due_column` false | Rung 2 unavailable. Renormalise over the rest |
+| No rung computable | `own_stress = 0.0`. Never guess |
 | Explicit `0.0` vs `null` | Different. `0.0` is real data; `null` is absence. See `AGENTS.md` §3.6 |
+| `series_break` set on a year | That year is not comparable with the previous one. Skip the transition |
+| `ageing_basis` differs between two companies | Never compare their buckets. Due-date and transaction-date clocks measure different things |
 
 ### 3.2 Graph construction — `engine/graph.py`
 
@@ -154,10 +198,27 @@ The core of the product.
 
 ```python
 buffer_strength(n) = clamp(cash_buffer_days / BUFFER_REF_DAYS, 0.0, MAX_BUFFER_STRENGTH)
-# BUFFER_REF_DAYS = 90, MAX_BUFFER_STRENGTH = 0.9
+# BUFFER_REF_DAYS = 90, MAX_BUFFER_STRENGTH = 0.35
 ```
 
-Nobody is fully immune — hence the 0.9 cap.
+Nobody is fully immune — hence the cap.
+
+**The cap was lowered from 0.9 to 0.35 after collection measured this field.** Across 44 verified
+company-years — 22 distress, 22 control — `cash_buffer_days` does **not** separate the two cohorts:
+AUC 0.569 against a 0.500 coin flip. The lowest buffers in the set belong to an investment-grade
+control (Balrampur Chini, 0 days) and the highest to a company that collapsed months later (Gensol,
+351 days, whose cash was later found not to be what the balance sheet claimed).
+
+Keep the term — surviving a payment delay longer when you hold more cash is mechanically real, and
+this is a shock-absorption term rather than a predictive signal, so the AUC does not condemn it. But
+a measurement this noisy must **nudge, not decide**. At 0.9 the buffer swung per-hop transmission by
+10x and dominated propagation; at 0.35 the swing is 1.54x.
+
+Two consequences worth internalising. First, real buffers are far thinner than the mock assumed
+(tier-1 median **12 days**, not 60–100), so on real data the buffer term damps almost nothing and
+contagion runs much deeper than any mock run will suggest. Second, reported cash is a poor proxy for
+usable liquidity — one company's ₹770 crore of "current investments" turned out to be unquoted equity
+pledged against loans. Prefer undrawn committed facilities once that field is populated.
 
 ```
 fragility⁰(n) = own_stress(n)
@@ -301,7 +362,7 @@ python -m engine.mockgen --seed 42 --out data/mock/network.json
 | Names | Realistic Indian manufacturing names. **Never `Company_47`** |
 | Fan-out | Tier-1 has 20–50 suppliers, not 3 |
 | Size distribution | Heavily skewed — a few large, many tiny |
-| Buffers by tier | Tier 0: 150–250 days. Tier 1: 60–100. Tier 2: 15–40. Tier 3: 5–25 |
+| Buffers by tier | Tier 1: 3–45 days, **empirical** (29 real company-years: median 12, quartiles 4 and 30.5). Tier 0: 60–200, Tier 2: 2–30, Tier 3: 1–20 — **stated assumptions, no observations exist** |
 | Chokepoints | 3–5 genuine single-source nodes so criticality has something real to find |
 | Numbers | Non-round. `24.70` not `25.00` |
 | Stress signals | 6–10 observable nodes with two years each, shaped like real Schedule III data |

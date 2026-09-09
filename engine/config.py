@@ -14,8 +14,30 @@ MOCK_SEED = 42  # default seed for deterministic mock generation
 # Stress detection  (engine/stress.py)
 # ---------------------------------------------------------------------------
 
-W_MIGRATION = 0.35  # weight of migration-ratio signal — lower because ageing table can be window-dressed
-W_LATE = 0.65       # weight of late-payment intensity — primary signal; whole-year flow cannot be tidied
+# Signal ladder, ordered by control-tested discriminating power.  Evidence for
+# every weight is in data/real/DATA_DICTIONARY.md §6 and findings.md §5.
+#
+# The original spec weighted "late-payment intensity" at 0.65, computed from
+# msmed_principal_paid_beyond_appointed_day.  Collection found that field
+# disclosed in 3 of 46 company-years, all belonging to a single control
+# company.  It cannot carry the model and is now the last rung.
+#
+# Availability varies enormously between filers, so weights are RENORMALISED
+# over whichever rungs are computable for a given company: a company with only
+# rung 1 available scores on rung 1 at full weight.  Never substitute a default
+# for an unavailable signal — see AGENTS.md §3.6 on null vs zero.
+
+W_INTEREST_DIRECTION = 0.45  # MSMED interest rose YoY — pre-event 6/8, controls 0/7; needs no Not Due column
+W_MIGRATION = 0.25           # Not Due → overdue share rose >20pp — clean separation, but only n=2 events
+W_PAYABLES_REVENUE = 0.20    # payables ÷ revenue rising — distress +4.0/+5.2pp vs controls −1.8/−2.2pp
+W_NONMSME_AGEING = 0.10      # non-MSME aged-bucket growth — fallback where the MSME book is immaterial
+
+# RETIRED — MSME balance growth.  Control Bharat Gears posted +629% in a year
+# CARE upgraded it, against distress case Nectar's +583%.  Does not
+# discriminate; suspected s.43B(h) reclassification, not payment behaviour.
+# Do not reinstate without re-testing against the control cohort.
+
+MIGRATION_THRESHOLD_PP = 20.0  # rung 2 fires above +20pp; 18 measured no-event transitions top out at +15.5
 
 MIN_SECTOR_SAMPLE = 3  # minimum sector peers for z-score; below this, fall back to global stats
 
@@ -29,7 +51,22 @@ MAX_ITERATIONS = 10     # upper bound on propagation iterations; convergence usu
 CONVERGENCE_THRESHOLD = 0.001  # max absolute change across all nodes to declare convergence
 DAMPING = 0.75          # each hop transmits 75% of upstream fragility; prevents long-chain blowup
 BUFFER_REF_DAYS = 90    # cash-buffer reference: 90 days ≈ a well-buffered mid-tier firm
-MAX_BUFFER_STRENGTH = 0.9  # nobody is fully immune — cap at 0.9 so even large firms carry some risk
+
+# Cap on how far cash buffer can damp inherited stress.  Was 0.9, which let the
+# buffer term swing per-hop transmission by 10x and made it the dominant force
+# in propagation.  Collection measured cash_buffer_days across 44 verified
+# company-years — 22 distress, 22 control — and it does not separate them:
+# AUC 0.569 against a 0.500 coin flip.  The lowest buffers in the set belong to
+# an investment-grade control (Balrampur Chini, 0 days) and the highest to a
+# company that collapsed months later (Gensol, 351 days, cash later found not
+# to be what the balance sheet claimed).
+#
+# Buffer is kept because absorbing a payment delay for longer is mechanically
+# real, but a measurement this noisy must nudge rather than decide.  At 0.35 the
+# per-hop swing is 1.54x instead of 10x.  Prefer undrawn committed facilities
+# over reported cash once that field is populated — see schema_change_request.md
+# gap 6 (liquidity quality).
+MAX_BUFFER_STRENGTH = 0.35
 
 # ---------------------------------------------------------------------------
 # Criticality  (engine/criticality.py)
