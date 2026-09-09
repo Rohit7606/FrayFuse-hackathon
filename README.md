@@ -126,6 +126,8 @@ cd web && npm install && npm run dev                  # mocks; dev:live for the 
 
 `FRAYFUSE_NETWORK` selects the dataset the API serves. That one variable is the entire real-data switch.
 
+`GET /api/network` also returns `stress_signals` — optional and additive in schema 1.2 — so the evidence panel can print a filer's own ageing and MSMED rows instead of restating them. See `SCHEMA.md` §5.2.
+
 **Determinism is mandatory** — the same input must give byte-identical output, because a judge will re-run the counterfactual on stage:
 
 ```bash
@@ -138,11 +140,24 @@ diff run1.json run2.json && echo DETERMINISTIC
 
 ## Status
 
-Engine, API, data pipeline and frontend are integrated on `main` and tested end to end. 85 Python tests plus the web suite, lint clean, determinism verified for scoring, mock generation and the CSV transform.
+Engine, API, data pipeline and frontend are integrated and tested end to end. 85 Python tests plus 16 web tests, lint clean, determinism verified for scoring, mock generation and the CSV transform.
 
-The UI is TypeScript + React with a force-directed network graph, ranked list, intervention card and the anchor counterfactual. It runs against committed mocks with the backend switched off (`npm run dev`) or against the live API (`npm run dev:live`), and both return identical figures.
+The UI is the **v2 console** (`web/src/v2/`): a seven-step walkthrough over one network canvas, with the four features the demo is built on.
 
-**What is not finished:** `handleRunCascade` is still a timed animation rather than a call to `/api/simulate`, so the cascade is staged rather than driven by the engine. The scores it animates are real; the propagation you watch is not yet live.
+| Step | What it shows | Where the numbers come from |
+|---|---|---|
+| 01–02 | The chain, and how little of it the anchor can see | `GET /api/network` |
+| 03 | **Ageing vs reality** — the trigger's filed ageing table beside its whole-year MSMED lines | `stress_signals` on `GET /api/network` |
+| 04 | **Cascade** — stress revealed one propagation hop at a time | `propagation_depth` from `POST /api/simulate` |
+| 05 | The ranked list, and why the origin is not the rescue | `ranking` + `scores` |
+| 06 | **Path focus** — the dependency chain from a deep-tier supplier to the anchor | walked over `edges` by `exposure_pct` |
+| 07 | **Fund it, then undo it** — before, after, and the counterfactual | `POST /api/intervene` |
+
+A **what-if slider** re-scores the trigger's `own_stress` at any point from step 04 onwards. Live it posts to `/api/simulate`; offline it reads `web/src/mocks/simulate-sweep.json`, where every stop was produced by that same engine call ahead of time. Nothing in the frontend computes a risk figure.
+
+The cascade animation is now driven by the engine: it reveals the `propagation_depth` each node was actually assigned, in order. It no longer stages a fixed sequence on a timer.
+
+`npm run dev` (committed mocks, backend off) and `npm run dev:live` (live API) return identical figures, which is what `scripts/refresh_web_mocks.py` exists to guarantee.
 
 ---
 
