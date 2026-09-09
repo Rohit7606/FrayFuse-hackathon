@@ -1,0 +1,24 @@
+/* Designed for a projector: larger than feels right, high contrast.
+   Test at 1280x720 (PERSON_C.md §6). */
+:root {
+  --bg: #0d1117;
+  --panel: #161b22;
+  --line: #30363d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --critical: #f85149;
+  --high: #ff9800;
+  --watch: #d4a72c;
+  --stable: #3fb950;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.band-critical { color: var(--critical); }
+.band-high { color: var(--high); }
+.band-watch { color: var(--watch); }
+.band-stable { color: var(--stable); }
