@@ -67,7 +67,7 @@ PINNED_NODES: tuple[dict[str, Any], ...] = (
         "sector": "auto_components",
         "product_category": "thermal_products",
         "revenue_cr": 61.35,
-        "cash_buffer_days": 27,
+        "cash_buffer_days": 16,
         "employees": 96,
         "is_observable": False,
     },
@@ -78,7 +78,7 @@ PINNED_NODES: tuple[dict[str, Any], ...] = (
         "sector": "polymers",
         "product_category": "polymer_compounds",
         "revenue_cr": 9.84,
-        "cash_buffer_days": 11,
+        "cash_buffer_days": 8,
         "employees": 23,
         "is_observable": False,
     },
@@ -124,14 +124,14 @@ PINNED_EDGES: tuple[dict[str, Any], ...] = (
         "supplier_id": "N087",
         "buyer_id": "N007",
         "component": "thermal_products",
-        "exposure_pct": 0.3400,
+        "exposure_pct": 0.4600,
         "is_single_source": False,
     },
     {
         "supplier_id": "N118",
         "buyer_id": "N042",
         "component": "polymer_compound",
-        "exposure_pct": 0.6600,
+        "exposure_pct": 0.7200,
         "is_single_source": True,
     },
 )
@@ -146,6 +146,19 @@ PINNED_SECONDARY_EXPOSURE: dict[str, tuple[tuple[str, float], ...]] = {
     "N087": (("radiator_cores", 0.2200), ("heat_shields", 0.1700), ("oil_coolers", 0.1400)),
     "N118": (("masterbatch_compound", 0.1900),),
 }
+
+# How many tier-3 suppliers each tier-2 cast member must have beneath it.
+#
+# Betweenness counts paths THROUGH a node, so a tier-2 firm with one supplier
+# sits on almost none and scores as replaceable however exposed it is.  Without
+# a supplier base the demo cast is out-ranked by generic filler and
+# DEMO_SCENARIO.md §3's contrast never appears in the list.
+#
+# N203 deliberately gets the LARGEST base.  It is the better-connected node and
+# still ranks below N042, which is the sharpest form of the argument: being
+# central is not the same as being irreplaceable.  N042 wins on the sole-source
+# term alone.
+PINNED_TIER2_FANIN: dict[str, int] = {"N042": 6, "N087": 9, "N203": 12}
 
 PINNED_IDS = tuple(n["node_id"] for n in PINNED_NODES)
 
@@ -465,6 +478,16 @@ def _build_pairs(
         for supplier_id in rng.sample(free_tier3, count):
             add(supplier_id, buyer_id)
 
+    # The demo cast needs a real supplier base beneath it — see
+    # PINNED_TIER2_FANIN for why betweenness collapses without one.
+    for buyer_id in sorted(PINNED_TIER2_FANIN):
+        shortfall = PINNED_TIER2_FANIN[buyer_id] - sum(1 for _, b in pairs if b == buyer_id)
+        if shortfall <= 0:
+            continue
+        candidates = [n for n in free_tier3 if (n, buyer_id) not in seen]
+        for supplier_id in sorted(rng.sample(candidates, min(shortfall, len(candidates)))):
+            add(supplier_id, buyer_id)
+
     # Nobody is left stranded: a supplier with no buyer would sit outside the
     # graph entirely and could never carry or receive stress.
     has_buyer = {supplier_id for supplier_id, _ in pairs}
@@ -584,6 +607,18 @@ def _add_extra_chokepoints(rng: random.Random, edges: list[dict[str, Any]]) -> N
 FY_YEARS = ("FY23", "FY24")
 OBSERVABLE_COUNT = 8  # a handful of listed filers; everything below them is dark
 
+# Positions in the observable list whose disclosures deteriorate year on year.
+#
+# Empty by design.  DEMO_SCENARIO.md §5 specifies a single stressed origin,
+# N007, and the cascade story is that one trigger reaching four suppliers.  A
+# second deteriorating peer creates a parallel stress branch whose suppliers
+# interleave with the demo cast in the ranked list, so the list stops being "what
+# N007 did" and the narration no longer matches the screen.
+#
+# The peers still matter: they are the quiet control cohort that makes N007's
+# deterioration legible as a signal rather than as the only thing measured.
+DETERIORATING_POSITIONS: frozenset[int] = frozenset()
+
 # N007, both years, hand-built.  FY24 matches the worked example in SCHEMA.md
 # §3.4 exactly; FY23 is its prior year, giving a 2.1x rise in the MSMED flow
 # figure against an ageing table that barely moves.
@@ -628,32 +663,69 @@ N007_SIGNALS: tuple[dict[str, Any], ...] = (
 
 
 def _peer_signals(
-    rng: random.Random, node: dict[str, Any], omit_not_due: bool, omit_materials: bool
+    rng: random.Random,
+    node: dict[str, Any],
+    omit_not_due: bool,
+    omit_materials: bool,
+    deteriorating: bool = False,
 ) -> list[dict[str, Any]]:
-    """Two years of unremarkable disclosures, so N007 stands out against peers."""
+    """Two years of disclosures for an observable peer.
+
+    The year-on-year direction of every figure the stress ladder reads is set
+    deliberately by `deteriorating`, not left to independent draws per year.
+    Drawing each year independently makes roughly half of all peers trip rung 1
+    by accident, which buries the demo's trigger in noise and — worse — puts a
+    stress score on the anchor, which DEMO_SCENARIO.md §2 says pays on time.
+    """
     revenue = node["revenue_cr"]
     materials_ratio = rng.uniform(0.58, 0.68)
     late_intensity = rng.uniform(0.06, 0.14)
-    late_drift = rng.uniform(0.92, 1.12)
     migration = rng.uniform(0.03, 0.11)
-    migration_drift = rng.uniform(0.90, 1.15)
     growth = rng.uniform(1.02, 1.09)
+
+    # Drift multipliers applied to year two.  A quiet filer's figures hold flat
+    # or improve; a deteriorating one's rise, but below N007's 2.1x so the
+    # trigger stays the clearest case in the network.
+    if deteriorating:
+        late_drift = rng.uniform(1.25, 1.60)
+        migration_drift = rng.uniform(1.05, 1.20)
+        payables_drift = rng.uniform(1.04, 1.10)
+        aged_drift = rng.uniform(1.10, 1.35)
+    else:
+        late_drift = rng.uniform(0.82, 0.97)
+        migration_drift = rng.uniform(0.88, 1.02)
+        payables_drift = rng.uniform(0.93, 0.99)
+        aged_drift = rng.uniform(0.80, 0.96)
+
+    # Every ratio is drawn once, before the year loop, then carried forward by
+    # its drift multiplier.  Redrawing inside the loop is what made a filer's
+    # direction accidental rather than intended.
+    msme_ratio = rng.uniform(0.014, 0.022)
+    nonmsme_ratio = rng.uniform(0.09, 0.16)
+    aged_1_2_ratio = rng.uniform(0.001, 0.006)
+    aged_2_3_ratio = rng.uniform(0.0002, 0.002)
+    aged_over_3_ratio = rng.uniform(0.0002, 0.0015)
+    unpaid_ratio = rng.uniform(0.5, 0.95)
+    interest_ratio = rng.uniform(0.01, 0.05)
+    turnover = rng.uniform(4.1, 7.3)
 
     rows: list[dict[str, Any]] = []
     for year_index, fy in enumerate(FY_YEARS):
-        scale = growth**year_index
         year_revenue = revenue / growth ** (len(FY_YEARS) - 1 - year_index)
         materials = year_revenue * materials_ratio
         year_migration = migration * migration_drift**year_index
         year_late = late_intensity * late_drift**year_index
+        year_payables = payables_drift**year_index
+        year_aged = aged_drift**year_index
 
-        msme_total = year_revenue * rng.uniform(0.014, 0.022) * scale
+        msme_total = year_revenue * msme_ratio * year_payables
         under_1yr = msme_total * year_migration
         not_due = msme_total - under_1yr
-        aged_1_2 = msme_total * rng.uniform(0.001, 0.006)
-        aged_2_3 = msme_total * rng.uniform(0.0002, 0.002)
-        aged_over_3 = msme_total * rng.uniform(0.0002, 0.0015)
-        nonmsme = year_revenue * rng.uniform(0.09, 0.16)
+        aged_1_2 = msme_total * aged_1_2_ratio * year_aged
+        aged_2_3 = msme_total * aged_2_3_ratio * year_aged
+        aged_over_3 = msme_total * aged_over_3_ratio * year_aged
+        nonmsme = year_revenue * nonmsme_ratio * year_payables
+        interest = msme_total * interest_ratio * late_drift**year_index
 
         rows.append(
             {
@@ -669,12 +741,12 @@ def _peer_signals(
                 "msme_total_cr": round(msme_total + aged_1_2 + aged_2_3 + aged_over_3, 2),
                 "nonmsme_total_cr": round(nonmsme, 2),
                 "total_trade_payables_cr": round(msme_total + nonmsme, 2),
-                "msmed_principal_unpaid_year_end_cr": round(msme_total * rng.uniform(0.5, 0.95), 2),
+                "msmed_principal_unpaid_year_end_cr": round(msme_total * unpaid_ratio, 2),
                 "msmed_principal_paid_beyond_appointed_day_cr": round(year_late * materials, 2),
-                "msmed_interest_accrued_unpaid_cr": round(msme_total * rng.uniform(0.01, 0.05), 2),
+                "msmed_interest_accrued_unpaid_cr": round(interest, 2),
                 "revenue_cr": round(year_revenue, 2),
                 "cost_of_materials_cr": None if omit_materials else round(materials, 2),
-                "trade_payables_turnover_ratio": round(rng.uniform(4.1, 7.3), 2),
+                "trade_payables_turnover_ratio": round(turnover, 2),
                 "has_not_due_column": not omit_not_due,
             }
         )
@@ -705,8 +777,17 @@ def _generate_stress_signals(
         else:
             # One peer omits the Not Due column and one omits cost of materials,
             # so both fallback branches are exercised by the committed mock.
+            #
+            # N001 is the anchor and must read clean: DEMO_SCENARIO.md §2 says it
+            # pays on time and has idle cash, and the counterfactual only lands
+            # if it starts the demo green.  Two peers deteriorate mildly so the
+            # ranked list is not suspiciously short, but none as sharply as N007.
             rows = _peer_signals(
-                rng, node, omit_not_due=position == 2, omit_materials=position == 3
+                rng,
+                node,
+                omit_not_due=position == 2,
+                omit_materials=position == 3,
+                deteriorating=position in DETERIORATING_POSITIONS,
             )
 
         for row in rows:

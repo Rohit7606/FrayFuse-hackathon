@@ -44,7 +44,11 @@
       "properties": {
         "schema_version": {
           "type": "string",
-          "const": "1.0"
+          "enum": [
+            "1.0",
+            "1.1"
+          ],
+          "description": "Contract version this file was produced against. 1.0 files remain valid: 1.1 was additive on inputs."
         },
         "generated_at": {
           "type": "string",
@@ -95,8 +99,6 @@
         "tier",
         "sector",
         "product_category",
-        "revenue_cr",
-        "cash_buffer_days",
         "is_observable",
         "data_source"
       ],
@@ -122,12 +124,20 @@
           "type": "string"
         },
         "revenue_cr": {
-          "type": "number",
-          "minimum": 0
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "description": "null means the figure was not disclosed for this real company. NEVER invent one - DATA_DICTIONARY.md 3b forbids a rupee figure beside a real company's name. The engine substitutes at runtime and records the node in `substituted`."
         },
         "cash_buffer_days": {
-          "type": "integer",
-          "minimum": 0
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "description": "null means not disclosed. Substituted at runtime and recorded in `substituted`."
         },
         "employees": {
           "type": [
@@ -150,6 +160,13 @@
         },
         "observation_completeness": {
           "$ref": "#/definitions/ObservationCompleteness"
+        },
+        "substituted": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Field names the engine supplied a value for because the source did not disclose one. Present so a substitution is a VISIBLE modelling decision rather than a fact frozen into a data file. The UI must label these."
         }
       }
     },
@@ -908,7 +925,7 @@
         "due_date",
         "transaction_date"
       ],
-      "description": "Schedule III ages from the due date; some filers age from the transaction date. Buckets from different bases are NOT comparable under the same column names."
+      "description": "Schedule III ages from the due date; some filers age from the transaction date. Buckets from different bases are NOT comparable under the same column names. Required - never null."
     },
     "EdgeConfidence": {
       "type": "string",
@@ -917,29 +934,40 @@
         "probable",
         "concentration_only"
       ],
-      "description": "How well evidenced this relationship is. 'probable' is inference, not disclosure — the UI must never present it as fact."
+      "description": "How well evidenced this relationship is. 'probable' is inference, not disclosure - the UI must never present it as fact. Required - never null."
     },
     "EdgeProvenance": {
-      "type": "string",
+      "type": [
+        "string",
+        "null"
+      ],
       "enum": [
         "related_party_note",
+        "related_party",
         "mdna",
+        "segment_note",
         "rating_agency",
         "awards_page",
+        "press",
         "auditor_note",
         "contingent_liability_note",
-        "synthetic"
+        "synthetic",
+        null
       ],
-      "description": "Where the edge came from. related_party_note means a group/promoter-affiliated entity disclosed under Ind AS 24 — a real dependency, but not an arm's-length supply relationship."
+      "description": "Where the edge came from. related_party_note means a group or promoter-affiliated entity disclosed under Ind AS 24 - a real dependency, but not an arm's-length supply relationship. 'press' is the weakest: reported, not filed. null means not recorded."
     },
     "ObservationCompleteness": {
-      "type": "string",
+      "type": [
+        "string",
+        "null"
+      ],
       "enum": [
         "observed",
         "partially_observed",
-        "not_observed"
+        "not_observed",
+        null
       ],
-      "description": "Whether this node's relationships were actually searched for. Without it, 'not critical' and 'not yet observed' are indistinguishable in the score — and the second is far more common."
+      "description": "Whether this node's relationships were actually searched for. Without it, 'not critical' and 'not yet observed' are indistinguishable in the score — and the second is far more common. null means not recorded."
     }
   },
   "examples": {

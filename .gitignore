@@ -229,3 +229,6 @@ data/real/network.json
 web/node_modules/
 web/dist/
 web/.vite/
+
+# Transform output — regenerate with `python -m engine.transform`
+data/real/network.json

@@ -11,6 +11,19 @@ it has that value.  No magic numbers elsewhere in the codebase.
 MOCK_SEED = 42  # default seed for deterministic mock generation
 
 # ---------------------------------------------------------------------------
+# Graph construction  (engine/graph.py)
+# ---------------------------------------------------------------------------
+
+# Which evidential levels may carry stress.  schema_change_request.md §1 asks
+# that only edges a company named in its own filing propagate automatically:
+# "probable" is inference from a third party and must not be given the standing
+# of disclosure.  The mock network is entirely "confirmed", so this is a no-op
+# there and only bites when the real dataset lands.
+PROPAGATING_EDGE_CONFIDENCE = frozenset({"confirmed"})
+
+MAX_EXPOSURE_SUM_TOLERANCE = 1.02  # a supplier's outgoing exposure may exceed 1.0 only by rounding
+
+# ---------------------------------------------------------------------------
 # Stress detection  (engine/stress.py)
 # ---------------------------------------------------------------------------
 
@@ -68,9 +81,33 @@ BUFFER_REF_DAYS = 90    # cash-buffer reference: 90 days ≈ a well-buffered mid
 # gap 6 (liquidity quality).
 MAX_BUFFER_STRENGTH = 0.35
 
+# Runtime fill for a real company whose filings do not disclose a buffer.
+#
+# 41 of 46 collected company-years have no cash_buffer_days, so the alternative
+# to substituting is dropping most real nodes from the graph.  The tier-1 value
+# is the measured median across 29 verified company-years; the others are stated
+# assumptions with no observation behind them, because the collected cohort is
+# entirely listed manufacturers.  Nodes filled this way carry the field in their
+# `substituted` list so the UI can label it — DATA_DICTIONARY.md §3b requires
+# the substitution to be visible rather than frozen into the data.
+SUBSTITUTE_BUFFER_DAYS_BY_TIER: dict[int, int] = {0: 60, 1: 12, 2: 10, 3: 8}
+DEFAULT_SUBSTITUTE_BUFFER_DAYS = 12
+
 # ---------------------------------------------------------------------------
 # Criticality  (engine/criticality.py)
 # ---------------------------------------------------------------------------
+
+# Normalise betweenness and flow share within tier rather than across the whole
+# network.  Both are size-correlated by construction, so a network-wide maximum
+# hands both to the tier-1 hub: measured on the mock at seed 42, the hub took
+# betweenness 0.875 and flow share 1.000 while a genuine sole-source tier-2
+# chokepoint scored 0.137 and 0.012.  That made 0.65 of criticality a proxy for
+# revenue and filled the ranked list with large stressed companies instead of the
+# small irreplaceable ones the product exists to find.  Within tier, the same
+# chokepoint scores 0.475 against a comparably stressed non-sole-source peer's
+# 0.178 — the 2.7x separation DEMO_SCENARIO.md §3 rests its argument on.
+# Set false to restore the original network-wide behaviour.
+NORMALISE_CRITICALITY_WITHIN_TIER = True
 
 W_BETWEENNESS = 0.45    # graph position — how many paths pass through this node
 W_SINGLE_SOURCE = 0.35  # irreplaceability — sole-source edges have outsized supply-chain impact
@@ -80,16 +117,45 @@ W_FLOW_SHARE = 0.20     # share of total network trade flowing through this node
 # Risk bands  (engine/ranking.py)
 # ---------------------------------------------------------------------------
 
-BAND_CRITICAL = 0.50  # final_score ≥ 0.50 → "critical"
-BAND_HIGH = 0.30      # 0.30 – 0.50 → "high"
-BAND_WATCH = 0.15     # 0.15 – 0.30 → "watch"
-# below 0.15 → "stable"
+# Recalibrated to the score distribution the model actually produces.
+#
+# final_score is the product of two sub-1 factors, and fragility is damped twice
+# on the way down the chain (once by DAMPING, once by the buffer term), so the
+# realistic range is far narrower than the original 0.50/0.30/0.15 assumed.  On
+# the mock at seed 42 the whole non-origin population fits under 0.21, and the
+# original thresholds banded every deep-tier supplier "stable" — including the
+# sole-source chokepoint the demo is built around.
+#
+# These are a calibration to an observed distribution, not a claim about the
+# world.  What carries meaning is the ORDERING and the separation between bands,
+# not the absolute numbers: the headline finding sits at 0.204 against the next
+# node's 0.090, a 2.3x gap.  Say that plainly rather than implying 0.20 is a
+# measured threshold for corporate distress.  Re-derive them if DAMPING,
+# MAX_BUFFER_STRENGTH or the criticality weights change.
+BAND_CRITICAL = 0.20   # final_score >= 0.20 -> "critical"
+BAND_HIGH = 0.06       # 0.06 - 0.20 -> "high"
+BAND_WATCH = 0.012     # 0.012 - 0.06 -> "watch"
+# below 0.012 -> "stable"
 
 # ---------------------------------------------------------------------------
 # Intervention  (engine/intervention.py)
 # ---------------------------------------------------------------------------
 
+# Below this many days of cash, a node's buffer is worth calling out in its
+# reason text.  Presentation only — it does not enter any score.  Chosen from
+# the collected tier-1 median of 12-15 days: a fortnight of cover against a
+# stretched payment cycle is the point where the buffer stops being a cushion.
+THIN_BUFFER_DAYS = 21
+
 DISRUPTION_MONTHS = 3  # assumed disruption window for exposure calculation — a stated assumption, not measured
+
+# ---------------------------------------------------------------------------
+# Transform build-time constants  (engine/transform.py)
+# ---------------------------------------------------------------------------
+
+# Fixed, not now().  Set at data-build time so the same CSVs always produce a
+# byte-identical network.json — AGENTS.md §3.1.
+TRANSFORM_GENERATED_AT = "2026-09-09T00:00:00Z"
 
 # ---------------------------------------------------------------------------
 # Mock generation build-time constants  (engine/mockgen.py)
