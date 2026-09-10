@@ -18,6 +18,10 @@ EdgeProvenance = Literal[
     "awards_page", "press", "auditor_note", "contingent_liability_note", "synthetic",
 ]
 ObservationCompleteness = Literal["observed", "partially_observed", "not_observed"]
+# Which queue a supplier belongs in — a decision, not a score. See
+# engine/triage.py for why this is not derivable from risk_band.
+TriageQueue = Literal["fund_now", "derisk", "monitor", "clear", "origin"]
+ActionKind = Literal["fund", "derisk", "monitor", "none"]
 
 
 class Meta(BaseModel):
@@ -122,6 +126,21 @@ class ReasonFactor(BaseModel):
     weight: float
 
 
+class SubstitutionCandidate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    node_id: NodeId
+    name: str
+    component: str
+    replaces_edge_id: EdgeId
+    fitness: Annotated[float, Field(ge=0.0, le=1.0)]
+    fragility: Annotated[float, Field(ge=0.0, le=1.0)]
+    # null means the candidate's revenue is undisclosed, which is unknown
+    # headroom and not zero headroom. Never coerce one to the other.
+    capacity_headroom_cr: Annotated[float, Field(ge=0.0)] | None = None
+    reason_text: str
+
+
 class Score(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -145,6 +164,13 @@ class Score(BaseModel):
     disruption_band: RiskBand
     disrupted_inflow_cr: Annotated[float, Field(ge=0.0)]
     disruption_reason: str
+    # Substitution, schema 1.3. ABSENT (None) means substitution was not
+    # considered for this node; an EMPTY LIST means it was considered and
+    # nobody qualified. Two different facts — see SCHEMA.md §4.6.
+    substitution_candidates: list[SubstitutionCandidate] | None = None
+    # Triage, schema 1.4. Optional and additive: an older client ignores it,
+    # and every score the engine produces carries it.
+    triage_queue: TriageQueue | None = None
 
 
 class BandCounts(BaseModel):
@@ -229,6 +255,16 @@ class SimulateRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     scenario: Scenario
+    # Score THIS network instead of the one the server loaded at startup.
+    #
+    # Added with ingestion (schema 1.3). The alternative was to keep the
+    # uploaded network in server memory and hand back a handle, which is the
+    # session state AGENTS.md §3.4 forbids. The client holds the network it
+    # ingested and sends it with each scenario, so every request stays a pure
+    # function of its own body and two clients can hold two different networks
+    # without knowing about each other. Omitted, the default network is scored,
+    # so nothing that worked before changes.
+    network: NetworkInput | None = None
 
 
 class InterveneRequest(BaseModel):
@@ -236,6 +272,32 @@ class InterveneRequest(BaseModel):
 
     interventions: list[Intervention]
     baseline_scenario: Scenario | None = None
+    # As on SimulateRequest — the client's own network, or the default.
+    network: NetworkInput | None = None
+
+
+class IngestReport(BaseModel):
+    """What the upload contained and what was made of it.
+
+    A demo asset rather than debug output: `fields_null` against
+    `fields_present` is the number behind "most of this network is dark",
+    which is the product's own thesis.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    files_seen: list[str]
+    files_used: dict[str, str]
+    files_ignored: list[str]
+    rows_parsed: dict[str, int]
+    companies_read: int
+    nodes_built: int
+    edges_built: int
+    generated_nodes: int
+    observable_nodes: int
+    fields_present: int
+    fields_null: int
+    warnings: list[str]
 
 
 class NetworkResponse(BaseModel):
@@ -262,6 +324,20 @@ class AtRiskResponse(BaseModel):
     ranking: list[str]
     scores: list[Score]
     summary: Summary
+
+
+class IngestResponse(ScoredNetwork):
+    """The scored network built from an upload, plus what the upload held.
+
+    Carries `stress_signals` as well as the ScoredNetwork fields, because the
+    client needs the whole NetworkInput back: to show the evidence panel, and
+    to send it with the scenario requests that follow (see SimulateRequest).
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    stress_signals: list[StressSignal] = Field(default_factory=list)
+    ingest_report: IngestReport
 
 
 class PerNodeDelta(BaseModel):
@@ -298,3 +374,174 @@ class ErrorResponse(BaseModel):
     error: str
     detail: str
     node_id: str | None = None
+
+
+# ---------------------------------------------------------------------------
+# Triage — the de-risking plan (schema 1.4)
+# ---------------------------------------------------------------------------
+
+
+class TriageStatus(BaseModel):
+    """One of the two readings behind a queue, stated separately."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    kind: Literal["fragility", "replaceability"]
+    verdict: Literal["fragile", "holding", "irreplaceable", "replaceable"]
+    detail: str
+
+
+class ReviewTrigger(BaseModel):
+    """A threshold that, once crossed, moves a watched supplier to the funding queue."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    metric: Literal["fragility", "criticality", "alternatives", "buyer_own_stress"]
+    current: float
+    threshold: float
+    detail: str
+
+
+class PlanDependency(BaseModel):
+    """The buyer this supplier most depends on, and whether it is the origin."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    buyer_id: NodeId
+    buyer_name: str
+    edge_id: EdgeId
+    component: str
+    exposure_pct: Annotated[float, Field(ge=0.0, le=1.0)]
+    annual_value_cr: float
+    buyer_is_stressed_origin: bool
+    buyer_own_stress: Annotated[float, Field(ge=0.0, le=1.0)]
+    buyer_fragility: Annotated[float, Field(ge=0.0, le=1.0)]
+
+
+class RecommendedAction(BaseModel):
+    """What to do, and what it would cost.
+
+    `amount_cr` is null for the queues where money is not the answer — that is a
+    different fact from ₹0.00 cr, and the two are kept apart here for the same
+    reason they are kept apart everywhere else in this contract.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    kind: ActionKind
+    label: str
+    amount_cr: Annotated[float, Field(ge=0.0)] | None = None
+
+
+class DeriskPlan(BaseModel):
+    """What to do about one supplier, and what would change the answer."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    node_id: NodeId
+    name: str
+    tier: Annotated[int, Field(ge=0, le=3)]
+    queue: TriageQueue
+    queue_label: str
+    headline: str
+    fragility: Annotated[float, Field(ge=0.0, le=1.0)]
+    criticality: Annotated[float, Field(ge=0.0, le=1.0)]
+    final_score: Annotated[float, Field(ge=0.0, le=1.0)]
+    risk_band: RiskBand
+    status: list[TriageStatus]
+    exposure_at_risk_cr: float
+    stabilisation_cost_cr: float
+    inherited_share: Annotated[float, Field(ge=0.0, le=1.0)]
+    # null means substitution was not considered for this node; 0 means it was
+    # and nobody qualified (SCHEMA.md §4.6).
+    alternatives_found: Annotated[int, Field(ge=0)] | None = None
+    dependency: PlanDependency | None = None
+    review_triggers: list[ReviewTrigger]
+    actions: list[str]
+    recommended_action: RecommendedAction
+
+
+class DeriskRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    node_id: NodeId
+    scenario: Scenario | None = None
+    # As on SimulateRequest — the client's own network, or the server default.
+    network: NetworkInput | None = None
+
+
+# ---------------------------------------------------------------------------
+# Budget allocation (schema 1.4)
+# ---------------------------------------------------------------------------
+
+
+class Allocation(BaseModel):
+    """One supplier's share of the budget, and what it bought."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    node_id: NodeId
+    name: str
+    rank: int | None = None
+    amount_cr: Annotated[float, Field(ge=0.0)]
+    cost_cr: Annotated[float, Field(ge=0.0)]
+    coverage: Annotated[float, Field(ge=0.0, le=1.0)]
+    # Measured with this supplier funded ALONE. Suppliers on the same chain each
+    # get credit for relieving it, so these can sum to more than the joint
+    # `objective.reduced_cr` — which is the figure to quote.
+    measured_benefit_cr: float
+    efficiency: float
+    exposure_at_risk_cr: float
+    fragility_before: Annotated[float, Field(ge=0.0, le=1.0)]
+    fragility_after: Annotated[float, Field(ge=0.0, le=1.0)]
+    band_before: RiskBand
+    band_after: RiskBand
+
+
+class AllocationObjective(BaseModel):
+    """What the allocation was optimised against, before and after."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    metric: Literal["anchor_inflow_at_risk_cr"]
+    before_cr: float
+    after_cr: float
+    reduced_cr: float
+
+
+class AllocateRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    # Bounded above so a mistyped budget cannot turn into a scoring run per
+    # rupee, and below at 0 because a negative budget is not a request.
+    budget_cr: Annotated[float, Field(ge=0.0, le=100_000.0)]
+    baseline_scenario: Scenario | None = None
+    network: NetworkInput | None = None
+    # How many ranked suppliers to probe. Each probe is a full scoring run, so
+    # this is the cost of the request — bounded rather than free.
+    max_candidates: Annotated[int, Field(ge=1, le=20)] | None = None
+
+
+class AllocateResponse(BaseModel):
+    """The plan, the outcome, and how it was arrived at.
+
+    Deliberately does NOT carry the before/after `ScoredNetwork` pair that
+    `/api/intervene` returns. The allocation is read as a plan plus its effect;
+    two full networks would be a megabyte of duplicate nodes and edges the
+    client already holds, and `delta` plus the two summaries carry everything
+    the comparison needs.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    budget_cr: float
+    allocated_cr: float
+    unallocated_cr: float
+    objective: AllocationObjective
+    allocations: list[Allocation]
+    candidates_considered: list[NodeId]
+    scoring_runs: Annotated[int, Field(ge=1)]
+    note: str
+    delta: Delta
+    summary_before: Summary
+    summary_after: Summary

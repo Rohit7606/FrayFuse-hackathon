@@ -114,6 +114,37 @@ W_SINGLE_SOURCE = 0.35  # irreplaceability — sole-source edges have outsized s
 W_FLOW_SHARE = 0.20     # share of total network trade flowing through this node
 
 # ---------------------------------------------------------------------------
+# Substitution  (engine/substitution.py)
+# ---------------------------------------------------------------------------
+
+# The criticality at or below which a supplier is treated as replaceable enough
+# to be worth suggesting alternatives for.
+#
+# Calibrated to the distribution this model actually produces, not to a claim
+# about the world.  On data/mock/network.json at seed 42 criticality runs
+# lower quartile 0.0370, median 0.0805, upper decile 0.2975; 0.04 sits just
+# above the lower quartile, so roughly the bottom quarter of the network is in
+# scope and 109 of 412 nodes qualify.  On data/real/network.json the quartile
+# is lower still (0.0183) and 124 nodes fall under the same threshold, so the
+# constant is not tuned to one dataset's shape.
+#
+# Raise it and the suggestions start reaching nodes the ranked list is warning
+# about, which is a contradiction on one screen.  Re-derive it if the
+# criticality weights or NORMALISE_CRITICALITY_WITHIN_TIER change.
+SUBSTITUTION_CRITICALITY_MAX = 0.04
+
+# Fitness weights.  Health leads because a replacement that is itself failing is
+# not a replacement at any capacity, whereas a healthy supplier that is a little
+# tight can usually stretch.  They sum to 1.0; a candidate whose revenue is
+# undisclosed drops the capacity term and renormalises onto health.
+W_SUB_HEALTH = 0.60     # 1 - fragility of the candidate
+W_SUB_CAPACITY = 0.40   # spare revenue against the volume being taken on, normalised within tier
+
+# Suggestions kept per supplier.  Three is a decision aid; a full list is a
+# search result, and nobody reads past the third row on a slide anyway.
+SUBSTITUTION_MAX_CANDIDATES = 3
+
+# ---------------------------------------------------------------------------
 # Risk bands  (engine/ranking.py)
 # ---------------------------------------------------------------------------
 
@@ -163,6 +194,20 @@ DISRUPTION_BAND_CRITICAL = 0.20  # supply_disruption >= 0.20 -> "critical"
 DISRUPTION_BAND_HIGH = 0.06      # 0.06 - 0.20 -> "high"
 DISRUPTION_BAND_WATCH = 0.012    # 0.012 - 0.06 -> "watch"
 # below 0.012 -> "stable"
+
+# ---------------------------------------------------------------------------
+# Ingestion  (engine/ingest.py) — added for the judged demo, AGENTS.md §1.5
+# ---------------------------------------------------------------------------
+
+# Caps that make a hostile zip a 422 rather than an outage.  A zip bomb is a
+# small file that expands without limit, so the guard has to be on the declared
+# uncompressed size and the member count, checked BEFORE anything is written.
+#
+# The collection set this was sized against is five CSVs totalling under 2 MB,
+# so both caps sit an order of magnitude above anything a real upload needs.
+INGEST_MAX_MEMBERS = 200            # files in the archive
+INGEST_MAX_UNCOMPRESSED_BYTES = 64 * 1024 * 1024   # 64 MB expanded
+INGEST_MAX_UPLOAD_BYTES = 16 * 1024 * 1024         # 16 MB on the wire
 
 # ---------------------------------------------------------------------------
 # Intervention  (engine/intervention.py)
@@ -228,3 +273,71 @@ DEEP_TIER2_FANOUT = (1, 3)    # tier-3 suppliers each tier-2 buys from
 # claim inside the generated layer, and costs the demo nothing: the product's
 # thesis is that the irreplaceable supplier sits deep in the chain anyway.
 DEEP_TIER_CHOKEPOINTS = 5  # genuine sole-source relationships in the generated layer
+
+
+# ---------------------------------------------------------------------------
+# Triage — which queue a supplier belongs in  (engine/triage.py)
+# ---------------------------------------------------------------------------
+
+# final_score already says how much a supplier matters.  Triage answers a
+# different question: what should be DONE about it.  Money and monitoring are
+# not the same response, and a fragile supplier that can be replaced does not
+# need rescuing — it needs watching and a second source.
+#
+# The split is on the two factors separately rather than on their product,
+# because the product deliberately destroys the distinction: 0.35 x 0.20 and
+# 0.10 x 0.70 are the same final_score and the opposite decision.
+#
+# Both thresholds are calibrated to the distribution this model produces on
+# data/mock/network.json at seed 42, exactly as BAND_CRITICAL was, and carry no
+# claim about the world.  Re-derive them if DAMPING, MAX_BUFFER_STRENGTH or the
+# criticality weights change.
+
+# Fragility at or above which the supplier's own finances are the problem.
+# Network-wide fragility runs p90 0.0465, p95 0.0872, p99 0.2083, so 0.10 is
+# roughly the top 4% of the network; across the 15 ranked suppliers it sits at
+# the median (0.113) and splits them 9 / 6.
+TRIAGE_FRAGILE_MIN = 0.10
+
+# Criticality at or above which the supplier cannot practically be replaced.
+# Within-tier criticality runs p90 0.2974 network-wide, so this is the top
+# decile; across the ranked 15 it is again the median (0.301).  Below it a
+# supplier is "relatively replaceable" — not that a second source exists today,
+# but that this one is not a chokepoint, which is what makes de-risking a
+# credible answer instead of a euphemism for doing nothing.
+TRIAGE_IRREPLACEABLE_MIN = 0.30
+
+# Below this fragility nothing meaningful has reached the node and it needs no
+# response at all.  Matches BAND_WATCH's order of magnitude on purpose: a node
+# the banding calls stable should not appear in a monitoring queue.
+TRIAGE_MONITOR_MIN = 0.02
+
+# The escalation trigger a de-risking plan sets.  A watched supplier is
+# escalated to the funding queue when its final_score would cross into the
+# critical band, and with criticality structurally fixed that is a threshold on
+# fragility alone: BAND_CRITICAL / criticality.  Named here rather than reusing
+# BAND_CRITICAL inline so that changing what "escalate" means does not require
+# changing what "critical" means.
+TRIAGE_ESCALATION_SCORE = BAND_CRITICAL
+
+# ---------------------------------------------------------------------------
+# Budget allocation  (engine/allocation.py)
+# ---------------------------------------------------------------------------
+
+# How many ranked suppliers the optimiser will probe.  Each probe is a full
+# scoring run (~0.3 s on the 412-node mock), so the pool is the whole cost of
+# the endpoint: 8 probes plus a baseline and a joint re-score is ~3 s.  Eight
+# also comfortably covers any budget a demo would hand it — the eight
+# top-ranked suppliers on the mock cost ₹14.4 cr between them.
+ALLOCATION_CANDIDATE_POOL = 8
+
+# The smallest fraction of a supplier's stabilisation cost worth committing.
+# Funding relieves inherited stress in proportion to coverage, so ₹0.02 cr
+# against a ₹4 cr requirement is not a small rescue, it is a rounding error
+# with a supplier's name on it.  Leftover money below this is reported as
+# unallocated rather than sprinkled.
+ALLOCATION_MIN_COVERAGE = 0.05
+
+# Below this, a measured improvement in anchor inflow at risk is floating-point
+# noise from re-running the propagation, not an effect of the money.
+ALLOCATION_MIN_BENEFIT_CR = 0.01

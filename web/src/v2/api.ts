@@ -10,7 +10,10 @@
  */
 
 import type {
+  AllocateResponse,
   DemoScenario,
+  DeriskPlan,
+  IngestResponse,
   InterveneResponse,
   Intervention,
   NetworkPayload,
@@ -29,6 +32,16 @@ const BASE = 'http://localhost:8000';
  * disagreeing with the panel beside it.
  */
 export const STRESS_LEVELS = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.75, 0.8, 0.9, 1] as const;
+
+/**
+ * The budget stops the optimiser offers.
+ *
+ * Mirrors BUDGET_LEVELS in scripts/refresh_web_mocks.py, for the same reason
+ * STRESS_LEVELS does: every stop is a real /api/allocate run committed ahead of
+ * time, so mock mode and live mode print the same allocation. A stop that is
+ * not in the committed sweep throws rather than showing the nearest one.
+ */
+export const BUDGET_LEVELS = [1, 2.5, 5, 10, 25] as const;
 
 export interface StressStep {
   own_stress: number;
@@ -55,7 +68,10 @@ async function post<T>(path: string, body: unknown): Promise<T> {
     // which field the frontend got wrong.
     let detail = response.statusText;
     try {
-      const payload = await response.json();
+      const payload = (await response.json()) as {
+        error?: { message?: string };
+        detail?: string;
+      };
       detail = payload?.error?.message ?? payload?.detail ?? detail;
     } catch {
       /* non-JSON error body; the status text is all there is */
@@ -69,6 +85,29 @@ async function get<T>(path: string): Promise<T> {
   const response = await fetch(`${BASE}${path}`);
   if (!response.ok) throw new Error(`${path} failed: ${response.statusText}`);
   return response.json() as Promise<T>;
+}
+
+/**
+ * The network a scenario request should be scored against.
+ *
+ * `undefined` means the server's default. Anything else is a network this
+ * client ingested and now carries with every request, which is what keeps
+ * ingestion stateless — see SCHEMA.md §5.6. The frontend never scores
+ * anything itself; it only says which network to score.
+ */
+export type NetworkOverride = NetworkPayload | undefined;
+
+function overrideBody(network: NetworkOverride) {
+  return network
+    ? {
+        network: {
+          meta: network.meta,
+          nodes: network.nodes,
+          edges: network.edges,
+          stress_signals: network.stress_signals ?? [],
+        },
+      }
+    : {};
 }
 
 export const api = {
@@ -88,10 +127,11 @@ export const api = {
    * baseline arithmetic over the whole network, so it is one request instead
    * of two and nothing has to be reconstructed on this side.
    */
-  async baseline(): Promise<ScoredNetwork> {
-    if (LIVE) {
+  async baseline(network?: NetworkOverride): Promise<ScoredNetwork> {
+    if (LIVE || network) {
       return post<ScoredNetwork>('/api/simulate', {
         scenario: { stress_overrides: [], interventions: [] },
+        ...overrideBody(network),
       });
     }
     return (await import('../mocks/simulate.json')).default as unknown as ScoredNetwork;
@@ -103,14 +143,26 @@ export const api = {
    * Live, this is the engine doing the work — the frontend never recomputes a
    * propagation. Offline, it reads the committed sweep, where every stop was
    * produced by that same engine call ahead of time.
+   *
+   * There are two committed sweeps, because there are two networks that can be
+   * on screen. An ingested one used to have none, so the slider was hidden
+   * outright after an upload — the one control that proves the numbers are
+   * recomputed rather than replayed, missing on the path that most needs to
+   * prove it. `ingest-sweep.json` is that network's own sweep, built by
+   * refresh_web_mocks.py against the same trigger the console derives.
    */
-  async atStressLevel(triggerNode: string, level: number): Promise<StressStep> {
+  async atStressLevel(
+    triggerNode: string,
+    level: number,
+    network?: NetworkOverride,
+  ): Promise<StressStep> {
     if (LIVE) {
       const scored = await post<ScoredNetwork>('/api/simulate', {
         scenario: {
           stress_overrides: [{ node_id: triggerNode, own_stress: level }],
           interventions: [],
         },
+        ...overrideBody(network),
       });
       return {
         own_stress: level,
@@ -120,7 +172,9 @@ export const api = {
       };
     }
 
-    const sweep = (await import('../mocks/simulate-sweep.json')).default as unknown as Sweep;
+    const sweep = network
+      ? ((await import('../mocks/ingest-sweep.json')).default as unknown as Sweep)
+      : ((await import('../mocks/simulate-sweep.json')).default as unknown as Sweep);
     const step = sweep.steps.find((candidate) => candidate.own_stress === level);
     if (!step) {
       // A level the sweep does not carry is a build-time mismatch between this
@@ -134,14 +188,132 @@ export const api = {
     return step;
   },
 
-  async intervene(interventions: Intervention[]): Promise<InterveneResponse> {
+  async intervene(
+    interventions: Intervention[],
+    network?: NetworkOverride,
+  ): Promise<InterveneResponse> {
     if (LIVE) {
       return post<InterveneResponse>('/api/intervene', {
         baseline_scenario: { stress_overrides: [], interventions: [] },
         interventions,
+        ...overrideBody(network),
       });
     }
+
+    // Offline, against an ingested network. The whole offline ingest path is
+    // one canned scenario — api.ingest returns the committed response whatever
+    // zip is chosen — so the matching committed intervention is the consistent
+    // answer here. It funds that network's own top-ranked supplier at the
+    // engine's own cost, which is exactly what the console asks for.
+    if (network) {
+      return (await import('../mocks/ingest-intervene.json'))
+        .default as unknown as InterveneResponse;
+    }
     return (await import('../mocks/intervene.json')).default as unknown as InterveneResponse;
+  },
+
+  /**
+   * Build a network from an uploaded archive.
+   *
+   * Live, this posts the file to /api/ingest and the engine does everything.
+   * Offline it returns the committed response — produced by that same endpoint
+   * at mock-refresh time, from the real collection directory zipped the way a
+   * user would zip it — so the build page is fully replayable with the backend
+   * switched off. The file is still read in mock mode, so an empty or
+   * obviously-wrong upload fails the same way in both.
+   */
+  async ingest(file: File): Promise<IngestResponse> {
+    if (LIVE) {
+      const body = new FormData();
+      body.append('file', file);
+      const response = await fetch(`${BASE}/api/ingest`, { method: 'POST', body });
+      if (!response.ok) {
+        let detail = response.statusText;
+        try {
+          const payload = (await response.json()) as { detail?: string };
+          detail = payload?.detail ?? detail;
+        } catch {
+          /* non-JSON error body */
+        }
+        throw new Error(detail);
+      }
+      return response.json() as Promise<IngestResponse>;
+    }
+
+    if (file.size === 0) throw new Error('the uploaded file is empty');
+    return (await import('../mocks/ingest.json')).default as unknown as IngestResponse;
+  },
+
+  /**
+   * The plan for one supplier: which queue it is in, what it would cost, and
+   * what would change the answer.
+   *
+   * Offline this reads the committed plan for that node — refresh_web_mocks.py
+   * commits one per node, produced by this same endpoint, so every node the
+   * graph can select has a real plan rather than a subset having one.
+   */
+  async derisk(nodeId: string, network?: NetworkOverride): Promise<DeriskPlan> {
+    if (LIVE) {
+      return post<DeriskPlan>('/api/derisk', { node_id: nodeId, ...overrideBody(network) });
+    }
+    const plans = network
+      ? ((await import('../mocks/ingest-derisk.json')).default as unknown as Record<string, DeriskPlan>)
+      : ((await import('../mocks/derisk.json')).default as unknown as Record<string, DeriskPlan>);
+    const plan = plans[nodeId];
+    if (!plan) {
+      throw new Error(
+        `no committed plan for ${nodeId}; re-run scripts/refresh_web_mocks.py`,
+      );
+    }
+    return plan;
+  },
+
+  /**
+   * Spread a budget across the ranked suppliers.
+   *
+   * Live, the engine probes each candidate and re-scores the chosen set. Mock
+   * mode replays the committed run for that exact budget — the stops are fixed
+   * for that reason, and an unlisted budget is a build-time mismatch rather
+   * than something to approximate with a neighbouring figure.
+   */
+  async allocate(budgetCr: number, network?: NetworkOverride): Promise<AllocateResponse> {
+    if (LIVE) {
+      return post<AllocateResponse>('/api/allocate', {
+        budget_cr: budgetCr,
+        ...overrideBody(network),
+      });
+    }
+    const runs = network
+      ? ((await import('../mocks/ingest-allocate.json')).default as unknown as AllocateResponse[])
+      : ((await import('../mocks/allocate.json')).default as unknown as AllocateResponse[]);
+    const run = runs.find((candidate) => candidate.budget_cr === budgetCr);
+    if (!run) {
+      throw new Error(
+        `no committed allocation for a ₹${budgetCr} cr budget; re-run scripts/refresh_web_mocks.py`,
+      );
+    }
+    return run;
+  },
+
+  /**
+   * Which supplier this mode can actually fund, or null for "any".
+   *
+   * Live, the engine will score any node, so funding is unrestricted. Offline
+   * there is exactly one committed /api/intervene response per network, and
+   * showing a Fund button that would replay somebody else's numbers is worse
+   * than showing a disabled one that says why.
+   */
+  async fundable(network?: NetworkOverride): Promise<string | null> {
+    if (LIVE) return null;
+    if (network) {
+      // The committed ingest intervention funds that network's own top-ranked
+      // supplier, read off the BEFORE ranking — after funding the order moves,
+      // so reading it from the result would name a different company.
+      const canned = (await import('../mocks/ingest.json'))
+        .default as unknown as IngestResponse;
+      return canned.ranking[0] ?? null;
+    }
+    return (await this.demoScenario()).intervention.node_id;
   },
 
   /**

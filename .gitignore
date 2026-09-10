@@ -8,19 +8,23 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
+/build/
+/develop-eggs/
+/dist/
+/downloads/
+/eggs/
+/.eggs/
+# ANCHORED TO THE REPO ROOT ON PURPOSE. Unanchored, Python's `lib/` matched
+# web/src/v2/lib/ and quietly kept bands.ts, derive.ts and format.ts — imported
+# by every v2 component and by the test suite — out of the repository entirely.
+# The working copy built; a fresh clone did not.
+/lib/
+/lib64/
+/parts/
+/sdist/
+/var/
+/wheels/
+/share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg

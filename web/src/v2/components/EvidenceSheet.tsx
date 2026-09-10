@@ -29,6 +29,16 @@ interface Props {
   /** Name of the buyer whose stress reached this node, when it was inherited. */
   inheritedFrom?: string | null;
   onClose: () => void;
+  /**
+   * The walkthrough's next step, offered from inside the sheet.
+   *
+   * The sheet is modal and covers the topbar, so at step 03 — where it opens by
+   * itself — the primary action sat underneath the scrim and the only way
+   * forward was to notice the sheet could be dismissed. A dialog that hides the
+   * one control the reader is meant to press next is a dead end, so it carries
+   * that control itself.
+   */
+  onContinue?: { label: string; run: () => void } | null;
 }
 
 function Delta({
@@ -102,7 +112,14 @@ function payablesRatio(row: StressSignal): number | null {
   return row.total_trade_payables_cr / row.revenue_cr;
 }
 
-export default function EvidenceSheet({ node, signals, score, inheritedFrom, onClose }: Props) {
+export default function EvidenceSheet({
+  node,
+  signals,
+  score,
+  inheritedFrom,
+  onClose,
+  onContinue,
+}: Props) {
   const closeRef = useRef<HTMLButtonElement>(null);
 
   // A sheet that traps nothing and cannot be dismissed with a key is a
@@ -119,20 +136,38 @@ export default function EvidenceSheet({ node, signals, score, inheritedFrom, onC
   const latest = signals.length ? signals[signals.length - 1] : null;
   const previous = signals.length > 1 ? signals[signals.length - 2] : null;
 
+  // The lime bar is the one place a surface is marked as engine-facing, and it
+  // is the only sticky part: the title scrolls away with the document, the way
+  // a page header does not.
   const header = (
-    <div className="ff-sheet-head">
-      <div>
-        <div className="ff-sheet-eyebrow">Evidence · published filings</div>
+    <>
+      <div className="ff-sheet-head">
+        <span className="ff-sheet-kind">evidence · published filings</span>
+        <span className="ff-sheet-actions">
+          {onContinue && (
+            <button
+              className="ff-sheet-next"
+              onClick={() => {
+                onClose();
+                onContinue.run();
+              }}
+            >
+              {onContinue.label}
+            </button>
+          )}
+          <button ref={closeRef} className="ff-sheet-close" onClick={onClose} aria-label="Close evidence">
+            ✕
+          </button>
+        </span>
+      </div>
+      <div className="ff-sheet-title-block">
         <h2 className="ff-sheet-title">{node.name}</h2>
-        <div className="ff-sheet-sub">
+        <p className="ff-sheet-sub">
           {node.node_id} · Tier {node.tier} · {node.sector.replace(/_/g, ' ')}
           {node.cin ? ` · CIN ${node.cin}` : ''}
-        </div>
+        </p>
       </div>
-      <button ref={closeRef} className="ff-sheet-close" onClick={onClose} aria-label="Close evidence">
-        ✕
-      </button>
-    </div>
+    </>
   );
 
   // ---- The unobservable case. This is not an error state; it is the finding.
@@ -199,18 +234,18 @@ export default function EvidenceSheet({ node, signals, score, inheritedFrom, onC
                   <span className="ff-col-name">Why the engine ranked it</span>
                   <span className="ff-col-basis">generated from a fixed template</span>
                 </div>
-                <p className="ff-footnote">{score.reason_text}</p>
+                <p className="ff-note-sm">{score.reason_text}</p>
               </div>
             )}
 
-            <div className="ff-provenance">
+            <div className="ff-tags">
               <span className="ff-tag" data-kind={node.data_source}>
                 {node.data_source}
               </span>
               <span className="ff-tag">tier {node.tier}</span>
               <span className="ff-tag">{node.is_observable ? 'observable' : 'not observable'}</span>
             </div>
-            <p className="ff-footnote">
+            <p className="ff-note-sm">
               Tier-2 and tier-3 companies in this dataset are generated, with names drawn from a
               fictional entity pool. They are not real businesses.
             </p>
@@ -338,7 +373,7 @@ export default function EvidenceSheet({ node, signals, score, inheritedFrom, onC
                 <LedgerRow label="Over 3 years" previous={previous?.msme_over_3yr_cr} latest={latest.msme_over_3yr_cr} />
                 <LedgerRow label="MSME total" previous={previous?.msme_total_cr} latest={latest.msme_total_cr} total />
               </div>
-              <div className="ff-ledger-row" style={{ borderBottom: 'none', paddingTop: 10 }}>
+              <div className="ff-ledger-row ff-ledger-derived">
                 <span className="ff-ledger-key">Overdue share of MSME book</span>
                 <span className="ff-ledger-prev">{shareBefore === null ? '—' : pct(shareBefore, 1)}</span>
                 <span className="ff-ledger-now">{shareNow === null ? '—' : pct(shareNow, 1)}</span>
@@ -374,7 +409,7 @@ export default function EvidenceSheet({ node, signals, score, inheritedFrom, onC
                 />
                 <LedgerRow label="Revenue" previous={previous?.revenue_cr} latest={latest.revenue_cr} total />
               </div>
-              <div className="ff-ledger-row" style={{ borderBottom: 'none', paddingTop: 10 }}>
+              <div className="ff-ledger-row ff-ledger-derived">
                 <span className="ff-ledger-key">Payables ÷ revenue</span>
                 <span className="ff-ledger-prev">
                   {previous && payablesRatio(previous) !== null ? pct(payablesRatio(previous), 1) : '—'}
@@ -433,7 +468,7 @@ export default function EvidenceSheet({ node, signals, score, inheritedFrom, onC
                 </div>
               ))}
             </div>
-            <p className="ff-footnote" style={{ marginTop: 10 }}>
+            <p className="ff-note-sm" style={{ marginTop: 12 }}>
               Both measures are drawn on one shared scale, so their sizes are comparable. The
               upper pair is twelve months of payment behaviour; the lower pair is what remained
               outstanding on the last day of each year.
@@ -455,7 +490,7 @@ export default function EvidenceSheet({ node, signals, score, inheritedFrom, onC
                 </div>
               ))}
             </div>
-            <p className="ff-footnote" style={{ marginTop: 10 }}>
+            <p className="ff-note-sm" style={{ marginTop: 12 }}>
               A filled marker means this filing discloses the inputs the rung needs in both years.
               A rung without inputs is dropped and the remaining weights are renormalised — never
               filled in with a default.{' '}
@@ -468,7 +503,7 @@ export default function EvidenceSheet({ node, signals, score, inheritedFrom, onC
             </p>
           </section>
 
-          <div className="ff-provenance">
+          <div className="ff-tags">
             <span className="ff-tag" data-kind={latest.data_source}>
               {latest.data_source}
             </span>
@@ -482,14 +517,14 @@ export default function EvidenceSheet({ node, signals, score, inheritedFrom, onC
           </div>
 
           {!latest.has_not_due_column && (
-            <p className="ff-footnote">
+            <p className="ff-note-sm">
               This filer folds not-yet-due amounts into the under-1-year bucket, so that bucket is
               not comparable with a filer who separates them. The migration rung is dropped rather
               than estimated.
             </p>
           )}
           {latest.data_source !== 'real' && (
-            <p className="ff-footnote">
+            <p className="ff-note-sm">
               These figures are synthetic — generated by <code>engine/mockgen</code> with a fixed
               seed so the demo is reproducible. Real collected filings carry{' '}
               <code>data_source: real</code> and are never mixed with generated rupee values.
