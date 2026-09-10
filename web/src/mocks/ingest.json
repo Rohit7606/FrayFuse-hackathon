@@ -8221,7 +8221,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N002",
@@ -8248,7 +8249,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N003",
@@ -8275,7 +8277,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N004",
@@ -8302,7 +8305,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 11.53,
       "disruption_reason": "Darshan Wiring Systems Pvt Ltd is at risk of halting engine wiring loom deliveries. ₹11.53 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N005",
@@ -8334,7 +8338,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "origin"
     },
     {
       "node_id": "N006",
@@ -8366,7 +8371,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "origin"
     },
     {
       "node_id": "N007",
@@ -8393,7 +8399,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N008",
@@ -8425,7 +8432,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "origin"
     },
     {
       "node_id": "N009",
@@ -8452,7 +8460,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N010",
@@ -8479,7 +8488,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N011",
@@ -8506,7 +8516,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N012",
@@ -8533,7 +8544,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N013",
@@ -8560,7 +8572,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N014",
@@ -8587,7 +8600,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N015",
@@ -8614,7 +8628,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N016",
@@ -8641,7 +8656,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "origin"
     },
     {
       "node_id": "N017",
@@ -8668,7 +8684,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N018",
@@ -8695,7 +8712,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N019",
@@ -8722,7 +8740,8 @@
       "disruption_band": "critical",
       "disrupted_inflow_cr": 37.94,
       "disruption_reason": "Shivam Autotech Limited is at risk of halting transmission gears and shafts deliveries. ₹37.94 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N020",
@@ -8749,7 +8768,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N021",
@@ -8776,7 +8796,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N022",
@@ -8803,7 +8824,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N023",
@@ -8830,7 +8852,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "origin"
     },
     {
       "node_id": "N024",
@@ -8857,7 +8880,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N025",
@@ -8884,7 +8908,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N026",
@@ -8911,7 +8936,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N027",
@@ -8943,7 +8969,8 @@
       "disruption_band": "critical",
       "disrupted_inflow_cr": 46.98,
       "disruption_reason": "Rituparn Implement Steel Products Enterprises is at risk of halting spring tooth tine deliveries. ₹46.98 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "origin"
     },
     {
       "node_id": "N028",
@@ -8970,7 +8997,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N029",
@@ -8997,7 +9025,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N030",
@@ -9024,7 +9053,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 6.04,
       "disruption_reason": "Bharat Precision Castings Udyog Pvt Ltd is at risk of halting cast cylinder liner deliveries. ₹6.04 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N031",
@@ -9051,7 +9081,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 5.32,
       "disruption_reason": "Shivam Autotech Limited is at risk of halting goods and services deliveries. ₹5.32 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N032",
@@ -9083,7 +9114,8 @@
       "disruption_band": "critical",
       "disrupted_inflow_cr": 70.26,
       "disruption_reason": "Pushkaraj API Works Pvt Ltd is at risk of halting fluoroquinolone intermediate deliveries. ₹70.26 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "origin"
     },
     {
       "node_id": "N033",
@@ -9110,7 +9142,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 19.08,
       "disruption_reason": "Aarogya Chem Synthesis Udyog Pvt Ltd is at risk of halting cephalosporin intermediate deliveries. ₹19.08 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N034",
@@ -9137,7 +9170,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N035",
@@ -9164,7 +9198,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N036",
@@ -9191,7 +9226,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N037",
@@ -9218,7 +9254,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N038",
@@ -9245,7 +9282,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N039",
@@ -9272,7 +9310,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.89,
       "disruption_reason": "Digvijay Casting Solutions Udyog Pvt Ltd is at risk of halting investment casting deliveries. ₹0.89 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N040",
@@ -9309,7 +9348,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 16.89,
       "disruption_reason": "Devendra Seal Ring Pvt Ltd is at risk of halting o ring seal deliveries. ₹16.89 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "origin"
     },
     {
       "node_id": "N041",
@@ -9346,7 +9386,8 @@
       "disruption_band": "critical",
       "disrupted_inflow_cr": 32.53,
       "disruption_reason": "Ghanshyam Axle Tube Works Udyog Pvt Ltd is at risk of halting welded axle tube deliveries. ₹32.53 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "origin"
     },
     {
       "node_id": "N042",
@@ -9373,7 +9414,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N043",
@@ -9400,7 +9442,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N044",
@@ -9442,7 +9485,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.39,
       "disruption_reason": "Prastar Construction Equipment Parts Pvt Ltd is at risk of halting excavator bucket tooth deliveries. ₹0.39 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N045",
@@ -9469,7 +9513,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N046",
@@ -9496,7 +9541,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N047",
@@ -9533,7 +9579,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 0.66,
       "disruption_reason": "Liladhar Sheet Bend Works Udyog Pvt Ltd is at risk of halting cnc bent sheet part deliveries — sole source, nothing else to buy it from. ₹0.66 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N048",
@@ -9560,7 +9607,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N049",
@@ -9587,7 +9635,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N050",
@@ -9614,7 +9663,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N051",
@@ -9651,7 +9701,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.08,
       "disruption_reason": "Jatin Pin Works Pvt Ltd is at risk of halting dowel pin deliveries. ₹0.08 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "fund_now"
     },
     {
       "node_id": "N052",
@@ -9678,7 +9729,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N053",
@@ -9705,7 +9757,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N054",
@@ -9732,7 +9785,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N055",
@@ -9759,7 +9813,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N056",
@@ -9786,7 +9841,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N057",
@@ -9813,7 +9869,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N058",
@@ -9840,7 +9897,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N059",
@@ -9867,7 +9925,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N060",
@@ -9909,7 +9968,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.36,
       "disruption_reason": "Prachanda Power Tool Parts LLP is at risk of halting gearbox housing casting deliveries. ₹0.36 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "fund_now"
     },
     {
       "node_id": "N061",
@@ -9946,7 +10006,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.72,
       "disruption_reason": "Dharaa Farm Equipment Fabrication Enterprises is at risk of halting cultivator tine assembly deliveries — sole source, nothing else to buy it from. ₹0.72 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "fund_now"
     },
     {
       "node_id": "N062",
@@ -9983,7 +10044,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 0.6,
       "disruption_reason": "Hemant Cable Assemblies Pvt Ltd is at risk of halting cable loom harness deliveries. ₹0.60 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N063",
@@ -10025,7 +10087,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.36,
       "disruption_reason": "Dinesh Bracket Works Udyog Pvt Ltd is at risk of halting exhaust bracket deliveries. ₹0.36 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N064",
@@ -10062,7 +10125,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.05,
       "disruption_reason": "Jagmohan Wire Rope Products Pvt Ltd is at risk of halting wire rope sling deliveries. ₹0.05 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N065",
@@ -10099,7 +10163,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.14,
       "disruption_reason": "Ikshit Metal Forming Industries Private Ltd is at risk of halting roll formed section deliveries. ₹0.14 cr of inbound supply at risk.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N066",
@@ -10136,7 +10201,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 0.28,
       "disruption_reason": "Laxmikant Spring Clip Products Private Ltd is at risk of halting retaining spring clip deliveries. ₹0.28 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N067",
@@ -10178,7 +10244,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 0.67,
       "disruption_reason": "Sahil Spring Coiling Udyog Pvt Ltd is at risk of halting tension spring deliveries. ₹0.67 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N068",
@@ -10205,7 +10272,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N069",
@@ -10232,7 +10300,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N070",
@@ -10259,7 +10328,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N071",
@@ -10286,7 +10356,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N072",
@@ -10313,7 +10384,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N073",
@@ -10340,7 +10412,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N074",
@@ -10367,7 +10440,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N075",
@@ -10394,7 +10468,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N076",
@@ -10421,7 +10496,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N077",
@@ -10448,7 +10524,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N078",
@@ -10475,7 +10552,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N079",
@@ -10517,7 +10595,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.04,
       "disruption_reason": "Chaitya Pharma Coating Works Pvt Ltd is at risk of halting enteric coating polymer deliveries. ₹0.04 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N080",
@@ -10554,7 +10633,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.09,
       "disruption_reason": "Bhoomi Agri Intermediates Pvt Ltd is at risk of halting triazine intermediate deliveries. ₹0.09 cr of inbound supply at risk.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N081",
@@ -10596,7 +10676,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.38,
       "disruption_reason": "Aayush Chem Works Enterprises is at risk of halting metformin intermediate deliveries. ₹0.38 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N082",
@@ -10638,7 +10719,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 1.53,
       "disruption_reason": "Ritusaar Agro Intermediates Pvt Ltd is at risk of halting neonicotinoid intermediate deliveries. ₹1.53 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "fund_now"
     },
     {
       "node_id": "N083",
@@ -10675,7 +10757,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 1.49,
       "disruption_reason": "Jivak API Intermediates Pvt Ltd is at risk of halting pyrimidine intermediate deliveries. ₹1.49 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N084",
@@ -10712,7 +10795,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.28,
       "disruption_reason": "Vikram Gasket Industries Pvt Ltd is at risk of halting gasket set deliveries. ₹0.28 cr of inbound supply at risk.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N085",
@@ -10754,7 +10838,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.03,
       "disruption_reason": "Nirmaan Equipment Component Works LLP is at risk of halting tower crane slewing bearing deliveries. ₹0.03 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N086",
@@ -10796,7 +10881,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.58,
       "disruption_reason": "Sandeep Weld Mesh Works Pvt Ltd is at risk of halting welded wire mesh deliveries. ₹0.58 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N087",
@@ -10838,7 +10924,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 0.89,
       "disruption_reason": "Haldhara Tractor Seal Products LLP is at risk of halting hydraulic seal kit deliveries. ₹0.89 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N088",
@@ -10875,7 +10962,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.67,
       "disruption_reason": "Hemraj Moulded Parts Private Ltd is at risk of halting moulded cable gland deliveries. ₹0.67 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N089",
@@ -10917,7 +11005,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.06,
       "disruption_reason": "Sira Hydraulic Valve Products Private Ltd is at risk of halting hydraulic spool valve deliveries. ₹0.06 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N090",
@@ -10944,7 +11033,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N091",
@@ -10971,7 +11061,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N092",
@@ -10998,7 +11089,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N093",
@@ -11025,7 +11117,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N094",
@@ -11052,7 +11145,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N095",
@@ -11079,7 +11173,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N096",
@@ -11106,7 +11201,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N097",
@@ -11133,7 +11229,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N098",
@@ -11160,7 +11257,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N099",
@@ -11187,7 +11285,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N100",
@@ -11214,7 +11313,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N101",
@@ -11241,7 +11341,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N102",
@@ -11268,7 +11369,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N103",
@@ -11295,7 +11397,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N104",
@@ -11322,7 +11425,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N105",
@@ -11349,7 +11453,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N106",
@@ -11376,7 +11481,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N107",
@@ -11413,7 +11519,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.05,
       "disruption_reason": "Eshwar Fastener Products Pvt Ltd is at risk of halting self tapping screw deliveries — sole source, nothing else to buy it from. ₹0.05 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N108",
@@ -11450,7 +11557,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.62,
       "disruption_reason": "Madhu Process Engineering Pvt Ltd is at risk of halting evaporator tube bundle deliveries. ₹0.62 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "fund_now"
     },
     {
       "node_id": "N109",
@@ -11492,7 +11600,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.05,
       "disruption_reason": "Chaitanya Harness Tape Products Udyog Pvt Ltd is at risk of halting pvc harness tape deliveries. ₹0.05 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N110",
@@ -11534,7 +11643,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.24,
       "disruption_reason": "Pancha Mill Gear Industries Pvt Ltd is at risk of halting planetary mill gearbox deliveries — sole source, nothing else to buy it from. ₹0.24 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N111",
@@ -11576,7 +11686,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 0.72,
       "disruption_reason": "Indrajit Gear Cutting Pvt Ltd is at risk of halting helical gear deliveries. ₹0.72 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "fund_now"
     },
     {
       "node_id": "N112",
@@ -11618,7 +11729,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.49,
       "disruption_reason": "Yogendra Wire Harness Industries Pvt Ltd is at risk of halting tail lamp harness deliveries. ₹0.49 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N113",
@@ -11660,7 +11772,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 1.32,
       "disruption_reason": "Varun Sheet Metal Enterprises is at risk of halting sheet metal panel deliveries. ₹1.32 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "fund_now"
     },
     {
       "node_id": "N114",
@@ -11702,7 +11815,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.1,
       "disruption_reason": "Akash Precision Bearings Enterprises is at risk of halting tapered roller bearing deliveries. ₹0.10 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N115",
@@ -11744,7 +11858,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 0.27,
       "disruption_reason": "Vedansh Wire Form Products Udyog Pvt Ltd is at risk of halting formed wire spring clip deliveries. ₹0.27 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N116",
@@ -11786,7 +11901,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.21,
       "disruption_reason": "Venkat Gear Box Parts Udyog Pvt Ltd is at risk of halting gear box casing deliveries. ₹0.21 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N117",
@@ -11828,7 +11944,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.02,
       "disruption_reason": "Ishwar Piston Assembly Udyog Pvt Ltd is at risk of halting piston assembly kit deliveries. ₹0.02 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N118",
@@ -11855,7 +11972,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N119",
@@ -11882,7 +12000,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N120",
@@ -11909,7 +12028,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N121",
@@ -11936,7 +12056,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N122",
@@ -11963,7 +12084,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N123",
@@ -11990,7 +12112,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N124",
@@ -12017,7 +12140,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N125",
@@ -12044,7 +12168,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N126",
@@ -12071,7 +12196,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N127",
@@ -12098,7 +12224,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N128",
@@ -12125,7 +12252,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N129",
@@ -12152,7 +12280,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N130",
@@ -12179,7 +12308,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N131",
@@ -12206,7 +12336,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N132",
@@ -12233,7 +12364,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N133",
@@ -12260,7 +12392,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N134",
@@ -12287,7 +12420,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N135",
@@ -12314,7 +12448,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N136",
@@ -12341,7 +12476,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N137",
@@ -12368,7 +12504,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N138",
@@ -12395,7 +12532,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N139",
@@ -12422,7 +12560,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N140",
@@ -12449,7 +12588,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N141",
@@ -12476,7 +12616,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N142",
@@ -12503,7 +12644,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N143",
@@ -12530,7 +12672,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N144",
@@ -12557,7 +12700,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N145",
@@ -12584,7 +12728,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N146",
@@ -12611,7 +12756,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N147",
@@ -12648,7 +12794,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N148",
@@ -12685,7 +12832,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N149",
@@ -12722,7 +12870,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N150",
@@ -12749,7 +12898,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N151",
@@ -12776,7 +12926,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N152",
@@ -12803,7 +12954,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N153",
@@ -12830,7 +12982,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N154",
@@ -12857,7 +13010,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N155",
@@ -12894,7 +13048,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N156",
@@ -12936,7 +13091,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N157",
@@ -12963,7 +13119,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N158",
@@ -12990,7 +13147,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N159",
@@ -13017,7 +13175,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N160",
@@ -13044,7 +13203,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N161",
@@ -13071,7 +13231,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N162",
@@ -13098,7 +13259,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N163",
@@ -13125,7 +13287,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N164",
@@ -13152,7 +13315,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N165",
@@ -13179,7 +13343,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N166",
@@ -13216,7 +13381,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N167",
@@ -13243,7 +13409,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N168",
@@ -13270,7 +13437,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N169",
@@ -13297,7 +13465,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N170",
@@ -13324,7 +13493,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N171",
@@ -13351,7 +13521,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N172",
@@ -13378,7 +13549,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N173",
@@ -13405,7 +13577,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N174",
@@ -13432,7 +13605,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N175",
@@ -13459,7 +13633,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N176",
@@ -13486,7 +13661,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N177",
@@ -13513,7 +13689,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N178",
@@ -13540,7 +13717,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N179",
@@ -13567,7 +13745,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N180",
@@ -13594,7 +13773,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N181",
@@ -13621,7 +13801,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N182",
@@ -13648,7 +13829,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N183",
@@ -13685,7 +13867,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N184",
@@ -13722,7 +13905,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N185",
@@ -13759,7 +13943,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N186",
@@ -13801,7 +13986,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N187",
@@ -13838,7 +14024,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N188",
@@ -13875,7 +14062,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N189",
@@ -13912,7 +14100,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N190",
@@ -13949,7 +14138,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N191",
@@ -13986,7 +14176,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N192",
@@ -14023,7 +14214,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N193",
@@ -14060,7 +14252,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N194",
@@ -14097,7 +14290,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N195",
@@ -14134,7 +14328,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N196",
@@ -14171,7 +14366,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N197",
@@ -14208,7 +14404,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N198",
@@ -14245,7 +14442,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N199",
@@ -14282,7 +14480,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N200",
@@ -14309,7 +14508,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N201",
@@ -14336,7 +14536,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N202",
@@ -14363,7 +14564,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N203",
@@ -14390,7 +14592,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N204",
@@ -14417,7 +14620,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N205",
@@ -14444,7 +14648,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N206",
@@ -14471,7 +14676,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N207",
@@ -14498,7 +14704,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N208",
@@ -14525,7 +14732,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N209",
@@ -14552,7 +14760,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N210",
@@ -14579,7 +14788,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N211",
@@ -14606,7 +14816,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N212",
@@ -14633,7 +14844,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N213",
@@ -14660,7 +14872,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N214",
@@ -14687,7 +14900,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N215",
@@ -14714,7 +14928,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N216",
@@ -14741,7 +14956,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N217",
@@ -14768,7 +14984,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N218",
@@ -14795,7 +15012,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N219",
@@ -14832,7 +15050,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N220",
@@ -14869,7 +15088,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N221",
@@ -14906,7 +15126,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N222",
@@ -14943,7 +15164,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N223",
@@ -14980,7 +15202,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N224",
@@ -15017,7 +15240,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N225",
@@ -15054,7 +15278,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N226",
@@ -15091,7 +15316,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N227",
@@ -15128,7 +15354,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N228",
@@ -15165,7 +15392,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N229",
@@ -15202,7 +15430,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N230",
@@ -15239,7 +15468,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N231",
@@ -15276,7 +15506,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N232",
@@ -15313,7 +15544,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N233",
@@ -15350,7 +15582,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N234",
@@ -15387,7 +15620,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N235",
@@ -15424,7 +15658,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N236",
@@ -15461,7 +15696,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N237",
@@ -15498,7 +15734,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N238",
@@ -15535,7 +15772,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N239",
@@ -15572,7 +15810,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N240",
@@ -15609,7 +15848,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N241",
@@ -15636,7 +15876,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N242",
@@ -15663,7 +15904,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N243",
@@ -15690,7 +15932,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N244",
@@ -15717,7 +15960,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N245",
@@ -15744,7 +15988,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N246",
@@ -15771,7 +16016,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N247",
@@ -15798,7 +16044,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N248",
@@ -15825,7 +16072,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N249",
@@ -15852,7 +16100,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N250",
@@ -15879,7 +16128,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N251",
@@ -15906,7 +16156,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N252",
@@ -15933,7 +16184,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N253",
@@ -15960,7 +16212,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N254",
@@ -15987,7 +16240,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N255",
@@ -16014,7 +16268,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N256",
@@ -16041,7 +16296,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N257",
@@ -16068,7 +16324,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N258",
@@ -16095,7 +16352,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N259",
@@ -16122,7 +16380,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N260",
@@ -16149,7 +16408,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N261",
@@ -16176,7 +16436,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N262",
@@ -16203,7 +16464,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N263",
@@ -16230,7 +16492,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N264",
@@ -16257,7 +16520,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N265",
@@ -16284,7 +16548,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N266",
@@ -16311,7 +16576,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N267",
@@ -16338,7 +16604,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N268",
@@ -16365,7 +16632,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N269",
@@ -16392,7 +16660,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N270",
@@ -16419,7 +16688,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N271",
@@ -16446,7 +16716,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N272",
@@ -16473,7 +16744,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N273",
@@ -16500,7 +16772,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N274",
@@ -16527,7 +16800,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N275",
@@ -16554,7 +16828,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N276",
@@ -16581,7 +16856,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N277",
@@ -16608,7 +16884,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N278",
@@ -16635,7 +16912,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N279",
@@ -16662,7 +16940,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N280",
@@ -16704,7 +16983,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N281",
@@ -16741,7 +17021,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N282",
@@ -16778,7 +17059,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N283",
@@ -16815,7 +17097,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N284",
@@ -16852,7 +17135,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N285",
@@ -16889,7 +17173,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N286",
@@ -16931,7 +17216,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N287",
@@ -16968,7 +17254,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N288",
@@ -17005,7 +17292,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N289",
@@ -17042,7 +17330,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N290",
@@ -17079,7 +17368,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N291",
@@ -17116,7 +17406,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N292",
@@ -17153,7 +17444,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N293",
@@ -17190,7 +17482,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N294",
@@ -17227,7 +17520,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N295",
@@ -17264,7 +17558,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N296",
@@ -17301,7 +17596,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N297",
@@ -17338,7 +17634,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N298",
@@ -17375,7 +17672,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": []
+      "substitution_candidates": [],
+      "triage_queue": "clear"
     }
   ],
   "ranking": [

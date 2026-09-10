@@ -1,0 +1,1112 @@
+[
+  {
+    "budget_cr": 1.0,
+    "allocated_cr": 1.0,
+    "unallocated_cr": 0.0,
+    "objective": {
+      "metric": "anchor_inflow_at_risk_cr",
+      "before_cr": 1378.54,
+      "after_cr": 1019.49,
+      "reduced_cr": 359.05
+    },
+    "allocations": [
+      {
+        "node_id": "N118",
+        "name": "Precision Polymer Works Pvt Ltd",
+        "rank": 4,
+        "amount_cr": 0.39,
+        "cost_cr": 0.39,
+        "coverage": 1.0,
+        "measured_benefit_cr": 174.47,
+        "efficiency": 447.359,
+        "exposure_at_risk_cr": 98.81,
+        "fragility_before": 0.1721,
+        "fragility_after": 0.0,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N042",
+        "name": "Sealsworks Rubber Industries Pvt Ltd",
+        "rank": 1,
+        "amount_cr": 0.61,
+        "cost_cr": 2.04,
+        "coverage": 0.299,
+        "measured_benefit_cr": 831.38,
+        "efficiency": 407.5392,
+        "exposure_at_risk_cr": 141.12,
+        "fragility_before": 0.3498,
+        "fragility_after": 0.2452,
+        "band_before": "critical",
+        "band_after": "high"
+      }
+    ],
+    "candidates_considered": [
+      "N042",
+      "N203",
+      "N087",
+      "N118",
+      "N387",
+      "N394",
+      "N348",
+      "N381"
+    ],
+    "scoring_runs": 10,
+    "note": "Candidates are probed one at a time and ordered by anchor exposure removed per rupee; the figures reported here come from re-scoring the whole allocation together, so nothing is double-counted.",
+    "delta": {
+      "nodes_improved": 8,
+      "nodes_worsened": 0,
+      "total_exposure_reduced_cr": 152.61,
+      "total_intervention_cost_cr": 1.0,
+      "per_node": [
+        {
+          "node_id": "N042",
+          "fragility_before": 0.3498,
+          "fragility_after": 0.2452,
+          "band_before": "critical",
+          "band_after": "high"
+        },
+        {
+          "node_id": "N118",
+          "fragility_before": 0.1721,
+          "fragility_after": 0.0,
+          "band_before": "high",
+          "band_after": "stable"
+        }
+      ]
+    },
+    "summary_before": {
+      "total_nodes": 412,
+      "at_risk_count": 15,
+      "band_counts": {
+        "critical": 2,
+        "high": 4,
+        "watch": 10,
+        "stable": 396
+      },
+      "total_intervention_cost_cr": 16.54,
+      "total_estimated_exposure_cr": 738.18,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N007"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N001",
+          "supply_disruption": 0.1076,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 848.96,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N251",
+          "supply_disruption": 0.1073,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 435.95,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N268",
+          "supply_disruption": 0.0157,
+          "disruption_band": "watch",
+          "disrupted_inflow_cr": 93.63,
+          "stopped_by": "N238"
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    },
+    "summary_after": {
+      "total_nodes": 412,
+      "at_risk_count": 14,
+      "band_counts": {
+        "critical": 1,
+        "high": 4,
+        "watch": 10,
+        "stable": 397
+      },
+      "total_intervention_cost_cr": 15.54,
+      "total_estimated_exposure_cr": 597.16,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N007"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N001",
+          "supply_disruption": 0.0786,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 619.67,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N251",
+          "supply_disruption": 0.0784,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 318.28,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N268",
+          "supply_disruption": 0.0137,
+          "disruption_band": "watch",
+          "disrupted_inflow_cr": 81.54,
+          "stopped_by": "N238"
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    }
+  },
+  {
+    "budget_cr": 2.5,
+    "allocated_cr": 2.5,
+    "unallocated_cr": 0.0,
+    "objective": {
+      "metric": "anchor_inflow_at_risk_cr",
+      "before_cr": 1378.54,
+      "after_cr": 545.11,
+      "reduced_cr": 833.43
+    },
+    "allocations": [
+      {
+        "node_id": "N118",
+        "name": "Precision Polymer Works Pvt Ltd",
+        "rank": 4,
+        "amount_cr": 0.39,
+        "cost_cr": 0.39,
+        "coverage": 1.0,
+        "measured_benefit_cr": 174.47,
+        "efficiency": 447.359,
+        "exposure_at_risk_cr": 98.81,
+        "fragility_before": 0.1721,
+        "fragility_after": 0.0,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N042",
+        "name": "Sealsworks Rubber Industries Pvt Ltd",
+        "rank": 1,
+        "amount_cr": 2.04,
+        "cost_cr": 2.04,
+        "coverage": 1.0,
+        "measured_benefit_cr": 831.38,
+        "efficiency": 407.5392,
+        "exposure_at_risk_cr": 141.12,
+        "fragility_before": 0.3498,
+        "fragility_after": 0.0,
+        "band_before": "critical",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N381",
+        "name": "Samarth Works Pvt Ltd",
+        "rank": 8,
+        "amount_cr": 0.07,
+        "cost_cr": 0.62,
+        "coverage": 0.1129,
+        "measured_benefit_cr": 15.07,
+        "efficiency": 24.3065,
+        "exposure_at_risk_cr": 32.65,
+        "fragility_before": 0.1113,
+        "fragility_after": 0.0988,
+        "band_before": "watch",
+        "band_after": "watch"
+      }
+    ],
+    "candidates_considered": [
+      "N042",
+      "N203",
+      "N087",
+      "N118",
+      "N387",
+      "N394",
+      "N348",
+      "N381"
+    ],
+    "scoring_runs": 10,
+    "note": "Candidates are probed one at a time and ordered by anchor exposure removed per rupee; the figures reported here come from re-scoring the whole allocation together, so nothing is double-counted.",
+    "delta": {
+      "nodes_improved": 13,
+      "nodes_worsened": 0,
+      "total_exposure_reduced_cr": 284.35,
+      "total_intervention_cost_cr": 2.5,
+      "per_node": [
+        {
+          "node_id": "N042",
+          "fragility_before": 0.3498,
+          "fragility_after": 0.0,
+          "band_before": "critical",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N118",
+          "fragility_before": 0.1721,
+          "fragility_after": 0.0,
+          "band_before": "high",
+          "band_after": "stable"
+        }
+      ]
+    },
+    "summary_before": {
+      "total_nodes": 412,
+      "at_risk_count": 15,
+      "band_counts": {
+        "critical": 2,
+        "high": 4,
+        "watch": 10,
+        "stable": 396
+      },
+      "total_intervention_cost_cr": 16.54,
+      "total_estimated_exposure_cr": 738.18,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N007"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N001",
+          "supply_disruption": 0.1076,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 848.96,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N251",
+          "supply_disruption": 0.1073,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 435.95,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N268",
+          "supply_disruption": 0.0157,
+          "disruption_band": "watch",
+          "disrupted_inflow_cr": 93.63,
+          "stopped_by": "N238"
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    },
+    "summary_after": {
+      "total_nodes": 412,
+      "at_risk_count": 13,
+      "band_counts": {
+        "critical": 1,
+        "high": 3,
+        "watch": 10,
+        "stable": 398
+      },
+      "total_intervention_cost_cr": 14.04,
+      "total_estimated_exposure_cr": 494.58,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N007"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N251",
+          "supply_disruption": 0.0394,
+          "disruption_band": "watch",
+          "disrupted_inflow_cr": 159.44,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N001",
+          "supply_disruption": 0.039,
+          "disruption_band": "watch",
+          "disrupted_inflow_cr": 306.98,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N268",
+          "supply_disruption": 0.0132,
+          "disruption_band": "watch",
+          "disrupted_inflow_cr": 78.69,
+          "stopped_by": "N238"
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    }
+  },
+  {
+    "budget_cr": 5.0,
+    "allocated_cr": 5.0,
+    "unallocated_cr": 0.0,
+    "objective": {
+      "metric": "anchor_inflow_at_risk_cr",
+      "before_cr": 1378.54,
+      "after_cr": 464.52,
+      "reduced_cr": 914.02
+    },
+    "allocations": [
+      {
+        "node_id": "N118",
+        "name": "Precision Polymer Works Pvt Ltd",
+        "rank": 4,
+        "amount_cr": 0.39,
+        "cost_cr": 0.39,
+        "coverage": 1.0,
+        "measured_benefit_cr": 174.47,
+        "efficiency": 447.359,
+        "exposure_at_risk_cr": 98.81,
+        "fragility_before": 0.1721,
+        "fragility_after": 0.0,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N042",
+        "name": "Sealsworks Rubber Industries Pvt Ltd",
+        "rank": 1,
+        "amount_cr": 2.04,
+        "cost_cr": 2.04,
+        "coverage": 1.0,
+        "measured_benefit_cr": 831.38,
+        "efficiency": 407.5392,
+        "exposure_at_risk_cr": 141.12,
+        "fragility_before": 0.3498,
+        "fragility_after": 0.0,
+        "band_before": "critical",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N381",
+        "name": "Samarth Works Pvt Ltd",
+        "rank": 8,
+        "amount_cr": 0.62,
+        "cost_cr": 0.62,
+        "coverage": 1.0,
+        "measured_benefit_cr": 15.07,
+        "efficiency": 24.3065,
+        "exposure_at_risk_cr": 32.65,
+        "fragility_before": 0.1113,
+        "fragility_after": 0.0006,
+        "band_before": "watch",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N348",
+        "name": "Chitrakoot Enterprises Private Ltd",
+        "rank": 7,
+        "amount_cr": 0.74,
+        "cost_cr": 0.74,
+        "coverage": 1.0,
+        "measured_benefit_cr": 17.89,
+        "efficiency": 24.1757,
+        "exposure_at_risk_cr": 29.44,
+        "fragility_before": 0.1468,
+        "fragility_after": 0.0001,
+        "band_before": "watch",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N387",
+        "name": "Purnima Components Pvt Ltd",
+        "rank": 5,
+        "amount_cr": 1.21,
+        "cost_cr": 4.11,
+        "coverage": 0.2944,
+        "measured_benefit_cr": 87.45,
+        "efficiency": 21.2774,
+        "exposure_at_risk_cr": 85.53,
+        "fragility_before": 0.2169,
+        "fragility_after": 0.153,
+        "band_before": "high",
+        "band_after": "watch"
+      }
+    ],
+    "candidates_considered": [
+      "N042",
+      "N203",
+      "N087",
+      "N118",
+      "N387",
+      "N394",
+      "N348",
+      "N381"
+    ],
+    "scoring_runs": 10,
+    "note": "Candidates are probed one at a time and ordered by anchor exposure removed per rupee; the figures reported here come from re-scoring the whole allocation together, so nothing is double-counted.",
+    "delta": {
+      "nodes_improved": 22,
+      "nodes_worsened": 0,
+      "total_exposure_reduced_cr": 403.8,
+      "total_intervention_cost_cr": 5.0,
+      "per_node": [
+        {
+          "node_id": "N042",
+          "fragility_before": 0.3498,
+          "fragility_after": 0.0,
+          "band_before": "critical",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N118",
+          "fragility_before": 0.1721,
+          "fragility_after": 0.0,
+          "band_before": "high",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N348",
+          "fragility_before": 0.1468,
+          "fragility_after": 0.0001,
+          "band_before": "watch",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N381",
+          "fragility_before": 0.1113,
+          "fragility_after": 0.0006,
+          "band_before": "watch",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N387",
+          "fragility_before": 0.2169,
+          "fragility_after": 0.153,
+          "band_before": "high",
+          "band_after": "watch"
+        }
+      ]
+    },
+    "summary_before": {
+      "total_nodes": 412,
+      "at_risk_count": 15,
+      "band_counts": {
+        "critical": 2,
+        "high": 4,
+        "watch": 10,
+        "stable": 396
+      },
+      "total_intervention_cost_cr": 16.54,
+      "total_estimated_exposure_cr": 738.18,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N007"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N001",
+          "supply_disruption": 0.1076,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 848.96,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N251",
+          "supply_disruption": 0.1073,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 435.95,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N268",
+          "supply_disruption": 0.0157,
+          "disruption_band": "watch",
+          "disrupted_inflow_cr": 93.63,
+          "stopped_by": "N238"
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    },
+    "summary_after": {
+      "total_nodes": 412,
+      "at_risk_count": 11,
+      "band_counts": {
+        "critical": 1,
+        "high": 2,
+        "watch": 9,
+        "stable": 400
+      },
+      "total_intervention_cost_cr": 11.54,
+      "total_estimated_exposure_cr": 410.97,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N007"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N251",
+          "supply_disruption": 0.0334,
+          "disruption_band": "watch",
+          "disrupted_inflow_cr": 135.18,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N001",
+          "supply_disruption": 0.0333,
+          "disruption_band": "watch",
+          "disrupted_inflow_cr": 261.49,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N268",
+          "supply_disruption": 0.0114,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 67.85,
+          "stopped_by": "N238"
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    }
+  },
+  {
+    "budget_cr": 10.0,
+    "allocated_cr": 10.0,
+    "unallocated_cr": 0.0,
+    "objective": {
+      "metric": "anchor_inflow_at_risk_cr",
+      "before_cr": 1378.54,
+      "after_cr": 292.9,
+      "reduced_cr": 1085.64
+    },
+    "allocations": [
+      {
+        "node_id": "N118",
+        "name": "Precision Polymer Works Pvt Ltd",
+        "rank": 4,
+        "amount_cr": 0.39,
+        "cost_cr": 0.39,
+        "coverage": 1.0,
+        "measured_benefit_cr": 174.47,
+        "efficiency": 447.359,
+        "exposure_at_risk_cr": 98.81,
+        "fragility_before": 0.1721,
+        "fragility_after": 0.0,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N042",
+        "name": "Sealsworks Rubber Industries Pvt Ltd",
+        "rank": 1,
+        "amount_cr": 2.04,
+        "cost_cr": 2.04,
+        "coverage": 1.0,
+        "measured_benefit_cr": 831.38,
+        "efficiency": 407.5392,
+        "exposure_at_risk_cr": 141.12,
+        "fragility_before": 0.3498,
+        "fragility_after": 0.0,
+        "band_before": "critical",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N381",
+        "name": "Samarth Works Pvt Ltd",
+        "rank": 8,
+        "amount_cr": 0.62,
+        "cost_cr": 0.62,
+        "coverage": 1.0,
+        "measured_benefit_cr": 15.07,
+        "efficiency": 24.3065,
+        "exposure_at_risk_cr": 32.65,
+        "fragility_before": 0.1113,
+        "fragility_after": 0.0006,
+        "band_before": "watch",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N348",
+        "name": "Chitrakoot Enterprises Private Ltd",
+        "rank": 7,
+        "amount_cr": 0.74,
+        "cost_cr": 0.74,
+        "coverage": 1.0,
+        "measured_benefit_cr": 17.89,
+        "efficiency": 24.1757,
+        "exposure_at_risk_cr": 29.44,
+        "fragility_before": 0.1468,
+        "fragility_after": 0.0001,
+        "band_before": "watch",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N387",
+        "name": "Purnima Components Pvt Ltd",
+        "rank": 5,
+        "amount_cr": 4.11,
+        "cost_cr": 4.11,
+        "coverage": 1.0,
+        "measured_benefit_cr": 87.45,
+        "efficiency": 21.2774,
+        "exposure_at_risk_cr": 85.53,
+        "fragility_before": 0.2169,
+        "fragility_after": 0.0,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N203",
+        "name": "Kalyani Fastener Systems Pvt Ltd",
+        "rank": 2,
+        "amount_cr": 2.1,
+        "cost_cr": 2.36,
+        "coverage": 0.8898,
+        "measured_benefit_cr": 50.11,
+        "efficiency": 21.2331,
+        "exposure_at_risk_cr": 64.77,
+        "fragility_before": 0.223,
+        "fragility_after": 0.0249,
+        "band_before": "high",
+        "band_after": "stable"
+      }
+    ],
+    "candidates_considered": [
+      "N042",
+      "N203",
+      "N087",
+      "N118",
+      "N387",
+      "N394",
+      "N348",
+      "N381"
+    ],
+    "scoring_runs": 10,
+    "note": "Candidates are probed one at a time and ordered by anchor exposure removed per rupee; the figures reported here come from re-scoring the whole allocation together, so nothing is double-counted.",
+    "delta": {
+      "nodes_improved": 35,
+      "nodes_worsened": 0,
+      "total_exposure_reduced_cr": 597.77,
+      "total_intervention_cost_cr": 10.0,
+      "per_node": [
+        {
+          "node_id": "N042",
+          "fragility_before": 0.3498,
+          "fragility_after": 0.0,
+          "band_before": "critical",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N118",
+          "fragility_before": 0.1721,
+          "fragility_after": 0.0,
+          "band_before": "high",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N203",
+          "fragility_before": 0.223,
+          "fragility_after": 0.0249,
+          "band_before": "high",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N309",
+          "fragility_before": 0.1129,
+          "fragility_after": 0.0833,
+          "band_before": "watch",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N348",
+          "fragility_before": 0.1468,
+          "fragility_after": 0.0001,
+          "band_before": "watch",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N381",
+          "fragility_before": 0.1113,
+          "fragility_after": 0.0006,
+          "band_before": "watch",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N387",
+          "fragility_before": 0.2169,
+          "fragility_after": 0.0,
+          "band_before": "high",
+          "band_after": "stable"
+        }
+      ]
+    },
+    "summary_before": {
+      "total_nodes": 412,
+      "at_risk_count": 15,
+      "band_counts": {
+        "critical": 2,
+        "high": 4,
+        "watch": 10,
+        "stable": 396
+      },
+      "total_intervention_cost_cr": 16.54,
+      "total_estimated_exposure_cr": 738.18,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N007"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N001",
+          "supply_disruption": 0.1076,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 848.96,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N251",
+          "supply_disruption": 0.1073,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 435.95,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N268",
+          "supply_disruption": 0.0157,
+          "disruption_band": "watch",
+          "disrupted_inflow_cr": 93.63,
+          "stopped_by": "N238"
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    },
+    "summary_after": {
+      "total_nodes": 412,
+      "at_risk_count": 8,
+      "band_counts": {
+        "critical": 1,
+        "high": 1,
+        "watch": 7,
+        "stable": 403
+      },
+      "total_intervention_cost_cr": 5.78,
+      "total_estimated_exposure_cr": 270.21,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N007"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N001",
+          "supply_disruption": 0.0205,
+          "disruption_band": "watch",
+          "disrupted_inflow_cr": 160.76,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N251",
+          "supply_disruption": 0.0185,
+          "disruption_band": "watch",
+          "disrupted_inflow_cr": 74.66,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N268",
+          "supply_disruption": 0.0097,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 57.48,
+          "stopped_by": "N238"
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    }
+  },
+  {
+    "budget_cr": 25.0,
+    "allocated_cr": 14.44,
+    "unallocated_cr": 10.56,
+    "objective": {
+      "metric": "anchor_inflow_at_risk_cr",
+      "before_cr": 1378.54,
+      "after_cr": 154.86,
+      "reduced_cr": 1223.68
+    },
+    "allocations": [
+      {
+        "node_id": "N118",
+        "name": "Precision Polymer Works Pvt Ltd",
+        "rank": 4,
+        "amount_cr": 0.39,
+        "cost_cr": 0.39,
+        "coverage": 1.0,
+        "measured_benefit_cr": 174.47,
+        "efficiency": 447.359,
+        "exposure_at_risk_cr": 98.81,
+        "fragility_before": 0.1721,
+        "fragility_after": 0.0,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N042",
+        "name": "Sealsworks Rubber Industries Pvt Ltd",
+        "rank": 1,
+        "amount_cr": 2.04,
+        "cost_cr": 2.04,
+        "coverage": 1.0,
+        "measured_benefit_cr": 831.38,
+        "efficiency": 407.5392,
+        "exposure_at_risk_cr": 141.12,
+        "fragility_before": 0.3498,
+        "fragility_after": 0.0,
+        "band_before": "critical",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N381",
+        "name": "Samarth Works Pvt Ltd",
+        "rank": 8,
+        "amount_cr": 0.62,
+        "cost_cr": 0.62,
+        "coverage": 1.0,
+        "measured_benefit_cr": 15.07,
+        "efficiency": 24.3065,
+        "exposure_at_risk_cr": 32.65,
+        "fragility_before": 0.1113,
+        "fragility_after": 0.0006,
+        "band_before": "watch",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N348",
+        "name": "Chitrakoot Enterprises Private Ltd",
+        "rank": 7,
+        "amount_cr": 0.74,
+        "cost_cr": 0.74,
+        "coverage": 1.0,
+        "measured_benefit_cr": 17.89,
+        "efficiency": 24.1757,
+        "exposure_at_risk_cr": 29.44,
+        "fragility_before": 0.1468,
+        "fragility_after": 0.0001,
+        "band_before": "watch",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N387",
+        "name": "Purnima Components Pvt Ltd",
+        "rank": 5,
+        "amount_cr": 4.11,
+        "cost_cr": 4.11,
+        "coverage": 1.0,
+        "measured_benefit_cr": 87.45,
+        "efficiency": 21.2774,
+        "exposure_at_risk_cr": 85.53,
+        "fragility_before": 0.2169,
+        "fragility_after": 0.0,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N203",
+        "name": "Kalyani Fastener Systems Pvt Ltd",
+        "rank": 2,
+        "amount_cr": 2.36,
+        "cost_cr": 2.36,
+        "coverage": 1.0,
+        "measured_benefit_cr": 50.11,
+        "efficiency": 21.2331,
+        "exposure_at_risk_cr": 64.77,
+        "fragility_before": 0.223,
+        "fragility_after": 0.0004,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N394",
+        "name": "Indraprast Treatments Enterprises Pvt Ltd",
+        "rank": 6,
+        "amount_cr": 0.95,
+        "cost_cr": 0.95,
+        "coverage": 1.0,
+        "measured_benefit_cr": 19.02,
+        "efficiency": 20.0211,
+        "exposure_at_risk_cr": 54.53,
+        "fragility_before": 0.1061,
+        "fragility_after": 0.0,
+        "band_before": "watch",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N087",
+        "name": "Vaayu Thermal Products Pvt Ltd",
+        "rank": 3,
+        "amount_cr": 3.23,
+        "cost_cr": 3.23,
+        "coverage": 1.0,
+        "measured_benefit_cr": 59.77,
+        "efficiency": 18.5046,
+        "exposure_at_risk_cr": 65.22,
+        "fragility_before": 0.2128,
+        "fragility_after": 0.0,
+        "band_before": "high",
+        "band_after": "stable"
+      }
+    ],
+    "candidates_considered": [
+      "N042",
+      "N203",
+      "N087",
+      "N118",
+      "N387",
+      "N394",
+      "N348",
+      "N381"
+    ],
+    "scoring_runs": 10,
+    "note": "Candidates are probed one at a time and ordered by anchor exposure removed per rupee; the figures reported here come from re-scoring the whole allocation together, so nothing is double-counted.",
+    "delta": {
+      "nodes_improved": 48,
+      "nodes_worsened": 0,
+      "total_exposure_reduced_cr": 783.6,
+      "total_intervention_cost_cr": 14.44,
+      "per_node": [
+        {
+          "node_id": "N042",
+          "fragility_before": 0.3498,
+          "fragility_after": 0.0,
+          "band_before": "critical",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N087",
+          "fragility_before": 0.2128,
+          "fragility_after": 0.0,
+          "band_before": "high",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N118",
+          "fragility_before": 0.1721,
+          "fragility_after": 0.0,
+          "band_before": "high",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N203",
+          "fragility_before": 0.223,
+          "fragility_after": 0.0004,
+          "band_before": "high",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N309",
+          "fragility_before": 0.1129,
+          "fragility_after": 0.0001,
+          "band_before": "watch",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N348",
+          "fragility_before": 0.1468,
+          "fragility_after": 0.0001,
+          "band_before": "watch",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N381",
+          "fragility_before": 0.1113,
+          "fragility_after": 0.0006,
+          "band_before": "watch",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N387",
+          "fragility_before": 0.2169,
+          "fragility_after": 0.0,
+          "band_before": "high",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N394",
+          "fragility_before": 0.1061,
+          "fragility_after": 0.0,
+          "band_before": "watch",
+          "band_after": "stable"
+        }
+      ]
+    },
+    "summary_before": {
+      "total_nodes": 412,
+      "at_risk_count": 15,
+      "band_counts": {
+        "critical": 2,
+        "high": 4,
+        "watch": 10,
+        "stable": 396
+      },
+      "total_intervention_cost_cr": 16.54,
+      "total_estimated_exposure_cr": 738.18,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N007"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N001",
+          "supply_disruption": 0.1076,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 848.96,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N251",
+          "supply_disruption": 0.1073,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 435.95,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N268",
+          "supply_disruption": 0.0157,
+          "disruption_band": "watch",
+          "disrupted_inflow_cr": 93.63,
+          "stopped_by": "N238"
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    },
+    "summary_after": {
+      "total_nodes": 412,
+      "at_risk_count": 6,
+      "band_counts": {
+        "critical": 1,
+        "high": 0,
+        "watch": 6,
+        "stable": 405
+      },
+      "total_intervention_cost_cr": 1.6,
+      "total_estimated_exposure_cr": 150.46,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N007"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N001",
+          "supply_disruption": 0.0096,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 75.19,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N251",
+          "supply_disruption": 0.009,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 36.16,
+          "stopped_by": "N007"
+        },
+        {
+          "node_id": "N268",
+          "supply_disruption": 0.0073,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 43.51,
+          "stopped_by": "N157"
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    }
+  }
+]

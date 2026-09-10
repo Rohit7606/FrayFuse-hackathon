@@ -447,6 +447,45 @@ supplying that buyer that part, and are capped at one entry per candidate
 company — three ways to replace the same firm are one alternative, not three.
 
 
+### 4.7 `triage_queue`
+
+`final_score` says how much a supplier matters. This field says what to **do**
+about it, and the two are not the same — because the product that makes the
+ranking honest destroys the distinction the decision needs:
+
+```
+fragility 0.35  x  criticality 0.20  =  0.070
+fragility 0.10  x  criticality 0.70  =  0.070
+```
+
+The same number, and the opposite response. The first supplier is running out of
+money but somebody else makes the part; the second is irreplaceable but solvent.
+Writing a cheque to either one is a mistake. So triage reads the two factors
+apart from each other rather than multiplied together.
+
+| Value | Meaning | The response |
+|---|---|---|
+| `fund_now` | `fragility >= TRIAGE_FRAGILE_MIN` **and** `criticality >= TRIAGE_IRREPLACEABLE_MIN` | The cheque is the answer |
+| `derisk` | Fragile, but below the chokepoint threshold | Watch it, second-source it, hold the money for someone with no alternative |
+| `monitor` | Stress has reached it but it is not yet fragile — including a solvent chokepoint | Watchlist, no money |
+| `clear` | `fragility < TRIAGE_MONITOR_MIN` — nothing meaningful reached it | Nothing |
+| `origin` | The stress starts here | A diagnosis, not a rescue target — the same reason `ranking` excludes origins (§4.3) |
+
+Both thresholds are calibrated to the distribution the engine produces on
+`data/mock/network.json` at seed 42, exactly as the risk bands were (§4.4), and
+carry no claim about the world. On that network they split 412 nodes into 6
+`fund_now`, 11 `derisk`, 51 `monitor`, 343 `clear` and 1 `origin`.
+
+**`derisk` is not a subset of `ranking`.** A supplier can be fragile and
+genuinely replaceable and therefore never rank — `final_score` multiplies its
+low criticality away. That population is exactly what the watch queue exists to
+surface, so a client building queue lists must read `triage_queue` across all
+`scores`, not filter `ranking`.
+
+Optional and additive: output-only, `NetworkInput` is untouched, and no score,
+band or ranking moves.
+
+
 ## 5. API contract
 
 Base URL: `http://localhost:8000`. All responses `application/json`. The API is **stateless** — see `AGENTS.md` §3.4.
@@ -597,6 +636,83 @@ Apply funding and return before, after, and the delta. This drives the closing d
 
 Never return 500 for a bad request. Never return 200 with an error inside.
 
+### 5.9 `POST /api/derisk`
+
+The plan for one supplier: which queue it is in, what it would cost to stabilise,
+what is at risk through it, and what would change the answer. One scoring run —
+the plan restates figures the engine produced and computes no new ones.
+
+**Request:**
+
+```json
+{ "node_id": "N348", "scenario": { "stress_overrides": [], "interventions": [] } }
+```
+
+`scenario` and `network` are both optional and behave exactly as they do on
+`/api/simulate` (§5.6), so a plan built while the what-if slider is off its
+baseline describes the network the caller is actually looking at.
+
+**Response** — a `DeriskPlan` (see `schema.json`). The fields that carry the
+argument:
+
+| Field | Notes |
+|---|---|
+| `queue`, `queue_label` | §4.7 |
+| `headline` | One template-generated sentence. Never an LLM |
+| `status` | The two readings stated **separately** — "High financial fragility, moderate replaceability" is generated from the figures, not written for one supplier |
+| `exposure_at_risk_cr` | `estimated_exposure_cr` — trade value at risk if it fails |
+| `stabilisation_cost_cr` | `intervention_cost_cr` — what funding it would cost, whether or not funding is recommended |
+| `inherited_share` | How much of its fragility arrived from upstream rather than its own filings |
+| `alternatives_found` | `null` means substitution was not considered, `0` means it was and nobody qualified — the §4.6 distinction, uncollapsed |
+| `dependency` | The buyer it most depends on, and whether that buyer is the stress origin |
+| `review_triggers` | Thresholds that would move it between queues. **A threshold that cannot be reached is never emitted** — a supplier whose criticality puts the critical band out of reach gets its review point at the high band instead, rather than a trigger that can never fire |
+| `recommended_action` | `kind` is one of `fund` / `derisk` / `monitor` / `none`. `amount_cr` is `null` where money is not the answer, which is a different fact from `0.00` |
+
+### 5.10 `POST /api/allocate`
+
+Spread a limited rescue budget across several fragile suppliers. The
+counterfactual answers "what does funding this one supplier buy?"; this answers
+the question that follows it — with ₹5 cr and four suppliers failing, where does
+the money go?
+
+**Request:**
+
+```json
+{ "budget_cr": 5.0, "max_candidates": 8 }
+```
+
+`baseline_scenario` and `network` are optional and behave as on `/api/simulate`.
+
+**The objective is the anchor's own exposure**: the sum of `disrupted_inflow_cr`
+across every tier-0 node — the rupees of inbound supply that stop arriving at the
+top of the chain. It is already computed by the disruption layer (§4.4), and
+optimising it is what turns a graph problem into a financial decision.
+
+**The method, stated plainly, because a judge will ask.** Each candidate is
+probed independently: score the network with that supplier fully funded and
+measure how far anchor inflow at risk falls. Divide by its cost and that is its
+efficiency. Money goes to the best ratio first until the budget runs out, and the
+chosen set is then re-scored **together** to produce the reported result.
+
+That last re-score matters. Two suppliers on the same chain each get credit for
+relieving it, so `measured_benefit_cr` values can sum to more than
+`objective.reduced_cr`. Greedy ordering on independent probes is an
+approximation of the optimum, not the optimum — but every headline figure comes
+from the joint re-score, so nothing reported is double-counted. Quote
+`objective.reduced_cr`.
+
+**Cost.** One scoring run per probed candidate, plus a baseline and the joint
+re-score; `scoring_runs` reports the count and `max_candidates` bounds it.
+
+**Response** — an `AllocateResponse`. It deliberately does **not** carry the
+before/after `ScoredNetwork` pair `/api/intervene` returns: `delta`,
+`summary_before` and `summary_after` carry everything the comparison needs, and
+two full networks would repeat nodes and edges the client already holds.
+
+Leftover money below `ALLOCATION_MIN_COVERAGE` of a supplier's cost is reported
+as `unallocated_cr` rather than sprinkled — a sliver of a rescue is not a small
+rescue, it is a rounding error with a supplier's name on it.
+
 ---
 
 ## 6. Validation
@@ -651,6 +767,7 @@ Five CSVs land in `data/real/`:
 
 | Version | Change |
 |---|---|
+| 1.4 | **`triage_queue` on `Score`, `POST /api/derisk`, `POST /api/allocate`.** Additive and output-only throughout: `NetworkInput` is untouched, no data file's `meta.schema_version` moves, `mockgen`/`transform` are unchanged, and no existing score, band, `ranking` or endpoint response changes. Adds the decision layer on top of the ranking — which queue a supplier belongs in (§4.7), the de-risking plan for a watched one (§5.9), and a budget spread across several (§5.10). New engine modules `engine/triage.py` and `engine/allocation.py`; the inline `delta` object on `InterveneResponse` was lifted to a `Delta` definition in `schema.json` so the allocation response references the same shape rather than copying it — same validation, no wire change. Needs Person A, Person B and Person C review |
 | 1.0 | Initial contract. Edge fields named `supplier_id`/`buyer_id` rather than `from`/`to`. MSMED flow figure designated primary signal. `has_not_due_column` added as a required comparability flag |
 | 1.1 | Carries the comparability flags the collection workstream measured: `ageing_basis`, `msme_book_material`, `series_break`, `liquidity_quality` on stress signals; `confidence`, `edge_provenance` and a nullable `is_single_source` on edges; `observation_completeness` on nodes. Risk-band thresholds recalibrated to the score distribution the engine actually produces (§4.4). Stressed origins excluded from `ranking` (§4.3). This entry also records the version bump that `schema.json` had already taken but which was never written up here — agreed with Person B and Person C |
 | 1.3 | **Ingestion endpoint and client-supplied networks.** `POST /api/ingest` (§5.5) builds and scores a network from an uploaded zip of collection CSVs; `simulate` and `intervene` take an optional `network` (§5.6) so the result can be scored without the server holding it. New error code `invalid_upload`, always 422. Additive throughout: every existing request and response is unchanged, and the default network still serves with no upload. Needs Person B and Person C review |

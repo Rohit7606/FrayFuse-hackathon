@@ -26,6 +26,56 @@ OUT = REPO_ROOT / "web" / "src" / "mocks"
 # rather than round to 0.7 and open on a figure the baseline view never showed.
 SWEEP_LEVELS = (0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.75, 0.8, 0.9, 1.0)
 
+# The budget stops the optimiser offers. Mirrors BUDGET_LEVELS in
+# web/src/v2/api.ts. Each run costs a scoring pass per probed candidate, so the
+# stops are few and fixed rather than a free-typed number.
+BUDGET_LEVELS = (1.0, 2.5, 5.0, 10.0, 25.0)
+
+
+def build_derisk_plans(network: dict, scored: dict) -> dict:
+    """A de-risking plan for every node in a network.
+
+    Built from ONE scoring run through `engine.triage` rather than by calling
+    /api/derisk once per node: the endpoint scores the whole network per
+    request, so 400 calls would be 400 propagations to produce output that is
+    identical by construction. `test_derisk_mock_matches_the_endpoint` asserts
+    that equivalence against the live endpoint rather than assuming it.
+    """
+    from engine.graph import build_graph
+    from engine.triage import build_plan
+
+    graph = build_graph(network)
+    scores = {row["node_id"]: row for row in scored["scores"]}
+    origins = set(scored["summary"]["stressed_origin_nodes"])
+    return {
+        node_id: build_plan(graph, network, scores[node_id], scores, origins)
+        for node_id in sorted(scores)
+    }
+
+
+def build_allocations(network: dict | None = None) -> list[dict]:
+    """One /api/allocate response per budget stop.
+
+    Through the real endpoint, because unlike the plans above each of these IS a
+    different computation — a different budget buys a different split.
+    """
+    from api.main import app
+
+    runs = []
+    with TestClient(app) as client:
+        for budget in BUDGET_LEVELS:
+            body: dict = {"budget_cr": budget}
+            if network is not None:
+                body["network"] = network
+            response = client.post("/api/allocate", json=body)
+            if response.status_code != 200:
+                raise SystemExit(
+                    f"allocate mock failed at {budget}: "
+                    f"{response.status_code} {response.text[:400]}"
+                )
+            runs.append(response.json())
+    return runs
+
 def build_sweep(trigger_node: str, network: dict | None = None) -> dict:
     """Score the network once per slider stop, keeping scores and summary only.
 
@@ -220,6 +270,26 @@ def main() -> None:
     payloads["ingest-sweep.json"] = build_sweep(
         ingest_trigger,
         network={key: ingest_payload[key] for key in ("meta", "nodes", "edges", "stress_signals")},
+    )
+
+    # A plan per node, so every supplier the graph can select has a real one
+    # offline. Built from the committed simulate response above, which is the
+    # same baseline scoring /api/derisk performs per request.
+    payloads["derisk.json"] = build_derisk_plans(
+        json.loads((REPO_ROOT / "data" / "mock" / "network.json").read_text(encoding="utf-8")),
+        payloads["simulate.json"],
+    )
+    payloads["ingest-derisk.json"] = build_derisk_plans(
+        {key: ingest_payload[key] for key in ("meta", "nodes", "edges", "stress_signals")},
+        ingest_payload,
+    )
+
+    # The budget optimiser, one committed run per stop. Each is a real engine
+    # allocation: candidates probed one at a time, then the chosen set re-scored
+    # together — which is why these are endpoint output and not derived here.
+    payloads["allocate.json"] = build_allocations()
+    payloads["ingest-allocate.json"] = build_allocations(
+        {key: ingest_payload[key] for key in ("meta", "nodes", "edges", "stress_signals")}
     )
 
     # DEMO_SCENARIO.md §8: "Never hardcode these IDs in application logic. Read
