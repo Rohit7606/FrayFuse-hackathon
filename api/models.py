@@ -18,6 +18,10 @@ EdgeProvenance = Literal[
     "awards_page", "press", "auditor_note", "contingent_liability_note", "synthetic",
 ]
 ObservationCompleteness = Literal["observed", "partially_observed", "not_observed"]
+# Which queue a supplier belongs in — a decision, not a score. See
+# engine/triage.py for why this is not derivable from risk_band.
+TriageQueue = Literal["fund_now", "derisk", "monitor", "clear", "origin"]
+ActionKind = Literal["fund", "derisk", "monitor", "none"]
 
 
 class Meta(BaseModel):
@@ -164,6 +168,9 @@ class Score(BaseModel):
     # considered for this node; an EMPTY LIST means it was considered and
     # nobody qualified. Two different facts — see SCHEMA.md §4.6.
     substitution_candidates: list[SubstitutionCandidate] | None = None
+    # Triage, schema 1.4. Optional and additive: an older client ignores it,
+    # and every score the engine produces carries it.
+    triage_queue: TriageQueue | None = None
 
 
 class BandCounts(BaseModel):
@@ -367,3 +374,174 @@ class ErrorResponse(BaseModel):
     error: str
     detail: str
     node_id: str | None = None
+
+
+# ---------------------------------------------------------------------------
+# Triage — the de-risking plan (schema 1.4)
+# ---------------------------------------------------------------------------
+
+
+class TriageStatus(BaseModel):
+    """One of the two readings behind a queue, stated separately."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    kind: Literal["fragility", "replaceability"]
+    verdict: Literal["fragile", "holding", "irreplaceable", "replaceable"]
+    detail: str
+
+
+class ReviewTrigger(BaseModel):
+    """A threshold that, once crossed, moves a watched supplier to the funding queue."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    metric: Literal["fragility", "criticality", "alternatives", "buyer_own_stress"]
+    current: float
+    threshold: float
+    detail: str
+
+
+class PlanDependency(BaseModel):
+    """The buyer this supplier most depends on, and whether it is the origin."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    buyer_id: NodeId
+    buyer_name: str
+    edge_id: EdgeId
+    component: str
+    exposure_pct: Annotated[float, Field(ge=0.0, le=1.0)]
+    annual_value_cr: float
+    buyer_is_stressed_origin: bool
+    buyer_own_stress: Annotated[float, Field(ge=0.0, le=1.0)]
+    buyer_fragility: Annotated[float, Field(ge=0.0, le=1.0)]
+
+
+class RecommendedAction(BaseModel):
+    """What to do, and what it would cost.
+
+    `amount_cr` is null for the queues where money is not the answer — that is a
+    different fact from ₹0.00 cr, and the two are kept apart here for the same
+    reason they are kept apart everywhere else in this contract.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    kind: ActionKind
+    label: str
+    amount_cr: Annotated[float, Field(ge=0.0)] | None = None
+
+
+class DeriskPlan(BaseModel):
+    """What to do about one supplier, and what would change the answer."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    node_id: NodeId
+    name: str
+    tier: Annotated[int, Field(ge=0, le=3)]
+    queue: TriageQueue
+    queue_label: str
+    headline: str
+    fragility: Annotated[float, Field(ge=0.0, le=1.0)]
+    criticality: Annotated[float, Field(ge=0.0, le=1.0)]
+    final_score: Annotated[float, Field(ge=0.0, le=1.0)]
+    risk_band: RiskBand
+    status: list[TriageStatus]
+    exposure_at_risk_cr: float
+    stabilisation_cost_cr: float
+    inherited_share: Annotated[float, Field(ge=0.0, le=1.0)]
+    # null means substitution was not considered for this node; 0 means it was
+    # and nobody qualified (SCHEMA.md §4.6).
+    alternatives_found: Annotated[int, Field(ge=0)] | None = None
+    dependency: PlanDependency | None = None
+    review_triggers: list[ReviewTrigger]
+    actions: list[str]
+    recommended_action: RecommendedAction
+
+
+class DeriskRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    node_id: NodeId
+    scenario: Scenario | None = None
+    # As on SimulateRequest — the client's own network, or the server default.
+    network: NetworkInput | None = None
+
+
+# ---------------------------------------------------------------------------
+# Budget allocation (schema 1.4)
+# ---------------------------------------------------------------------------
+
+
+class Allocation(BaseModel):
+    """One supplier's share of the budget, and what it bought."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    node_id: NodeId
+    name: str
+    rank: int | None = None
+    amount_cr: Annotated[float, Field(ge=0.0)]
+    cost_cr: Annotated[float, Field(ge=0.0)]
+    coverage: Annotated[float, Field(ge=0.0, le=1.0)]
+    # Measured with this supplier funded ALONE. Suppliers on the same chain each
+    # get credit for relieving it, so these can sum to more than the joint
+    # `objective.reduced_cr` — which is the figure to quote.
+    measured_benefit_cr: float
+    efficiency: float
+    exposure_at_risk_cr: float
+    fragility_before: Annotated[float, Field(ge=0.0, le=1.0)]
+    fragility_after: Annotated[float, Field(ge=0.0, le=1.0)]
+    band_before: RiskBand
+    band_after: RiskBand
+
+
+class AllocationObjective(BaseModel):
+    """What the allocation was optimised against, before and after."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    metric: Literal["anchor_inflow_at_risk_cr"]
+    before_cr: float
+    after_cr: float
+    reduced_cr: float
+
+
+class AllocateRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    # Bounded above so a mistyped budget cannot turn into a scoring run per
+    # rupee, and below at 0 because a negative budget is not a request.
+    budget_cr: Annotated[float, Field(ge=0.0, le=100_000.0)]
+    baseline_scenario: Scenario | None = None
+    network: NetworkInput | None = None
+    # How many ranked suppliers to probe. Each probe is a full scoring run, so
+    # this is the cost of the request — bounded rather than free.
+    max_candidates: Annotated[int, Field(ge=1, le=20)] | None = None
+
+
+class AllocateResponse(BaseModel):
+    """The plan, the outcome, and how it was arrived at.
+
+    Deliberately does NOT carry the before/after `ScoredNetwork` pair that
+    `/api/intervene` returns. The allocation is read as a plan plus its effect;
+    two full networks would be a megabyte of duplicate nodes and edges the
+    client already holds, and `delta` plus the two summaries carry everything
+    the comparison needs.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    budget_cr: float
+    allocated_cr: float
+    unallocated_cr: float
+    objective: AllocationObjective
+    allocations: list[Allocation]
+    candidates_considered: list[NodeId]
+    scoring_runs: Annotated[int, Field(ge=1)]
+    note: str
+    delta: Delta
+    summary_before: Summary
+    summary_after: Summary
