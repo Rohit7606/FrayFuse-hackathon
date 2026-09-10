@@ -275,6 +275,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
   }, [baseline, demo, ingested, index]);
 
   const triggerNode = plan?.trigger ?? null;
+  const activeTriggerId = selectedId ?? triggerNode;
 
   /** The network every scenario request carries, or undefined for the default. */
   const networkOverride = useMemo(
@@ -292,8 +293,8 @@ export default function Console({ ingested, onBuildPage }: Props) {
 
   /** The slider's home position: the trigger's own filed stress. */
   const baselineLevelIndex = useMemo(() => {
-    if (!baseline || !triggerNode) return STRESS_LEVELS.length - 1;
-    const own = baseline.scores.find((row) => row.node_id === triggerNode)?.own_stress ?? 0;
+    if (!baseline || !activeTriggerId) return STRESS_LEVELS.length - 1;
+    const own = baseline.scores.find((row) => row.node_id === activeTriggerId)?.own_stress ?? 0;
     const exact = STRESS_LEVELS.findIndex((stop) => Math.abs(stop - own) < 1e-9);
     if (exact >= 0) return exact;
     // No exact stop means this file and refresh_web_mocks.py have drifted.
@@ -304,7 +305,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
       if (Math.abs(STRESS_LEVELS[i] - own) < Math.abs(STRESS_LEVELS[nearest] - own)) nearest = i;
     }
     return nearest;
-  }, [baseline, triggerNode]);
+  }, [baseline, activeTriggerId]);
 
   const activeLevelIndex = levelIndex ?? baselineLevelIndex;
   const atBaselineLevel = activeLevelIndex === baselineLevelIndex;
@@ -355,7 +356,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
 
   const anchor = summary ? anchorAtRisk(summary) : null;
 
-  const triggerName = triggerNode && index ? index.nodeById.get(triggerNode)?.name ?? triggerNode : '—';
+  const triggerName = activeTriggerId && index ? index.nodeById.get(activeTriggerId)?.name ?? activeTriggerId : '—';
 
   const watchedId = plan?.watched ?? ranking[0] ?? null;
   const watchedNode = watchedId && index ? index.nodeById.get(watchedId) : null;
@@ -384,7 +385,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
 
   const changeLevel = useCallback(
     async (nextIndex: number) => {
-      if (!triggerNode) return;
+      if (!activeTriggerId) return;
       setLevelIndex(nextIndex);
       // Funding is applied against the baseline scenario, so an intervention
       // result and a re-scored trigger cannot both be on screen truthfully.
@@ -400,7 +401,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
       setScoring(true);
       try {
         const next = await api.atStressLevel(
-          triggerNode,
+          activeTriggerId,
           STRESS_LEVELS[nextIndex],
           networkOverride,
         );
@@ -412,7 +413,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
         setScoring(false);
       }
     },
-    [triggerNode, baselineLevelIndex, networkOverride],
+    [activeTriggerId, baselineLevelIndex, networkOverride],
   );
 
   // ---- Step navigation ---------------------------------------------------
