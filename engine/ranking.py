@@ -218,6 +218,7 @@ def build_scores(
     exposures: dict[str, float],
     disruption: DisruptionResult,
     substitutions: dict[str, SubstitutionDetail] | None = None,
+    triage: dict[str, str] | None = None,
 ) -> list[dict[str, Any]]:
     """One Score object per node, ranked, with reasons.
 
@@ -259,6 +260,13 @@ def build_scores(
                 "disruption_reason": _compose_disruption_reason(
                     graph, node_id, disruption, names
                 ),
+                # Which queue this supplier belongs in — a decision, not a
+                # score.  Composed here beside the figures it reads so the UI
+                # can split the ranked list into "fund now" and "watch" without
+                # a second request; the classification itself lives in
+                # engine/triage.py.  None only if the caller passed no triage
+                # map, which nothing in the pipeline does.
+                "triage_queue": (triage or {}).get(node_id),
             }
         )
 

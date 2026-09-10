@@ -15,6 +15,7 @@ from engine import intervention as intervention_mod
 from engine import ranking as ranking_mod
 from engine import stress as stress_mod
 from engine import substitution as substitution_mod
+from engine import triage as triage_mod
 from engine.contagion import propagate
 from engine.disruption import propagate_disruption
 from engine.graph import build_graph
@@ -145,6 +146,16 @@ def score_network(
         graph, network, criticality, contagion.fragility
     )
 
+    # Which queue each supplier belongs in.  Reads the same two factors the
+    # ranking multiplies together, but keeps them apart — fragile-and-
+    # irreplaceable and fragile-but-replaceable are the same final_score and
+    # opposite decisions (triage.py).
+    triage = triage_mod.classify_all(
+        contagion.fragility,
+        {node_id: detail.criticality for node_id, detail in criticality.items()},
+        set(contagion.origins),
+    )
+
     scores = ranking_mod.build_scores(
         graph,
         network,
@@ -155,6 +166,7 @@ def score_network(
         exposures,
         disruption,
         substitutions,
+        triage,
     )
 
     return {
@@ -187,6 +199,12 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Score a FrayFuse network.")
     parser.add_argument("network", type=Path, help="path to a NetworkInput json file")
     parser.add_argument("--json", action="store_true", help="print the full ScoredNetwork")
+    parser.add_argument(
+        "--budget",
+        type=float,
+        default=None,
+        help="also spread this many ₹ cr across the ranked suppliers",
+    )
     args = parser.parse_args()
 
     network = json.loads(args.network.read_text(encoding="utf-8"))
@@ -206,6 +224,13 @@ def main() -> None:
         f"converged in {summary['iterations_to_converge']} iterations"
     )
     print(f"bands: {summary['band_counts']}")
+
+    # What to DO about them, which the bands deliberately do not say.
+    queues: dict[str, int] = {}
+    for score in result["scores"]:
+        queue = score.get("triage_queue") or "clear"
+        queues[queue] = queues.get(queue, 0) + 1
+    print(f"queues: {queues}")
     print(
         f"intervention ₹{summary['total_intervention_cost_cr']} cr "
         f"vs exposure ₹{summary['total_estimated_exposure_cr']} cr\n"
@@ -214,7 +239,8 @@ def main() -> None:
         score = by_id[node_id]
         print(
             f"{score['rank']:>3}. {node_id} {names[node_id]}  "
-            f"[{score['risk_band']}] score {score['final_score']:.4f} "
+            f"[{score['risk_band']}] [{score.get('triage_queue', '?')}] "
+            f"score {score['final_score']:.4f} "
             f"= fragility {score['fragility']:.4f} x criticality {score['criticality']:.4f}"
         )
         print(f"     {score['reason_text']}")
@@ -237,6 +263,31 @@ def main() -> None:
                 f"{anchor['supply_disruption']:.4f}{through}"
             )
             print(f"     ₹{anchor['disrupted_inflow_cr']} cr of inbound supply at risk")
+
+    # The budget beat, rehearsable from the CLI for the same reason the
+    # counterfactual above is.  Imported here rather than at module scope
+    # because allocation.py imports this module.
+    if args.budget is not None:
+        from engine.allocation import allocate_budget
+
+        allocation = allocate_budget(network, args.budget)
+        objective = allocation["objective"]
+        print(
+            f"\n₹{allocation['budget_cr']} cr budget: "
+            f"₹{allocation['allocated_cr']} cr committed, "
+            f"₹{allocation['unallocated_cr']} cr unallocated "
+            f"({allocation['scoring_runs']} scoring runs)"
+        )
+        print(
+            f"     anchor inflow at risk ₹{objective['before_cr']} cr → "
+            f"₹{objective['after_cr']} cr  (−₹{objective['reduced_cr']} cr)"
+        )
+        for row in allocation["allocations"]:
+            print(
+                f"     ₹{row['amount_cr']:>6.2f} cr → {row['node_id']} {row['name']}  "
+                f"{row['coverage'] * 100:.0f}% of need · "
+                f"{row['band_before']} → {row['band_after']}"
+            )
 
 
 if __name__ == "__main__":
