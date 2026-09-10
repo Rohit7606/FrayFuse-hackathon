@@ -5,6 +5,8 @@ Endpoints:
     GET  /api/at-risk     — baseline scoring, ranked list
     POST /api/simulate    — score under a scenario
     POST /api/intervene   — before/after/delta for funding decisions
+    POST /api/derisk      — the de-risking plan for one supplier
+    POST /api/allocate    — spread a limited budget across the ranked suppliers
     POST /api/ingest      — build and score a network from an uploaded zip
     GET  /health          — liveness check
 """
@@ -27,10 +29,15 @@ from api import errors, scoring
 from api.adapters import compute_delta
 from api.config import CORS_ORIGINS, NETWORK_PATH
 from api.models import (
+    AllocateRequest,
+    AllocateResponse,
     AtRiskResponse,
+    DeriskPlan,
+    DeriskRequest,
     IngestResponse,
     InterveneRequest,
     InterveneResponse,
+    Intervention,
     NetworkResponse,
     Scenario,
     ScoredNetwork,
@@ -198,6 +205,75 @@ def intervene(req: InterveneRequest):
         before=before,
         after=after,
         delta=compute_delta(before, after, interventions=req.interventions),
+    )
+
+
+@app.post("/api/derisk", response_model=DeriskPlan)
+def derisk(req: DeriskRequest):
+    """What to do about one supplier — fund it, watch it, or neither.
+
+    `final_score` ranks; this decides. Fragile-and-irreplaceable and
+    fragile-but-replaceable are the same score and opposite responses, so the
+    plan reads the two factors apart from each other (engine/triage.py) and
+    returns the queue, the exposure, the stabilisation cost, and the thresholds
+    that would move the supplier between queues.
+
+    One scoring run. Stateless like every other endpoint: the scenario and the
+    network both come in on the request body.
+    """
+    network = req.network.model_dump(mode="json") if req.network else load_network()
+    plan = scoring.derisk(network, req.node_id, req.scenario or Scenario())
+    return DeriskPlan.model_validate(plan)
+
+
+@app.post("/api/allocate", response_model=AllocateResponse)
+def allocate(req: AllocateRequest):
+    """Spread a limited rescue budget across several fragile suppliers.
+
+    The counterfactual answers "what does funding this one supplier buy?". This
+    answers the question that follows: with ₹5 cr and four suppliers failing,
+    where does the money go? Candidates are probed one at a time, ordered by
+    anchor exposure removed per rupee, and the chosen set is re-scored together
+    so the reported figures are the joint result rather than a sum of
+    independent estimates.
+
+    Costs one scoring run per probed candidate plus two — bounded by
+    `max_candidates`, which is why that field has a ceiling.
+    """
+    network = req.network.model_dump(mode="json") if req.network else load_network()
+    result = scoring.allocate(
+        network,
+        req.budget_cr,
+        req.baseline_scenario or Scenario(),
+        req.max_candidates,
+    )
+
+    before = ScoredNetwork.model_validate(result["before"])
+    after = ScoredNetwork.model_validate(result["after"])
+    interventions = [
+        Intervention(node_id=row["node_id"], amount_cr=row["amount_cr"])
+        for row in result["allocations"]
+    ]
+
+    return AllocateResponse.model_validate(
+        {
+            **{
+                key: result[key]
+                for key in (
+                    "budget_cr",
+                    "allocated_cr",
+                    "unallocated_cr",
+                    "objective",
+                    "allocations",
+                    "candidates_considered",
+                    "scoring_runs",
+                    "note",
+                )
+            },
+            "delta": compute_delta(before, after, interventions=interventions),
+            "summary_before": before.summary,
+            "summary_after": after.summary,
+        }
     )
 
 
