@@ -1,6 +1,6 @@
 # SCHEMA.md — FrayFuse Data Contract
 
-**Schema version: 1.1**
+**Schema version: 1.3**
 
 This file is the boundary between all three tracks. It has **no single owner** — changes require both other team members to be named on the PR. See `AGENTS.md` §4.3.
 
@@ -308,10 +308,11 @@ One entry per node — **every** node, including unstressed ones.
 | `disruption_band` | enum | Same four values as `risk_band`, **separate thresholds** — §4.4 |
 | `disrupted_inflow_cr` | float | Expected inbound trade value that fails to arrive |
 | `disruption_reason` | string | **Mandatory, never empty.** Template-generated, deterministic |
+| `substitution_candidates` | array \| null | Who else could take this supplier's volume — §4.6. Added in 1.3 |
 
-The last five are the **supply-disruption layer**, added in 1.2. They are a
-second propagation running in the opposite direction to the first, and they do
-not enter `final_score`, `risk_band` or `ranking` — those are unchanged.
+The five before the last are the **supply-disruption layer**, added in 1.2. They
+are a second propagation running in the opposite direction to the first, and
+they do not enter `final_score`, `risk_band` or `ranking` — those are unchanged.
 
 ### 4.2 How the numbers are produced
 
@@ -402,6 +403,49 @@ top band: at these thresholds `N001` bands `high` at baseline and drops to `watc
 is funded.
 
 ---
+
+
+### 4.6 `substitution_candidates`
+
+The ranked list answers "fragile **and** irreplaceable". This field answers the
+opposite question at the other end of the same distribution: where a supplier is
+replaceable, who could actually take the volume. It introduces no new signal —
+eligibility is read off `criticality`, fitness is scored on the same
+`contagion.fragility` that `final_score` uses.
+
+**`null` and `[]` are different facts and must never be collapsed.**
+
+| Value | Meaning |
+|---|---|
+| `null` | Substitution was **not considered**. The node is above `SUBSTITUTION_CRITICALITY_MAX`, or is a confirmed sole source, or its sole-source status is **undisclosed**, or it supplies nothing |
+| `[]` | It **was** considered, and no same-tier supplier of the same component qualified |
+| non-empty | Up to `SUBSTITUTION_MAX_CANDIDATES` alternatives, best fitness first, ties broken on `node_id` |
+
+This is the same distinction as `null` versus `0.0` everywhere else in this
+contract (AGENTS.md §3.6), and it carries real weight here. A node whose
+`is_single_source` is undisclosed gets `null`, **not** `[]` — offering a
+replacement on the strength of absent evidence would assert that alternatives
+exist, which is precisely the claim nobody filed. On `data/real/network.json`
+that rule excludes all 43 real companies, because not one collected filing made
+a sole-sourcing statement.
+
+Per candidate:
+
+| Field | Type | Notes |
+|---|---|---|
+| `node_id` | NodeId | The alternative supplier |
+| `name` | string | Its name, so the UI need not join back to `nodes` |
+| `component` | string | The part it already makes and would take over |
+| `replaces_edge_id` | EdgeId | The specific relationship being replaced |
+| `fitness` | float 0–1 | `W_SUB_HEALTH x (1 - fragility)` + `W_SUB_CAPACITY x` capacity, normalised within tier |
+| `fragility` | float 0–1 | The candidate's own fragility — a replacement that is failing is not a replacement |
+| `capacity_headroom_cr` | float \| null | Revenue not already committed. **`null` means revenue undisclosed**, which is unknown headroom, not zero. The capacity term is dropped and its weight renormalised onto health, exactly as criticality drops an undisclosed sole-source term |
+| `reason_text` | string | **Mandatory, never empty.** Template-generated and deterministic. Never an LLM |
+
+Candidates are same-tier and same-component only, exclude anyone already
+supplying that buyer that part, and are capped at one entry per candidate
+company — three ways to replace the same firm are one alternative, not three.
+
 
 ## 5. API contract
 
@@ -561,5 +605,6 @@ Five CSVs land in `data/real/`:
 |---|---|
 | 1.0 | Initial contract. Edge fields named `supplier_id`/`buyer_id` rather than `from`/`to`. MSMED flow figure designated primary signal. `has_not_due_column` added as a required comparability flag |
 | 1.1 | Carries the comparability flags the collection workstream measured: `ageing_basis`, `msme_book_material`, `series_break`, `liquidity_quality` on stress signals; `confidence`, `edge_provenance` and a nullable `is_single_source` on edges; `observation_completeness` on nodes. Risk-band thresholds recalibrated to the score distribution the engine actually produces (§4.4). Stressed origins excluded from `ranking` (§4.3). This entry also records the version bump that `schema.json` had already taken but which was never written up here — agreed with Person B and Person C |
+| 1.3 | **`substitution_candidates` on `Score`.** Optional, additive and output-only — `NetworkInput` is untouched, no data file's `meta.schema_version` moves, and `mockgen`/`transform` are unchanged. `final_score`, `risk_band` and `ranking` are unchanged; nothing that was correct before returns a different number. `null` means not considered and `[]` means considered-and-empty (§4.6). New engine module `engine/substitution.py`, orchestrated from `pipeline.py`. Needs Person B review |
 | 1.2 | **`stress_signals` on `GET /api/network`.** Optional, additive, pass-through — the endpoint already had the rows in memory and was dropping them. Required so the UI can display a filer's own disclosure beside the score derived from it; the alternative was hardcoding rupee figures in the frontend, which AGENTS.md §3.6 forbids. No engine, no scoring and no data file changes; an older client is unaffected because the field is optional. Needs Person B review |
 | 1.2 | **Supply-disruption layer.** Adds `halt_risk`, `supply_disruption`, `disruption_band`, `disrupted_inflow_cr` and `disruption_reason` to `Score`, and `anchor_disruption` plus `disruption_iterations_to_converge` to `Summary`. Purely additive and **output-only** — `NetworkInput` is untouched, so no data file's `meta.schema_version` moves and `mockgen`/`transform` are unchanged. `final_score`, `risk_band` and `ranking` are unchanged; nothing that was correct before returns a different number. Closes the `DEMO_SCENARIO.md` §6 counterfactual, which payment-stress propagation structurally could not reach. Needs Person B and Person C review |

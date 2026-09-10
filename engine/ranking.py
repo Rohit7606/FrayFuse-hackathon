@@ -19,6 +19,7 @@ from engine.contagion import ContagionResult
 from engine.criticality import CriticalityDetail
 from engine.disruption import DisruptionResult
 from engine.stress import StressDetail
+from engine.substitution import SubstitutionDetail
 
 BAND_ORDER = ("critical", "high", "watch", "stable")
 
@@ -216,6 +217,7 @@ def build_scores(
     costs: dict[str, float],
     exposures: dict[str, float],
     disruption: DisruptionResult,
+    substitutions: dict[str, SubstitutionDetail] | None = None,
 ) -> list[dict[str, Any]]:
     """One Score object per node, ranked, with reasons.
 
@@ -258,6 +260,30 @@ def build_scores(
                     graph, node_id, disruption, names
                 ),
             }
+        )
+
+        # null means "substitution was not considered for this node"; an empty
+        # list means "it was considered and nobody qualified".  Two different
+        # facts, kept apart exactly the way §3.6 keeps undisclosed apart from
+        # disclosed-nil — and the same shape whether it comes out of the engine
+        # or through pydantic, which serialises an unset optional as null.
+        detail = (substitutions or {}).get(node_id)
+        scores[-1]["substitution_candidates"] = (
+            [
+                {
+                    "node_id": candidate.node_id,
+                    "name": candidate.name,
+                    "component": candidate.component,
+                    "replaces_edge_id": candidate.replaces_edge_id,
+                    "fitness": candidate.fitness,
+                    "fragility": candidate.fragility,
+                    "capacity_headroom_cr": candidate.capacity_headroom_cr,
+                    "reason_text": candidate.reason_text,
+                }
+                for candidate in detail.candidates
+            ]
+            if detail is not None and detail.eligible
+            else None
         )
 
     # Stressed origins are reported separately in summary.stressed_origin_nodes

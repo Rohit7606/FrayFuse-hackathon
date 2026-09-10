@@ -14,6 +14,7 @@ from engine import criticality as criticality_mod
 from engine import intervention as intervention_mod
 from engine import ranking as ranking_mod
 from engine import stress as stress_mod
+from engine import substitution as substitution_mod
 from engine.contagion import propagate
 from engine.disruption import propagate_disruption
 from engine.graph import build_graph
@@ -136,8 +137,24 @@ def score_network(
             contagion.fragility[node_id] * criticality[node_id].criticality,
         )
 
+    # Substitution reads criticality on its low side and scores on the
+    # post-intervention fragility, so a funded supplier correctly becomes a
+    # better alternative.  Orchestrated here rather than from ranking.py, which
+    # composes scores and must not reach for its own inputs.
+    substitutions = substitution_mod.compute_substitutions(
+        graph, network, criticality, contagion.fragility
+    )
+
     scores = ranking_mod.build_scores(
-        graph, network, stress_detail, contagion, criticality, costs, exposures, disruption
+        graph,
+        network,
+        stress_detail,
+        contagion,
+        criticality,
+        costs,
+        exposures,
+        disruption,
+        substitutions,
     )
 
     return {
