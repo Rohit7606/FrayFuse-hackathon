@@ -1,0 +1,2081 @@
+[
+  {
+    "budget_cr": 1.0,
+    "allocated_cr": 1.0,
+    "unallocated_cr": 0.0,
+    "objective": {
+      "metric": "anchor_inflow_at_risk_cr",
+      "before_cr": 37.94,
+      "after_cr": 32.68,
+      "reduced_cr": 5.26
+    },
+    "allocations": [
+      {
+        "node_id": "N113",
+        "name": "Kshira Mill Component Works Pvt Ltd",
+        "rank": 2,
+        "amount_cr": 1.0,
+        "cost_cr": 1.66,
+        "coverage": 0.6024,
+        "measured_benefit_cr": 8.99,
+        "efficiency": 5.4157,
+        "exposure_at_risk_cr": 5.98,
+        "fragility_before": 0.2527,
+        "fragility_after": 0.1001,
+        "band_before": "high",
+        "band_after": "watch"
+      }
+    ],
+    "candidates_considered": [
+      "N111",
+      "N113",
+      "N082",
+      "N060",
+      "N061",
+      "N087",
+      "N081",
+      "N109"
+    ],
+    "scoring_runs": 10,
+    "note": "Candidates are probed one at a time and ordered by anchor exposure removed per rupee; the figures reported here come from re-scoring the whole allocation together, so nothing is double-counted.",
+    "delta": {
+      "nodes_improved": 4,
+      "nodes_worsened": 0,
+      "total_exposure_reduced_cr": 4.08,
+      "total_intervention_cost_cr": 1.0,
+      "per_node": [
+        {
+          "node_id": "N113",
+          "fragility_before": 0.2527,
+          "fragility_after": 0.1001,
+          "band_before": "high",
+          "band_after": "watch"
+        }
+      ]
+    },
+    "summary_before": {
+      "total_nodes": 298,
+      "at_risk_count": 29,
+      "band_counts": {
+        "critical": 1,
+        "high": 6,
+        "watch": 24,
+        "stable": 267
+      },
+      "total_intervention_cost_cr": 41.49,
+      "total_estimated_exposure_cr": 33.56,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N005",
+        "N006",
+        "N008",
+        "N016",
+        "N023",
+        "N027",
+        "N032",
+        "N040",
+        "N041"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N019",
+          "supply_disruption": 0.2089,
+          "disruption_band": "critical",
+          "disrupted_inflow_cr": 37.94,
+          "stopped_by": "N041"
+        },
+        {
+          "node_id": "N002",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N005",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N006",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N008",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N009",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N012",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N013",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N015",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N016",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N017",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N020",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N021",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N023",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N025",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N029",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N042",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N043",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    },
+    "summary_after": {
+      "total_nodes": 298,
+      "at_risk_count": 29,
+      "band_counts": {
+        "critical": 1,
+        "high": 5,
+        "watch": 25,
+        "stable": 267
+      },
+      "total_intervention_cost_cr": 40.49,
+      "total_estimated_exposure_cr": 29.95,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N005",
+        "N006",
+        "N008",
+        "N016",
+        "N023",
+        "N027",
+        "N032",
+        "N040",
+        "N041"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N019",
+          "supply_disruption": 0.1799,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 32.68,
+          "stopped_by": "N041"
+        },
+        {
+          "node_id": "N002",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N005",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N006",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N008",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N009",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N012",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N013",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N015",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N016",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N017",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N020",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N021",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N023",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N025",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N029",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N042",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N043",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    }
+  },
+  {
+    "budget_cr": 2.5,
+    "allocated_cr": 2.5,
+    "unallocated_cr": 0.0,
+    "objective": {
+      "metric": "anchor_inflow_at_risk_cr",
+      "before_cr": 37.94,
+      "after_cr": 24.49,
+      "reduced_cr": 13.45
+    },
+    "allocations": [
+      {
+        "node_id": "N113",
+        "name": "Kshira Mill Component Works Pvt Ltd",
+        "rank": 2,
+        "amount_cr": 1.66,
+        "cost_cr": 1.66,
+        "coverage": 1.0,
+        "measured_benefit_cr": 8.99,
+        "efficiency": 5.4157,
+        "exposure_at_risk_cr": 5.98,
+        "fragility_before": 0.2527,
+        "fragility_after": 0.0,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N111",
+        "name": "Ghanshyam Axle Tube Works Udyog Pvt Ltd",
+        "rank": 1,
+        "amount_cr": 0.84,
+        "cost_cr": 2.26,
+        "coverage": 0.3717,
+        "measured_benefit_cr": 11.82,
+        "efficiency": 5.2301,
+        "exposure_at_risk_cr": 7.26,
+        "fragility_before": 0.2945,
+        "fragility_after": 0.1852,
+        "band_before": "high",
+        "band_after": "high"
+      }
+    ],
+    "candidates_considered": [
+      "N111",
+      "N113",
+      "N082",
+      "N060",
+      "N061",
+      "N087",
+      "N081",
+      "N109"
+    ],
+    "scoring_runs": 10,
+    "note": "Candidates are probed one at a time and ordered by anchor exposure removed per rupee; the figures reported here come from re-scoring the whole allocation together, so nothing is double-counted.",
+    "delta": {
+      "nodes_improved": 8,
+      "nodes_worsened": 0,
+      "total_exposure_reduced_cr": 9.61,
+      "total_intervention_cost_cr": 2.5,
+      "per_node": [
+        {
+          "node_id": "N113",
+          "fragility_before": 0.2527,
+          "fragility_after": 0.0,
+          "band_before": "high",
+          "band_after": "stable"
+        }
+      ]
+    },
+    "summary_before": {
+      "total_nodes": 298,
+      "at_risk_count": 29,
+      "band_counts": {
+        "critical": 1,
+        "high": 6,
+        "watch": 24,
+        "stable": 267
+      },
+      "total_intervention_cost_cr": 41.49,
+      "total_estimated_exposure_cr": 33.56,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N005",
+        "N006",
+        "N008",
+        "N016",
+        "N023",
+        "N027",
+        "N032",
+        "N040",
+        "N041"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N019",
+          "supply_disruption": 0.2089,
+          "disruption_band": "critical",
+          "disrupted_inflow_cr": 37.94,
+          "stopped_by": "N041"
+        },
+        {
+          "node_id": "N002",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N005",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N006",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N008",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N009",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N012",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N013",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N015",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N016",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N017",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N020",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N021",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N023",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N025",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N029",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N042",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N043",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    },
+    "summary_after": {
+      "total_nodes": 298,
+      "at_risk_count": 28,
+      "band_counts": {
+        "critical": 1,
+        "high": 5,
+        "watch": 24,
+        "stable": 268
+      },
+      "total_intervention_cost_cr": 38.99,
+      "total_estimated_exposure_cr": 24.89,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N005",
+        "N006",
+        "N008",
+        "N016",
+        "N023",
+        "N027",
+        "N032",
+        "N040",
+        "N041"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N019",
+          "supply_disruption": 0.1348,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 24.49,
+          "stopped_by": "N041"
+        },
+        {
+          "node_id": "N002",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N005",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N006",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N008",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N009",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N012",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N013",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N015",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N016",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N017",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N020",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N021",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N023",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N025",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N029",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N042",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N043",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    }
+  },
+  {
+    "budget_cr": 5.0,
+    "allocated_cr": 5.0,
+    "unallocated_cr": 0.0,
+    "objective": {
+      "metric": "anchor_inflow_at_risk_cr",
+      "before_cr": 37.94,
+      "after_cr": 14.65,
+      "reduced_cr": 23.29
+    },
+    "allocations": [
+      {
+        "node_id": "N113",
+        "name": "Kshira Mill Component Works Pvt Ltd",
+        "rank": 2,
+        "amount_cr": 1.66,
+        "cost_cr": 1.66,
+        "coverage": 1.0,
+        "measured_benefit_cr": 8.99,
+        "efficiency": 5.4157,
+        "exposure_at_risk_cr": 5.98,
+        "fragility_before": 0.2527,
+        "fragility_after": 0.0,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N111",
+        "name": "Ghanshyam Axle Tube Works Udyog Pvt Ltd",
+        "rank": 1,
+        "amount_cr": 2.26,
+        "cost_cr": 2.26,
+        "coverage": 1.0,
+        "measured_benefit_cr": 11.82,
+        "efficiency": 5.2301,
+        "exposure_at_risk_cr": 7.26,
+        "fragility_before": 0.2945,
+        "fragility_after": 0.0005,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N109",
+        "name": "Mahesh Electroplating Works LLP",
+        "rank": 8,
+        "amount_cr": 0.99,
+        "cost_cr": 0.99,
+        "coverage": 1.0,
+        "measured_benefit_cr": 1.5,
+        "efficiency": 1.5152,
+        "exposure_at_risk_cr": 2.74,
+        "fragility_before": 0.2175,
+        "fragility_after": 0.0003,
+        "band_before": "watch",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N061",
+        "name": "Prasad Wire Drawing Udyog Pvt Ltd",
+        "rank": 5,
+        "amount_cr": 0.09,
+        "cost_cr": 0.62,
+        "coverage": 0.1452,
+        "measured_benefit_cr": 0.03,
+        "efficiency": 0.0484,
+        "exposure_at_risk_cr": 3.79,
+        "fragility_before": 0.1565,
+        "fragility_after": 0.1339,
+        "band_before": "high",
+        "band_after": "high"
+      }
+    ],
+    "candidates_considered": [
+      "N111",
+      "N113",
+      "N082",
+      "N060",
+      "N061",
+      "N087",
+      "N081",
+      "N109"
+    ],
+    "scoring_runs": 10,
+    "note": "Candidates are probed one at a time and ordered by anchor exposure removed per rupee; the figures reported here come from re-scoring the whole allocation together, so nothing is double-counted.",
+    "delta": {
+      "nodes_improved": 14,
+      "nodes_worsened": 0,
+      "total_exposure_reduced_cr": 17.93,
+      "total_intervention_cost_cr": 5.0,
+      "per_node": [
+        {
+          "node_id": "N109",
+          "fragility_before": 0.2175,
+          "fragility_after": 0.0003,
+          "band_before": "watch",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N111",
+          "fragility_before": 0.2945,
+          "fragility_after": 0.0005,
+          "band_before": "high",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N113",
+          "fragility_before": 0.2527,
+          "fragility_after": 0.0,
+          "band_before": "high",
+          "band_after": "stable"
+        }
+      ]
+    },
+    "summary_before": {
+      "total_nodes": 298,
+      "at_risk_count": 29,
+      "band_counts": {
+        "critical": 1,
+        "high": 6,
+        "watch": 24,
+        "stable": 267
+      },
+      "total_intervention_cost_cr": 41.49,
+      "total_estimated_exposure_cr": 33.56,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N005",
+        "N006",
+        "N008",
+        "N016",
+        "N023",
+        "N027",
+        "N032",
+        "N040",
+        "N041"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N019",
+          "supply_disruption": 0.2089,
+          "disruption_band": "critical",
+          "disrupted_inflow_cr": 37.94,
+          "stopped_by": "N041"
+        },
+        {
+          "node_id": "N002",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N005",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N006",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N008",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N009",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N012",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N013",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N015",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N016",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N017",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N020",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N021",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N023",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N025",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N029",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N042",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N043",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    },
+    "summary_after": {
+      "total_nodes": 298,
+      "at_risk_count": 26,
+      "band_counts": {
+        "critical": 1,
+        "high": 4,
+        "watch": 23,
+        "stable": 270
+      },
+      "total_intervention_cost_cr": 36.47,
+      "total_estimated_exposure_cr": 16.86,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N005",
+        "N006",
+        "N008",
+        "N016",
+        "N023",
+        "N027",
+        "N032",
+        "N040",
+        "N041"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N019",
+          "supply_disruption": 0.0807,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 14.65,
+          "stopped_by": "N041"
+        },
+        {
+          "node_id": "N002",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N005",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N006",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N008",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N009",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N012",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N013",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N015",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N016",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N017",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N020",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N021",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N023",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N025",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N029",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N042",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N043",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    }
+  },
+  {
+    "budget_cr": 10.0,
+    "allocated_cr": 7.2,
+    "unallocated_cr": 2.8,
+    "objective": {
+      "metric": "anchor_inflow_at_risk_cr",
+      "before_cr": 37.94,
+      "after_cr": 14.56,
+      "reduced_cr": 23.38
+    },
+    "allocations": [
+      {
+        "node_id": "N113",
+        "name": "Kshira Mill Component Works Pvt Ltd",
+        "rank": 2,
+        "amount_cr": 1.66,
+        "cost_cr": 1.66,
+        "coverage": 1.0,
+        "measured_benefit_cr": 8.99,
+        "efficiency": 5.4157,
+        "exposure_at_risk_cr": 5.98,
+        "fragility_before": 0.2527,
+        "fragility_after": 0.0,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N111",
+        "name": "Ghanshyam Axle Tube Works Udyog Pvt Ltd",
+        "rank": 1,
+        "amount_cr": 2.26,
+        "cost_cr": 2.26,
+        "coverage": 1.0,
+        "measured_benefit_cr": 11.82,
+        "efficiency": 5.2301,
+        "exposure_at_risk_cr": 7.26,
+        "fragility_before": 0.2945,
+        "fragility_after": 0.0005,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N109",
+        "name": "Mahesh Electroplating Works LLP",
+        "rank": 8,
+        "amount_cr": 0.99,
+        "cost_cr": 0.99,
+        "coverage": 1.0,
+        "measured_benefit_cr": 1.5,
+        "efficiency": 1.5152,
+        "exposure_at_risk_cr": 2.74,
+        "fragility_before": 0.2175,
+        "fragility_after": 0.0003,
+        "band_before": "watch",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N061",
+        "name": "Prasad Wire Drawing Udyog Pvt Ltd",
+        "rank": 5,
+        "amount_cr": 0.62,
+        "cost_cr": 0.62,
+        "coverage": 1.0,
+        "measured_benefit_cr": 0.03,
+        "efficiency": 0.0484,
+        "exposure_at_risk_cr": 3.79,
+        "fragility_before": 0.1565,
+        "fragility_after": 0.0007,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N060",
+        "name": "Digvijay Casting Solutions Udyog Pvt Ltd",
+        "rank": 4,
+        "amount_cr": 1.67,
+        "cost_cr": 1.67,
+        "coverage": 1.0,
+        "measured_benefit_cr": 0.06,
+        "efficiency": 0.0359,
+        "exposure_at_risk_cr": 4.07,
+        "fragility_before": 0.19,
+        "fragility_after": 0.0003,
+        "band_before": "high",
+        "band_after": "stable"
+      }
+    ],
+    "candidates_considered": [
+      "N111",
+      "N113",
+      "N082",
+      "N060",
+      "N061",
+      "N087",
+      "N081",
+      "N109"
+    ],
+    "scoring_runs": 10,
+    "note": "Candidates are probed one at a time and ordered by anchor exposure removed per rupee; the figures reported here come from re-scoring the whole allocation together, so nothing is double-counted.",
+    "delta": {
+      "nodes_improved": 17,
+      "nodes_worsened": 0,
+      "total_exposure_reduced_cr": 26.41,
+      "total_intervention_cost_cr": 7.2,
+      "per_node": [
+        {
+          "node_id": "N060",
+          "fragility_before": 0.19,
+          "fragility_after": 0.0003,
+          "band_before": "high",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N061",
+          "fragility_before": 0.1565,
+          "fragility_after": 0.0007,
+          "band_before": "high",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N109",
+          "fragility_before": 0.2175,
+          "fragility_after": 0.0003,
+          "band_before": "watch",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N111",
+          "fragility_before": 0.2945,
+          "fragility_after": 0.0005,
+          "band_before": "high",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N113",
+          "fragility_before": 0.2527,
+          "fragility_after": 0.0,
+          "band_before": "high",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N186",
+          "fragility_before": 0.0421,
+          "fragility_after": 0.0002,
+          "band_before": "watch",
+          "band_after": "stable"
+        }
+      ]
+    },
+    "summary_before": {
+      "total_nodes": 298,
+      "at_risk_count": 29,
+      "band_counts": {
+        "critical": 1,
+        "high": 6,
+        "watch": 24,
+        "stable": 267
+      },
+      "total_intervention_cost_cr": 41.49,
+      "total_estimated_exposure_cr": 33.56,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N005",
+        "N006",
+        "N008",
+        "N016",
+        "N023",
+        "N027",
+        "N032",
+        "N040",
+        "N041"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N019",
+          "supply_disruption": 0.2089,
+          "disruption_band": "critical",
+          "disrupted_inflow_cr": 37.94,
+          "stopped_by": "N041"
+        },
+        {
+          "node_id": "N002",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N005",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N006",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N008",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N009",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N012",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N013",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N015",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N016",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N017",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N020",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N021",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N023",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N025",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N029",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N042",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N043",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    },
+    "summary_after": {
+      "total_nodes": 298,
+      "at_risk_count": 23,
+      "band_counts": {
+        "critical": 1,
+        "high": 2,
+        "watch": 22,
+        "stable": 273
+      },
+      "total_intervention_cost_cr": 34.14,
+      "total_estimated_exposure_cr": 8.58,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N005",
+        "N006",
+        "N008",
+        "N016",
+        "N023",
+        "N027",
+        "N032",
+        "N040",
+        "N041"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N019",
+          "supply_disruption": 0.0801,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 14.56,
+          "stopped_by": "N041"
+        },
+        {
+          "node_id": "N002",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N005",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N006",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N008",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N009",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N012",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N013",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N015",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N016",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N017",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N020",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N021",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N023",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N025",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N029",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N042",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N043",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    }
+  },
+  {
+    "budget_cr": 25.0,
+    "allocated_cr": 7.2,
+    "unallocated_cr": 17.8,
+    "objective": {
+      "metric": "anchor_inflow_at_risk_cr",
+      "before_cr": 37.94,
+      "after_cr": 14.56,
+      "reduced_cr": 23.38
+    },
+    "allocations": [
+      {
+        "node_id": "N113",
+        "name": "Kshira Mill Component Works Pvt Ltd",
+        "rank": 2,
+        "amount_cr": 1.66,
+        "cost_cr": 1.66,
+        "coverage": 1.0,
+        "measured_benefit_cr": 8.99,
+        "efficiency": 5.4157,
+        "exposure_at_risk_cr": 5.98,
+        "fragility_before": 0.2527,
+        "fragility_after": 0.0,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N111",
+        "name": "Ghanshyam Axle Tube Works Udyog Pvt Ltd",
+        "rank": 1,
+        "amount_cr": 2.26,
+        "cost_cr": 2.26,
+        "coverage": 1.0,
+        "measured_benefit_cr": 11.82,
+        "efficiency": 5.2301,
+        "exposure_at_risk_cr": 7.26,
+        "fragility_before": 0.2945,
+        "fragility_after": 0.0005,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N109",
+        "name": "Mahesh Electroplating Works LLP",
+        "rank": 8,
+        "amount_cr": 0.99,
+        "cost_cr": 0.99,
+        "coverage": 1.0,
+        "measured_benefit_cr": 1.5,
+        "efficiency": 1.5152,
+        "exposure_at_risk_cr": 2.74,
+        "fragility_before": 0.2175,
+        "fragility_after": 0.0003,
+        "band_before": "watch",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N061",
+        "name": "Prasad Wire Drawing Udyog Pvt Ltd",
+        "rank": 5,
+        "amount_cr": 0.62,
+        "cost_cr": 0.62,
+        "coverage": 1.0,
+        "measured_benefit_cr": 0.03,
+        "efficiency": 0.0484,
+        "exposure_at_risk_cr": 3.79,
+        "fragility_before": 0.1565,
+        "fragility_after": 0.0007,
+        "band_before": "high",
+        "band_after": "stable"
+      },
+      {
+        "node_id": "N060",
+        "name": "Digvijay Casting Solutions Udyog Pvt Ltd",
+        "rank": 4,
+        "amount_cr": 1.67,
+        "cost_cr": 1.67,
+        "coverage": 1.0,
+        "measured_benefit_cr": 0.06,
+        "efficiency": 0.0359,
+        "exposure_at_risk_cr": 4.07,
+        "fragility_before": 0.19,
+        "fragility_after": 0.0003,
+        "band_before": "high",
+        "band_after": "stable"
+      }
+    ],
+    "candidates_considered": [
+      "N111",
+      "N113",
+      "N082",
+      "N060",
+      "N061",
+      "N087",
+      "N081",
+      "N109"
+    ],
+    "scoring_runs": 10,
+    "note": "Candidates are probed one at a time and ordered by anchor exposure removed per rupee; the figures reported here come from re-scoring the whole allocation together, so nothing is double-counted.",
+    "delta": {
+      "nodes_improved": 17,
+      "nodes_worsened": 0,
+      "total_exposure_reduced_cr": 26.41,
+      "total_intervention_cost_cr": 7.2,
+      "per_node": [
+        {
+          "node_id": "N060",
+          "fragility_before": 0.19,
+          "fragility_after": 0.0003,
+          "band_before": "high",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N061",
+          "fragility_before": 0.1565,
+          "fragility_after": 0.0007,
+          "band_before": "high",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N109",
+          "fragility_before": 0.2175,
+          "fragility_after": 0.0003,
+          "band_before": "watch",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N111",
+          "fragility_before": 0.2945,
+          "fragility_after": 0.0005,
+          "band_before": "high",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N113",
+          "fragility_before": 0.2527,
+          "fragility_after": 0.0,
+          "band_before": "high",
+          "band_after": "stable"
+        },
+        {
+          "node_id": "N186",
+          "fragility_before": 0.0421,
+          "fragility_after": 0.0002,
+          "band_before": "watch",
+          "band_after": "stable"
+        }
+      ]
+    },
+    "summary_before": {
+      "total_nodes": 298,
+      "at_risk_count": 29,
+      "band_counts": {
+        "critical": 1,
+        "high": 6,
+        "watch": 24,
+        "stable": 267
+      },
+      "total_intervention_cost_cr": 41.49,
+      "total_estimated_exposure_cr": 33.56,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N005",
+        "N006",
+        "N008",
+        "N016",
+        "N023",
+        "N027",
+        "N032",
+        "N040",
+        "N041"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N019",
+          "supply_disruption": 0.2089,
+          "disruption_band": "critical",
+          "disrupted_inflow_cr": 37.94,
+          "stopped_by": "N041"
+        },
+        {
+          "node_id": "N002",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N005",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N006",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N008",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N009",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N012",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N013",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N015",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N016",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N017",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N020",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N021",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N023",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N025",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N029",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N042",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N043",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    },
+    "summary_after": {
+      "total_nodes": 298,
+      "at_risk_count": 23,
+      "band_counts": {
+        "critical": 1,
+        "high": 2,
+        "watch": 22,
+        "stable": 273
+      },
+      "total_intervention_cost_cr": 34.14,
+      "total_estimated_exposure_cr": 8.58,
+      "iterations_to_converge": 3,
+      "stressed_origin_nodes": [
+        "N005",
+        "N006",
+        "N008",
+        "N016",
+        "N023",
+        "N027",
+        "N032",
+        "N040",
+        "N041"
+      ],
+      "max_propagation_depth": 2,
+      "anchor_disruption": [
+        {
+          "node_id": "N019",
+          "supply_disruption": 0.0801,
+          "disruption_band": "high",
+          "disrupted_inflow_cr": 14.56,
+          "stopped_by": "N041"
+        },
+        {
+          "node_id": "N002",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N005",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N006",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N008",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N009",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N012",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N013",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N015",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N016",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N017",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N020",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N021",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N023",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N025",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N029",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N042",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        },
+        {
+          "node_id": "N043",
+          "supply_disruption": 0.0,
+          "disruption_band": "stable",
+          "disrupted_inflow_cr": 0.0,
+          "stopped_by": null
+        }
+      ],
+      "disruption_iterations_to_converge": 4
+    }
+  }
+]

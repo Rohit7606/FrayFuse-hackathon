@@ -22288,7 +22288,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 848.96,
       "disruption_reason": "Brakecraft Components Ltd is at risk of halting brake assembly deliveries. ₹848.96 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N002",
@@ -22325,7 +22326,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.1,
       "disruption_reason": "Harshad Rubber Works Udyog Pvt Ltd is at risk of halting cold forming deliveries. ₹0.10 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N003",
@@ -22352,7 +22354,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N004",
@@ -22410,7 +22413,8 @@
           "capacity_headroom_cr": 2.27,
           "reason_text": "Same tier, already supplies forgings to one other buyer, ₹2.27 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N005",
@@ -22437,7 +22441,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N006",
@@ -22464,7 +22469,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N007",
@@ -22496,7 +22502,8 @@
       "disruption_band": "critical",
       "disrupted_inflow_cr": 46.48,
       "disruption_reason": "Sealsworks Rubber Industries Pvt Ltd is at risk of halting hydraulic seal kit deliveries — sole source, nothing else to buy it from. ₹46.48 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "origin"
     },
     {
       "node_id": "N008",
@@ -22523,7 +22530,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 4.36,
       "disruption_reason": "Kalyani Fastener Systems Pvt Ltd is at risk of halting cold forged bolts deliveries. ₹4.36 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N009",
@@ -22550,7 +22558,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N010",
@@ -22577,7 +22586,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 1.89,
       "disruption_reason": "Indraprast Treatments Enterprises Pvt Ltd is at risk of halting sealing compounds deliveries. ₹1.89 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N011",
@@ -22645,7 +22655,8 @@
           "capacity_headroom_cr": 4.16,
           "reason_text": "Same tier, already supplies injection moulding to one other buyer, ₹4.16 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N012",
@@ -22672,7 +22683,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.07,
       "disruption_reason": "Purnima Polymers Systems Pvt Ltd is at risk of halting cold forming deliveries. ₹0.07 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N013",
@@ -22740,7 +22752,8 @@
           "capacity_headroom_cr": 4.51,
           "reason_text": "Same tier, already supplies aluminium billets to 4 other buyers, ₹4.51 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N014",
@@ -22767,7 +22780,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N015",
@@ -22794,7 +22808,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N016",
@@ -22831,7 +22846,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.09,
       "disruption_reason": "Kesariya Toolings Industries Pvt Ltd is at risk of halting powder coating deliveries. ₹0.09 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N017",
@@ -22873,7 +22889,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.02,
       "disruption_reason": "Yashodhan Metalworks Components Pvt Ltd is at risk of halting polymer compounds deliveries. ₹0.02 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N018",
@@ -22931,7 +22948,8 @@
           "capacity_headroom_cr": 7.04,
           "reason_text": "Same tier, already supplies sealing compounds to one other buyer, ₹7.04 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N019",
@@ -22958,7 +22976,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N020",
@@ -22985,7 +23004,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N021",
@@ -23043,7 +23063,8 @@
           "capacity_headroom_cr": 5.66,
           "reason_text": "Same tier, already supplies powder coating to one other buyer, ₹5.66 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N022",
@@ -23070,7 +23091,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "Anantham Industries Systems Pvt Ltd is at risk of halting engineering plastics deliveries. ₹0.00 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N023",
@@ -23097,7 +23119,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 1.2,
       "disruption_reason": "Purnima Components Pvt Ltd is at risk of halting sealing compounds deliveries. ₹1.20 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N024",
@@ -23124,7 +23147,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.26,
       "disruption_reason": "Suryakant Springs Products Pvt Ltd is at risk of halting powder coating deliveries. ₹0.26 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N025",
@@ -23151,7 +23175,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N026",
@@ -23188,7 +23213,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N027",
@@ -23246,7 +23272,8 @@
           "capacity_headroom_cr": 11.1,
           "reason_text": "Same tier, already supplies synthetic rubber to 2 other buyers, ₹11.10 cr of revenue not already committed, and its own fragility is 0.010."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N028",
@@ -23283,7 +23310,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N029",
@@ -23351,7 +23379,8 @@
           "capacity_headroom_cr": 2.28,
           "reason_text": "Same tier, already supplies sheet metal to one other buyer, ₹2.28 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N030",
@@ -23409,7 +23438,8 @@
           "capacity_headroom_cr": 6.54,
           "reason_text": "Same tier, already supplies electroplating to 3 other buyers, ₹6.54 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N031",
@@ -23436,7 +23466,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.04,
       "disruption_reason": "Udaygiri Works Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.04 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N032",
@@ -23473,7 +23504,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N033",
@@ -23515,7 +23547,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "Vaikunth Auto Systems Pvt Ltd is at risk of halting aluminium billets deliveries. ₹0.00 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N034",
@@ -23542,7 +23575,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N035",
@@ -23610,7 +23644,8 @@
           "capacity_headroom_cr": 11.1,
           "reason_text": "Same tier, already supplies synthetic rubber to 2 other buyers, ₹11.10 cr of revenue not already committed, and its own fragility is 0.010."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N036",
@@ -23652,7 +23687,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.28,
       "disruption_reason": "Purnima Enterprises Udyog Pvt Ltd is at risk of halting electroplating deliveries. ₹0.28 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N037",
@@ -23679,7 +23715,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.2,
       "disruption_reason": "Aarvik Precision Engineering Pvt Ltd is at risk of halting rubber moulding deliveries. ₹0.20 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N038",
@@ -23706,7 +23743,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N039",
@@ -23774,7 +23812,8 @@
           "capacity_headroom_cr": 1.92,
           "reason_text": "Same tier, already supplies cold forming to 3 other buyers, ₹1.92 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N040",
@@ -23811,7 +23850,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N041",
@@ -23848,7 +23888,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.21,
       "disruption_reason": "Siddhivin Castings Works Udyog Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.21 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N042",
@@ -23895,7 +23936,8 @@
       "disruption_band": "critical",
       "disrupted_inflow_cr": 4.68,
       "disruption_reason": "Precision Polymer Works Pvt Ltd is at risk of halting polymer compound deliveries — sole source, nothing else to buy it from. ₹4.68 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "fund_now"
     },
     {
       "node_id": "N043",
@@ -23953,7 +23995,8 @@
           "capacity_headroom_cr": 4.51,
           "reason_text": "Same tier, already supplies aluminium billets to 4 other buyers, ₹4.51 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N044",
@@ -23980,7 +24023,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N045",
@@ -24007,7 +24051,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N046",
@@ -24034,7 +24079,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N047",
@@ -24061,7 +24107,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N048",
@@ -24103,7 +24150,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.24,
       "disruption_reason": "Saptagiri Castings Engineering Pvt Ltd is at risk of halting aluminium billets deliveries. ₹0.24 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N049",
@@ -24161,7 +24209,8 @@
           "capacity_headroom_cr": 5.9,
           "reason_text": "Same tier, already supplies cold forming to 4 other buyers, ₹5.90 cr of revenue not already committed, and its own fragility is 0.012."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N050",
@@ -24219,7 +24268,8 @@
           "capacity_headroom_cr": 5.66,
           "reason_text": "Same tier, already supplies powder coating to one other buyer, ₹5.66 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N051",
@@ -24256,7 +24306,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N052",
@@ -24283,7 +24334,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N053",
@@ -24310,7 +24362,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N054",
@@ -24352,7 +24405,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.08,
       "disruption_reason": "Amaravati Systems Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.08 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N055",
@@ -24389,7 +24443,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N056",
@@ -24416,7 +24471,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N057",
@@ -24443,7 +24499,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N058",
@@ -24470,7 +24527,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N059",
@@ -24538,7 +24596,8 @@
           "capacity_headroom_cr": 4.5,
           "reason_text": "Same tier, already supplies precision machining to one other buyer, ₹4.50 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N060",
@@ -24565,7 +24624,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.04,
       "disruption_reason": "Bhavani Castings Components Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.04 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N061",
@@ -24602,7 +24662,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N062",
@@ -24629,7 +24690,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.12,
       "disruption_reason": "Bhavani Precision Components Pvt Ltd is at risk of halting sheet metal deliveries. ₹0.12 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N063",
@@ -24697,7 +24759,8 @@
           "capacity_headroom_cr": 2.26,
           "reason_text": "Same tier, already supplies forgings to one other buyer, ₹2.26 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N064",
@@ -24755,7 +24818,8 @@
           "capacity_headroom_cr": 4.51,
           "reason_text": "Same tier, already supplies aluminium billets to 4 other buyers, ₹4.51 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N065",
@@ -24823,7 +24887,8 @@
           "capacity_headroom_cr": 2.42,
           "reason_text": "Same tier, already supplies engineering plastics to 3 other buyers, ₹2.42 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N066",
@@ -24860,7 +24925,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N067",
@@ -24902,7 +24968,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.39,
       "disruption_reason": "Sarvodaya Works Udyog Pvt Ltd is at risk of halting electroplating deliveries. ₹0.39 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N068",
@@ -24929,7 +24996,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.02,
       "disruption_reason": "Virajpet Castings Products Udyog Pvt Ltd is at risk of halting sealing compounds deliveries. ₹0.02 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N069",
@@ -24966,7 +25034,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N070",
@@ -25034,7 +25103,8 @@
           "capacity_headroom_cr": 4.16,
           "reason_text": "Same tier, already supplies injection moulding to one other buyer, ₹4.16 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N071",
@@ -25061,7 +25131,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 3.54,
       "disruption_reason": "Indraprast Treatments Enterprises Pvt Ltd is at risk of halting sealing compounds deliveries. ₹3.54 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N072",
@@ -25088,7 +25159,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N073",
@@ -25146,7 +25218,8 @@
           "capacity_headroom_cr": 5.66,
           "reason_text": "Same tier, already supplies powder coating to one other buyer, ₹5.66 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N074",
@@ -25173,7 +25246,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N075",
@@ -25200,7 +25274,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.03,
       "disruption_reason": "Sahyadri Products Udyog Pvt Ltd is at risk of halting precision machining deliveries. ₹0.03 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N076",
@@ -25258,7 +25333,8 @@
           "capacity_headroom_cr": 5.66,
           "reason_text": "Same tier, already supplies powder coating to one other buyer, ₹5.66 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N077",
@@ -25285,7 +25361,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N078",
@@ -25312,7 +25389,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N079",
@@ -25339,7 +25417,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.13,
       "disruption_reason": "Trishul Industries Pvt Ltd is at risk of halting forgings deliveries. ₹0.13 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N080",
@@ -25397,7 +25476,8 @@
           "capacity_headroom_cr": 15.77,
           "reason_text": "Same tier, already supplies synthetic rubber to 6 other buyers, ₹15.77 cr of revenue not already committed, and its own fragility is 0.012."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N081",
@@ -25424,7 +25504,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.09,
       "disruption_reason": "Zorawar Works Udyog Pvt Ltd is at risk of halting electroplating deliveries. ₹0.09 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N082",
@@ -25482,7 +25563,8 @@
           "capacity_headroom_cr": 1.89,
           "reason_text": "Same tier, already supplies sheet metal to 2 other buyers, ₹1.89 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N083",
@@ -25509,7 +25591,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N084",
@@ -25536,7 +25619,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.02,
       "disruption_reason": "Kritika Forgings Industries Pvt Ltd is at risk of halting forgings deliveries. ₹0.02 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N085",
@@ -25573,7 +25657,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N086",
@@ -25600,7 +25685,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.01,
       "disruption_reason": "Chitrakoot Treatments Components Pvt Ltd is at risk of halting engineering plastics deliveries. ₹0.01 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N087",
@@ -25642,7 +25728,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 4.14,
       "disruption_reason": "Panchvati Metalworks Industries Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹4.14 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "fund_now"
     },
     {
       "node_id": "N088",
@@ -25669,7 +25756,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 1.68,
       "disruption_reason": "Vaikunth Autotech Engineering Pvt Ltd is at risk of halting sealing compounds deliveries. ₹1.68 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N089",
@@ -25696,7 +25784,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.04,
       "disruption_reason": "Purnima Enterprises Udyog Pvt Ltd is at risk of halting electroplating deliveries. ₹0.04 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N090",
@@ -25733,7 +25822,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N091",
@@ -25801,7 +25891,8 @@
           "capacity_headroom_cr": 11.1,
           "reason_text": "Same tier, already supplies synthetic rubber to 2 other buyers, ₹11.10 cr of revenue not already committed, and its own fragility is 0.010."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N092",
@@ -25859,7 +25950,8 @@
           "capacity_headroom_cr": 2.28,
           "reason_text": "Same tier, already supplies sheet metal to one other buyer, ₹2.28 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N093",
@@ -25886,7 +25978,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.02,
       "disruption_reason": "Saptagiri Works Pvt Ltd is at risk of halting cold forming deliveries. ₹0.02 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N094",
@@ -25954,7 +26047,8 @@
           "capacity_headroom_cr": 5.66,
           "reason_text": "Same tier, already supplies powder coating to one other buyer, ₹5.66 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N095",
@@ -25981,7 +26075,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "Jagriti Industries Udyog Pvt Ltd is at risk of halting aluminium billets deliveries. ₹0.00 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N096",
@@ -26008,7 +26103,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.61,
       "disruption_reason": "Rajhans Products Pvt Ltd is at risk of halting sensor modules deliveries. ₹0.61 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N097",
@@ -26035,7 +26131,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N098",
@@ -26103,7 +26200,8 @@
           "capacity_headroom_cr": 6.57,
           "reason_text": "Same tier, already supplies electroplating to 2 other buyers, ₹6.57 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N099",
@@ -26171,7 +26269,8 @@
           "capacity_headroom_cr": 5.66,
           "reason_text": "Same tier, already supplies powder coating to one other buyer, ₹5.66 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N100",
@@ -26198,7 +26297,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.04,
       "disruption_reason": "Manthan Enterprises Udyog Pvt Ltd is at risk of halting alloy steel deliveries. ₹0.04 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N101",
@@ -26225,7 +26325,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N102",
@@ -26252,7 +26353,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N103",
@@ -26279,7 +26381,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "Aarvik Products Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.00 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N104",
@@ -26337,7 +26440,8 @@
           "capacity_headroom_cr": 2.26,
           "reason_text": "Same tier, already supplies forgings to one other buyer, ₹2.26 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N105",
@@ -26364,7 +26468,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.01,
       "disruption_reason": "Vasundhara Forgings Systems Pvt Ltd is at risk of halting forgings deliveries. ₹0.01 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N106",
@@ -26432,7 +26537,8 @@
           "capacity_headroom_cr": 4.02,
           "reason_text": "Same tier, already supplies rubber moulding to one other buyer, ₹4.02 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N107",
@@ -26469,7 +26575,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N108",
@@ -26537,7 +26644,8 @@
           "capacity_headroom_cr": 2.42,
           "reason_text": "Same tier, already supplies engineering plastics to 3 other buyers, ₹2.42 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N109",
@@ -26564,7 +26672,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N110",
@@ -26601,7 +26710,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N111",
@@ -26659,7 +26769,8 @@
           "capacity_headroom_cr": 7.04,
           "reason_text": "Same tier, already supplies sealing compounds to one other buyer, ₹7.04 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N112",
@@ -26686,7 +26797,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N113",
@@ -26713,7 +26825,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N114",
@@ -26740,7 +26853,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.03,
       "disruption_reason": "Meghdoot Products Udyog Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.03 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N115",
@@ -26808,7 +26922,8 @@
           "capacity_headroom_cr": 6.7,
           "reason_text": "Same tier, already supplies polymer compounds to 2 other buyers, ₹6.70 cr of revenue not already committed, and its own fragility is 0.014."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N116",
@@ -26835,7 +26950,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N117",
@@ -26903,7 +27019,8 @@
           "capacity_headroom_cr": 4.5,
           "reason_text": "Same tier, already supplies precision machining to one other buyer, ₹4.50 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N118",
@@ -26945,7 +27062,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "fund_now"
     },
     {
       "node_id": "N119",
@@ -26972,7 +27090,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N120",
@@ -26999,7 +27118,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N121",
@@ -27036,7 +27156,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N122",
@@ -27094,7 +27215,8 @@
           "capacity_headroom_cr": 4.02,
           "reason_text": "Same tier, already supplies rubber moulding to one other buyer, ₹4.02 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N123",
@@ -27121,7 +27243,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N124",
@@ -27148,7 +27271,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N125",
@@ -27175,7 +27299,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N126",
@@ -27202,7 +27327,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 1.29,
       "disruption_reason": "Adhira Works Pvt Ltd is at risk of halting precision machining deliveries. ₹1.29 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N127",
@@ -27260,7 +27386,8 @@
           "capacity_headroom_cr": 1.1,
           "reason_text": "Same tier, already supplies precision machining to one other buyer, ₹1.10 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N128",
@@ -27328,7 +27455,8 @@
           "capacity_headroom_cr": 3.76,
           "reason_text": "Same tier, already supplies heat treatment to one other buyer, ₹3.76 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N129",
@@ -27396,7 +27524,8 @@
           "capacity_headroom_cr": 4.51,
           "reason_text": "Same tier, already supplies aluminium billets to 4 other buyers, ₹4.51 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N130",
@@ -27423,7 +27552,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N131",
@@ -27460,7 +27590,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N132",
@@ -27487,7 +27618,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N133",
@@ -27514,7 +27646,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N134",
@@ -27582,7 +27715,8 @@
           "capacity_headroom_cr": 5.46,
           "reason_text": "Same tier, already supplies alloy steel to one other buyer, ₹5.46 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N135",
@@ -27624,7 +27758,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N136",
@@ -27661,7 +27796,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N137",
@@ -27688,7 +27824,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N138",
@@ -27756,7 +27893,8 @@
           "capacity_headroom_cr": 7.57,
           "reason_text": "Same tier, already supplies synthetic rubber to 3 other buyers, ₹7.57 cr of revenue not already committed, and its own fragility is 0.001."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N139",
@@ -27783,7 +27921,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.04,
       "disruption_reason": "Mahendra Treatments Industries Udyog Pvt Ltd is at risk of halting alloy steel deliveries. ₹0.04 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N140",
@@ -27810,7 +27949,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.03,
       "disruption_reason": "Madhuban Enterprises Udyog Pvt Ltd is at risk of halting heat treatment deliveries. ₹0.03 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N141",
@@ -27837,7 +27977,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 2.09,
       "disruption_reason": "Somnath Enterprises Private Ltd is at risk of halting sealing compounds deliveries. ₹2.09 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N142",
@@ -27905,7 +28046,8 @@
           "capacity_headroom_cr": 4.68,
           "reason_text": "Same tier, already supplies engineering plastics to 2 other buyers, ₹4.68 cr of revenue not already committed, and its own fragility is 0.017."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N143",
@@ -27932,7 +28074,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N144",
@@ -27969,7 +28112,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N145",
@@ -28006,7 +28150,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N146",
@@ -28064,7 +28209,8 @@
           "capacity_headroom_cr": 5.66,
           "reason_text": "Same tier, already supplies powder coating to one other buyer, ₹5.66 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N147",
@@ -28091,7 +28237,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N148",
@@ -28159,7 +28306,8 @@
           "capacity_headroom_cr": 1.26,
           "reason_text": "Same tier, already supplies castings to one other buyer, ₹1.26 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N149",
@@ -28186,7 +28334,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N150",
@@ -28244,7 +28393,8 @@
           "capacity_headroom_cr": 4.2,
           "reason_text": "Same tier, already supplies cold forming to one other buyer, ₹4.20 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N151",
@@ -28281,7 +28431,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N152",
@@ -28339,7 +28490,8 @@
           "capacity_headroom_cr": 1.62,
           "reason_text": "Same tier, already supplies cold forming to one other buyer, ₹1.62 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N153",
@@ -28366,7 +28518,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 1.69,
       "disruption_reason": "Somnath Enterprises Private Ltd is at risk of halting sealing compounds deliveries. ₹1.69 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N154",
@@ -28403,7 +28556,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N155",
@@ -28445,7 +28599,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.19,
       "disruption_reason": "Virajpet Stampings Enterprises Udyog Pvt Ltd is at risk of halting cold forming deliveries. ₹0.19 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N156",
@@ -28472,7 +28627,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N157",
@@ -28499,7 +28655,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 1.43,
       "disruption_reason": "Vaikunth Rubber Engineering Pvt Ltd is at risk of halting brake systems deliveries. ₹1.43 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N158",
@@ -28526,7 +28683,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N159",
@@ -28584,7 +28742,8 @@
           "capacity_headroom_cr": 4.48,
           "reason_text": "Same tier, already supplies synthetic rubber to 2 other buyers, ₹4.48 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N160",
@@ -28611,7 +28770,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N161",
@@ -28679,7 +28839,8 @@
           "capacity_headroom_cr": 4.16,
           "reason_text": "Same tier, already supplies injection moulding to one other buyer, ₹4.16 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N162",
@@ -28706,7 +28867,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "Vaikunth Engineering Products Udyog Pvt Ltd is at risk of halting forgings deliveries. ₹0.00 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N163",
@@ -28743,7 +28905,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N164",
@@ -28801,7 +28964,8 @@
           "capacity_headroom_cr": 4.48,
           "reason_text": "Same tier, already supplies aluminium billets to one other buyer, ₹4.48 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N165",
@@ -28859,7 +29023,8 @@
           "capacity_headroom_cr": 6.57,
           "reason_text": "Same tier, already supplies electroplating to 2 other buyers, ₹6.57 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N166",
@@ -28886,7 +29051,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N167",
@@ -28913,7 +29079,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "Sarvodaya Industries Udyog Pvt Ltd is at risk of halting precision machining deliveries. ₹0.00 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N168",
@@ -28950,7 +29117,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N169",
@@ -28977,7 +29145,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N170",
@@ -29014,7 +29183,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N171",
@@ -29051,7 +29221,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.03,
       "disruption_reason": "Udaygiri Works Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.03 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N172",
@@ -29078,7 +29249,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N173",
@@ -29105,7 +29277,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N174",
@@ -29132,7 +29305,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N175",
@@ -29200,7 +29374,8 @@
           "capacity_headroom_cr": 4.48,
           "reason_text": "Same tier, already supplies aluminium billets to one other buyer, ₹4.48 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N176",
@@ -29237,7 +29412,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N177",
@@ -29264,7 +29440,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N178",
@@ -29306,7 +29483,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.66,
       "disruption_reason": "Trishul Products Udyog Pvt Ltd is at risk of halting injection moulding deliveries — sole source, nothing else to buy it from. ₹0.66 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N179",
@@ -29333,7 +29511,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.36,
       "disruption_reason": "Suryakant Engineering Industries Pvt Ltd is at risk of halting precision machining deliveries. ₹0.36 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N180",
@@ -29391,7 +29570,8 @@
           "capacity_headroom_cr": 1.92,
           "reason_text": "Same tier, already supplies cold forming to 3 other buyers, ₹1.92 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N181",
@@ -29418,7 +29598,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.01,
       "disruption_reason": "Ratnadeep Industries Udyog Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.01 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N182",
@@ -29445,7 +29626,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 6.21,
       "disruption_reason": "Purnima Components Pvt Ltd is at risk of halting sealing compounds deliveries. ₹6.21 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N183",
@@ -29472,7 +29654,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N184",
@@ -29499,7 +29682,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N185",
@@ -29536,7 +29720,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N186",
@@ -29563,7 +29748,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N187",
@@ -29590,7 +29776,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 5.81,
       "disruption_reason": "Vaayu Thermal Products Pvt Ltd is at risk of halting radiator cores deliveries. ₹5.81 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N188",
@@ -29648,7 +29835,8 @@
           "capacity_headroom_cr": 5.66,
           "reason_text": "Same tier, already supplies powder coating to one other buyer, ₹5.66 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N189",
@@ -29685,7 +29873,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N190",
@@ -29712,7 +29901,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N191",
@@ -29770,7 +29960,8 @@
           "capacity_headroom_cr": 5.46,
           "reason_text": "Same tier, already supplies alloy steel to one other buyer, ₹5.46 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N192",
@@ -29797,7 +29988,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.04,
       "disruption_reason": "Suryakant Springs Products Pvt Ltd is at risk of halting powder coating deliveries. ₹0.04 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N193",
@@ -29865,7 +30057,8 @@
           "capacity_headroom_cr": 2.28,
           "reason_text": "Same tier, already supplies sheet metal to one other buyer, ₹2.28 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N194",
@@ -29892,7 +30085,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N195",
@@ -29919,7 +30113,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N196",
@@ -29946,7 +30141,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N197",
@@ -29983,7 +30179,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N198",
@@ -30020,7 +30217,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N199",
@@ -30062,7 +30260,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.02,
       "disruption_reason": "Ratnadeep Industries Udyog Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.02 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N200",
@@ -30104,7 +30303,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.17,
       "disruption_reason": "Trishul Engineering Enterprises Pvt Ltd is at risk of halting aluminium billets deliveries. ₹0.17 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N201",
@@ -30131,7 +30331,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N202",
@@ -30189,7 +30390,8 @@
           "capacity_headroom_cr": 4.16,
           "reason_text": "Same tier, already supplies injection moulding to one other buyer, ₹4.16 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N203",
@@ -30226,7 +30428,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 4.27,
       "disruption_reason": "Mahendra Treatments Industries Udyog Pvt Ltd is at risk of halting alloy steel deliveries. ₹4.27 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "fund_now"
     },
     {
       "node_id": "N204",
@@ -30284,7 +30487,8 @@
           "capacity_headroom_cr": 0.45,
           "reason_text": "Same tier, already supplies castings to 2 other buyers, ₹0.45 cr of revenue not already committed, and its own fragility is 0.000."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N205",
@@ -30342,7 +30546,8 @@
           "capacity_headroom_cr": 4.16,
           "reason_text": "Same tier, already supplies injection moulding to one other buyer, ₹4.16 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N206",
@@ -30379,7 +30584,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N207",
@@ -30406,7 +30612,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "Somnath Systems Udyog Pvt Ltd is at risk of halting electroplating deliveries. ₹0.00 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N208",
@@ -30464,7 +30671,8 @@
           "capacity_headroom_cr": 8.1,
           "reason_text": "Same tier, already supplies electroplating to 2 other buyers, ₹8.10 cr of revenue not already committed, and its own fragility is 0.014."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N209",
@@ -30491,7 +30699,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N210",
@@ -30559,7 +30768,8 @@
           "capacity_headroom_cr": 2.42,
           "reason_text": "Same tier, already supplies engineering plastics to 3 other buyers, ₹2.42 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N211",
@@ -30627,7 +30837,8 @@
           "capacity_headroom_cr": 8.1,
           "reason_text": "Same tier, already supplies electroplating to 2 other buyers, ₹8.10 cr of revenue not already committed, and its own fragility is 0.014."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N212",
@@ -30685,7 +30896,8 @@
           "capacity_headroom_cr": 2.48,
           "reason_text": "Same tier, already supplies polymer compounds to one other buyer, ₹2.48 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N213",
@@ -30722,7 +30934,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N214",
@@ -30780,7 +30993,8 @@
           "capacity_headroom_cr": 2.42,
           "reason_text": "Same tier, already supplies engineering plastics to 3 other buyers, ₹2.42 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N215",
@@ -30838,7 +31052,8 @@
           "capacity_headroom_cr": 4.21,
           "reason_text": "Same tier, already supplies precision machining to one other buyer, ₹4.21 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N216",
@@ -30896,7 +31111,8 @@
           "capacity_headroom_cr": 2.82,
           "reason_text": "Same tier, already supplies rubber moulding to one other buyer, ₹2.82 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N217",
@@ -30938,7 +31154,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.12,
       "disruption_reason": "Pratapgarh Turned Parts Systems Udyog Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.12 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N218",
@@ -31006,7 +31223,8 @@
           "capacity_headroom_cr": 4.06,
           "reason_text": "Same tier, already supplies engineering plastics to one other buyer, ₹4.06 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N219",
@@ -31033,7 +31251,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N220",
@@ -31075,7 +31294,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.09,
       "disruption_reason": "Ashwamedh Products Pvt Ltd is at risk of halting sheet metal deliveries. ₹0.09 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N221",
@@ -31112,7 +31332,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N222",
@@ -31139,7 +31360,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N223",
@@ -31197,7 +31419,8 @@
           "capacity_headroom_cr": 6.57,
           "reason_text": "Same tier, already supplies electroplating to 2 other buyers, ₹6.57 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N224",
@@ -31239,7 +31462,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N225",
@@ -31276,7 +31500,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N226",
@@ -31313,7 +31538,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N227",
@@ -31381,7 +31607,8 @@
           "capacity_headroom_cr": 4.5,
           "reason_text": "Same tier, already supplies precision machining to one other buyer, ₹4.50 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N228",
@@ -31439,7 +31666,8 @@
           "capacity_headroom_cr": 4.51,
           "reason_text": "Same tier, already supplies aluminium billets to 4 other buyers, ₹4.51 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N229",
@@ -31466,7 +31694,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 2.8,
       "disruption_reason": "Sealsworks Rubber Industries Pvt Ltd is at risk of halting moulded seals deliveries. ₹2.80 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N230",
@@ -31493,7 +31722,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N231",
@@ -31535,7 +31765,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.07,
       "disruption_reason": "Shreeyash Springs Engineering Udyog Pvt Ltd is at risk of halting cold forming deliveries. ₹0.07 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N232",
@@ -31593,7 +31824,8 @@
           "capacity_headroom_cr": 4.02,
           "reason_text": "Same tier, already supplies rubber moulding to one other buyer, ₹4.02 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N233",
@@ -31620,7 +31852,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.75,
       "disruption_reason": "Amaravati Turned Parts Products Pvt Ltd is at risk of halting starter motors deliveries. ₹0.75 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N234",
@@ -31647,7 +31880,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 2.9,
       "disruption_reason": "Purnima Components Pvt Ltd is at risk of halting sealing compounds deliveries. ₹2.90 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N235",
@@ -31689,7 +31923,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.1,
       "disruption_reason": "Chitrakoot Moulders Industries Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.10 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N236",
@@ -31716,7 +31951,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N237",
@@ -31774,7 +32010,8 @@
           "capacity_headroom_cr": 1.89,
           "reason_text": "Same tier, already supplies sheet metal to 2 other buyers, ₹1.89 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N238",
@@ -31801,7 +32038,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 4.99,
       "disruption_reason": "Vaayu Thermal Products Pvt Ltd is at risk of halting heat shields deliveries. ₹4.99 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N239",
@@ -31828,7 +32066,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.01,
       "disruption_reason": "Purnima Polymers Systems Pvt Ltd is at risk of halting cold forming deliveries. ₹0.01 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N240",
@@ -31865,7 +32104,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N241",
@@ -31892,7 +32132,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N242",
@@ -31919,7 +32160,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N243",
@@ -31977,7 +32219,8 @@
           "capacity_headroom_cr": 5.46,
           "reason_text": "Same tier, already supplies alloy steel to one other buyer, ₹5.46 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N244",
@@ -32004,7 +32247,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.41,
       "disruption_reason": "Suryakant Springs Components Pvt Ltd is at risk of halting cold forming deliveries. ₹0.41 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N245",
@@ -32031,7 +32275,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N246",
@@ -32068,7 +32313,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N247",
@@ -32095,7 +32341,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 1.84,
       "disruption_reason": "Sealsworks Rubber Industries Pvt Ltd is at risk of halting o ring sets deliveries. ₹1.84 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N248",
@@ -32153,7 +32400,8 @@
           "capacity_headroom_cr": 4.48,
           "reason_text": "Same tier, already supplies aluminium billets to one other buyer, ₹4.48 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N249",
@@ -32180,7 +32428,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.05,
       "disruption_reason": "Udaygiri Works Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.05 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N250",
@@ -32207,7 +32456,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N251",
@@ -32234,7 +32484,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 435.95,
       "disruption_reason": "Brakecraft Components Ltd is at risk of halting drivetrain modules deliveries. ₹435.95 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N252",
@@ -32261,7 +32512,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N253",
@@ -32329,7 +32581,8 @@
           "capacity_headroom_cr": 4.16,
           "reason_text": "Same tier, already supplies injection moulding to one other buyer, ₹4.16 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N254",
@@ -32356,7 +32609,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N255",
@@ -32383,7 +32637,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N256",
@@ -32410,7 +32665,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N257",
@@ -32447,7 +32703,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N258",
@@ -32474,7 +32731,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N259",
@@ -32532,7 +32790,8 @@
           "capacity_headroom_cr": 8.1,
           "reason_text": "Same tier, already supplies electroplating to 2 other buyers, ₹8.10 cr of revenue not already committed, and its own fragility is 0.014."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N260",
@@ -32559,7 +32818,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.01,
       "disruption_reason": "Pratapgarh Engineering Products Udyog Pvt Ltd is at risk of halting polymer compounds deliveries. ₹0.01 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N261",
@@ -32596,7 +32856,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.64,
       "disruption_reason": "Rameshwar Engineering Pvt Ltd is at risk of halting alloy steel deliveries. ₹0.64 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N262",
@@ -32633,7 +32894,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N263",
@@ -32675,7 +32937,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.03,
       "disruption_reason": "Kesariya Auto Engineering Pvt Ltd is at risk of halting sealing compounds deliveries. ₹0.03 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N264",
@@ -32717,7 +32980,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.01,
       "disruption_reason": "Purnima Polymers Systems Pvt Ltd is at risk of halting cold forming deliveries. ₹0.01 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N265",
@@ -32744,7 +33008,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.01,
       "disruption_reason": "Daksha Rubber Components Pvt Ltd is at risk of halting polymer compounds deliveries. ₹0.01 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N266",
@@ -32802,7 +33067,8 @@
           "capacity_headroom_cr": 2.26,
           "reason_text": "Same tier, already supplies forgings to one other buyer, ₹2.26 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N267",
@@ -32829,7 +33095,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N268",
@@ -32856,7 +33123,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 93.63,
       "disruption_reason": "Indraprast Treatments Industries Ltd is at risk of halting starter motors deliveries. ₹93.63 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N269",
@@ -32924,7 +33192,8 @@
           "capacity_headroom_cr": 1.92,
           "reason_text": "Same tier, already supplies cold forming to 3 other buyers, ₹1.92 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N270",
@@ -32951,7 +33220,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.21,
       "disruption_reason": "Siddhivin Systems Udyog Pvt Ltd is at risk of halting rubber moulding deliveries. ₹0.21 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N271",
@@ -33019,7 +33289,8 @@
           "capacity_headroom_cr": 5.9,
           "reason_text": "Same tier, already supplies cold forming to 4 other buyers, ₹5.90 cr of revenue not already committed, and its own fragility is 0.012."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N272",
@@ -33046,7 +33317,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N273",
@@ -33104,7 +33376,8 @@
           "capacity_headroom_cr": 4.5,
           "reason_text": "Same tier, already supplies precision machining to one other buyer, ₹4.50 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N274",
@@ -33141,7 +33414,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N275",
@@ -33168,7 +33442,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N276",
@@ -33195,7 +33470,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "Vajrapani Auto Systems Udyog Pvt Ltd is at risk of halting sheet metal deliveries. ₹0.00 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N277",
@@ -33222,7 +33498,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.76,
       "disruption_reason": "Somnath Enterprises Private Ltd is at risk of halting sealing compounds deliveries. ₹0.76 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N278",
@@ -33249,7 +33526,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.13,
       "disruption_reason": "Trishul Products Udyog Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.13 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N279",
@@ -33307,7 +33585,8 @@
           "capacity_headroom_cr": 15.77,
           "reason_text": "Same tier, already supplies synthetic rubber to 6 other buyers, ₹15.77 cr of revenue not already committed, and its own fragility is 0.012."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N280",
@@ -33375,7 +33654,8 @@
           "capacity_headroom_cr": 4.5,
           "reason_text": "Same tier, already supplies precision machining to one other buyer, ₹4.50 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N281",
@@ -33402,7 +33682,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N282",
@@ -33429,7 +33710,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N283",
@@ -33471,7 +33753,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.25,
       "disruption_reason": "Shivneri Systems Pvt Ltd is at risk of halting precision machining deliveries. ₹0.25 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N284",
@@ -33498,7 +33781,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N285",
@@ -33556,7 +33840,8 @@
           "capacity_headroom_cr": 7.04,
           "reason_text": "Same tier, already supplies sealing compounds to one other buyer, ₹7.04 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N286",
@@ -33598,7 +33883,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.05,
       "disruption_reason": "Harshad Engineering Pvt Ltd is at risk of halting electroplating deliveries. ₹0.05 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N287",
@@ -33625,7 +33911,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.02,
       "disruption_reason": "Sahyadri Products Udyog Pvt Ltd is at risk of halting precision machining deliveries. ₹0.02 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N288",
@@ -33652,7 +33939,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 3.42,
       "disruption_reason": "Purnima Components Pvt Ltd is at risk of halting sealing compounds deliveries. ₹3.42 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N289",
@@ -33694,7 +33982,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "Vajrapani Auto Systems Udyog Pvt Ltd is at risk of halting sheet metal deliveries. ₹0.00 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N290",
@@ -33731,7 +34020,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N291",
@@ -33799,7 +34089,8 @@
           "capacity_headroom_cr": 4.5,
           "reason_text": "Same tier, already supplies precision machining to one other buyer, ₹4.50 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N292",
@@ -33841,7 +34132,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 0.16,
       "disruption_reason": "Meghdoot Works Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.16 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N293",
@@ -33909,7 +34201,8 @@
           "capacity_headroom_cr": 2.28,
           "reason_text": "Same tier, already supplies sheet metal to one other buyer, ₹2.28 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N294",
@@ -33946,7 +34239,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N295",
@@ -33983,7 +34277,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N296",
@@ -34020,7 +34315,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N297",
@@ -34047,7 +34343,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N298",
@@ -34084,7 +34381,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N299",
@@ -34142,7 +34440,8 @@
           "capacity_headroom_cr": 4.02,
           "reason_text": "Same tier, already supplies rubber moulding to one other buyer, ₹4.02 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N300",
@@ -34184,7 +34483,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.03,
       "disruption_reason": "Chandrika Works Pvt Ltd is at risk of halting rubber moulding deliveries. ₹0.03 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N301",
@@ -34211,7 +34511,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N302",
@@ -34238,7 +34539,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N303",
@@ -34265,7 +34567,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "Kaveri Industries Pvt Ltd is at risk of halting powder coating deliveries. ₹0.00 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N304",
@@ -34292,7 +34595,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N305",
@@ -34360,7 +34664,8 @@
           "capacity_headroom_cr": 7.04,
           "reason_text": "Same tier, already supplies sealing compounds to one other buyer, ₹7.04 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N306",
@@ -34428,7 +34733,8 @@
           "capacity_headroom_cr": 6.28,
           "reason_text": "Same tier, already supplies forgings to 2 other buyers, ₹6.28 cr of revenue not already committed, and its own fragility is 0.047."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N307",
@@ -34486,7 +34792,8 @@
           "capacity_headroom_cr": 4.21,
           "reason_text": "Same tier, already supplies precision machining to one other buyer, ₹4.21 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N308",
@@ -34513,7 +34820,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N309",
@@ -34550,7 +34858,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N310",
@@ -34577,7 +34886,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.06,
       "disruption_reason": "Udaygiri Works Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.06 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N311",
@@ -34604,7 +34914,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.01,
       "disruption_reason": "Kaveri Enterprises Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.01 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N312",
@@ -34631,7 +34942,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N313",
@@ -34668,7 +34980,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N314",
@@ -34695,7 +35008,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N315",
@@ -34763,7 +35077,8 @@
           "capacity_headroom_cr": 5.66,
           "reason_text": "Same tier, already supplies powder coating to one other buyer, ₹5.66 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N316",
@@ -34790,7 +35105,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.06,
       "disruption_reason": "Sarvodaya Works Udyog Pvt Ltd is at risk of halting electroplating deliveries. ₹0.06 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N317",
@@ -34817,7 +35133,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 3.11,
       "disruption_reason": "Kalyani Fastener Systems Pvt Ltd is at risk of halting stud assemblies deliveries. ₹3.11 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N318",
@@ -34885,7 +35202,8 @@
           "capacity_headroom_cr": 11.1,
           "reason_text": "Same tier, already supplies synthetic rubber to 2 other buyers, ₹11.10 cr of revenue not already committed, and its own fragility is 0.010."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N319",
@@ -34953,7 +35271,8 @@
           "capacity_headroom_cr": 2.28,
           "reason_text": "Same tier, already supplies sheet metal to one other buyer, ₹2.28 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N320",
@@ -35021,7 +35340,8 @@
           "capacity_headroom_cr": 5.46,
           "reason_text": "Same tier, already supplies alloy steel to one other buyer, ₹5.46 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N321",
@@ -35048,7 +35368,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N322",
@@ -35106,7 +35427,8 @@
           "capacity_headroom_cr": 5.46,
           "reason_text": "Same tier, already supplies alloy steel to one other buyer, ₹5.46 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N323",
@@ -35174,7 +35496,8 @@
           "capacity_headroom_cr": 8.1,
           "reason_text": "Same tier, already supplies electroplating to 2 other buyers, ₹8.10 cr of revenue not already committed, and its own fragility is 0.014."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N324",
@@ -35201,7 +35524,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N325",
@@ -35228,7 +35552,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N326",
@@ -35265,7 +35590,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N327",
@@ -35302,7 +35628,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.7,
       "disruption_reason": "Sanchita Metalworks Components Udyog Pvt Ltd is at risk of halting heat treatment deliveries. ₹0.70 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N328",
@@ -35329,7 +35656,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N329",
@@ -35356,7 +35684,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N330",
@@ -35383,7 +35712,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.04,
       "disruption_reason": "Yashodhan Metalworks Components Pvt Ltd is at risk of halting polymer compounds deliveries. ₹0.04 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N331",
@@ -35425,7 +35755,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.05,
       "disruption_reason": "Saptagiri Polymers Enterprises Pvt Ltd is at risk of halting polymer compounds deliveries. ₹0.05 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N332",
@@ -35462,7 +35793,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N333",
@@ -35489,7 +35821,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N334",
@@ -35531,7 +35864,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.24,
       "disruption_reason": "Saptagiri Polymers Products Pvt Ltd is at risk of halting powder coating deliveries. ₹0.24 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N335",
@@ -35568,7 +35902,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N336",
@@ -35626,7 +35961,8 @@
           "capacity_headroom_cr": 7.04,
           "reason_text": "Same tier, already supplies sealing compounds to one other buyer, ₹7.04 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N337",
@@ -35653,7 +35989,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N338",
@@ -35721,7 +36058,8 @@
           "capacity_headroom_cr": 4.02,
           "reason_text": "Same tier, already supplies rubber moulding to one other buyer, ₹4.02 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N339",
@@ -35748,7 +36086,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N340",
@@ -35775,7 +36114,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "Aarvik Products Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.00 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N341",
@@ -35833,7 +36173,8 @@
           "capacity_headroom_cr": 6.57,
           "reason_text": "Same tier, already supplies electroplating to 2 other buyers, ₹6.57 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N342",
@@ -35870,7 +36211,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N343",
@@ -35897,7 +36239,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N344",
@@ -35924,7 +36267,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.01,
       "disruption_reason": "Vasundhara Enterprises Pvt Ltd is at risk of halting sealing compounds deliveries. ₹0.01 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N345",
@@ -35961,7 +36305,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N346",
@@ -35988,7 +36333,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 2.5,
       "disruption_reason": "Chitrakoot Enterprises Private Ltd is at risk of halting rubber moulding deliveries. ₹2.50 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N347",
@@ -36015,7 +36361,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N348",
@@ -36052,7 +36399,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.78,
       "disruption_reason": "Trishul Industries Pvt Ltd is at risk of halting forgings deliveries. ₹0.78 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N349",
@@ -36089,7 +36437,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N350",
@@ -36126,7 +36475,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N351",
@@ -36153,7 +36503,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N352",
@@ -36180,7 +36531,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N353",
@@ -36207,7 +36559,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "Somnath Systems Udyog Pvt Ltd is at risk of halting electroplating deliveries. ₹0.00 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N354",
@@ -36265,7 +36618,8 @@
           "capacity_headroom_cr": 7.04,
           "reason_text": "Same tier, already supplies sealing compounds to one other buyer, ₹7.04 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N355",
@@ -36292,7 +36646,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.02,
       "disruption_reason": "Bhavani Castings Components Pvt Ltd is at risk of halting injection moulding deliveries. ₹0.02 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N356",
@@ -36319,7 +36674,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N357",
@@ -36346,7 +36702,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N358",
@@ -36404,7 +36761,8 @@
           "capacity_headroom_cr": 3.76,
           "reason_text": "Same tier, already supplies heat treatment to one other buyer, ₹3.76 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N359",
@@ -36431,7 +36789,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N360",
@@ -36458,7 +36817,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 1.1,
       "disruption_reason": "Vaikunth Autotech Engineering Pvt Ltd is at risk of halting sealing compounds deliveries. ₹1.10 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N361",
@@ -36485,7 +36845,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.06,
       "disruption_reason": "Saptagiri Castings Engineering Pvt Ltd is at risk of halting aluminium billets deliveries. ₹0.06 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N362",
@@ -36512,7 +36873,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N363",
@@ -36539,7 +36901,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N364",
@@ -36597,7 +36960,8 @@
           "capacity_headroom_cr": 4.16,
           "reason_text": "Same tier, already supplies injection moulding to one other buyer, ₹4.16 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N365",
@@ -36634,7 +36998,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "Manthan Toolings Industries Pvt Ltd is at risk of halting powder coating deliveries. ₹0.00 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N366",
@@ -36692,7 +37057,8 @@
           "capacity_headroom_cr": 2.23,
           "reason_text": "Same tier, already supplies engineering plastics to one other buyer, ₹2.23 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N367",
@@ -36760,7 +37126,8 @@
           "capacity_headroom_cr": 4.5,
           "reason_text": "Same tier, already supplies precision machining to one other buyer, ₹4.50 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N368",
@@ -36818,7 +37185,8 @@
           "capacity_headroom_cr": 2.42,
           "reason_text": "Same tier, already supplies engineering plastics to 3 other buyers, ₹2.42 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N369",
@@ -36845,7 +37213,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N370",
@@ -36872,7 +37241,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "Kesariya Auto Engineering Pvt Ltd is at risk of halting sealing compounds deliveries. ₹0.00 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N371",
@@ -36899,7 +37269,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N372",
@@ -36926,7 +37297,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N373",
@@ -36953,7 +37325,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N374",
@@ -36990,7 +37363,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N375",
@@ -37017,7 +37391,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N376",
@@ -37044,7 +37419,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N377",
@@ -37071,7 +37447,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 1.23,
       "disruption_reason": "Ratnadeep Engineering Private Ltd is at risk of halting thermal products deliveries. ₹1.23 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N378",
@@ -37098,7 +37475,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N379",
@@ -37135,7 +37513,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N380",
@@ -37193,7 +37572,8 @@
           "capacity_headroom_cr": 4.02,
           "reason_text": "Same tier, already supplies rubber moulding to one other buyer, ₹4.02 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N381",
@@ -37235,7 +37615,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 1.05,
       "disruption_reason": "Aarvik Stampings Products Pvt Ltd is at risk of halting electroplating deliveries. ₹1.05 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N382",
@@ -37293,7 +37674,8 @@
           "capacity_headroom_cr": 2.42,
           "reason_text": "Same tier, already supplies engineering plastics to 3 other buyers, ₹2.42 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N383",
@@ -37320,7 +37702,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N384",
@@ -37347,7 +37730,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N385",
@@ -37374,7 +37758,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N386",
@@ -37401,7 +37786,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N387",
@@ -37443,7 +37829,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.96,
       "disruption_reason": "Suryakant Engineering Industries Pvt Ltd is at risk of halting precision machining deliveries. ₹0.96 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "fund_now"
     },
     {
       "node_id": "N388",
@@ -37511,7 +37898,8 @@
           "capacity_headroom_cr": 4.51,
           "reason_text": "Same tier, already supplies aluminium billets to 4 other buyers, ₹4.51 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N389",
@@ -37538,7 +37926,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 1.71,
       "disruption_reason": "Rajhans Products Pvt Ltd is at risk of halting sensor modules deliveries. ₹1.71 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N390",
@@ -37606,7 +37995,8 @@
           "capacity_headroom_cr": 5.66,
           "reason_text": "Same tier, already supplies powder coating to one other buyer, ₹5.66 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "derisk"
     },
     {
       "node_id": "N391",
@@ -37643,7 +38033,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N392",
@@ -37670,7 +38061,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.18,
       "disruption_reason": "Suryakant Engineering Industries Pvt Ltd is at risk of halting precision machining deliveries. ₹0.18 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N393",
@@ -37697,7 +38089,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N394",
@@ -37739,7 +38132,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.76,
       "disruption_reason": "Vaikunth Products Udyog Pvt Ltd is at risk of halting synthetic rubber deliveries. ₹0.76 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "fund_now"
     },
     {
       "node_id": "N395",
@@ -37766,7 +38160,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 2.07,
       "disruption_reason": "Indraprast Treatments Enterprises Pvt Ltd is at risk of halting sealing compounds deliveries. ₹2.07 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N396",
@@ -37793,7 +38188,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 1.32,
       "disruption_reason": "Samarth Works Pvt Ltd is at risk of halting steering assemblies deliveries. ₹1.32 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N397",
@@ -37851,7 +38247,8 @@
           "capacity_headroom_cr": 2.82,
           "reason_text": "Same tier, already supplies rubber moulding to one other buyer, ₹2.82 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N398",
@@ -37888,7 +38285,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier of its own has stopped; its own delivery risk is unpaid invoices, not missing parts.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N399",
@@ -37915,7 +38313,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.23,
       "disruption_reason": "Aarvik Stampings Products Pvt Ltd is at risk of halting electroplating deliveries. ₹0.23 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N400",
@@ -37942,7 +38341,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N401",
@@ -38000,7 +38400,8 @@
           "capacity_headroom_cr": 2.82,
           "reason_text": "Same tier, already supplies rubber moulding to one other buyer, ₹2.82 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N402",
@@ -38027,7 +38428,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N403",
@@ -38054,7 +38456,8 @@
       "disruption_band": "high",
       "disrupted_inflow_cr": 0.33,
       "disruption_reason": "Precision Polymer Works Pvt Ltd is at risk of halting masterbatch compound deliveries. ₹0.33 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N404",
@@ -38122,7 +38525,8 @@
           "capacity_headroom_cr": 5.66,
           "reason_text": "Same tier, already supplies powder coating to one other buyer, ₹5.66 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N405",
@@ -38159,7 +38563,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.3,
       "disruption_reason": "Meghdoot Stampings Industries Pvt Ltd is at risk of halting synthetic rubber deliveries — sole source, nothing else to buy it from. ₹0.30 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N406",
@@ -38186,7 +38591,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.08,
       "disruption_reason": "Saptagiri Polymers Enterprises Pvt Ltd is at risk of halting polymer compounds deliveries. ₹0.08 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N407",
@@ -38228,7 +38634,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.49,
       "disruption_reason": "Shreeyash Stampings Components Pvt Ltd is at risk of halting cold forming deliveries. ₹0.49 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "monitor"
     },
     {
       "node_id": "N408",
@@ -38255,7 +38662,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "Rameshwar Enterprises Pvt Ltd is at risk of halting sheet metal deliveries. ₹0.00 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N409",
@@ -38313,7 +38721,8 @@
           "capacity_headroom_cr": 7.04,
           "reason_text": "Same tier, already supplies sealing compounds to one other buyer, ₹7.04 cr of revenue not already committed, and no stress has reached it."
         }
-      ]
+      ],
+      "triage_queue": "clear"
     },
     {
       "node_id": "N410",
@@ -38340,7 +38749,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 4.37,
       "disruption_reason": "Vaayu Thermal Products Pvt Ltd is at risk of halting oil coolers deliveries. ₹4.37 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N411",
@@ -38367,7 +38777,8 @@
       "disruption_band": "watch",
       "disrupted_inflow_cr": 0.14,
       "disruption_reason": "Zorawar Works Udyog Pvt Ltd is at risk of halting electroplating deliveries. ₹0.14 cr of inbound supply at risk.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     },
     {
       "node_id": "N412",
@@ -38394,7 +38805,8 @@
       "disruption_band": "stable",
       "disrupted_inflow_cr": 0.0,
       "disruption_reason": "No supplier failure reaches this node.",
-      "substitution_candidates": null
+      "substitution_candidates": null,
+      "triage_queue": "clear"
     }
   ],
   "ranking": [
