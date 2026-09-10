@@ -11,6 +11,7 @@
 
 import type {
   DemoScenario,
+  IngestResponse,
   InterveneResponse,
   Intervention,
   NetworkPayload,
@@ -74,6 +75,29 @@ async function get<T>(path: string): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+/**
+ * The network a scenario request should be scored against.
+ *
+ * `undefined` means the server's default. Anything else is a network this
+ * client ingested and now carries with every request, which is what keeps
+ * ingestion stateless — see SCHEMA.md §5.6. The frontend never scores
+ * anything itself; it only says which network to score.
+ */
+export type NetworkOverride = NetworkPayload | undefined;
+
+function overrideBody(network: NetworkOverride) {
+  return network
+    ? {
+        network: {
+          meta: network.meta,
+          nodes: network.nodes,
+          edges: network.edges,
+          stress_signals: network.stress_signals ?? [],
+        },
+      }
+    : {};
+}
+
 export const api = {
   live: LIVE,
 
@@ -91,10 +115,11 @@ export const api = {
    * baseline arithmetic over the whole network, so it is one request instead
    * of two and nothing has to be reconstructed on this side.
    */
-  async baseline(): Promise<ScoredNetwork> {
-    if (LIVE) {
+  async baseline(network?: NetworkOverride): Promise<ScoredNetwork> {
+    if (LIVE || network) {
       return post<ScoredNetwork>('/api/simulate', {
         scenario: { stress_overrides: [], interventions: [] },
+        ...overrideBody(network),
       });
     }
     return (await import('../mocks/simulate.json')).default as unknown as ScoredNetwork;
@@ -107,13 +132,20 @@ export const api = {
    * propagation. Offline, it reads the committed sweep, where every stop was
    * produced by that same engine call ahead of time.
    */
-  async atStressLevel(triggerNode: string, level: number): Promise<StressStep> {
-    if (LIVE) {
+  async atStressLevel(
+    triggerNode: string,
+    level: number,
+    network?: NetworkOverride,
+  ): Promise<StressStep> {
+    // An ingested network has no committed sweep — it did not exist when the
+    // mocks were generated — so it always goes to the engine, mock mode or not.
+    if (LIVE || network) {
       const scored = await post<ScoredNetwork>('/api/simulate', {
         scenario: {
           stress_overrides: [{ node_id: triggerNode, own_stress: level }],
           interventions: [],
         },
+        ...overrideBody(network),
       });
       return {
         own_stress: level,
@@ -137,14 +169,60 @@ export const api = {
     return step;
   },
 
-  async intervene(interventions: Intervention[]): Promise<InterveneResponse> {
+  async intervene(
+    interventions: Intervention[],
+    network?: NetworkOverride,
+  ): Promise<InterveneResponse> {
     if (LIVE) {
       return post<InterveneResponse>('/api/intervene', {
         baseline_scenario: { stress_overrides: [], interventions: [] },
         interventions,
+        ...overrideBody(network),
       });
     }
+
+    // Offline, against an ingested network. The whole offline ingest path is
+    // one canned scenario — api.ingest returns the committed response whatever
+    // zip is chosen — so the matching committed intervention is the consistent
+    // answer here. It funds that network's own top-ranked supplier at the
+    // engine's own cost, which is exactly what the console asks for.
+    if (network) {
+      return (await import('../mocks/ingest-intervene.json'))
+        .default as unknown as InterveneResponse;
+    }
     return (await import('../mocks/intervene.json')).default as unknown as InterveneResponse;
+  },
+
+  /**
+   * Build a network from an uploaded archive.
+   *
+   * Live, this posts the file to /api/ingest and the engine does everything.
+   * Offline it returns the committed response — produced by that same endpoint
+   * at mock-refresh time, from the real collection directory zipped the way a
+   * user would zip it — so the build page is fully replayable with the backend
+   * switched off. The file is still read in mock mode, so an empty or
+   * obviously-wrong upload fails the same way in both.
+   */
+  async ingest(file: File): Promise<IngestResponse> {
+    if (LIVE) {
+      const body = new FormData();
+      body.append('file', file);
+      const response = await fetch(`${BASE}/api/ingest`, { method: 'POST', body });
+      if (!response.ok) {
+        let detail = response.statusText;
+        try {
+          const payload = (await response.json()) as { detail?: string };
+          detail = payload?.detail ?? detail;
+        } catch {
+          /* non-JSON error body */
+        }
+        throw new Error(detail);
+      }
+      return response.json() as Promise<IngestResponse>;
+    }
+
+    if (file.size === 0) throw new Error('the uploaded file is empty');
+    return (await import('../mocks/ingest.json')).default as unknown as IngestResponse;
   },
 
   /**

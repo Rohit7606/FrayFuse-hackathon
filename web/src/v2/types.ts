@@ -168,6 +168,29 @@ export interface ScoredNetwork {
   summary: Summary;
 }
 
+/** What an upload contained and what was made of it. A demo asset. */
+export interface IngestReport {
+  files_seen: string[];
+  files_used: Record<string, string>;
+  files_ignored: string[];
+  rows_parsed: Record<string, number>;
+  companies_read: number;
+  nodes_built: number;
+  edges_built: number;
+  generated_nodes: number;
+  observable_nodes: number;
+  fields_present: number;
+  fields_null: number;
+  warnings: string[];
+}
+
+export interface IngestResponse extends ScoredNetwork {
+  nodes: Node[];
+  edges: Edge[];
+  stress_signals: StressSignal[];
+  ingest_report: IngestReport;
+}
+
 export interface PerNodeDelta {
   node_id: string;
   fragility_before: number;
