@@ -22,8 +22,15 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import './console.css';
 import { STRESS_LEVELS, api, type StressStep } from './api';
 import { PAPER } from './lib/bands';
-import { anchorAtRisk, buildIndex, buildWaves, dependencyPath, scoresById } from './lib/derive';
-import { cr, num, pct } from './lib/format';
+import {
+  anchorAtRisk,
+  buildIndex,
+  buildWaves,
+  dependencyPath,
+  pickTrigger,
+  scoresById,
+} from './lib/derive';
+import { cr, num, pct, shortName } from './lib/format';
 import EvidenceSheet from './components/EvidenceSheet';
 import GraphStage, { type StageMode } from './components/GraphStage';
 import { Dossier, NetworkStats, Outcome, RankList, RiskStats } from './components/SidePanel';
@@ -34,6 +41,7 @@ import type {
   IngestResponse,
   InterveneResponse,
   NetworkPayload,
+  RiskBand,
   ScoredNetwork,
 } from './types';
 
@@ -76,6 +84,8 @@ export default function Console({ ingested, onBuildPage }: Props) {
   const [fetchedNetwork, setFetchedNetwork] = useState<NetworkPayload | null>(null);
   const [fetchedBaseline, setFetchedBaseline] = useState<ScoredNetwork | null>(null);
   const [demo, setDemo] = useState<DemoScenario | null>(null);
+  /** When the funding landed, so the graph can mark what it moved. */
+  const [fundedAt, setFundedAt] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const [step, setStep] = useState<StepId>('network');
@@ -165,6 +175,20 @@ export default function Console({ ingested, onBuildPage }: Props) {
     [ingested, fetchedBaseline],
   );
 
+  /**
+   * Bring the dossier into view when a node is picked.
+   *
+   * The side panel scrolls, and at the closing step the outcome block is tall
+   * enough to push a freshly-selected supplier's dossier clean off the bottom —
+   * so clicking a node on the graph appeared to do nothing at all. The panel
+   * moves to what was just asked for rather than making the reader hunt for it.
+   */
+  useEffect(() => {
+    if (!selectedId) return;
+    const block = document.getElementById('ff-dossier');
+    block?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'nearest' });
+  }, [selectedId, reducedMotion]);
+
   const index = useMemo(
     () =>
       network
@@ -199,11 +223,13 @@ export default function Console({ ingested, onBuildPage }: Props) {
       ? baseline.scores.find((row) => row.node_id === top)?.intervention_cost_cr ?? 0
       : 0;
     return {
-      trigger: baseline.summary.stressed_origin_nodes[0] ?? null,
+      trigger: index
+        ? pickTrigger(baseline.ranking, scoresById(baseline.scores), baseline.summary, index)
+        : baseline.summary.stressed_origin_nodes[0] ?? null,
       watched: top,
       intervention: top ? { node_id: top, amount_cr: cost } : null,
     };
-  }, [baseline, demo, ingested]);
+  }, [baseline, demo, ingested, index]);
 
   const triggerNode = plan?.trigger ?? null;
 
@@ -220,14 +246,6 @@ export default function Console({ ingested, onBuildPage }: Props) {
         : undefined,
     [ingested],
   );
-
-  /**
-   * The what-if slider needs the engine when the network was ingested: there is
-   * no committed sweep for a network that did not exist at mock-refresh time.
-   * With the API switched off it is hidden and says why, rather than posting to
-   * a port with nothing behind it.
-   */
-  const canSimulate = api.live || !ingested;
 
   /** The slider's home position: the trigger's own filed stress. */
   const baselineLevelIndex = useMemo(() => {
@@ -329,6 +347,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
       // result and a re-scored trigger cannot both be on screen truthfully.
       setIntervention(null);
       setCounterfactual(false);
+      setFundedAt(null);
 
       if (nextIndex === baselineLevelIndex) {
         setStressStep(null);
@@ -365,6 +384,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
       if (next !== 'act') {
         setIntervention(null);
         setCounterfactual(false);
+        setFundedAt(null);
       }
 
       switch (next) {
@@ -411,21 +431,17 @@ export default function Console({ ingested, onBuildPage }: Props) {
           setSheetNodeId(null);
           // The funding decision is defined against the baseline, so reset the
           // what-if before applying it rather than comparing two scenarios.
+          //
+          // The money is NOT released here. Arriving at the last step used to
+          // apply the intervention immediately, which meant the audience saw
+          // only the outcome and a control that was already switched on — the
+          // before/after the step exists to show had happened off-screen before
+          // anyone looked. The step now lands on the unfunded network and the
+          // primary action releases the money.
           setLevelIndex(baselineLevelIndex);
           setStressStep(null);
           setCounterfactual(false);
-          if (!plan?.intervention) break;
-          setSelectedId(plan.intervention.node_id);
-          try {
-            setScoring(true);
-            const result = await api.intervene([plan.intervention], networkOverride);
-            setIntervention(result);
-            setError(null);
-          } catch (cause) {
-            setError(cause instanceof Error ? cause.message : String(cause));
-          } finally {
-            setScoring(false);
-          }
+          if (plan?.intervention) setSelectedId(plan.intervention.node_id);
           break;
         }
       }
@@ -439,13 +455,31 @@ export default function Console({ ingested, onBuildPage }: Props) {
       ranking,
       plan,
       baselineLevelIndex,
-      networkOverride,
     ],
   );
+
+  /** Release the funding. One request; the engine scores before and after. */
+  const fund = useCallback(async () => {
+    if (!plan?.intervention) return;
+    setSelectedId(plan.intervention.node_id);
+    setCounterfactual(false);
+    try {
+      setScoring(true);
+      const result = await api.intervene([plan.intervention], networkOverride);
+      setIntervention(result);
+      setFundedAt(performance.now());
+      setError(null);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : String(cause));
+    } finally {
+      setScoring(false);
+    }
+  }, [plan, networkOverride]);
 
   const restart = useCallback(() => {
     setIntervention(null);
     setCounterfactual(false);
+    setFundedAt(null);
     setStressStep(null);
     setLevelIndex(baselineLevelIndex);
     setCascadeAt(null);
@@ -507,10 +541,17 @@ export default function Console({ ingested, onBuildPage }: Props) {
         };
       case 'path':
         return {
-          title: 'One dependency chain out of 1,339',
+          title: `One dependency chain out of ${num(network?.meta.edge_count ?? 0)}`,
           text: 'Everything else is dimmed. This is the chain by which a halt here reaches the anchor.',
         };
       case 'act':
+        if (!intervention)
+          return {
+            title: `${cr(plan?.intervention?.amount_cr ?? 0)} into ${shortName(
+              watchedNode?.name ?? '—',
+            )}`,
+            text: 'Nothing has been funded yet. Release it and the engine scores the same network again — watch the graph, not just the panel.',
+          };
         return {
           title: counterfactual ? 'Nobody funds anything' : 'One payment, re-scored',
           text: counterfactual
@@ -535,7 +576,14 @@ export default function Console({ ingested, onBuildPage }: Props) {
       case 'path':
         return { label: 'Fund it', code: '07', to: 'act' as StepId };
       case 'act':
-        return { label: 'Start again', code: '01', to: null };
+        return intervention
+          ? { label: 'Start again', code: '01', to: null, act: 'restart' as const }
+          : {
+              label: `Release ${cr(plan?.intervention?.amount_cr ?? 0)}`,
+              code: '07',
+              to: null,
+              act: 'fund' as const,
+            };
     }
   })();
 
@@ -549,6 +597,31 @@ export default function Console({ ingested, onBuildPage }: Props) {
   })();
 
   const currentWave = waveIndex >= 0 ? waves[Math.min(waveIndex, waves.length - 1)] : null;
+
+  /**
+   * The nodes the money actually moved, and when it landed.
+   *
+   * `delta.per_node` is the engine's own before/after list; this is only the
+   * rows where the band changed, plus the funded supplier itself. Empty while
+   * the counterfactual is showing, because in that view nothing was funded and
+   * nothing moved.
+   */
+  const changedIds = useMemo(() => {
+    if (!intervention || counterfactual) return null;
+    const ids = new Map<string, RiskBand>(
+      intervention.delta.per_node
+        .filter((row) => row.band_before !== row.band_after)
+        .map((row) => [row.node_id, row.band_before] as const),
+    );
+    // The funded supplier belongs on the marker whether or not its own band
+    // moved — it is the node the money went into.
+    const funded = plan?.intervention?.node_id;
+    if (funded && !ids.has(funded)) {
+      const before = intervention.before.scores.find((row) => row.node_id === funded);
+      if (before) ids.set(funded, before.risk_band);
+    }
+    return ids;
+  }, [intervention, counterfactual, plan]);
 
   const anchorBefore = intervention ? anchorAtRisk(intervention.before.summary) : null;
   // THE SAME anchor after, found by id.
@@ -606,7 +679,11 @@ export default function Console({ ingested, onBuildPage }: Props) {
 
         <button
           className="ff-primary"
-          onClick={() => (primary.to ? goTo(primary.to) : restart())}
+          onClick={() => {
+            if (primary.to) goTo(primary.to);
+            else if ('act' in primary && primary.act === 'fund') fund();
+            else restart();
+          }}
           disabled={scoring && step === 'act'}
         >
           <span className="ff-primary-disc" aria-hidden="true">
@@ -652,6 +729,8 @@ export default function Console({ ingested, onBuildPage }: Props) {
               pathEdgeIds={pathEdgeIds}
               selectedId={selectedId}
               triggerNode={triggerNode}
+              changedIds={changedIds}
+              changedAt={fundedAt}
               bottomInset={(showWhatIf ? 112 : 0) + (step === 'cascade' || step === 'path' ? 76 : 0)}
               onSelect={setSelectedId}
             />
@@ -724,7 +803,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
             )}
           </div>
 
-          {showWhatIf && canSimulate && summary && watchedNode && (
+          {showWhatIf && summary && watchedNode && (
             <WhatIfBar
               triggerName={triggerName}
               levelIndex={activeLevelIndex}
@@ -795,6 +874,9 @@ export default function Console({ ingested, onBuildPage }: Props) {
           score={scores.get(sheetNode.node_id)}
           inheritedFrom={sheetInheritedFrom}
           onClose={() => setSheetNodeId(null)}
+          onContinue={
+            step === 'evidence' ? { label: 'Run the cascade →', run: () => goTo('cascade') } : null
+          }
         />
       )}
     </div>

@@ -360,6 +360,8 @@ export default function BuildPage({ onEnterConsole, onUseCommittedNetwork }: Pro
               pathEdgeIds={null}
               selectedId={null}
               triggerNode={null}
+              changedIds={null}
+              changedAt={null}
               bottomInset={112}
               onSelect={() => {}}
             />

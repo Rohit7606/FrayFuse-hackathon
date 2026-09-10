@@ -13,8 +13,17 @@ import { describe, expect, test } from 'vitest';
 import network from '../src/mocks/network.json';
 import baseline from '../src/mocks/simulate.json';
 import sweep from '../src/mocks/simulate-sweep.json';
+import ingested from '../src/mocks/ingest.json';
+import ingestSweep from '../src/mocks/ingest-sweep.json';
 import demo from '../src/mocks/demo-scenario.json';
-import { anchorAtRisk, buildIndex, buildWaves, dependencyPath } from '../src/v2/lib/derive';
+import {
+  anchorAtRisk,
+  buildIndex,
+  buildWaves,
+  dependencyPath,
+  pickTrigger,
+  scoresById,
+} from '../src/v2/lib/derive';
 import { STRESS_LEVELS } from '../src/v2/api';
 import type { Edge, Node, Score, StressSignal, Summary } from '../src/v2/types';
 
@@ -149,5 +158,50 @@ describe('committed stress sweep', () => {
     const own = scores.find((score) => score.node_id === demo.trigger_node)?.own_stress;
     expect(own).toBeDefined();
     expect(STRESS_LEVELS.some((stop) => Math.abs(stop - own!) < 1e-9)).toBe(true);
+  });
+});
+
+describe('trigger selection on an ingested network', () => {
+  const ingestIndex = buildIndex(
+    ingested.nodes as unknown as Node[],
+    ingested.edges as unknown as Edge[],
+    (ingested.stress_signals ?? []) as unknown as StressSignal[],
+  );
+  const ingestScores = scoresById(ingested.scores as unknown as Score[]);
+  const trigger = pickTrigger(
+    ingested.ranking,
+    ingestScores,
+    ingested.summary as unknown as Summary,
+    ingestIndex,
+  );
+
+  test('picks an origin the engine actually reported', () => {
+    expect(trigger).not.toBeNull();
+    expect(ingested.summary.stressed_origin_nodes).toContain(trigger);
+  });
+
+  test('never opens the evidence beat on an anchor', () => {
+    // The beat is "the tier-1's own filing admits it is paying late". The real
+    // collection lists five tier-0 companies among its nine origins, and
+    // taking the first one opened the filing of a sugar anchor whose
+    // disclosures had not moved at all.
+    expect(ingestIndex.nodeById.get(trigger!)?.tier).toBeGreaterThan(0);
+  });
+
+  test('is on the dependency path of the supplier the console rescues', () => {
+    const top = ingested.ranking[0];
+    expect(dependencyPath(top, ingestIndex).nodeIds).toContain(trigger);
+  });
+
+  test('matches the trigger the committed sweep was built around', () => {
+    // refresh_web_mocks.pick_trigger duplicates this rule in Python. If the two
+    // drift, the slider silently moves a company the caption never names.
+    expect(ingestSweep.trigger_node).toBe(trigger);
+  });
+
+  test('the ingested sweep covers every slider stop, including the baseline', () => {
+    expect(ingestSweep.steps.map((step) => step.own_stress)).toEqual([...STRESS_LEVELS]);
+    const own = ingestScores.get(trigger!)?.own_stress ?? -1;
+    expect(STRESS_LEVELS).toContain(own);
   });
 });

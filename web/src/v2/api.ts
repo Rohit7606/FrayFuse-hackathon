@@ -131,15 +131,20 @@ export const api = {
    * Live, this is the engine doing the work — the frontend never recomputes a
    * propagation. Offline, it reads the committed sweep, where every stop was
    * produced by that same engine call ahead of time.
+   *
+   * There are two committed sweeps, because there are two networks that can be
+   * on screen. An ingested one used to have none, so the slider was hidden
+   * outright after an upload — the one control that proves the numbers are
+   * recomputed rather than replayed, missing on the path that most needs to
+   * prove it. `ingest-sweep.json` is that network's own sweep, built by
+   * refresh_web_mocks.py against the same trigger the console derives.
    */
   async atStressLevel(
     triggerNode: string,
     level: number,
     network?: NetworkOverride,
   ): Promise<StressStep> {
-    // An ingested network has no committed sweep — it did not exist when the
-    // mocks were generated — so it always goes to the engine, mock mode or not.
-    if (LIVE || network) {
+    if (LIVE) {
       const scored = await post<ScoredNetwork>('/api/simulate', {
         scenario: {
           stress_overrides: [{ node_id: triggerNode, own_stress: level }],
@@ -155,7 +160,9 @@ export const api = {
       };
     }
 
-    const sweep = (await import('../mocks/simulate-sweep.json')).default as unknown as Sweep;
+    const sweep = network
+      ? ((await import('../mocks/ingest-sweep.json')).default as unknown as Sweep)
+      : ((await import('../mocks/simulate-sweep.json')).default as unknown as Sweep);
     const step = sweep.steps.find((candidate) => candidate.own_stress === level);
     if (!step) {
       // A level the sweep does not carry is a build-time mismatch between this

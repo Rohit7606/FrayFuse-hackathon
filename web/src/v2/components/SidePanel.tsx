@@ -240,7 +240,7 @@ export function Dossier({
   hasFilings: boolean;
 }) {
   return (
-    <div className="ff-block">
+    <div className="ff-block" id="ff-dossier">
       <div className="ff-block-head">
         <h2 className="ff-h">{node.name}</h2>
         <button className="ff-ghost" onClick={onEvidence}>

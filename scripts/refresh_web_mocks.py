@@ -26,7 +26,7 @@ OUT = REPO_ROOT / "web" / "src" / "mocks"
 # rather than round to 0.7 and open on a figure the baseline view never showed.
 SWEEP_LEVELS = (0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.75, 0.8, 0.9, 1.0)
 
-def build_sweep(trigger_node: str) -> dict:
+def build_sweep(trigger_node: str, network: dict | None = None) -> dict:
     """Score the network once per slider stop, keeping scores and summary only.
 
     Scores are kept WHOLE. An earlier version carried a whitelist of the fields
@@ -46,7 +46,10 @@ def build_sweep(trigger_node: str) -> dict:
                 "stress_overrides": [{"node_id": trigger_node, "own_stress": level}],
                 "interventions": [],
             }
-            result = client.post("/api/simulate", json={"scenario": scenario}).json()
+            body: dict = {"scenario": scenario}
+            if network is not None:
+                body["network"] = network
+            result = client.post("/api/simulate", json=body).json()
             steps.append(
                 {
                     "own_stress": level,
@@ -117,6 +120,53 @@ def build_ingest_intervention(ingested: dict) -> dict:
     return response.json()
 
 
+def pick_trigger(ingested: dict) -> str:
+    """The origin the ingested walkthrough tells its story about.
+
+    MUST STAY IDENTICAL to `pickTrigger` in web/src/v2/lib/derive.ts — this
+    script commits the sweep the slider reads offline, and a sweep built around
+    a different trigger than the console names is a slider that moves a company
+    the caption never mentions.
+
+    The rule: walk the top-ranked supplier's dependency path upward and take the
+    first stressed origin on it; failing that, the most-stressed origin that is
+    not an anchor; failing that, whatever the engine listed first.
+    """
+    origins = list(ingested["summary"]["stressed_origin_nodes"])
+    if not origins:
+        raise SystemExit("ingest mock has no stressed origins; nothing to sweep")
+    if len(origins) == 1:
+        return origins[0]
+
+    tier = {n["node_id"]: n["tier"] for n in ingested["nodes"]}
+    own = {s["node_id"]: s["own_stress"] for s in ingested["scores"]}
+    by_supplier: dict[str, list[dict]] = {}
+    for edge in ingested["edges"]:
+        by_supplier.setdefault(edge["supplier_id"], []).append(edge)
+
+    ranking = ingested["ranking"]
+    if ranking:
+        current = ranking[0]
+        seen = {current}
+        for _ in range(8):
+            if tier.get(current) == 0:
+                break
+            options = [e for e in by_supplier.get(current, []) if e["buyer_id"] not in seen]
+            if not options:
+                break
+            options.sort(
+                key=lambda e: (-e["exposure_pct"], -e["annual_value_cr"], e["edge_id"])
+            )
+            current = options[0]["buyer_id"]
+            seen.add(current)
+            if current in origins:
+                return current
+
+    suppliers = [n for n in origins if tier.get(n, 0) > 0]
+    pool = suppliers or origins
+    return min(pool, key=lambda n: (-own.get(n, 0.0), n))
+
+
 def main() -> None:
     from api.main import app
 
@@ -160,6 +210,17 @@ def main() -> None:
     # the network it already holds, which is what it does with a live response
     # too, so both paths take the same code path.
     payloads["simulate-sweep.json"] = build_sweep(demo["trigger_node"])
+
+    # And the same sweep for the ingested network. Without it the what-if
+    # slider simply vanished after an upload — the one control that proves the
+    # numbers are being recomputed rather than replayed, missing on the path
+    # that most needs to prove it. The trigger is derived exactly as the console
+    # derives it, so the sweep and the caption name the same company.
+    ingest_trigger = pick_trigger(ingest_payload)
+    payloads["ingest-sweep.json"] = build_sweep(
+        ingest_trigger,
+        network={key: ingest_payload[key] for key in ("meta", "nodes", "edges", "stress_signals")},
+    )
 
     # DEMO_SCENARIO.md §8: "Never hardcode these IDs in application logic. Read
     # them from the fixture." The frontend cannot reach data/fixtures/ from

@@ -26,7 +26,7 @@ import {
   mix,
   rgba,
 } from '../lib/bands';
-import type { Edge, Node, Score } from '../types';
+import type { Edge, Node, RiskBand, Score } from '../types';
 
 export type StageMode = 'network' | 'observability' | 'cascade' | 'focus' | 'build';
 
@@ -81,6 +81,17 @@ interface Props {
   selectedId: string | null;
   triggerNode: string | null;
   /**
+   * nodeId → the band it held BEFORE the funding, and when the funding landed.
+   *
+   * Two dots changing colour among four hundred is a change nobody sees. A
+   * changed node is drawn twice over: the band it left as a heavy outer ring,
+   * the band it moved to as the fill, with its name printed and everything else
+   * stepped back. The reader can then see "critical → stable" on the graph
+   * without being told to look at a specific pixel.
+   */
+  changedIds: Map<string, RiskBand> | null;
+  changedAt: number | null;
+  /**
    * Pixels of the canvas covered by the overlays that sit on top of it — the
    * what-if bar and the wave or path banner. The canvas fills the whole stage
    * so that panning works everywhere, but a fit that ignores this puts the
@@ -120,8 +131,12 @@ const bandY = (tier: number) => -420 + Math.min(tier, 3) * BAND_GAP;
  * cluster; 251 tier-3 suppliers on one row is a strip five times wider than
  * the stage. The count decides.
  */
+function subRowsFor(tierSize: number): number {
+  return tierSize > 60 ? SUB_ROWS : tierSize > 16 ? 2 : 1;
+}
+
 function subRowOffset(nodeId: string, tierSize: number): number {
-  const rows = tierSize > 60 ? SUB_ROWS : tierSize > 16 ? 2 : 1;
+  const rows = subRowsFor(tierSize);
   if (rows === 1) return 0;
   let hash = 0;
   for (let i = 0; i < nodeId.length; i += 1) hash = (hash * 31 + nodeId.charCodeAt(i)) >>> 0;
@@ -139,6 +154,8 @@ export default function GraphStage({
   pathEdgeIds,
   selectedId,
   triggerNode,
+  changedIds,
+  changedAt,
   bottomInset,
   onSelect,
 }: Props) {
@@ -172,6 +189,8 @@ export default function GraphStage({
     selectedId,
     triggerNode,
     scores,
+    changedIds,
+    changedAt,
   });
   // Written after commit, not during render. The canvas paints on the next
   // animation frame, so an effect is early enough, and assigning during render
@@ -186,8 +205,21 @@ export default function GraphStage({
       selectedId,
       triggerNode,
       scores,
+      changedIds,
+      changedAt,
     };
-  }, [mode, arrival, cascadeStartedAt, pathNodeIds, pathEdgeIds, selectedId, triggerNode, scores]);
+  }, [
+    mode,
+    arrival,
+    cascadeStartedAt,
+    pathNodeIds,
+    pathEdgeIds,
+    selectedId,
+    triggerNode,
+    scores,
+    changedIds,
+    changedAt,
+  ]);
 
   // Read back inside a timeout after a fit, so it is written after commit.
   useEffect(() => {
@@ -333,10 +365,18 @@ export default function GraphStage({
     return easeOut((now - startedAt - offset) / span);
   }, []);
 
+  /**
+   * Node radius, in graph units.
+   *
+   * These used to start at 3.6, which the fit then shrank to about two screen
+   * pixels on a four-hundred-node network — a dot too small to read a colour
+   * off, let alone aim at. The whole layout is pinned to tier bands 280 apart,
+   * so there is room; the earlier figures were simply timid.
+   */
   const radiusOf = useCallback((node: GraphNode, score: Score | undefined) => {
-    const base = 3.6 + (3 - Math.min(node.tier, 3)) * 1.05;
+    const base = 6.4 + (3 - Math.min(node.tier, 3)) * 1.4;
     const band = score?.risk_band;
-    const bump = band === 'critical' ? 1.5 : band === 'high' ? 0.8 : 0;
+    const bump = band === 'critical' ? 2.4 : band === 'high' ? 1.3 : 0;
     return base + bump;
   }, []);
 
@@ -384,6 +424,21 @@ export default function GraphStage({
         radius = touched ? radius * (0.86 + 0.14 * reveal) : radius * 0.78;
       }
 
+      // What the money moved. While the marker is up, a node whose band changed
+      // grows and everything else steps back, so the closing beat has something
+      // to look at on the graph and not only in the panel.
+      const bandBefore = state.changedIds?.get(node.id);
+      const changed = bandBefore !== undefined;
+      const marking = (state.changedIds?.size ?? 0) > 0 && state.mode === 'cascade';
+      if (marking) {
+        if (changed) {
+          radius += 4.5;
+          alpha = 1;
+        } else {
+          alpha *= 0.3;
+        }
+      }
+
       // Focus dims everything off the path. Everything, including the anchor's
       // own neighbours — the point of the mode is that four nodes matter.
       if (state.mode === 'focus' && state.pathNodeIds) {
@@ -419,6 +474,39 @@ export default function GraphStage({
         }
       }
 
+      // A ring that keeps expanding for as long as the marker is up, so a
+      // change that happened while the reader was looking at the side panel is
+      // still announcing itself when they look back.
+      if (changed && state.changedAt !== null && !reducedMotion.current) {
+        const k = ((now - state.changedAt) / 1400) % 1;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius + easeOut(k) * 26, 0, 2 * Math.PI);
+        ctx.strokeStyle = rgba(PAPER.forest, (1 - k) * 0.7);
+        ctx.lineWidth = 2 / globalScale;
+        ctx.stroke();
+      }
+
+      // The band it LEFT, as a thick collar around the band it moved to. Both
+      // facts are on the node at once, which is the only way "critical became
+      // stable" reads as a change rather than as a colour.
+      if (changed && bandBefore) {
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius + 4.2, 0, 2 * Math.PI);
+        ctx.strokeStyle = BAND_COLOR[bandBefore];
+        ctx.lineWidth = 5.5;
+        ctx.stroke();
+        // A hairline on each side of the collar, so the old band reads as a
+        // deliberate band of colour and not as a blurred edge on the fill.
+        ctx.strokeStyle = rgba(PAPER.sheet, 0.9);
+        ctx.lineWidth = 1 / globalScale;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius + 1.4, 0, 2 * Math.PI);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius + 7.0, 0, 2 * Math.PI);
+        ctx.stroke();
+      }
+
       ctx.beginPath();
       ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
       ctx.fillStyle = fill;
@@ -432,7 +520,9 @@ export default function GraphStage({
       // Lime only ever appears as a ring, never as the fill, so it can never
       // be misread as a severity value.
       const ring =
-        selected || onPath || (node.id === state.triggerNode && state.mode !== 'network')
+        changed
+          ? null
+          : selected || onPath || (node.id === state.triggerNode && state.mode !== 'network')
           ? PAPER.forest
           : state.mode === 'observability' && node.is_observable
             ? PAPER.forest
@@ -460,7 +550,7 @@ export default function GraphStage({
 
       // Labels are earned, not sprayed: the node under the pointer, the
       // selected node, and the nodes on a highlighted path.
-      const labelled = hovered || selected || (state.mode === 'focus' && onPath);
+      const labelled = hovered || selected || changed || (state.mode === 'focus' && onPath);
       if (!labelled) return;
 
       const fontSize = Math.max(11 / globalScale, 3.4);
@@ -524,8 +614,11 @@ export default function GraphStage({
 
       // Above the topmost sub-row, not on the band's centre line — a tier
       // spread across sub-rows would otherwise print its label through its
-      // own nodes.
-      const clearance = ((SUB_ROWS - 1) / 2) * SUB_ROW_GAP + 14;
+      // own nodes. Measured against the rows THIS tier actually uses: a tier of
+      // eleven suppliers occupies one row, and clearing five left its label
+      // floating in empty space forty pixels above the rule it belongs to.
+      const rows = subRowsFor(tierSizeRef.current.get(band.tier) ?? 1);
+      const clearance = ((rows - 1) / 2) * SUB_ROW_GAP + 16;
       ctx.fillStyle = rgba(PAPER.ink, 0.34);
       ctx.textAlign = 'left';
       ctx.fillText(band.label, left + 14 / globalScale, y - clearance);
@@ -591,6 +684,24 @@ export default function GraphStage({
         height={size.height}
         graphData={graphData}
         backgroundColor="rgba(0,0,0,0)"
+        /**
+         * THE FIX FOR "the graph never changes".
+         *
+         * force-graph defaults to `autoPauseRedraw`, which skips a frame when
+         * nothing IT tracks has changed — node positions, the camera, the link
+         * particles. Everything this component animates is invisible to that
+         * test: the cascade reveal, the arrival rings, the funding marker and
+         * every band colour are read out of `live.current` and
+         * `performance.now()` inside the paint callbacks.
+         *
+         * So after the layout cooled, a data-only change painted nothing at
+         * all. Re-scoring at a new stress level, funding a supplier, turning
+         * the funding back off — all of it updated the side panel and left the
+         * canvas showing the previous scenario until someone happened to pan or
+         * zoom, which is exactly when it finally repainted. It was not a
+         * colour that was too subtle; the frame was never drawn.
+         */
+        autoPauseRedraw={false}
         nodeRelSize={5}
         nodeLabel={() => ''}
         cooldownTime={4200}
@@ -606,8 +717,15 @@ export default function GraphStage({
         nodeCanvasObject={paintNode as any}
         nodePointerAreaPaint={(node: GraphNode, colour: string, ctx: CanvasRenderingContext2D) => {
           if (typeof node.x !== 'number' || typeof node.y !== 'number') return;
+          // In GRAPH units the target shrinks with the zoom, and the fit for a
+          // four-hundred-node network sits around 0.55 — which turned a nominal
+          // 9-unit target into a five-pixel one and made most of the graph
+          // unclickable. Dividing by the current zoom keeps it a constant
+          // ~13px on screen however far out the view is.
+          const zoom = graphRef.current?.zoom?.() ?? 1;
+          const radius = Math.max(radiusOf(node, live.current.scores.get(node.id)), 13 / zoom);
           ctx.beginPath();
-          ctx.arc(node.x, node.y, 9, 0, 2 * Math.PI);
+          ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
           ctx.fillStyle = colour;
           ctx.fill();
         }}

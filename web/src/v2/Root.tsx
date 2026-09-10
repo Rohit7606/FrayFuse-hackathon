@@ -23,7 +23,13 @@ import type { IngestResponse } from './types';
 type View = 'build' | 'console';
 
 export default function Root() {
-  const [view, setView] = useState<View>('build');
+  // The CONSOLE is the product and the committed network is the default
+  // (AGENTS.md 1.5) — "the demo must run end to end without anyone uploading
+  // anything". Opening on the upload screen put a file picker between the
+  // audience and the walkthrough and made the console look like an afterthought
+  // of the ingest page. Build is one click away, in the topbar, where it reads
+  // as the extra capability it is.
+  const [view, setView] = useState<View>('console');
   const [ingested, setIngested] = useState<IngestResponse | null>(null);
 
   if (view === 'build') {
