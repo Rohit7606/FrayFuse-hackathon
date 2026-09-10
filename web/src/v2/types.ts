@@ -8,6 +8,16 @@
  */
 
 export type RiskBand = 'stable' | 'watch' | 'high' | 'critical';
+
+/**
+ * Which queue a supplier belongs in — a DECISION, not a score (SCHEMA.md 4.7).
+ *
+ * Not derivable from risk_band on this side: fragility 0.35 x criticality 0.20
+ * and fragility 0.10 x criticality 0.70 are the same final_score and the
+ * opposite response. The engine reads the two factors apart; the UI reads the
+ * queue it produced and never re-derives it here.
+ */
+export type TriageQueue = 'fund_now' | 'derisk' | 'monitor' | 'clear' | 'origin';
 export type DataSource = 'real' | 'synthetic' | 'derived' | 'estimated';
 
 export interface Node {
@@ -118,6 +128,8 @@ export interface Score {
    *   non-empty        — up to three alternatives, best fitness first
    */
   substitution_candidates?: SubstitutionCandidate[] | null;
+  /** Triage, schema 1.4. Absent on an older backend. */
+  triage_queue?: TriageQueue | null;
 }
 
 export interface AnchorDisruption {
@@ -225,4 +237,104 @@ export interface DemoScenario {
   expected_ranking: string[];
   intervention: Intervention;
   counterfactual_anchor: string;
+}
+
+/** One of the two readings behind a queue, stated separately. */
+export interface TriageStatus {
+  kind: 'fragility' | 'replaceability';
+  verdict: 'fragile' | 'holding' | 'irreplaceable' | 'replaceable';
+  detail: string;
+}
+
+/** A threshold that, once crossed, moves a watched supplier to the funding queue. */
+export interface ReviewTrigger {
+  metric: 'fragility' | 'criticality' | 'alternatives' | 'buyer_own_stress';
+  current: number;
+  threshold: number;
+  detail: string;
+}
+
+export interface PlanDependency {
+  buyer_id: string;
+  buyer_name: string;
+  edge_id: string;
+  component: string;
+  exposure_pct: number;
+  annual_value_cr: number;
+  buyer_is_stressed_origin: boolean;
+  buyer_own_stress: number;
+  buyer_fragility: number;
+}
+
+export interface RecommendedAction {
+  kind: 'fund' | 'derisk' | 'monitor' | 'none';
+  label: string;
+  /** null where money is not the answer — a different fact from ₹0.00 cr. */
+  amount_cr?: number | null;
+}
+
+export interface DeriskPlan {
+  node_id: string;
+  name: string;
+  tier: number;
+  queue: TriageQueue;
+  queue_label: string;
+  headline: string;
+  fragility: number;
+  criticality: number;
+  final_score: number;
+  risk_band: RiskBand;
+  status: TriageStatus[];
+  exposure_at_risk_cr: number;
+  stabilisation_cost_cr: number;
+  inherited_share: number;
+  /** null means substitution was not considered; 0 means it was and nobody qualified. */
+  alternatives_found?: number | null;
+  dependency?: PlanDependency | null;
+  review_triggers: ReviewTrigger[];
+  actions: string[];
+  recommended_action: RecommendedAction;
+}
+
+/** One supplier's share of a budget, and what it bought. */
+export interface Allocation {
+  node_id: string;
+  name: string;
+  rank?: number | null;
+  amount_cr: number;
+  cost_cr: number;
+  coverage: number;
+  /**
+   * Measured with this supplier funded ALONE. Suppliers on one chain each get
+   * credit for relieving it, so these can sum to more than
+   * `objective.reduced_cr` — which is the joint figure and the one to show.
+   */
+  measured_benefit_cr: number;
+  efficiency: number;
+  exposure_at_risk_cr: number;
+  fragility_before: number;
+  fragility_after: number;
+  band_before: RiskBand;
+  band_after: RiskBand;
+}
+
+export interface AllocationObjective {
+  metric: 'anchor_inflow_at_risk_cr';
+  before_cr: number;
+  after_cr: number;
+  reduced_cr: number;
+}
+
+export interface AllocateResponse {
+  budget_cr: number;
+  allocated_cr: number;
+  unallocated_cr: number;
+  objective: AllocationObjective;
+  allocations: Allocation[];
+  candidates_considered: string[];
+  scoring_runs: number;
+  note: string;
+  delta: Delta;
+  summary_before: Summary;
+  summary_after: Summary;
 }
