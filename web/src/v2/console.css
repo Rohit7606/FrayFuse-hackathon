@@ -310,7 +310,16 @@ code { font-family: var(--mono); font-size: 0.92em; }
 }
 .ff-stage-overlay[data-bar='true'] { bottom: 112px; }
 
-.ff-stage-caption { max-width: 46ch; }
+.ff-stage-caption {
+  max-width: 46ch; pointer-events: auto;
+  /* Drawn OVER the canvas, which prints its own tier labels in ink at the same
+     height — the two were interleaving letter for letter at the top left. The
+     caption is the foreground, so it gets the paper. */
+  background: var(--desk);
+  border-radius: var(--r);
+  padding: 10px 14px; margin: -10px -14px;
+  box-shadow: 0 0 0 1px rgba(20, 20, 20, 0.05), 0 12px 24px -18px rgba(20, 20, 20, 0.5);
+}
 .ff-stage-caption h2 {
   font-size: 21px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.24;
   text-wrap: balance;
@@ -350,7 +359,7 @@ code { font-family: var(--mono); font-size: 0.92em; }
 .ff-path-id { font-family: var(--mono); font-size: 11.5px; font-weight: 500; }
 .ff-path-name { font-size: 12.5px; color: var(--ink-mid); }
 .ff-path-arrow { position: relative; color: var(--ink-dim); font-size: 13px; }
-.ff-path-arrow[data-sole='true'] { color: var(--critical); }
+.ff-path-arrow[data-sole='true'] { color: var(--critical); min-width: 62px; text-align: center; }
 .ff-path-arrow[data-sole='true']::after {
   content: 'sole source'; position: absolute; left: 50%; top: 14px; transform: translateX(-50%);
   font-family: var(--mono); font-size: 8.5px; color: var(--critical); white-space: nowrap;
@@ -375,7 +384,7 @@ code { font-family: var(--mono); font-size: 0.92em; }
 /* A wrapping heading must not run under the control beside it. */
 .ff-block-head > .ff-ghost, .ff-block-head > .ff-h-note { flex: none; }
 .ff-block-head > .ff-h-note { padding-top: 2px; }
-.ff-h { font-size: 13.5px; font-weight: 600; letter-spacing: -0.01em; }
+.ff-h { font-size: 13.5px; font-weight: 600; letter-spacing: -0.01em; min-width: 0; overflow-wrap: anywhere; }
 .ff-h-note { font-family: var(--mono); font-size: 10.5px; color: var(--ink-dim); }
 .ff-note { font-size: 12px; color: var(--ink-mid); line-height: 1.55; }
 .ff-note-sm { font-size: 11.5px; color: var(--ink-dim); line-height: 1.5; }
@@ -389,7 +398,7 @@ code { font-family: var(--mono); font-size: 0.92em; }
   padding: 9px 0; border-bottom: 1px solid var(--rule);
 }
 .ff-figure:last-child { border-bottom: none; }
-.ff-figure-label { font-size: 12.5px; color: var(--ink-mid); }
+.ff-figure-label { font-size: 12.5px; color: var(--ink-mid); min-width: 0; overflow-wrap: anywhere; }
 .ff-figure-value {
   font-family: var(--mono); font-size: 15px; font-weight: 500;
   letter-spacing: -0.01em; font-variant-numeric: tabular-nums;
@@ -496,7 +505,10 @@ code { font-family: var(--mono); font-size: 0.92em; }
 .ff-alt-row:nth-child(3) { animation-delay: 120ms; }
 
 .ff-alt-line { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; }
-.ff-alt-name { font-size: 12.5px; font-weight: 600; letter-spacing: -0.01em; }
+.ff-alt-name {
+  font-size: 12.5px; font-weight: 600; letter-spacing: -0.01em;
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 .ff-alt-fit {
   font-family: var(--mono); font-size: 11px; color: var(--forest);
   font-variant-numeric: tabular-nums;
@@ -551,10 +563,13 @@ code { font-family: var(--mono); font-size: 0.92em; }
 
 .ff-slider-head {
   display: flex; align-items: baseline; justify-content: space-between;
-  gap: 14px; margin-bottom: 8px;
+  gap: 14px; margin-bottom: 8px; min-width: 0;
 }
-.ff-slider-head > * { white-space: nowrap; }
-.ff-slider-label { font-size: 13px; }
+/* The readout is short and tabular, so it keeps its line. The question is not:
+   real filers are called things like "Ghanshyam Axle Tube Works Udyog Pvt Ltd"
+   and nowrap pushed thirty pixels of it out through the side of the bar. */
+.ff-slider-head > .ff-slider-value { white-space: nowrap; flex: none; }
+.ff-slider-label { font-size: 13px; min-width: 0; }
 .ff-slider-label strong { font-weight: 600; }
 .ff-slider-value { font-family: var(--mono); font-size: 12.5px; color: var(--ink-mid); font-variant-numeric: tabular-nums; }
 
@@ -593,8 +608,11 @@ code { font-family: var(--mono); font-size: 0.92em; }
 .ff-tick[data-baseline='true']::before { background: var(--forest); height: 6px; }
 
 .ff-readouts { display: flex; gap: 26px; align-items: flex-start; flex-wrap: wrap; }
-.ff-readout { display: flex; flex-direction: column; gap: 5px; min-width: 92px; }
-.ff-readout-label { font-size: 11px; color: var(--ink-dim); }
+.ff-readout { display: flex; flex-direction: column; gap: 5px; min-width: 92px; max-width: 190px; }
+.ff-readout-label {
+  font-size: 11px; color: var(--ink-dim);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 .ff-readout-value {
   font-family: var(--mono); font-size: 16px; letter-spacing: -0.015em;
   font-variant-numeric: tabular-nums;
@@ -631,7 +649,17 @@ code { font-family: var(--mono); font-size: 0.92em; }
   padding: 13px 24px;
   display: flex; align-items: center; justify-content: space-between; gap: 18px;
 }
-.ff-sheet-kind { font-family: var(--mono); font-size: 12px; font-weight: 500; }
+.ff-sheet-kind { font-family: var(--mono); font-size: 12px; font-weight: 500; min-width: 0; }
+.ff-sheet-actions { display: flex; align-items: center; gap: 10px; flex: none; }
+.ff-sheet-next {
+  height: 28px; padding: 0 14px; border-radius: 999px; flex: none;
+  border: 1px solid var(--forest); background: var(--forest); color: var(--lime);
+  font-size: 12.5px; font-weight: 600; white-space: nowrap;
+  transition: opacity var(--t) ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .ff-sheet-next:hover { opacity: 0.86; }
+}
 .ff-sheet-close {
   flex: none; width: 28px; height: 28px; border-radius: 50%;
   border: 1px solid var(--forest); color: var(--forest);
@@ -668,12 +696,14 @@ code { font-family: var(--mono); font-size: 0.92em; }
 /* Ledger rows, set the way a note to the accounts is set. */
 .ff-ledger { display: flex; flex-direction: column; }
 .ff-ledger-row {
-  display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: baseline;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px; align-items: baseline;
   padding: 7px 0; border-bottom: 1px solid var(--rule); font-size: 12.5px;
 }
 .ff-ledger-row:last-child { border-bottom: none; }
 .ff-ledger-row[data-total='true'] { border-top: 1px solid var(--ink); border-bottom: none; font-weight: 600; }
-.ff-ledger-row[data-lead='true'] { background: var(--critical-wash); margin: 0 -8px; padding: 8px; }
+.ff-ledger-row[data-lead='true'] {
+  background: var(--critical-wash); border-radius: var(--r-sm); padding: 8px;
+}
 .ff-ledger-prev, .ff-ledger-now {
   font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums;
   min-width: 68px; text-align: right;

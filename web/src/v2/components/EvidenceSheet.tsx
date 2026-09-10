@@ -29,6 +29,16 @@ interface Props {
   /** Name of the buyer whose stress reached this node, when it was inherited. */
   inheritedFrom?: string | null;
   onClose: () => void;
+  /**
+   * The walkthrough's next step, offered from inside the sheet.
+   *
+   * The sheet is modal and covers the topbar, so at step 03 — where it opens by
+   * itself — the primary action sat underneath the scrim and the only way
+   * forward was to notice the sheet could be dismissed. A dialog that hides the
+   * one control the reader is meant to press next is a dead end, so it carries
+   * that control itself.
+   */
+  onContinue?: { label: string; run: () => void } | null;
 }
 
 function Delta({
@@ -102,7 +112,14 @@ function payablesRatio(row: StressSignal): number | null {
   return row.total_trade_payables_cr / row.revenue_cr;
 }
 
-export default function EvidenceSheet({ node, signals, score, inheritedFrom, onClose }: Props) {
+export default function EvidenceSheet({
+  node,
+  signals,
+  score,
+  inheritedFrom,
+  onClose,
+  onContinue,
+}: Props) {
   const closeRef = useRef<HTMLButtonElement>(null);
 
   // A sheet that traps nothing and cannot be dismissed with a key is a
@@ -126,9 +143,22 @@ export default function EvidenceSheet({ node, signals, score, inheritedFrom, onC
     <>
       <div className="ff-sheet-head">
         <span className="ff-sheet-kind">evidence · published filings</span>
-        <button ref={closeRef} className="ff-sheet-close" onClick={onClose} aria-label="Close evidence">
-          ✕
-        </button>
+        <span className="ff-sheet-actions">
+          {onContinue && (
+            <button
+              className="ff-sheet-next"
+              onClick={() => {
+                onClose();
+                onContinue.run();
+              }}
+            >
+              {onContinue.label}
+            </button>
+          )}
+          <button ref={closeRef} className="ff-sheet-close" onClick={onClose} aria-label="Close evidence">
+            ✕
+          </button>
+        </span>
       </div>
       <div className="ff-sheet-title-block">
         <h2 className="ff-sheet-title">{node.name}</h2>
