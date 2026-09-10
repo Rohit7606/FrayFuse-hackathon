@@ -362,12 +362,12 @@ export default function BuildPage({ onEnterConsole, onUseCommittedNetwork }: Pro
               triggerNode={null}
               changedIds={null}
               changedAt={null}
-              bottomInset={112}
+              bottomInset={24}
               onSelect={() => {}}
             />
           ) : null}
 
-          <div className="ff-stage-overlay" data-bar="true">
+          <div className="ff-stage-overlay">
             <div className="ff-stage-caption">
               <h2>
                 {phase === 'idle' && 'Build the chain from the filings themselves'}
