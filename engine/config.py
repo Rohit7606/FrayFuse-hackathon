@@ -196,6 +196,20 @@ DISRUPTION_BAND_WATCH = 0.012    # 0.012 - 0.06 -> "watch"
 # below 0.012 -> "stable"
 
 # ---------------------------------------------------------------------------
+# Ingestion  (engine/ingest.py) — added for the judged demo, AGENTS.md §1.5
+# ---------------------------------------------------------------------------
+
+# Caps that make a hostile zip a 422 rather than an outage.  A zip bomb is a
+# small file that expands without limit, so the guard has to be on the declared
+# uncompressed size and the member count, checked BEFORE anything is written.
+#
+# The collection set this was sized against is five CSVs totalling under 2 MB,
+# so both caps sit an order of magnitude above anything a real upload needs.
+INGEST_MAX_MEMBERS = 200            # files in the archive
+INGEST_MAX_UNCOMPRESSED_BYTES = 64 * 1024 * 1024   # 64 MB expanded
+INGEST_MAX_UPLOAD_BYTES = 16 * 1024 * 1024         # 16 MB on the wire
+
+# ---------------------------------------------------------------------------
 # Intervention  (engine/intervention.py)
 # ---------------------------------------------------------------------------
 

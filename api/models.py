@@ -248,6 +248,16 @@ class SimulateRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     scenario: Scenario
+    # Score THIS network instead of the one the server loaded at startup.
+    #
+    # Added with ingestion (schema 1.3). The alternative was to keep the
+    # uploaded network in server memory and hand back a handle, which is the
+    # session state AGENTS.md §3.4 forbids. The client holds the network it
+    # ingested and sends it with each scenario, so every request stays a pure
+    # function of its own body and two clients can hold two different networks
+    # without knowing about each other. Omitted, the default network is scored,
+    # so nothing that worked before changes.
+    network: NetworkInput | None = None
 
 
 class InterveneRequest(BaseModel):
@@ -255,6 +265,32 @@ class InterveneRequest(BaseModel):
 
     interventions: list[Intervention]
     baseline_scenario: Scenario | None = None
+    # As on SimulateRequest — the client's own network, or the default.
+    network: NetworkInput | None = None
+
+
+class IngestReport(BaseModel):
+    """What the upload contained and what was made of it.
+
+    A demo asset rather than debug output: `fields_null` against
+    `fields_present` is the number behind "most of this network is dark",
+    which is the product's own thesis.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    files_seen: list[str]
+    files_used: dict[str, str]
+    files_ignored: list[str]
+    rows_parsed: dict[str, int]
+    companies_read: int
+    nodes_built: int
+    edges_built: int
+    generated_nodes: int
+    observable_nodes: int
+    fields_present: int
+    fields_null: int
+    warnings: list[str]
 
 
 class NetworkResponse(BaseModel):
@@ -281,6 +317,20 @@ class AtRiskResponse(BaseModel):
     ranking: list[str]
     scores: list[Score]
     summary: Summary
+
+
+class IngestResponse(ScoredNetwork):
+    """The scored network built from an upload, plus what the upload held.
+
+    Carries `stress_signals` as well as the ScoredNetwork fields, because the
+    client needs the whole NetworkInput back: to show the evidence panel, and
+    to send it with the scenario requests that follow (see SimulateRequest).
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    stress_signals: list[StressSignal] = Field(default_factory=list)
+    ingest_report: IngestReport
 
 
 class PerNodeDelta(BaseModel):

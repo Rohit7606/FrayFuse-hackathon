@@ -6,6 +6,7 @@ networkx
 numpy
 pandas
 fastapi
+python-multipart  # multipart/form-data parsing for POST /api/ingest (AGENTS.md 1.5). FastAPI requires it for UploadFile; there is no stdlib path
 uvicorn
 pydantic
 pytest

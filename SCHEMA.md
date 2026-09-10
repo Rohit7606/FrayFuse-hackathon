@@ -506,7 +506,55 @@ Score the network under a scenario. Used by the what-if controls.
 
 **Response:** full `ScoredNetwork`.
 
-### 5.5 `POST /api/intervene`
+### 5.5 `POST /api/ingest`
+
+Build and score a network from an uploaded zip of collection CSVs. Added with
+ingestion (AGENTS.md §1.5); offline only, and no LLM.
+
+**Request:** `multipart/form-data` with one `file` field holding a zip.
+
+**Response:** a full `ScoredNetwork`, plus `stress_signals` and an
+`ingest_report`:
+
+```json
+{
+  "meta": {...}, "nodes": [...], "edges": [...],
+  "scores": [...], "ranking": [...], "summary": {...},
+  "stress_signals": [...],
+  "ingest_report": {
+    "files_seen": [...], "files_used": {"companies.csv": "data/real/companies.csv"},
+    "files_ignored": [...], "rows_parsed": {"companies.csv": 43},
+    "companies_read": 43, "nodes_built": 298, "edges_built": 302,
+    "generated_nodes": 255, "observable_nodes": 14,
+    "fields_present": 618, "fields_null": 440, "warnings": [...]
+  }
+}
+```
+
+`stress_signals` comes back because the client needs the whole `NetworkInput`:
+to render the evidence panel, and to send with the scenario requests that
+follow.
+
+**Errors are always 422 `invalid_upload`, never 500.** An unreadable zip, a
+member resolving outside the extraction directory, an archive over the size or
+member caps, or no recognisable collection CSVs — each names the file.
+
+**Statelessness.** The server keeps nothing. The network it loaded at startup is
+untouched and remains the default, so the demo runs end to end with no upload.
+
+### 5.6 Scoring a client-supplied network
+
+`POST /api/simulate` and `POST /api/intervene` both accept an optional
+`network` field holding a full `NetworkInput`. Present, it is scored instead of
+the server's default; absent, nothing changes.
+
+This is what keeps ingestion stateless (AGENTS.md §3.4). The client holds the
+network it ingested and sends it with each scenario, so every request stays a
+pure function of its own body and two clients can hold two different networks
+without knowing about each other. There is no session id and no server-side
+handle.
+
+### 5.7 `POST /api/intervene`
 
 Apply funding and return before, after, and the delta. This drives the closing demo beat.
 
@@ -539,7 +587,7 @@ Apply funding and return before, after, and the delta. This drives the closing d
 
 `per_node` includes only nodes whose `risk_band` changed.
 
-### 5.6 Errors
+### 5.8 Errors
 
 | Status | When | Body |
 |---|---|---|
@@ -605,6 +653,7 @@ Five CSVs land in `data/real/`:
 |---|---|
 | 1.0 | Initial contract. Edge fields named `supplier_id`/`buyer_id` rather than `from`/`to`. MSMED flow figure designated primary signal. `has_not_due_column` added as a required comparability flag |
 | 1.1 | Carries the comparability flags the collection workstream measured: `ageing_basis`, `msme_book_material`, `series_break`, `liquidity_quality` on stress signals; `confidence`, `edge_provenance` and a nullable `is_single_source` on edges; `observation_completeness` on nodes. Risk-band thresholds recalibrated to the score distribution the engine actually produces (§4.4). Stressed origins excluded from `ranking` (§4.3). This entry also records the version bump that `schema.json` had already taken but which was never written up here — agreed with Person B and Person C |
+| 1.3 | **Ingestion endpoint and client-supplied networks.** `POST /api/ingest` (§5.5) builds and scores a network from an uploaded zip of collection CSVs; `simulate` and `intervene` take an optional `network` (§5.6) so the result can be scored without the server holding it. New error code `invalid_upload`, always 422. Additive throughout: every existing request and response is unchanged, and the default network still serves with no upload. Needs Person B and Person C review |
 | 1.3 | **`substitution_candidates` on `Score`.** Optional, additive and output-only — `NetworkInput` is untouched, no data file's `meta.schema_version` moves, and `mockgen`/`transform` are unchanged. `final_score`, `risk_band` and `ranking` are unchanged; nothing that was correct before returns a different number. `null` means not considered and `[]` means considered-and-empty (§4.6). New engine module `engine/substitution.py`, orchestrated from `pipeline.py`. Needs Person B review |
 | 1.2 | **`stress_signals` on `GET /api/network`.** Optional, additive, pass-through — the endpoint already had the rows in memory and was dropping them. Required so the UI can display a filer's own disclosure beside the score derived from it; the alternative was hardcoding rupee figures in the frontend, which AGENTS.md §3.6 forbids. No engine, no scoring and no data file changes; an older client is unaffected because the field is optional. Needs Person B review |
 | 1.2 | **Supply-disruption layer.** Adds `halt_risk`, `supply_disruption`, `disruption_band`, `disrupted_inflow_cr` and `disruption_reason` to `Score`, and `anchor_disruption` plus `disruption_iterations_to_converge` to `Summary`. Purely additive and **output-only** — `NetworkInput` is untouched, so no data file's `meta.schema_version` moves and `mockgen`/`transform` are unchanged. `final_score`, `risk_band` and `ranking` are unchanged; nothing that was correct before returns a different number. Closes the `DEMO_SCENARIO.md` §6 counterfactual, which payment-stress propagation structurally could not reach. Needs Person B and Person C review |
