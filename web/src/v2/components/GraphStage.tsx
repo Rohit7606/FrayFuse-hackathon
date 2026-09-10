@@ -28,10 +28,12 @@ import {
 } from '../lib/bands';
 import type { Edge, Node, Score } from '../types';
 
-export type StageMode = 'network' | 'observability' | 'cascade' | 'focus';
+export type StageMode = 'network' | 'observability' | 'cascade' | 'focus' | 'build';
 
 /** How long one node takes to take on its band colour. */
 const ARRIVE_MS = 620;
+/** How long one node takes to appear during the live build. */
+const PLACE_MS = 420;
 /** How long the ring that marks an arrival lives. */
 const PULSE_MS = 1100;
 /**
@@ -314,14 +316,21 @@ export default function GraphStage({
     return fitWithInset(700, 46);
   }, [mode, pathNodeIds, fitWithInset]);
 
-  /** 0 → still neutral, 1 → fully in its band colour. */
-  const revealOf = useCallback((nodeId: string, now: number) => {
+  /**
+   * 0 → not yet, 1 → fully arrived.
+   *
+   * One ramp, two jobs: during the cascade it is how far a node has taken on
+   * its band colour, during the build it is how far it has been placed on the
+   * page. The brief for the build said to extend this mechanism rather than
+   * invent a second one, and there was nothing to add — the shape is the same.
+   */
+  const revealOf = useCallback((nodeId: string, now: number, span = ARRIVE_MS) => {
     const { arrival: offsets, cascadeStartedAt: startedAt } = live.current;
     if (!offsets) return 1;
     const offset = offsets.get(nodeId);
     if (offset === undefined) return 0;
     if (startedAt === null) return 0;
-    return easeOut((now - startedAt - offset) / ARRIVE_MS);
+    return easeOut((now - startedAt - offset) / span);
   }, []);
 
   const radiusOf = useCallback((node: GraphNode, score: Score | undefined) => {
@@ -357,6 +366,14 @@ export default function GraphStage({
         fill = node.is_observable ? PAPER.forest : UNSCORED;
         alpha = node.is_observable ? 1 : 0.22;
         radius = node.is_observable ? radius + 1.2 : radius * 0.8;
+      } else if (state.mode === 'build') {
+        // Structure first, colour second — two beats, not one. During the
+        // build a node is only ever ink on paper; nothing here knows its band.
+        const placed = revealOf(node.id, now, PLACE_MS);
+        if (placed <= 0) return;
+        fill = isAnchor ? UNSCORED_ANCHOR : UNSCORED;
+        alpha = placed;
+        radius *= 0.55 + 0.45 * placed;
       } else {
         const band = score?.risk_band ?? 'stable';
         const reveal = revealOf(node.id, now);
@@ -505,15 +522,32 @@ export default function GraphStage({
       ctx.lineTo(right, y);
       ctx.stroke();
 
+      // Above the topmost sub-row, not on the band's centre line — a tier
+      // spread across sub-rows would otherwise print its label through its
+      // own nodes.
+      const clearance = ((SUB_ROWS - 1) / 2) * SUB_ROW_GAP + 14;
       ctx.fillStyle = rgba(PAPER.ink, 0.34);
       ctx.textAlign = 'left';
-      ctx.fillText(band.label, left + 14 / globalScale, y - 5 / globalScale);
+      ctx.fillText(band.label, left + 14 / globalScale, y - clearance);
     }
     ctx.restore();
   }, [size.width]);
 
   const linkColor = useCallback((link: GraphLink) => {
     const state = live.current;
+
+    if (state.mode === 'build') {
+      // An edge cannot be drawn to a node that is not there yet. Waiting for
+      // both endpoints is what makes the build read as a chain assembling
+      // rather than a mesh fading up.
+      const now = performance.now();
+      const source = typeof link.source === 'object' ? link.source.id : link.source;
+      const target = typeof link.target === 'object' ? link.target.id : link.target;
+      const ready = Math.min(revealOf(source, now, PLACE_MS), revealOf(target, now, PLACE_MS));
+      if (ready <= 0.35) return 'rgba(0,0,0,0)';
+      return rgba(PAPER.ink, 0.05 + 0.05 * ready);
+    }
+
     if (state.mode === 'focus' && state.pathEdgeIds) {
       return state.pathEdgeIds.has(link.edge_id)
         ? rgba(PAPER.forest, 0.85)
@@ -531,7 +565,7 @@ export default function GraphStage({
     // that make a supplier irreplaceable, so they are worth seeing before
     // anyone clicks anything.
     return link.is_single_source === true ? rgba(PAPER.ink, 0.16) : rgba(PAPER.ink, 0.055);
-  }, []);
+  }, [revealOf]);
 
   const linkWidth = useCallback((link: GraphLink) => {
     const state = live.current;

@@ -58,6 +58,65 @@ def build_sweep(trigger_node: str) -> dict:
     return {"trigger_node": trigger_node, "levels": list(SWEEP_LEVELS), "steps": steps}
 
 
+def build_ingest_mock() -> dict:
+    """POST the real collection directory to /api/ingest and keep the response.
+
+    Uses data/real rather than data/mock deliberately: ingestion exists to build
+    the graph from filings that were actually collected, and the demo uploads
+    that folder.
+    """
+    import io
+    import zipfile
+
+    from api.main import app
+
+    source = REPO_ROOT / "data" / "real"
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
+        for path in sorted(source.iterdir()):
+            if path.is_file():
+                archive.write(path, f"data/real/{path.name}")
+
+    with TestClient(app) as client:
+        response = client.post(
+            "/api/ingest",
+            files={"file": ("data_real.zip", buffer.getvalue(), "application/zip")},
+        )
+    if response.status_code != 200:
+        raise SystemExit(f"ingest mock failed: {response.status_code} {response.text[:400]}")
+    return response.json()
+
+
+def build_ingest_intervention(ingested: dict) -> dict:
+    """Fund the ingested network's top-ranked supplier, at the engine's own cost.
+
+    Mirrors exactly what the console computes for an ingested network: the
+    first entry in `ranking`, funded at the `intervention_cost_cr` the engine
+    put on it. If that derivation changes on either side they will disagree,
+    which is why both read the same two fields rather than a hardcoded id.
+    """
+    from api.main import app
+
+    ranked = ingested["ranking"][0] if ingested["ranking"] else None
+    if ranked is None:
+        raise SystemExit("ingest mock produced an empty ranking; nothing to fund")
+    cost = next(s["intervention_cost_cr"] for s in ingested["scores"] if s["node_id"] == ranked)
+
+    network = {key: ingested[key] for key in ("meta", "nodes", "edges", "stress_signals")}
+    with TestClient(app) as client:
+        response = client.post(
+            "/api/intervene",
+            json={
+                "baseline_scenario": {"stress_overrides": [], "interventions": []},
+                "interventions": [{"node_id": ranked, "amount_cr": cost}],
+                "network": network,
+            },
+        )
+    if response.status_code != 200:
+        raise SystemExit(f"ingest intervention mock failed: {response.status_code} {response.text[:400]}")
+    return response.json()
+
+
 def main() -> None:
     from api.main import app
 
@@ -77,6 +136,19 @@ def main() -> None:
                 json={"baseline_scenario": empty, "interventions": [demo["intervention"]]},
             ).json(),
         }
+
+    # The live-build page needs a response to replay with the backend off.
+    # Built from the real collection CSVs, zipped exactly as a user would zip
+    # that folder, and pushed through the real endpoint — so the committed mock
+    # is the endpoint's own output rather than a description of it.
+    ingest_payload = build_ingest_mock()
+    payloads["ingest.json"] = ingest_payload
+
+    # Funding the ingested network's own top-ranked supplier. Without this the
+    # closing beat has nothing to show when the API is switched off and the
+    # network came from an upload — there is no committed intervention for a
+    # network that did not exist when the mocks were written.
+    payloads["ingest-intervene.json"] = build_ingest_intervention(ingest_payload)
 
     # The what-if slider sweeps the trigger node's own_stress. Mock mode has no
     # backend to sweep against, so every step is scored here and committed —

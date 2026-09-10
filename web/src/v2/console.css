@@ -224,6 +224,76 @@ code { font-family: var(--mono); font-size: 0.92em; }
 }
 
 /* ===================================================================
+   Build page — the ingest log, the drop zone, the counters
+   =================================================================== */
+
+.ff-logline {
+  padding: 9px 12px;
+  border-radius: var(--r);
+  color: var(--rail-ink);
+  /* A disclosure, not a state change: 200ms, a small rise, no loop. */
+  animation: ff-logline-in 200ms var(--ease-out) both;
+}
+@keyframes ff-logline-in {
+  from { opacity: 0; transform: translateY(-3px); }
+}
+.ff-logline[data-waiting='true'] { color: var(--rail-ink-dim); opacity: 0.45; animation: none; }
+.ff-logline-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 4px 10px; flex-wrap: wrap;
+}
+.ff-logline-label { font-size: 12.5px; font-weight: 500; flex: 1 1 auto; min-width: 0; }
+.ff-logline-value {
+  font-family: var(--mono); font-size: 11.5px; color: var(--lime);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.ff-logline[data-waiting='true'] .ff-logline-value { color: var(--rail-ink-dim); }
+.ff-logline-note {
+  display: block; font-size: 11px; color: var(--rail-ink-dim);
+  line-height: 1.45; margin-top: 3px;
+}
+
+.ff-warnings { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.ff-warnings li { font-size: 11px; color: var(--rail-ink-dim); line-height: 1.45; }
+
+.ff-drop {
+  pointer-events: auto;
+  align-self: center; margin: auto;
+  max-width: 46ch; text-align: center;
+  padding: 30px 34px;
+  border: 1px dashed var(--rule-firm); border-radius: var(--r);
+  background: var(--sheet);
+  transition: border-color var(--t) ease, background-color var(--t) ease;
+}
+.ff-drop[data-dragging='true'] { border-color: var(--forest); background: var(--mint); }
+.ff-drop-lead { font-size: 16px; font-weight: 600; letter-spacing: -0.015em; }
+.ff-drop-note { font-size: 12px; color: var(--ink-mid); line-height: 1.55; margin: 8px 0 14px; }
+.ff-drop-error { font-size: 12px; color: var(--critical); margin-top: 12px; line-height: 1.5; }
+
+.ff-counters {
+  pointer-events: auto; align-self: flex-start;
+  display: flex; gap: 28px;
+  background: var(--sheet); border: 1px solid var(--rule-firm); border-radius: var(--r);
+  padding: 12px 18px;
+  box-shadow: 0 1px 2px rgba(20, 20, 20, 0.05);
+}
+.ff-counter { display: flex; flex-direction: column; gap: 2px; }
+.ff-counter-value {
+  font-family: var(--mono); font-size: 20px; letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.ff-counter-label { font-size: 11px; color: var(--ink-dim); }
+
+.ff-file-from {
+  display: block; font-family: var(--mono); font-size: 10px;
+  color: var(--ink-dim); margin-top: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ff-logline { animation: none; }
+}
+
+/* ===================================================================
    Stage
    =================================================================== */
 

@@ -31,6 +31,7 @@ import StoryRail, { STEPS, type StepId } from './components/StoryRail';
 import WhatIfBar from './components/WhatIfBar';
 import type {
   DemoScenario,
+  IngestResponse,
   InterveneResponse,
   NetworkPayload,
   ScoredNetwork,
@@ -57,9 +58,23 @@ function BrandMark() {
   );
 }
 
-export default function Console() {
-  const [network, setNetwork] = useState<NetworkPayload | null>(null);
-  const [baseline, setBaseline] = useState<ScoredNetwork | null>(null);
+interface Props {
+  /**
+   * A network built on the build page. When present the console reads it
+   * instead of the committed mocks, and every scenario request carries it —
+   * which is what keeps ingestion stateless (SCHEMA.md 5.6).
+   */
+  ingested: IngestResponse | null;
+  onBuildPage: () => void;
+}
+
+export default function Console({ ingested, onBuildPage }: Props) {
+  // Only ever populated on the committed path. An ingested network needs none
+  // of this — it arrived complete as a prop — so it is DERIVED below rather
+  // than copied into state by an effect, which would be a second source of
+  // truth for something React already has.
+  const [fetchedNetwork, setFetchedNetwork] = useState<NetworkPayload | null>(null);
+  const [fetchedBaseline, setFetchedBaseline] = useState<ScoredNetwork | null>(null);
   const [demo, setDemo] = useState<DemoScenario | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -96,6 +111,10 @@ export default function Console() {
   // ---- Load ---------------------------------------------------------------
 
   useEffect(() => {
+    // An ingested network is already complete and already scored — it came back
+    // from /api/ingest in one response, so there is nothing to fetch.
+    if (ingested) return;
+
     let cancelled = false;
     (async () => {
       try {
@@ -105,8 +124,8 @@ export default function Console() {
           api.demoScenario(),
         ]);
         if (cancelled) return;
-        setNetwork(net);
-        setBaseline(base);
+        setFetchedNetwork(net);
+        setFetchedBaseline(base);
         setDemo(scenario);
       } catch (cause) {
         if (!cancelled) setError(cause instanceof Error ? cause.message : String(cause));
@@ -115,7 +134,36 @@ export default function Console() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [ingested]);
+
+  /** The network on screen: the one that was uploaded, or the committed one. */
+  const network = useMemo<NetworkPayload | null>(
+    () =>
+      ingested
+        ? {
+            meta: ingested.meta,
+            nodes: ingested.nodes,
+            edges: ingested.edges,
+            stress_signals: ingested.stress_signals,
+          }
+        : fetchedNetwork,
+    [ingested, fetchedNetwork],
+  );
+
+  const baseline = useMemo<ScoredNetwork | null>(
+    () =>
+      ingested
+        ? {
+            meta: ingested.meta,
+            nodes: ingested.nodes,
+            edges: ingested.edges,
+            scores: ingested.scores,
+            ranking: ingested.ranking,
+            summary: ingested.summary,
+          }
+        : fetchedBaseline,
+    [ingested, fetchedBaseline],
+  );
 
   const index = useMemo(
     () =>
@@ -125,7 +173,61 @@ export default function Console() {
     [network],
   );
 
-  const triggerNode = demo?.trigger_node ?? baseline?.summary.stressed_origin_nodes[0] ?? null;
+  /**
+   * Trigger, watched supplier and funding amount.
+   *
+   * On the committed network these come from data/fixtures/demo_scenario.json,
+   * because DEMO_SCENARIO.md 8 says never to hardcode them and the fixture is
+   * where they live. An ingested network has no fixture - its node ids did not
+   * exist when the fixture was written - so they are read off the engine's own
+   * output instead: the origin it found, the supplier it ranked first, and the
+   * amount it costed to stabilise that supplier.
+   */
+  const plan = useMemo(() => {
+    if (!baseline) return null;
+
+    if (!ingested && demo) {
+      return {
+        trigger: demo.trigger_node,
+        watched: demo.expected_ranking[0] ?? baseline.ranking[0] ?? null,
+        intervention: demo.intervention,
+      };
+    }
+
+    const top = baseline.ranking[0] ?? null;
+    const cost = top
+      ? baseline.scores.find((row) => row.node_id === top)?.intervention_cost_cr ?? 0
+      : 0;
+    return {
+      trigger: baseline.summary.stressed_origin_nodes[0] ?? null,
+      watched: top,
+      intervention: top ? { node_id: top, amount_cr: cost } : null,
+    };
+  }, [baseline, demo, ingested]);
+
+  const triggerNode = plan?.trigger ?? null;
+
+  /** The network every scenario request carries, or undefined for the default. */
+  const networkOverride = useMemo(
+    () =>
+      ingested
+        ? {
+            meta: ingested.meta,
+            nodes: ingested.nodes,
+            edges: ingested.edges,
+            stress_signals: ingested.stress_signals,
+          }
+        : undefined,
+    [ingested],
+  );
+
+  /**
+   * The what-if slider needs the engine when the network was ingested: there is
+   * no committed sweep for a network that did not exist at mock-refresh time.
+   * With the API switched off it is hidden and says why, rather than posting to
+   * a port with nothing behind it.
+   */
+  const canSimulate = api.live || !ingested;
 
   /** The slider's home position: the trigger's own filed stress. */
   const baselineLevelIndex = useMemo(() => {
@@ -194,7 +296,7 @@ export default function Console() {
 
   const triggerName = triggerNode && index ? index.nodeById.get(triggerNode)?.name ?? triggerNode : '—';
 
-  const watchedId = demo?.expected_ranking[0] ?? ranking[0] ?? null;
+  const watchedId = plan?.watched ?? ranking[0] ?? null;
   const watchedNode = watchedId && index ? index.nodeById.get(watchedId) : null;
 
   // ---- Cascade timing ----------------------------------------------------
@@ -234,7 +336,11 @@ export default function Console() {
       }
       setScoring(true);
       try {
-        const next = await api.atStressLevel(triggerNode, STRESS_LEVELS[nextIndex]);
+        const next = await api.atStressLevel(
+          triggerNode,
+          STRESS_LEVELS[nextIndex],
+          networkOverride,
+        );
         setStressStep(next);
         setError(null);
       } catch (cause) {
@@ -243,7 +349,7 @@ export default function Console() {
         setScoring(false);
       }
     },
-    [triggerNode, baselineLevelIndex],
+    [triggerNode, baselineLevelIndex, networkOverride],
   );
 
   // ---- Step navigation ---------------------------------------------------
@@ -308,11 +414,11 @@ export default function Console() {
           setLevelIndex(baselineLevelIndex);
           setStressStep(null);
           setCounterfactual(false);
-          if (!demo) break;
-          setSelectedId(demo.intervention.node_id);
+          if (!plan?.intervention) break;
+          setSelectedId(plan.intervention.node_id);
           try {
             setScoring(true);
-            const result = await api.intervene([demo.intervention]);
+            const result = await api.intervene([plan.intervention], networkOverride);
             setIntervention(result);
             setError(null);
           } catch (cause) {
@@ -324,7 +430,17 @@ export default function Console() {
         }
       }
     },
-    [triggerNode, runCascade, cascadeAt, waves.length, watchedId, ranking, demo, baselineLevelIndex],
+    [
+      triggerNode,
+      runCascade,
+      cascadeAt,
+      waves.length,
+      watchedId,
+      ranking,
+      plan,
+      baselineLevelIndex,
+      networkOverride,
+    ],
   );
 
   const restart = useCallback(() => {
@@ -352,6 +468,10 @@ export default function Console() {
           : 'cascade';
 
   const observableCount = network?.nodes.filter((node) => node.is_observable).length ?? 0;
+  // Counted, not assumed. The committed mock has three anchors and the real
+  // collection has fifteen; a caption that says "one anchor" is wrong on both.
+  const anchorCount = network?.nodes.filter((node) => node.tier === 0).length ?? 0;
+  const tierCount = new Set(network?.nodes.map((node) => node.tier) ?? []).size;
 
   const showWhatIf =
     step !== 'network' && step !== 'visibility' && step !== 'act' && summary !== null;
@@ -360,7 +480,9 @@ export default function Console() {
     switch (step) {
       case 'network':
         return {
-          title: `${num(network?.meta.node_count ?? 0)} companies, four tiers, one anchor at the top`,
+          title: `${num(network?.meta.node_count ?? 0)} companies, ${num(tierCount)} tiers, ${
+            anchorCount === 1 ? 'one anchor' : `${num(anchorCount)} anchors`
+          } at the top`,
           text: 'Goods flow upward along every edge. Money — when it arrives — flows back down.',
         };
       case 'visibility':
@@ -474,8 +596,11 @@ export default function Console() {
             Fray<span>Fuse</span>
           </span>
           <span className="ff-dataset">
-            {api.live ? 'live engine' : 'committed engine output'} · schema{' '}
-            {network?.meta.schema_version ?? '—'}
+            {ingested
+              ? `built from your upload · ${num(network?.meta.node_count ?? 0)} companies`
+              : `${api.live ? 'live engine' : 'committed engine output'} · schema ${
+                  network?.meta.schema_version ?? '—'
+                }`}
           </span>
         </div>
 
@@ -499,6 +624,9 @@ export default function Console() {
               Reset
             </button>
           )}
+          <button className="ff-ghost" onClick={onBuildPage}>
+            {ingested ? 'Rebuild' : 'Build from filings'}
+          </button>
         </div>
       </header>
 
@@ -596,7 +724,7 @@ export default function Console() {
             )}
           </div>
 
-          {showWhatIf && summary && watchedNode && (
+          {showWhatIf && canSimulate && summary && watchedNode && (
             <WhatIfBar
               triggerName={triggerName}
               levelIndex={activeLevelIndex}
@@ -620,11 +748,13 @@ export default function Console() {
             summary && <RiskStats summary={summary} />
           )}
 
-          {intervention && demo && index && (
+          {intervention && plan?.intervention && index && (
             <Outcome
               delta={intervention.delta}
-              fundedName={index.nodeById.get(demo.intervention.node_id)?.name ?? demo.intervention.node_id}
-              fundedAmount={demo.intervention.amount_cr}
+              fundedName={
+                index.nodeById.get(plan.intervention.node_id)?.name ?? plan.intervention.node_id
+              }
+              fundedAmount={plan.intervention.amount_cr}
               anchorBefore={anchorBefore}
               anchorAfter={anchorAfterSame}
               anchorName={anchorPairName}
