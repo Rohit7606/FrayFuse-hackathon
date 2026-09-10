@@ -114,6 +114,37 @@ W_SINGLE_SOURCE = 0.35  # irreplaceability — sole-source edges have outsized s
 W_FLOW_SHARE = 0.20     # share of total network trade flowing through this node
 
 # ---------------------------------------------------------------------------
+# Substitution  (engine/substitution.py)
+# ---------------------------------------------------------------------------
+
+# The criticality at or below which a supplier is treated as replaceable enough
+# to be worth suggesting alternatives for.
+#
+# Calibrated to the distribution this model actually produces, not to a claim
+# about the world.  On data/mock/network.json at seed 42 criticality runs
+# lower quartile 0.0370, median 0.0805, upper decile 0.2975; 0.04 sits just
+# above the lower quartile, so roughly the bottom quarter of the network is in
+# scope and 109 of 412 nodes qualify.  On data/real/network.json the quartile
+# is lower still (0.0183) and 124 nodes fall under the same threshold, so the
+# constant is not tuned to one dataset's shape.
+#
+# Raise it and the suggestions start reaching nodes the ranked list is warning
+# about, which is a contradiction on one screen.  Re-derive it if the
+# criticality weights or NORMALISE_CRITICALITY_WITHIN_TIER change.
+SUBSTITUTION_CRITICALITY_MAX = 0.04
+
+# Fitness weights.  Health leads because a replacement that is itself failing is
+# not a replacement at any capacity, whereas a healthy supplier that is a little
+# tight can usually stretch.  They sum to 1.0; a candidate whose revenue is
+# undisclosed drops the capacity term and renormalises onto health.
+W_SUB_HEALTH = 0.60     # 1 - fragility of the candidate
+W_SUB_CAPACITY = 0.40   # spare revenue against the volume being taken on, normalised within tier
+
+# Suggestions kept per supplier.  Three is a decision aid; a full list is a
+# search result, and nobody reads past the third row on a slide anyway.
+SUBSTITUTION_MAX_CANDIDATES = 3
+
+# ---------------------------------------------------------------------------
 # Risk bands  (engine/ranking.py)
 # ---------------------------------------------------------------------------
 

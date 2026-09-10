@@ -122,6 +122,21 @@ class ReasonFactor(BaseModel):
     weight: float
 
 
+class SubstitutionCandidate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    node_id: NodeId
+    name: str
+    component: str
+    replaces_edge_id: EdgeId
+    fitness: Annotated[float, Field(ge=0.0, le=1.0)]
+    fragility: Annotated[float, Field(ge=0.0, le=1.0)]
+    # null means the candidate's revenue is undisclosed, which is unknown
+    # headroom and not zero headroom. Never coerce one to the other.
+    capacity_headroom_cr: Annotated[float, Field(ge=0.0)] | None = None
+    reason_text: str
+
+
 class Score(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -145,6 +160,10 @@ class Score(BaseModel):
     disruption_band: RiskBand
     disrupted_inflow_cr: Annotated[float, Field(ge=0.0)]
     disruption_reason: str
+    # Substitution, schema 1.3. ABSENT (None) means substitution was not
+    # considered for this node; an EMPTY LIST means it was considered and
+    # nobody qualified. Two different facts — see SCHEMA.md §4.6.
+    substitution_candidates: list[SubstitutionCandidate] | None = None
 
 
 class BandCounts(BaseModel):

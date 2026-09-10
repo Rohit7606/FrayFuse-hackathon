@@ -474,6 +474,59 @@
         }
       }
     },
+    "SubstitutionCandidate": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "name",
+        "component",
+        "replaces_edge_id",
+        "fitness",
+        "fragility",
+        "capacity_headroom_cr",
+        "reason_text"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "node_id": {
+          "$ref": "#/definitions/NodeId"
+        },
+        "name": {
+          "type": "string"
+        },
+        "component": {
+          "type": "string",
+          "description": "The part this candidate already makes and would take over."
+        },
+        "replaces_edge_id": {
+          "$ref": "#/definitions/EdgeId"
+        },
+        "fitness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Weighted health and capacity. Capacity is dropped and the weight renormalised onto health where the candidate's revenue is undisclosed."
+        },
+        "fragility": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "capacity_headroom_cr": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "description": "Revenue not already committed to existing customers. null means the candidate's revenue is undisclosed, which is unknown headroom, NOT zero headroom."
+        },
+        "reason_text": {
+          "type": "string",
+          "minLength": 10,
+          "description": "Template-generated and deterministic, like Score.reason_text. Never an LLM."
+        }
+      }
+    },
     "Score": {
       "type": "object",
       "required": [
@@ -534,6 +587,17 @@
             "null"
           ],
           "minimum": 1
+        },
+        "substitution_candidates": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/definitions/SubstitutionCandidate"
+          },
+          "description": "OPTIONAL, additive in 1.3. null means substitution was NOT CONSIDERED for this node - it is too critical, it is a confirmed sole source, its sole-source status is undisclosed, or it supplies nothing. An EMPTY ARRAY means it WAS considered and no same-tier supplier of the same component was found. The two are different facts and must never be collapsed, for the same reason null and 0.0 are kept apart everywhere else in this contract."
         },
         "reason_text": {
           "type": "string",
