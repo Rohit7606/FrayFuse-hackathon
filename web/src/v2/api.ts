@@ -10,7 +10,9 @@
  */
 
 import type {
+  AllocateResponse,
   DemoScenario,
+  DeriskPlan,
   IngestResponse,
   InterveneResponse,
   Intervention,
@@ -30,6 +32,16 @@ const BASE = 'http://localhost:8000';
  * disagreeing with the panel beside it.
  */
 export const STRESS_LEVELS = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.75, 0.8, 0.9, 1] as const;
+
+/**
+ * The budget stops the optimiser offers.
+ *
+ * Mirrors BUDGET_LEVELS in scripts/refresh_web_mocks.py, for the same reason
+ * STRESS_LEVELS does: every stop is a real /api/allocate run committed ahead of
+ * time, so mock mode and live mode print the same allocation. A stop that is
+ * not in the committed sweep throws rather than showing the nearest one.
+ */
+export const BUDGET_LEVELS = [1, 2.5, 5, 10, 25] as const;
 
 export interface StressStep {
   own_stress: number;
@@ -230,6 +242,78 @@ export const api = {
 
     if (file.size === 0) throw new Error('the uploaded file is empty');
     return (await import('../mocks/ingest.json')).default as unknown as IngestResponse;
+  },
+
+  /**
+   * The plan for one supplier: which queue it is in, what it would cost, and
+   * what would change the answer.
+   *
+   * Offline this reads the committed plan for that node — refresh_web_mocks.py
+   * commits one per node, produced by this same endpoint, so every node the
+   * graph can select has a real plan rather than a subset having one.
+   */
+  async derisk(nodeId: string, network?: NetworkOverride): Promise<DeriskPlan> {
+    if (LIVE) {
+      return post<DeriskPlan>('/api/derisk', { node_id: nodeId, ...overrideBody(network) });
+    }
+    const plans = network
+      ? ((await import('../mocks/ingest-derisk.json')).default as unknown as Record<string, DeriskPlan>)
+      : ((await import('../mocks/derisk.json')).default as unknown as Record<string, DeriskPlan>);
+    const plan = plans[nodeId];
+    if (!plan) {
+      throw new Error(
+        `no committed plan for ${nodeId}; re-run scripts/refresh_web_mocks.py`,
+      );
+    }
+    return plan;
+  },
+
+  /**
+   * Spread a budget across the ranked suppliers.
+   *
+   * Live, the engine probes each candidate and re-scores the chosen set. Mock
+   * mode replays the committed run for that exact budget — the stops are fixed
+   * for that reason, and an unlisted budget is a build-time mismatch rather
+   * than something to approximate with a neighbouring figure.
+   */
+  async allocate(budgetCr: number, network?: NetworkOverride): Promise<AllocateResponse> {
+    if (LIVE) {
+      return post<AllocateResponse>('/api/allocate', {
+        budget_cr: budgetCr,
+        ...overrideBody(network),
+      });
+    }
+    const runs = network
+      ? ((await import('../mocks/ingest-allocate.json')).default as unknown as AllocateResponse[])
+      : ((await import('../mocks/allocate.json')).default as unknown as AllocateResponse[]);
+    const run = runs.find((candidate) => candidate.budget_cr === budgetCr);
+    if (!run) {
+      throw new Error(
+        `no committed allocation for a ₹${budgetCr} cr budget; re-run scripts/refresh_web_mocks.py`,
+      );
+    }
+    return run;
+  },
+
+  /**
+   * Which supplier this mode can actually fund, or null for "any".
+   *
+   * Live, the engine will score any node, so funding is unrestricted. Offline
+   * there is exactly one committed /api/intervene response per network, and
+   * showing a Fund button that would replay somebody else's numbers is worse
+   * than showing a disabled one that says why.
+   */
+  async fundable(network?: NetworkOverride): Promise<string | null> {
+    if (LIVE) return null;
+    if (network) {
+      // The committed ingest intervention funds that network's own top-ranked
+      // supplier, read off the BEFORE ranking — after funding the order moves,
+      // so reading it from the result would name a different company.
+      const canned = (await import('../mocks/ingest.json'))
+        .default as unknown as IngestResponse;
+      return canned.ranking[0] ?? null;
+    }
+    return (await this.demoScenario()).intervention.node_id;
   },
 
   /**

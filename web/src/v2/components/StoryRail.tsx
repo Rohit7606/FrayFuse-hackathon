@@ -1,5 +1,5 @@
 /**
- * The demo's spine: seven ordered steps, each clickable so a question in the
+ * The demo's spine: eight ordered steps, each clickable so a question in the
  * Q&A does not force a restart.
  *
  * The numbers are here because this genuinely is a sequence and the order
@@ -23,6 +23,7 @@ export const STEPS = [
   { id: 'rank', name: 'Fragile × irreplaceable' },
   { id: 'path', name: 'Why this one matters' },
   { id: 'act', name: 'Fund it, then undo it' },
+  { id: 'allocate', name: 'Spread a budget' },
 ] as const;
 
 export type StepId = (typeof STEPS)[number]['id'];
