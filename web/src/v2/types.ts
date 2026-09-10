@@ -76,6 +76,19 @@ export interface ReasonFactor {
   weight: number;
 }
 
+/** One alternative supplier who could take over one relationship. */
+export interface SubstitutionCandidate {
+  node_id: string;
+  name: string;
+  component: string;
+  replaces_edge_id: string;
+  fitness: number;
+  fragility: number;
+  /** null means the candidate's revenue is undisclosed — unknown headroom, not zero. */
+  capacity_headroom_cr: number | null;
+  reason_text: string;
+}
+
 export interface Score {
   node_id: string;
   own_stress: number;
@@ -96,6 +109,15 @@ export interface Score {
   disruption_band?: RiskBand;
   disrupted_inflow_cr?: number;
   disruption_reason?: string;
+  /**
+   * Substitution, schema 1.3. THREE states, and they are three different facts
+   * (SCHEMA.md §4.6):
+   *   undefined / null — not considered: too critical, a confirmed sole source,
+   *                      sole-source status undisclosed, or supplies nobody
+   *   []               — considered, and nobody qualified
+   *   non-empty        — up to three alternatives, best fitness first
+   */
+  substitution_candidates?: SubstitutionCandidate[] | null;
 }
 
 export interface AnchorDisruption {

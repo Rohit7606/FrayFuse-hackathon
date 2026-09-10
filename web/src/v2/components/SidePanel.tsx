@@ -11,7 +11,7 @@
 
 import { BAND_COLOR, BAND_WASH, bandStyle } from '../lib/bands';
 import { cr, num, pct, score as fmtScore, shortName } from '../lib/format';
-import type { Delta, Meta, Node, RiskBand, Score, Summary } from '../types';
+import type { Delta, Meta, Node, RiskBand, Score, SubstitutionCandidate, Summary } from '../types';
 
 function Chip({ band }: { band: RiskBand | undefined }) {
   if (!band) return null;
@@ -161,6 +161,73 @@ export function RankList({
 
 // ---------------------------------------------------------------------------
 
+/**
+ * The other end of the criticality distribution.
+ *
+ * Three states, and they are three different facts (SCHEMA.md §4.6). The
+ * component renders all three rather than treating two of them as "nothing to
+ * show", because "we looked and found nobody" is a finding — on the real
+ * network it is the answer for every eligible node.
+ */
+function Alternatives({
+  candidates,
+  node,
+}: {
+  candidates: SubstitutionCandidate[] | null | undefined;
+  node: Node;
+}) {
+  // Not considered. The dossier stays silent rather than explaining an absence
+  // the reader did not ask about — for a critical supplier the whole panel is
+  // already saying it cannot be replaced.
+  if (candidates === null || candidates === undefined) return null;
+
+  return (
+    <section className="ff-alt">
+      <div className="ff-alt-head">
+        <h3 className="ff-alt-title">
+          {candidates.length > 0 ? 'Replaceable — alternatives exist' : 'Replaceable, but no alternative found'}
+        </h3>
+        <span className="ff-alt-fit">{candidates.length > 0 ? `${candidates.length} found` : '0 found'}</span>
+      </div>
+
+      {candidates.length === 0 ? (
+        <p className="ff-alt-note">
+          This supplier is not a chokepoint, so switching away from it is possible in principle —
+          but no other tier-{node.tier} supplier in this network makes the same part. Funding it is
+          not the only option; finding a second source is simply not something this dataset can
+          point at.
+        </p>
+      ) : (
+        <>
+          <p className="ff-alt-note">
+            Low criticality and no sole-source claim, so the volume could move. Ranked on the
+            candidate's own health and the revenue it has not already committed.
+          </p>
+          <div className="ff-alt-list">
+            {candidates.map((candidate) => (
+              <div className="ff-alt-row" key={`${candidate.node_id}-${candidate.replaces_edge_id}`}>
+                <div className="ff-alt-line">
+                  <span className="ff-alt-name">{candidate.name}</span>
+                  <span className="ff-alt-fit">fit {candidate.fitness.toFixed(2)}</span>
+                </div>
+                <div className="ff-alt-meta">
+                  {candidate.node_id} · {candidate.component.replace(/_/g, ' ')} ·{' '}
+                  {candidate.capacity_headroom_cr === null
+                    ? 'headroom undisclosed'
+                    : `${cr(candidate.capacity_headroom_cr)} spare`}
+                </div>
+                <p className="ff-alt-why">{candidate.reason_text}</p>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
+
 export function Dossier({
   node,
   score,
@@ -245,6 +312,8 @@ export function Dossier({
               <p className="ff-note">{score.disruption_reason}</p>
             </>
           )}
+
+          <Alternatives candidates={score.substitution_candidates} node={node} />
         </>
       )}
     </div>
