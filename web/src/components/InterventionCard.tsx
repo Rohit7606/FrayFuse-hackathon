@@ -8,6 +8,7 @@ interface AnchorDisruption {
 
 interface InterventionCardProps {
   delta: any;
+  nodes?: any[];
   /** summary.anchor_disruption[0] before and after funding — DEMO_SCENARIO.md §6. */
   anchorBefore?: AnchorDisruption;
   anchorAfter?: AnchorDisruption;
@@ -16,41 +17,80 @@ interface InterventionCardProps {
 
 export default function InterventionCard({
   delta,
+  nodes,
   anchorBefore,
   anchorAfter,
   onCounterfactual,
 }: InterventionCardProps) {
   if (!delta || !delta.per_node || delta.per_node.length === 0) return null;
-  
-  const targetNode = delta.per_node[0].node_id;
+
+  const nodeMap = new Map<string, any>();
+  if (nodes) nodes.forEach((n: any) => nodeMap.set(n.node_id, n));
 
   const formatINR = (valueCr: number) => {
-    if (valueCr >= 1) return `₹${valueCr.toFixed(1)}Cr`;
-    return `₹${(valueCr * 100).toFixed(0)}L`;
+    if (valueCr >= 1) return `₹${valueCr.toFixed(1)} cr`;
+    return `₹${(valueCr * 100).toFixed(0)} L`;
+  };
+
+  const bandColor: Record<string, string> = {
+    critical: 'var(--accent-red)',
+    high: 'var(--accent-amber)',
+    watch: 'var(--accent-blue)',
+    stable: 'var(--accent-green)',
   };
 
   return (
     <div className="panel-section">
-      <div className="panel-section-title">Intervention</div>
+      <div className="panel-section-title">Intervention Results</div>
       <div className="intervention-card">
-        <div className="intervention-header">
-          <div className="intervention-icon pay">₹</div>
-          <div>
-            <div className="intervention-title">Intervene: {targetNode}</div>
-            <div className="intervention-desc">Stabilise supplier with early payment (₹{delta.total_intervention_cost_cr.toFixed(1)} Cr)</div>
+        {/* Summary stats */}
+        <div className="intervention-summary-row">
+          <div className="intervention-stat">
+            <div className="intervention-stat-value green">{delta.nodes_improved}</div>
+            <div className="intervention-stat-label">Suppliers improved</div>
+          </div>
+          <div className="intervention-stat">
+            <div className="intervention-stat-value">{delta.nodes_worsened}</div>
+            <div className="intervention-stat-label">Worsened</div>
           </div>
         </div>
+
         <div className="intervention-comparison">
           <div className="comparison-box cost">
-            <div className="comparison-label">Intervention Cost</div>
+            <div className="comparison-label">Capital Deployed</div>
             <div className="comparison-value green">{formatINR(delta.total_intervention_cost_cr)}</div>
           </div>
-          <div className="comparison-vs">vs</div>
+          <div className="comparison-vs">→</div>
           <div className="comparison-box exposure">
-            <div className="comparison-label">Exposure if No Action</div>
-            <div className="comparison-value red">{formatINR(delta.total_exposure_reduced_cr)}</div>
+            <div className="comparison-label">Exposure Reduced</div>
+            <div className="comparison-value blue">{formatINR(delta.total_exposure_reduced_cr)}</div>
           </div>
         </div>
+
+        {/* Per-node band transitions */}
+        <div className="intervention-transitions">
+          {delta.per_node.map((pn: any) => {
+            const nodeName = nodeMap.get(pn.node_id)?.name || pn.node_id;
+            return (
+              <div key={pn.node_id} className="transition-row">
+                <div className="transition-name">{nodeName.length > 25 ? nodeName.substring(0, 23) + '…' : nodeName}</div>
+                <div className="transition-bands">
+                  <span className="transition-band" style={{ color: bandColor[pn.band_before] || '#9aa0b0' }}>
+                    {pn.band_before}
+                  </span>
+                  <span className="transition-arrow">→</span>
+                  <span className="transition-band" style={{ color: bandColor[pn.band_after] || '#9aa0b0' }}>
+                    {pn.band_after}
+                  </span>
+                </div>
+                <div className="transition-fragility">
+                  {pn.fragility_before.toFixed(2)} → {pn.fragility_after.toFixed(2)}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
         {anchorBefore && anchorAfter && (
           /* The closing beat. Payment stress alone can never reach the anchor —
              it is the top buyer, so nothing propagates into it. This is the
@@ -58,8 +98,8 @@ export default function InterventionCard({
              and how much of that the funding takes off the table. */
           <div className="anchor-beat">
             <div className="comparison-label">
-              Anchor supply at risk &mdash; {anchorBefore.node_id}
-              {anchorBefore.stopped_by ? ` via ${anchorBefore.stopped_by}` : ''}
+              Anchor supply at risk &mdash; {nodeMap.get(anchorBefore.node_id)?.name || anchorBefore.node_id}
+              {anchorBefore.stopped_by ? ` via ${nodeMap.get(anchorBefore.stopped_by)?.name || anchorBefore.stopped_by}` : ''}
             </div>
             <div className="anchor-beat-values">
               <span className="comparison-value red">{formatINR(anchorBefore.disrupted_inflow_cr)}</span>

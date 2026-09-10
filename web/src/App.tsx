@@ -5,6 +5,7 @@ import NetworkGraph from './components/NetworkGraph';
 import RankedList from './components/RankedList';
 import HeaderBar from './components/HeaderBar';
 import InterventionCard from './components/InterventionCard';
+import BudgetAllocator from './components/BudgetAllocator';
 import './index.css';
 
 function App() {
@@ -59,10 +60,7 @@ function App() {
   const handleIntervene = async () => {
     try {
       // DEMO_SCENARIO.md §8: read the node and amount from the fixture rather
-      // than hardcoding them here. This sent an EMPTY interventions array,
-      // which mock mode hid because it returns a pre-baked intervene.json —
-      // against the live API it funded nothing and before/after came back
-      // identical.
+      // than hardcoding them here.
       const data = await apiClient.intervene(
         { stress_overrides: [], interventions: [] },
         [demoScenario.intervention]
@@ -74,6 +72,34 @@ function App() {
     }
   };
 
+  /** Fund a single node — triggered from the ranked list's "Fund Supplier" button. */
+  const handleFundNode = async (nodeId: string, amountCr: number) => {
+    try {
+      const data = await apiClient.intervene(
+        { stress_overrides: [], interventions: [] },
+        [{ node_id: nodeId, amount_cr: amountCr }]
+      );
+      setInterveneData(data);
+      setSimulationState('intervened');
+    } catch (err) {
+      console.error('Fund node failed:', err);
+    }
+  };
+
+  /** Deploy a multi-node budget allocation — triggered from BudgetAllocator. */
+  const handleDeployBudget = async (allocations: Array<{ node_id: string; amount_cr: number }>) => {
+    try {
+      const data = await apiClient.intervene(
+        { stress_overrides: [], interventions: [] },
+        allocations
+      );
+      setInterveneData(data);
+      setSimulationState('intervened');
+    } catch (err) {
+      console.error('Deploy budget failed:', err);
+    }
+  };
+
   const handleReset = () => {
     setSimulationState('idle');
     setInterveneData(null);
@@ -82,17 +108,6 @@ function App() {
 
   const stats = useMemo(() => {
     // Read summary.band_counts rather than re-deriving bands from final_score.
-    //
-    // This used to count `final_score > 0.6` as critical and `> 0.3` as
-    // stressed, which were the ORIGINAL thresholds. Schema 1.1 recalibrated
-    // them to 0.20 / 0.06 / 0.012 because the model's real range is far
-    // narrower — nothing in the network scores above 0.21 — so both counters
-    // were permanently zero and the header read "412 Healthy, 0 Stressed,
-    // 0 Critical" while the engine was flagging a critical supplier.
-    //
-    // The engine bands every node from engine/config.py and reports the totals
-    // in summary.band_counts. That covers all 412 nodes, where `scores` here
-    // holds only the ranked top ten, so this is both correct and complete.
     const summary = (simulationState === 'intervened' && interveneData?.after?.summary)
       ? interveneData.after.summary
       : atRiskData?.summary;
@@ -108,12 +123,6 @@ function App() {
   }, [atRiskData, interveneData, simulationState]);
 
   // The worst-hit anchor before funding, and THE SAME anchor after.
-  //
-  // summary.anchor_disruption is sorted by disruption descending, and the
-  // order changes once the intervention lands: N001 leads at 0.1076 before,
-  // but afterwards N251 (0.0394) edges past N001 (0.0392). Taking [0] from
-  // each list would pair one anchor's "before" with another's "after" and
-  // print a number that belongs to neither.
   const anchorBeat = useMemo(() => {
     const before = interveneData?.before?.summary?.anchor_disruption?.[0];
     if (!before) return {};
@@ -126,7 +135,6 @@ function App() {
   const graphData = useMemo(() => {
     if (!networkData) return null;
     if (simulationState === 'intervened' && interveneData?.after) {
-      // In intervened state, the nodes/edges might be identical but we want the updated scores
       return {
         ...networkData,
         scores: interveneData.after.scores
@@ -206,7 +214,7 @@ function App() {
           </div>
 
           <div className="panel-section">
-            <div className="panel-section-title">Fragile & Critical Suppliers</div>
+            <div className="panel-section-title">Fragile &amp; Critical Suppliers</div>
             {loading ? (
               <div style={{ color: 'var(--text-secondary)' }}>Loading...</div>
             ) : (
@@ -215,13 +223,27 @@ function App() {
                 nodes={networkData?.nodes} 
                 simulationState={simulationState}
                 currentWave={currentWave}
+                onFundNode={handleFundNode}
               />
             )}
           </div>
 
+          {/* Budget Allocator — visible after cascade completes */}
+          {simulationState === 'cascaded' && (
+            <div className="panel-section">
+              <div className="panel-section-title">Budget Optimizer</div>
+              <BudgetAllocator
+                scores={atRiskData?.scores}
+                nodes={networkData?.nodes}
+                onDeployBudget={handleDeployBudget}
+              />
+            </div>
+          )}
+
           {simulationState === 'intervened' && interveneData?.delta && (
             <InterventionCard 
-              delta={interveneData.delta} 
+              delta={interveneData.delta}
+              nodes={networkData?.nodes}
               {...anchorBeat}
               onCounterfactual={() => setSimulationState('cascaded')}
             />
