@@ -22,6 +22,7 @@ from fastapi.responses import JSONResponse
 UNKNOWN_NODE = "unknown_node"
 INVALID_SCENARIO = "invalid_scenario"
 ENGINE_FAILURE = "engine_failure"
+INVALID_UPLOAD = "invalid_upload"
 
 
 def unknown_node(node_id: str) -> JSONResponse:
@@ -61,4 +62,18 @@ def engine_failure(detail: str) -> JSONResponse:
     return JSONResponse(
         status_code=500,
         content={"error": ENGINE_FAILURE, "detail": detail},
+    )
+
+
+def invalid_upload(detail: str) -> JSONResponse:
+    """422 — an uploaded archive that cannot produce a network.
+
+    422 rather than 400 because the request itself is well-formed: it is the
+    entity inside it that cannot be processed. The detail always names the file
+    or the missing CSVs, because the person reading it is standing in front of
+    an audience with the wrong zip selected.
+    """
+    return JSONResponse(
+        status_code=422,
+        content={"error": INVALID_UPLOAD, "detail": detail},
     )

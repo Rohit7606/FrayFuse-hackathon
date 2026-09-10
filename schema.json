@@ -1017,8 +1017,10 @@
           "enum": [
             "unknown_node",
             "invalid_scenario",
-            "engine_failure"
-          ]
+            "engine_failure",
+            "invalid_upload"
+          ],
+          "description": "invalid_upload is returned with 422 by POST /api/ingest for anything wrong with an uploaded archive - unreadable zip, a member escaping the extraction directory, an oversized archive, or no recognisable collection CSVs. It always names the file. A bad upload is never a 500."
         },
         "detail": {
           "type": "string"
