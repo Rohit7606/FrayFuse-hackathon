@@ -29,11 +29,10 @@ Every feature must serve that sentence. If a proposed feature does not, do not b
 | **Any machine-learning model** | A transparent propagation rule that can be explained in one sentence beats a trained model that cannot be justified. At our data volumes ML would be theatre. The depth is in the graph, not in fitting anything |
 | **Blockchain / distributed ledger** | Solves nothing here |
 | **Login, auth, user accounts, RBAC** | Stakeholder views are a client-side toggle |
-| **Document upload, OCR, PDF parsing at runtime** | Data arrives pre-extracted. Live parsing adds demo failure risk and zero value |
 | **Real-time streaming, websockets, background jobs** | Everything is batch and stateless |
 | **Mobile app** | No |
 | **Database servers (Postgres, Mongo, Redis)** | JSON files on disk. A database adds operational risk, not capability |
-| **LLM calls at runtime** | Reason strings are template-generated and deterministic |
+| **LLM calls anywhere in scoring** | Reason strings are template-generated and deterministic. Still absolute inside `engine/` — see §1.5 for the one bounded exception in the ingestion path |
 | **Dataset collection or research** | Handled entirely outside this repo. See §1.4 |
 
 If asked to implement anything on this list, **stop and ask why** before writing code.
@@ -53,6 +52,20 @@ Node IDs, amounts and the exact sequence are fixed in that file. Do not invent a
 All three tracks build against **mock data** generated locally, conforming to the frozen contract in `SCHEMA.md`. When the real dataset arrives it will be transformed into the identical runtime shape, so swapping it in is a file-path change and nothing else.
 
 If a session drifts toward "let me look up the real numbers for X" — stop. That is out of scope for this repo.
+
+### 1.5 Ingestion — added for the judged demo
+
+Document upload was on the §1.2 ruled-out list. It has been moved here deliberately, not drifted into: the hackathon judges asked to see the multi-level graph built live from uploaded source documents rather than read from a pre-committed JSON file. That is the reason, and it is the only reason.
+
+**In scope.** A user uploads a zip of filing data they already have. `engine/ingest.py` unpacks it offline, hands the CSVs to `engine/transform.py` — still the only place that knows about CSVs (§7) — validates the result against `schema.json`, and scores it. Nothing else changes: the same `score_network()`, the same contract, the same numbers.
+
+**Out of scope, and unchanged.** Scraping. Live external lookups. Any network egress at runtime. §1.4 is not relaxed by this: uploaded files come from the user, and this repo still never goes and fetches anything. An ingestion path that reached out to a registry or a filings site would be exactly the collection work §1.4 puts outside this repo.
+
+**LLM calls stay ruled out for scoring.** If extraction ever needs one, it runs only in the ingestion path, never inside `engine/`, and it writes its output to a CSV on disk so that everything downstream of it is deterministic and re-runnable. Reason strings remain template-generated. As built, the ingestion path uses no LLM at all — the CSV route is the whole implementation.
+
+**Streaming stays ruled out.** `score_network()` remains a pure function over a complete network (§3.1). The graph appearing to build tier by tier is a presentation-layer animation over a result that was computed in full before the first node was drawn. The engine never emits partial results.
+
+**The committed network remains the default and the fallback.** `data/mock/network.json` is what the API serves with no upload, and the demo must run end to end without anyone uploading anything.
 
 ---
 
@@ -419,4 +432,5 @@ If step 5 turns out to be false, the contract was wrong — fix the contract, no
 
 | Version | Change |
 |---|---|
+| 1.1 | **Ingestion admitted to scope (§1.5).** Document upload moved off the §1.2 ruled-out list at the judges' request: the graph is to be built live from uploaded filings rather than read from a committed JSON file. Scraping, live lookups and runtime network egress remain out of scope, and §1.4 is unchanged. LLM calls stay ruled out for scoring and inside `engine/`; the ingestion path as built uses none. Streaming stays ruled out — `score_network()` stays pure and the tier-by-tier build is a presentation-layer animation over a completed result |
 | 1.0 | Initial. Project renamed ChainWatch → FrayFuse |
