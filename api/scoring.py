@@ -16,6 +16,10 @@ from typing import Any
 
 from api.adapters import to_engine_scenario
 from api.models import Intervention, Scenario
+from engine import allocation as allocation_mod
+from engine import config as engine_config
+from engine import triage as triage_mod
+from engine.graph import build_graph
 from engine.pipeline import UnknownNodeError, score_network
 
 _baseline_cache: dict[str, Any] | None = None
@@ -83,3 +87,52 @@ def intervene(
     )
 
     return score_network(network, engine_baseline), score_network(network, engine_after)
+
+
+def derisk(
+    network: dict[str, Any],
+    node_id: str,
+    scenario: Scenario,
+) -> dict[str, Any]:
+    """The de-risking plan for one supplier under one scenario.
+
+    One scoring run, then a restatement of what it produced — the plan reads
+    figures, it does not compute new ones. The scenario is honoured so that a
+    plan built while the what-if slider is off its baseline describes the
+    network the caller is actually looking at.
+    """
+    if node_id not in {node["node_id"] for node in network["nodes"]}:
+        raise UnknownNodeError(node_id)
+    validate_node_ids(scenario, network)
+
+    scored = score_network(network, to_engine_scenario(scenario))
+    scores_by_id = {row["node_id"]: row for row in scored["scores"]}
+
+    return triage_mod.build_plan(
+        build_graph(network),
+        network,
+        scores_by_id[node_id],
+        scores_by_id,
+        set(scored["summary"]["stressed_origin_nodes"]),
+    )
+
+
+def allocate(
+    network: dict[str, Any],
+    budget_cr: float,
+    baseline_scenario: Scenario,
+    max_candidates: int | None = None,
+) -> dict[str, Any]:
+    """Spread a budget across the ranked suppliers.
+
+    Never cached: the budget varies, and a cached allocation would be a plan for
+    somebody else's money. Costs one scoring run per probed candidate plus a
+    baseline and a joint re-score — see engine/allocation.py.
+    """
+    validate_node_ids(baseline_scenario, network)
+    return allocation_mod.allocate_budget(
+        network,
+        budget_cr,
+        to_engine_scenario(baseline_scenario),
+        pool_size=max_candidates or engine_config.ALLOCATION_CANDIDATE_POOL,
+    )

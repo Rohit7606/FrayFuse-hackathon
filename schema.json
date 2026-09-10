@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "FrayFuse Runtime Contract",
-  "schemaVersion": "1.1",
+  "schemaVersion": "1.4",
   "description": "Machine-readable contract for FrayFuse runtime input and output. See SCHEMA.md for prose and rationale.",
   "definitions": {
     "NodeId": {
@@ -474,6 +474,59 @@
         }
       }
     },
+    "SubstitutionCandidate": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "name",
+        "component",
+        "replaces_edge_id",
+        "fitness",
+        "fragility",
+        "capacity_headroom_cr",
+        "reason_text"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "node_id": {
+          "$ref": "#/definitions/NodeId"
+        },
+        "name": {
+          "type": "string"
+        },
+        "component": {
+          "type": "string",
+          "description": "The part this candidate already makes and would take over."
+        },
+        "replaces_edge_id": {
+          "$ref": "#/definitions/EdgeId"
+        },
+        "fitness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Weighted health and capacity. Capacity is dropped and the weight renormalised onto health where the candidate's revenue is undisclosed."
+        },
+        "fragility": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "capacity_headroom_cr": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "description": "Revenue not already committed to existing customers. null means the candidate's revenue is undisclosed, which is unknown headroom, NOT zero headroom."
+        },
+        "reason_text": {
+          "type": "string",
+          "minLength": 10,
+          "description": "Template-generated and deterministic, like Score.reason_text. Never an LLM."
+        }
+      }
+    },
     "Score": {
       "type": "object",
       "required": [
@@ -535,6 +588,17 @@
           ],
           "minimum": 1
         },
+        "substitution_candidates": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/definitions/SubstitutionCandidate"
+          },
+          "description": "OPTIONAL, additive in 1.3. null means substitution was NOT CONSIDERED for this node - it is too critical, it is a confirmed sole source, its sole-source status is undisclosed, or it supplies nothing. An EMPTY ARRAY means it WAS considered and no same-tier supplier of the same component was found. The two are different facts and must never be collapsed, for the same reason null and 0.0 are kept apart everywhere else in this contract."
+        },
         "reason_text": {
           "type": "string",
           "minLength": 10
@@ -578,6 +642,17 @@
         "disruption_reason": {
           "type": "string",
           "minLength": 10
+        },
+        "triage_queue": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/TriageQueue"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "OPTIONAL, additive in 1.4. The queue this supplier belongs in. Output-only; NetworkInput is untouched and no score, band or ranking changes. null only where the producer did not classify."
         }
       }
     },
@@ -906,38 +981,7 @@
           "$ref": "#/definitions/ScoredNetwork"
         },
         "delta": {
-          "type": "object",
-          "required": [
-            "nodes_improved",
-            "nodes_worsened",
-            "total_exposure_reduced_cr",
-            "total_intervention_cost_cr",
-            "per_node"
-          ],
-          "additionalProperties": false,
-          "properties": {
-            "nodes_improved": {
-              "type": "integer",
-              "minimum": 0
-            },
-            "nodes_worsened": {
-              "type": "integer",
-              "minimum": 0
-            },
-            "total_exposure_reduced_cr": {
-              "type": "number"
-            },
-            "total_intervention_cost_cr": {
-              "type": "number",
-              "minimum": 0
-            },
-            "per_node": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/PerNodeDelta"
-              }
-            }
-          }
+          "$ref": "#/definitions/Delta"
         }
       }
     },
@@ -953,8 +997,10 @@
           "enum": [
             "unknown_node",
             "invalid_scenario",
-            "engine_failure"
-          ]
+            "engine_failure",
+            "invalid_upload"
+          ],
+          "description": "invalid_upload is returned with 422 by POST /api/ingest for anything wrong with an uploaded archive - unreadable zip, a member escaping the extraction directory, an oversized archive, or no recognisable collection CSVs. It always names the file. A bad upload is never a 500."
         },
         "detail": {
           "type": "string"
@@ -1050,6 +1096,549 @@
           ]
         }
       }
+    },
+    "TriageQueue": {
+      "type": "string",
+      "enum": [
+        "fund_now",
+        "derisk",
+        "monitor",
+        "clear",
+        "origin"
+      ],
+      "description": "Which queue a supplier belongs in - a DECISION, not a score. fund_now: fragile AND irreplaceable. derisk: fragile but relatively replaceable - watch and second-source rather than fund. monitor: stress has reached it but it is not yet fragile, or it is a solvent chokepoint. clear: nothing meaningful reached it. origin: the stress starts here, so it is a diagnosis and not a rescue target, for the same reason ranking excludes origins. Not derivable from risk_band: fragility 0.35 x criticality 0.20 and fragility 0.10 x criticality 0.70 are the same final_score and the opposite response."
+    },
+    "Delta": {
+      "type": "object",
+      "required": [
+        "nodes_improved",
+        "nodes_worsened",
+        "total_exposure_reduced_cr",
+        "total_intervention_cost_cr",
+        "per_node"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "nodes_improved": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "nodes_worsened": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total_exposure_reduced_cr": {
+          "type": "number"
+        },
+        "total_intervention_cost_cr": {
+          "type": "number",
+          "minimum": 0
+        },
+        "per_node": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PerNodeDelta"
+          }
+        }
+      }
+    },
+    "TriageStatus": {
+      "type": "object",
+      "required": [
+        "kind",
+        "verdict",
+        "detail"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "fragility",
+            "replaceability"
+          ]
+        },
+        "verdict": {
+          "type": "string",
+          "enum": [
+            "fragile",
+            "holding",
+            "irreplaceable",
+            "replaceable"
+          ]
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 10
+        }
+      },
+      "description": "One of the two readings behind a queue, stated separately rather than collapsed into a single adjective."
+    },
+    "ReviewTrigger": {
+      "type": "object",
+      "required": [
+        "metric",
+        "current",
+        "threshold",
+        "detail"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "metric": {
+          "type": "string",
+          "enum": [
+            "fragility",
+            "criticality",
+            "alternatives",
+            "buyer_own_stress"
+          ]
+        },
+        "current": {
+          "type": "number"
+        },
+        "threshold": {
+          "type": "number"
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 10
+        }
+      },
+      "description": "A threshold that, once crossed, moves a watched supplier into the funding queue. A threshold that cannot be reached is never emitted - the plan falls back to a lower band, or to the buyer, rather than stating a trigger that can never fire."
+    },
+    "PlanDependency": {
+      "type": "object",
+      "required": [
+        "buyer_id",
+        "buyer_name",
+        "edge_id",
+        "component",
+        "exposure_pct",
+        "annual_value_cr",
+        "buyer_is_stressed_origin",
+        "buyer_own_stress",
+        "buyer_fragility"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "buyer_id": {
+          "$ref": "#/definitions/NodeId"
+        },
+        "buyer_name": {
+          "type": "string"
+        },
+        "edge_id": {
+          "$ref": "#/definitions/EdgeId"
+        },
+        "component": {
+          "type": "string"
+        },
+        "exposure_pct": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "annual_value_cr": {
+          "type": "number"
+        },
+        "buyer_is_stressed_origin": {
+          "type": "boolean"
+        },
+        "buyer_own_stress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "buyer_fragility": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "description": "The buyer this supplier most depends on for revenue, chosen by exposure then value then edge_id - the same tiebreak the dependency path walks, so the plan names the buyer that appears on the chain."
+    },
+    "RecommendedAction": {
+      "type": "object",
+      "required": [
+        "kind",
+        "label"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "fund",
+            "derisk",
+            "monitor",
+            "none"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "amount_cr": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "description": "null where money is not the answer. That is a different fact from 0.00, and the two are kept apart here for the same reason they are kept apart everywhere else in this contract."
+        }
+      }
+    },
+    "DeriskPlan": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "name",
+        "tier",
+        "queue",
+        "queue_label",
+        "headline",
+        "fragility",
+        "criticality",
+        "final_score",
+        "risk_band",
+        "status",
+        "exposure_at_risk_cr",
+        "stabilisation_cost_cr",
+        "inherited_share",
+        "review_triggers",
+        "actions",
+        "recommended_action"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "node_id": {
+          "$ref": "#/definitions/NodeId"
+        },
+        "name": {
+          "type": "string"
+        },
+        "tier": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "queue": {
+          "$ref": "#/definitions/TriageQueue"
+        },
+        "queue_label": {
+          "type": "string"
+        },
+        "headline": {
+          "type": "string",
+          "minLength": 10
+        },
+        "fragility": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "criticality": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "final_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "risk_band": {
+          "$ref": "#/definitions/RiskBand"
+        },
+        "status": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TriageStatus"
+          }
+        },
+        "exposure_at_risk_cr": {
+          "type": "number"
+        },
+        "stabilisation_cost_cr": {
+          "type": "number"
+        },
+        "inherited_share": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "alternatives_found": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "description": "null means substitution was NOT CONSIDERED for this node; 0 means it was and nobody qualified. The same distinction as substitution_candidates (SCHEMA.md 4.6), and it must not be collapsed."
+        },
+        "dependency": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/PlanDependency"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "review_triggers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ReviewTrigger"
+          }
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "recommended_action": {
+          "$ref": "#/definitions/RecommendedAction"
+        }
+      },
+      "description": "What to do about one supplier and what would change the answer. Template-generated and deterministic: every string is filled from figures the same response carries."
+    },
+    "DeriskRequest": {
+      "type": "object",
+      "required": [
+        "node_id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "node_id": {
+          "$ref": "#/definitions/NodeId"
+        },
+        "scenario": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/Scenario"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "network": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/NetworkInput"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "Allocation": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "name",
+        "amount_cr",
+        "cost_cr",
+        "coverage",
+        "measured_benefit_cr",
+        "efficiency",
+        "exposure_at_risk_cr",
+        "fragility_before",
+        "fragility_after",
+        "band_before",
+        "band_after"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "node_id": {
+          "$ref": "#/definitions/NodeId"
+        },
+        "name": {
+          "type": "string"
+        },
+        "rank": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "amount_cr": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cost_cr": {
+          "type": "number",
+          "minimum": 0
+        },
+        "coverage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "measured_benefit_cr": {
+          "type": "number",
+          "description": "Anchor inflow at risk removed with this supplier funded ALONE. Suppliers on the same chain each get credit for relieving it, so these can sum to more than objective.reduced_cr - which is the joint figure and the one to quote."
+        },
+        "efficiency": {
+          "type": "number"
+        },
+        "exposure_at_risk_cr": {
+          "type": "number"
+        },
+        "fragility_before": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "fragility_after": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "band_before": {
+          "$ref": "#/definitions/RiskBand"
+        },
+        "band_after": {
+          "$ref": "#/definitions/RiskBand"
+        }
+      }
+    },
+    "AllocationObjective": {
+      "type": "object",
+      "required": [
+        "metric",
+        "before_cr",
+        "after_cr",
+        "reduced_cr"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "metric": {
+          "type": "string",
+          "enum": [
+            "anchor_inflow_at_risk_cr"
+          ]
+        },
+        "before_cr": {
+          "type": "number"
+        },
+        "after_cr": {
+          "type": "number"
+        },
+        "reduced_cr": {
+          "type": "number"
+        }
+      },
+      "description": "What the allocation was optimised against: the sum of disrupted_inflow_cr across every tier-0 anchor - the rupees of inbound supply that stop arriving at the top of the chain."
+    },
+    "AllocateRequest": {
+      "type": "object",
+      "required": [
+        "budget_cr"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "budget_cr": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "baseline_scenario": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/Scenario"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "network": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/NetworkInput"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "max_candidates": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 20,
+          "description": "How many ranked suppliers to probe. Each probe is a full scoring run, so this is the cost of the request - bounded rather than free."
+        }
+      }
+    },
+    "AllocateResponse": {
+      "type": "object",
+      "required": [
+        "budget_cr",
+        "allocated_cr",
+        "unallocated_cr",
+        "objective",
+        "allocations",
+        "candidates_considered",
+        "scoring_runs",
+        "note",
+        "delta",
+        "summary_before",
+        "summary_after"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "budget_cr": {
+          "type": "number",
+          "minimum": 0
+        },
+        "allocated_cr": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unallocated_cr": {
+          "type": "number",
+          "minimum": 0
+        },
+        "objective": {
+          "$ref": "#/definitions/AllocationObjective"
+        },
+        "allocations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Allocation"
+          }
+        },
+        "candidates_considered": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NodeId"
+          }
+        },
+        "scoring_runs": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "note": {
+          "type": "string"
+        },
+        "delta": {
+          "$ref": "#/definitions/Delta"
+        },
+        "summary_before": {
+          "$ref": "#/definitions/Summary"
+        },
+        "summary_after": {
+          "$ref": "#/definitions/Summary"
+        }
+      },
+      "description": "Deliberately does NOT carry the before/after ScoredNetwork pair that InterveneResponse returns. The allocation is read as a plan plus its effect; two full networks would repeat nodes and edges the client already holds, and delta plus the two summaries carry everything the comparison needs."
     }
   },
   "examples": {

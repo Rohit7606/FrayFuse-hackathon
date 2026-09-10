@@ -235,7 +235,73 @@ If a model tuning change breaks these assertions, that is the system working. Ei
 
 ---
 
-## 9. Naming note
+## 9. The live build, and what to do when it fails
+
+Shared ownership — this section was added with ingestion (AGENTS.md §1.5) and
+touches all three tracks.
+
+### 9.1 The opening
+
+The console opens on the **build page**, not on the walkthrough. Upload a zip of
+the collection CSVs — the whole `data/real` folder zipped is exactly right, and
+the markdown and the committed `network.json` inside it are ignored rather than
+refused. The archive is unpacked, transformed, validated and scored in one pass
+on the server; the page then reveals that result, in the order the work
+happened, and builds the graph tier by tier from the anchors down.
+
+**Say what it is.** The page states on screen that the figures are results being
+revealed rather than a progress bar, because they are. If a judge asks whether
+the engine streams: it does not, and it must not — `score_network()` is a pure
+function over a complete network (§3.1), which is what makes the two-run
+determinism check possible at all.
+
+Then **Open the console**, and the seven-step walkthrough runs on the network
+that was just built. Its trigger, its top-ranked supplier and its funding amount
+all come from the engine's own output rather than from
+`data/fixtures/demo_scenario.json` — the fixture's node IDs describe the mock
+network and do not exist in an uploaded one.
+
+### 9.2 Recovery — read this before going on stage
+
+**If the upload fails, do not retry it in front of the audience.**
+
+Press **Use committed network** in the top right of the build page. The console
+opens immediately on `data/mock/network.json`, the walkthrough is exactly the
+one documented in §2 to §6 of this file, and every figure quoted there still
+holds. Nothing about the rehearsed demo depends on ingestion succeeding.
+
+The same control is available before any upload, so the fallback is one click
+from the opening screen and needs no explanation to reach.
+
+Two failure modes worth recognising:
+
+| What you see | What it is | What to do |
+|---|---|---|
+| A red line under the drop zone naming a file | A 422 — wrong archive, or one missing a required CSV | Read it out; it names the file. Then use the committed network |
+| The page sits on "Reading…" | The API is not running | Use the committed network. `npm run dev` alone serves the committed ingest response, so the build animation still plays |
+
+### 9.3 What the figures are on the real collection
+
+Quote these only if you actually uploaded `data/real`. The mock network's
+figures in §5 are the rupee-for-rupee ones and do not apply here.
+
+| | |
+|---|---|
+| Files in the archive | 11, of which 5 are recognised collection CSVs |
+| Companies read | 43 real filers |
+| Generated beneath them | 255 nodes, fictional entity pool, marked in the graph |
+| Network built | 298 nodes, 302 edges |
+| Fields disclosed | 618 filled against 440 left blank |
+| Companies with enough to score | 14 of 298 |
+
+That last pair is the line worth landing: **440 fields across these filings say
+nothing at all, and 284 of the 298 companies publish nothing an anchor could
+read.** That is not a gap in the collection — it is the problem the product
+exists for, and the graph is mostly dark because the chain is.
+
+---
+
+## 10. Naming note
 
 All company names here are **fictional**, constructed for the mock network. They are deliberately plausible rather than obviously fake — anonymous placeholders like `Company_47` make the whole demo read as a toy.
 
@@ -243,7 +309,7 @@ When the real dataset lands, real listed companies appear at tiers 0–1 with `d
 
 ---
 
-## 10. Changelog
+## 11. Changelog
 
 | Version | Change |
 |---|---|

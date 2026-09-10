@@ -12,27 +12,46 @@
  *   05 RANK        the supplier to rescue is not the one that started it
  *   06 PATH        and this is the chain by which it reaches the anchor
  *   07 ACT         fund it, measure it, then turn the funding off
+ *   08 ALLOCATE    and when the money is finite and several are failing,
+ *                  decide where it goes
  *
  * Every figure on screen came from engine/ through api/. This file sequences
  * and arranges; it does not compute a risk number, and the cascade it animates
  * is the engine's own `propagation_depth`, revealed in order.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import './console.css';
-import { STRESS_LEVELS, api, type StressStep } from './api';
-import { CHROME } from './lib/bands';
-import { anchorAtRisk, buildIndex, buildWaves, dependencyPath, scoresById } from './lib/derive';
-import { cr, num, pct } from './lib/format';
+import { BUDGET_LEVELS, STRESS_LEVELS, api, type StressStep } from './api';
+import { PAPER } from './lib/bands';
+import {
+  anchorAtRisk,
+  buildIndex,
+  buildWaves,
+  dependencyPath,
+  pickTrigger,
+  scoresById,
+} from './lib/derive';
+import { cr, num, pct, shortName } from './lib/format';
 import EvidenceSheet from './components/EvidenceSheet';
 import GraphStage, { type StageMode } from './components/GraphStage';
+import {
+  BudgetPanel,
+  DeriskPanel,
+  QueueBoard,
+  WatchQueue,
+} from './components/DecisionPanel';
 import { Dossier, NetworkStats, Outcome, RankList, RiskStats } from './components/SidePanel';
 import StoryRail, { STEPS, type StepId } from './components/StoryRail';
 import WhatIfBar from './components/WhatIfBar';
 import type {
+  AllocateResponse,
   DemoScenario,
+  DeriskPlan,
+  IngestResponse,
   InterveneResponse,
   NetworkPayload,
+  RiskBand,
   ScoredNetwork,
 } from './types';
 
@@ -44,21 +63,39 @@ const STEP_INDEX = new Map(STEPS.map((step, index) => [step.id, index]));
 function BrandMark() {
   return (
     <svg className="ff-brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      {/* One anchor, two tiers, a frayed strand. The logo is the product. */}
-      <circle cx="12" cy="4" r="2.4" fill={CHROME.limeDeep} />
-      <circle cx="5" cy="13" r="1.8" fill={CHROME.ink} opacity="0.55" />
-      <circle cx="19" cy="13" r="1.8" fill={CHROME.ink} opacity="0.55" />
-      <circle cx="12" cy="21" r="2.2" fill="#D9315C" />
-      <path d="M12 6.4 5 11.2M12 6.4l7 4.8" stroke={CHROME.ink} strokeWidth="1" opacity="0.35" />
-      <path d="M5 14.8 12 18.8M19 14.8 12 18.8" stroke="#D9315C" strokeWidth="1.2" opacity="0.75" />
+      {/* An anchor at the top, two tiers below it, and one strand that has
+          parted. The mark is the argument. */}
+      <circle cx="12" cy="4" r="2.3" fill={PAPER.forest} />
+      <circle cx="5" cy="13" r="1.7" fill={PAPER.ink} opacity="0.4" />
+      <circle cx="19" cy="13" r="1.7" fill={PAPER.ink} opacity="0.4" />
+      <circle cx="12" cy="21" r="2.1" fill="#8E1230" />
+      <path d="M12 6.3 5 11.3M12 6.3l7 5" stroke={PAPER.ink} strokeWidth="1" opacity="0.28" />
+      <path d="M5 14.7 12 18.9" stroke="#8E1230" strokeWidth="1.3" />
+      <path d="M19 14.7 16 16.5" stroke="#8E1230" strokeWidth="1.3" opacity="0.5" />
     </svg>
   );
 }
 
-export default function Console() {
-  const [network, setNetwork] = useState<NetworkPayload | null>(null);
-  const [baseline, setBaseline] = useState<ScoredNetwork | null>(null);
+interface Props {
+  /**
+   * A network built on the build page. When present the console reads it
+   * instead of the committed mocks, and every scenario request carries it —
+   * which is what keeps ingestion stateless (SCHEMA.md 5.6).
+   */
+  ingested: IngestResponse | null;
+  onBuildPage: () => void;
+}
+
+export default function Console({ ingested, onBuildPage }: Props) {
+  // Only ever populated on the committed path. An ingested network needs none
+  // of this — it arrived complete as a prop — so it is DERIVED below rather
+  // than copied into state by an effect, which would be a second source of
+  // truth for something React already has.
+  const [fetchedNetwork, setFetchedNetwork] = useState<NetworkPayload | null>(null);
+  const [fetchedBaseline, setFetchedBaseline] = useState<ScoredNetwork | null>(null);
   const [demo, setDemo] = useState<DemoScenario | null>(null);
+  /** When the funding landed, so the graph can mark what it moved. */
+  const [fundedAt, setFundedAt] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const [step, setStep] = useState<StepId>('network');
@@ -76,15 +113,43 @@ export default function Console() {
 
   const [intervention, setIntervention] = useState<InterveneResponse | null>(null);
   const [counterfactual, setCounterfactual] = useState(false);
+  /** The supplier the money actually went into, and how much. */
+  const [funded, setFunded] = useState<{ node_id: string; amount_cr: number } | null>(null);
 
-  const reducedMotion = useRef(false);
+  // The decision layer. `decision` is the plan for whatever is selected;
+  // `watchlist` is the de-risk queue built during this session, which is
+  // client-side by construction — the API holds no session state (§3.4) and
+  // PERSON_C.md rules out browser storage.
+  const [decision, setDecision] = useState<DeriskPlan | null>(null);
+  const [watchlist, setWatchlist] = useState<string[]>([]);
+  const [fundableNode, setFundableNode] = useState<string | null>(null);
+
+  const [budgetIndex, setBudgetIndex] = useState(2);
+  const [allocation, setAllocation] = useState<AllocateResponse | null>(null);
+  const [allocating, setAllocating] = useState(false);
+  const [allocError, setAllocError] = useState<string | null>(null);
+
+  // Read synchronously on the first render, then kept in state, because the
+  // wave offsets are computed during render and a ref set in an effect arrives
+  // one render too late: the person who asked for less motion would get all of
+  // it, once, and no recompute.
+  const [reducedMotion, setReducedMotion] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
   useEffect(() => {
-    reducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const onChange = () => setReducedMotion(query.matches);
+    query.addEventListener('change', onChange);
+    return () => query.removeEventListener('change', onChange);
   }, []);
 
   // ---- Load ---------------------------------------------------------------
 
   useEffect(() => {
+    // An ingested network is already complete and already scored — it came back
+    // from /api/ingest in one response, so there is nothing to fetch.
+    if (ingested) return;
+
     let cancelled = false;
     (async () => {
       try {
@@ -94,8 +159,8 @@ export default function Console() {
           api.demoScenario(),
         ]);
         if (cancelled) return;
-        setNetwork(net);
-        setBaseline(base);
+        setFetchedNetwork(net);
+        setFetchedBaseline(base);
         setDemo(scenario);
       } catch (cause) {
         if (!cancelled) setError(cause instanceof Error ? cause.message : String(cause));
@@ -104,7 +169,68 @@ export default function Console() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [ingested]);
+
+  // Which supplier this mode can fund. Live that is any of them; offline it is
+  // the one the committed intervention covers, and the plan panel says so on
+  // the button rather than replaying somebody else's numbers.
+  useEffect(() => {
+    let cancelled = false;
+    api
+      .fundable(ingested ? { meta: ingested.meta, nodes: ingested.nodes, edges: ingested.edges } : undefined)
+      .then((nodeId) => {
+        if (!cancelled) setFundableNode(nodeId);
+      })
+      .catch(() => {
+        if (!cancelled) setFundableNode(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [ingested]);
+
+  /** The network on screen: the one that was uploaded, or the committed one. */
+  const network = useMemo<NetworkPayload | null>(
+    () =>
+      ingested
+        ? {
+            meta: ingested.meta,
+            nodes: ingested.nodes,
+            edges: ingested.edges,
+            stress_signals: ingested.stress_signals,
+          }
+        : fetchedNetwork,
+    [ingested, fetchedNetwork],
+  );
+
+  const baseline = useMemo<ScoredNetwork | null>(
+    () =>
+      ingested
+        ? {
+            meta: ingested.meta,
+            nodes: ingested.nodes,
+            edges: ingested.edges,
+            scores: ingested.scores,
+            ranking: ingested.ranking,
+            summary: ingested.summary,
+          }
+        : fetchedBaseline,
+    [ingested, fetchedBaseline],
+  );
+
+  /**
+   * Bring the dossier into view when a node is picked.
+   *
+   * The side panel scrolls, and at the closing step the outcome block is tall
+   * enough to push a freshly-selected supplier's dossier clean off the bottom —
+   * so clicking a node on the graph appeared to do nothing at all. The panel
+   * moves to what was just asked for rather than making the reader hunt for it.
+   */
+  useEffect(() => {
+    if (!selectedId) return;
+    const block = document.getElementById('ff-dossier');
+    block?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'nearest' });
+  }, [selectedId, reducedMotion]);
 
   const index = useMemo(
     () =>
@@ -114,7 +240,55 @@ export default function Console() {
     [network],
   );
 
-  const triggerNode = demo?.trigger_node ?? baseline?.summary.stressed_origin_nodes[0] ?? null;
+  /**
+   * Trigger, watched supplier and funding amount.
+   *
+   * On the committed network these come from data/fixtures/demo_scenario.json,
+   * because DEMO_SCENARIO.md 8 says never to hardcode them and the fixture is
+   * where they live. An ingested network has no fixture - its node ids did not
+   * exist when the fixture was written - so they are read off the engine's own
+   * output instead: the origin it found, the supplier it ranked first, and the
+   * amount it costed to stabilise that supplier.
+   */
+  const plan = useMemo(() => {
+    if (!baseline) return null;
+
+    if (!ingested && demo) {
+      return {
+        trigger: demo.trigger_node,
+        watched: demo.expected_ranking[0] ?? baseline.ranking[0] ?? null,
+        intervention: demo.intervention,
+      };
+    }
+
+    const top = baseline.ranking[0] ?? null;
+    const cost = top
+      ? baseline.scores.find((row) => row.node_id === top)?.intervention_cost_cr ?? 0
+      : 0;
+    return {
+      trigger: index
+        ? pickTrigger(baseline.ranking, scoresById(baseline.scores), baseline.summary, index)
+        : baseline.summary.stressed_origin_nodes[0] ?? null,
+      watched: top,
+      intervention: top ? { node_id: top, amount_cr: cost } : null,
+    };
+  }, [baseline, demo, ingested, index]);
+
+  const triggerNode = plan?.trigger ?? null;
+
+  /** The network every scenario request carries, or undefined for the default. */
+  const networkOverride = useMemo(
+    () =>
+      ingested
+        ? {
+            meta: ingested.meta,
+            nodes: ingested.nodes,
+            edges: ingested.edges,
+            stress_signals: ingested.stress_signals,
+          }
+        : undefined,
+    [ingested],
+  );
 
   /** The slider's home position: the trigger's own filed stress. */
   const baselineLevelIndex = useMemo(() => {
@@ -150,7 +324,7 @@ export default function Console() {
 
   const scores = useMemo(() => scoresById(scored?.scores ?? []), [scored]);
   const summary = scored?.summary ?? null;
-  const ranking = scored?.ranking ?? [];
+  const ranking = useMemo(() => scored?.ranking ?? [], [scored]);
 
   const waves = useMemo(
     () => (scored && summary ? buildWaves(scored.scores, summary) : []),
@@ -162,11 +336,11 @@ export default function Console() {
     if (waves.length === 0) return null;
     const map = new Map<string, number>();
     for (const wave of waves) {
-      const offset = reducedMotion.current ? 0 : wave.depth * WAVE_MS;
+      const offset = reducedMotion ? 0 : wave.depth * WAVE_MS;
       for (const nodeId of wave.nodeIds) map.set(nodeId, offset);
     }
     return map;
-  }, [waves]);
+  }, [waves, reducedMotion]);
 
   const path = useMemo(() => {
     if (!index || !selectedId) return null;
@@ -183,23 +357,22 @@ export default function Console() {
 
   const triggerName = triggerNode && index ? index.nodeById.get(triggerNode)?.name ?? triggerNode : '—';
 
-  const watchedId = demo?.expected_ranking[0] ?? ranking[0] ?? null;
+  const watchedId = plan?.watched ?? ranking[0] ?? null;
   const watchedNode = watchedId && index ? index.nodeById.get(watchedId) : null;
 
   // ---- Cascade timing ----------------------------------------------------
 
   const runCascade = useCallback(() => {
     setCascadeAt(performance.now());
-    setWaveIndex(0);
-  }, []);
+    // Reduced motion jumps straight to the settled state: the waves still
+    // happened and the readout still names the last one, there is just nothing
+    // travelling across the screen to watch.
+    setWaveIndex(reducedMotion ? Math.max(waves.length - 1, 0) : 0);
+  }, [reducedMotion, waves.length]);
 
   useEffect(() => {
     if (cascadeAt === null || waveIndex < 0) return;
     if (waveIndex >= waves.length - 1) return;
-    if (reducedMotion.current) {
-      setWaveIndex(waves.length - 1);
-      return;
-    }
     const timer = window.setTimeout(() => setWaveIndex((current) => current + 1), WAVE_MS);
     return () => window.clearTimeout(timer);
   }, [cascadeAt, waveIndex, waves.length]);
@@ -217,6 +390,8 @@ export default function Console() {
       // result and a re-scored trigger cannot both be on screen truthfully.
       setIntervention(null);
       setCounterfactual(false);
+      setFundedAt(null);
+      setFunded(null);
 
       if (nextIndex === baselineLevelIndex) {
         setStressStep(null);
@@ -224,7 +399,11 @@ export default function Console() {
       }
       setScoring(true);
       try {
-        const next = await api.atStressLevel(triggerNode, STRESS_LEVELS[nextIndex]);
+        const next = await api.atStressLevel(
+          triggerNode,
+          STRESS_LEVELS[nextIndex],
+          networkOverride,
+        );
         setStressStep(next);
         setError(null);
       } catch (cause) {
@@ -233,7 +412,7 @@ export default function Console() {
         setScoring(false);
       }
     },
-    [triggerNode, baselineLevelIndex],
+    [triggerNode, baselineLevelIndex, networkOverride],
   );
 
   // ---- Step navigation ---------------------------------------------------
@@ -249,6 +428,8 @@ export default function Console() {
       if (next !== 'act') {
         setIntervention(null);
         setCounterfactual(false);
+        setFundedAt(null);
+        setFunded(null);
       }
 
       switch (next) {
@@ -291,35 +472,121 @@ export default function Console() {
           setSelectedId(select ?? watchedId ?? ranking[0] ?? null);
           break;
 
+        case 'allocate':
+          setSheetNodeId(null);
+          setLevelIndex(baselineLevelIndex);
+          setStressStep(null);
+          // Jumping straight here from the rail must still show a settled
+          // cascade rather than an unlit graph, exactly as 'rank' does.
+          if (cascadeAt === null) {
+            setCascadeAt(performance.now() - (waves.length + 2) * WAVE_MS);
+            setWaveIndex(waves.length - 1);
+          }
+          break;
+
         case 'act': {
           setSheetNodeId(null);
           // The funding decision is defined against the baseline, so reset the
           // what-if before applying it rather than comparing two scenarios.
+          //
+          // The money is NOT released here. Arriving at the last step used to
+          // apply the intervention immediately, which meant the audience saw
+          // only the outcome and a control that was already switched on — the
+          // before/after the step exists to show had happened off-screen before
+          // anyone looked. The step now lands on the unfunded network and the
+          // primary action releases the money.
           setLevelIndex(baselineLevelIndex);
           setStressStep(null);
           setCounterfactual(false);
-          if (!demo) break;
-          setSelectedId(demo.intervention.node_id);
-          try {
-            setScoring(true);
-            const result = await api.intervene([demo.intervention]);
-            setIntervention(result);
-            setError(null);
-          } catch (cause) {
-            setError(cause instanceof Error ? cause.message : String(cause));
-          } finally {
-            setScoring(false);
-          }
+          if (plan?.intervention) setSelectedId(plan.intervention.node_id);
           break;
         }
       }
     },
-    [triggerNode, runCascade, cascadeAt, waves.length, watchedId, ranking, demo, baselineLevelIndex],
+    [
+      triggerNode,
+      runCascade,
+      cascadeAt,
+      waves.length,
+      watchedId,
+      ranking,
+      plan,
+      baselineLevelIndex,
+    ],
   );
+
+  /**
+   * Release the funding into one supplier. One request; the engine scores
+   * before and after, and the counterfactual toggle reads the `before` half.
+   *
+   * Takes the node rather than reading the demo's own intervention, so the
+   * same path serves the closing beat and the "fund this one" button on any
+   * supplier's plan. Nothing here decides an amount — the caller passes the
+   * engine's own `intervention_cost_cr` for that node.
+   */
+  const fund = useCallback(
+    async (nodeId: string, amountCr: number) => {
+      setSelectedId(nodeId);
+      setCounterfactual(false);
+      try {
+        setScoring(true);
+        const result = await api.intervene(
+          [{ node_id: nodeId, amount_cr: amountCr }],
+          networkOverride,
+        );
+        setIntervention(result);
+        setFunded({ node_id: nodeId, amount_cr: amountCr });
+        setFundedAt(performance.now());
+        setError(null);
+      } catch (cause) {
+        setError(cause instanceof Error ? cause.message : String(cause));
+      } finally {
+        setScoring(false);
+      }
+    },
+    [networkOverride],
+  );
+
+  /**
+   * Spread a budget across several suppliers.
+   *
+   * The engine probes each candidate and re-scores the chosen set together, so
+   * this is one request and one plan — the frontend never decides who gets what.
+   */
+  const runAllocation = useCallback(async () => {
+    setAllocating(true);
+    setAllocError(null);
+    try {
+      setAllocation(await api.allocate(BUDGET_LEVELS[budgetIndex], networkOverride));
+      // The graph marks what the money moved, on the same clock the single
+      // funding uses.
+      setFundedAt(performance.now());
+    } catch (cause) {
+      setAllocError(cause instanceof Error ? cause.message : String(cause));
+      setAllocation(null);
+    } finally {
+      setAllocating(false);
+    }
+  }, [budgetIndex, networkOverride]);
+
+  const toggleWatch = useCallback((nodeId: string) => {
+    setWatchlist((current) =>
+      current.includes(nodeId)
+        ? current.filter((entry) => entry !== nodeId)
+        : [...current, nodeId],
+    );
+  }, []);
 
   const restart = useCallback(() => {
     setIntervention(null);
     setCounterfactual(false);
+    setFundedAt(null);
+    setFunded(null);
+    setDecision(null);
+    setWatchlist([]);
+    setAllocation(null);
+    setAllocError(null);
+    setBudgetIndex(2);
     setStressStep(null);
     setLevelIndex(baselineLevelIndex);
     setCascadeAt(null);
@@ -329,6 +596,50 @@ export default function Console() {
     setReachedIndex(0);
     setStep('network');
   }, [baselineLevelIndex]);
+
+  // ---- The decision for the selected supplier ----------------------------
+
+  /**
+   * A plan describes ONE scored network, so it is fetched only while the screen
+   * is showing the baseline one.
+   *
+   * Off the baseline the figures on the plan and the figures in the dossier
+   * beside it would be two different scorings of two different scenarios, sat
+   * next to each other with no way for a reader to tell. The panel steps aside
+   * instead, and the what-if readout or the outcome block carries that state.
+   */
+  const planStep = step !== 'network' && step !== 'visibility' && step !== 'evidence';
+  const planAvailable = planStep && atBaselineLevel && !intervention;
+
+  useEffect(() => {
+    if (!planAvailable || !selectedId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const next = await api.derisk(selectedId, networkOverride);
+        if (!cancelled) setDecision(next);
+      } catch (cause) {
+        // A missing plan is a mock-refresh problem, not something to put a red
+        // banner over the whole screen for. The panel simply stays away, which
+        // is what `shownDecision` does with a stale one anyway.
+        console.warn('no plan for', selectedId, cause);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [planAvailable, selectedId, networkOverride]);
+
+  /**
+   * The plan on screen, derived rather than cleared by an effect.
+   *
+   * A plan for the previously-selected supplier is not a plan for this one, and
+   * clearing it in an effect would show the wrong company's decision for one
+   * frame. Deriving it means the panel can only ever show a plan whose node is
+   * the selected node, in a scenario the rest of the screen agrees with.
+   */
+  const shownDecision =
+    planAvailable && decision && decision.node_id === selectedId ? decision : null;
 
   // ---- Presentation ------------------------------------------------------
 
@@ -342,15 +653,27 @@ export default function Console() {
           : 'cascade';
 
   const observableCount = network?.nodes.filter((node) => node.is_observable).length ?? 0;
+  // Counted, not assumed. The committed mock has three anchors and the real
+  // collection has fifteen; a caption that says "one anchor" is wrong on both.
+  const anchorCount = network?.nodes.filter((node) => node.tier === 0).length ?? 0;
+  const tierCount = new Set(network?.nodes.map((node) => node.tier) ?? []).size;
 
+  // The allocation is defined against the baseline, exactly as the single
+  // funding decision is, so the slider is put away for both.
   const showWhatIf =
-    step !== 'network' && step !== 'visibility' && step !== 'act' && summary !== null;
+    step !== 'network' &&
+    step !== 'visibility' &&
+    step !== 'act' &&
+    step !== 'allocate' &&
+    summary !== null;
 
   const caption = (() => {
     switch (step) {
       case 'network':
         return {
-          title: `${num(network?.meta.node_count ?? 0)} companies, four tiers, one anchor at the top`,
+          title: `${num(network?.meta.node_count ?? 0)} companies, ${num(tierCount)} tiers, ${
+            anchorCount === 1 ? 'one anchor' : `${num(anchorCount)} anchors`
+          } at the top`,
           text: 'Goods flow upward along every edge. Money — when it arrives — flows back down.',
         };
       case 'visibility':
@@ -375,15 +698,37 @@ export default function Console() {
         };
       case 'path':
         return {
-          title: 'One dependency chain out of 1,339',
+          title: `One dependency chain out of ${num(network?.meta.edge_count ?? 0)}`,
           text: 'Everything else is dimmed. This is the chain by which a halt here reaches the anchor.',
         };
       case 'act':
+        if (!intervention)
+          return {
+            title: `${cr(plan?.intervention?.amount_cr ?? 0)} into ${shortName(
+              watchedNode?.name ?? '—',
+            )}`,
+            text: 'Nothing has been funded yet. Release it and the engine scores the same network again — watch the graph, not just the panel.',
+          };
         return {
           title: counterfactual ? 'Nobody funds anything' : 'One payment, re-scored',
           text: counterfactual
             ? 'This is the same network with the funding withdrawn — the engine scored it, not a slide.'
             : 'Before and after are two scoring passes over the same network in one request.',
+        };
+      case 'allocate':
+        if (!allocation)
+          return {
+            title: 'The money is finite. Several of them are failing',
+            text: 'Pick a budget and the engine probes each candidate, then re-scores the whole allocation together.',
+          };
+        return {
+          title: `${cr(allocation.allocated_cr)} across ${num(
+            allocation.allocations.length,
+          )} suppliers`,
+          text: `${cr(
+            allocation.objective.reduced_cr,
+            0,
+          )} of inbound supply at the anchors is no longer at risk. Ordered by anchor exposure removed per rupee.`,
         };
     }
   })();
@@ -403,7 +748,16 @@ export default function Console() {
       case 'path':
         return { label: 'Fund it', code: '07', to: 'act' as StepId };
       case 'act':
-        return { label: 'Start again', code: '01', to: null };
+        return intervention
+          ? { label: 'Now spread a budget', code: '08', to: 'allocate' as StepId }
+          : {
+              label: `Release ${cr(plan?.intervention?.amount_cr ?? 0)}`,
+              code: '07',
+              to: null,
+              act: 'fund' as const,
+            };
+      case 'allocate':
+        return { label: 'Start again', code: '01', to: null, act: 'restart' as const };
     }
   })();
 
@@ -417,6 +771,45 @@ export default function Console() {
   })();
 
   const currentWave = waveIndex >= 0 ? waves[Math.min(waveIndex, waves.length - 1)] : null;
+
+  /**
+   * The nodes the money actually moved, and when it landed.
+   *
+   * `delta.per_node` is the engine's own before/after list; this is only the
+   * rows where the band changed, plus the funded supplier itself. Empty while
+   * the counterfactual is showing, because in that view nothing was funded and
+   * nothing moved.
+   */
+  const changedIds = useMemo(() => {
+    // An allocation moves several suppliers at once, so the graph marks all of
+    // them: the bands the engine's own delta says changed, plus every supplier
+    // that took money whether or not its band crossed a boundary.
+    if (step === 'allocate' && allocation) {
+      const ids = new Map<string, RiskBand>(
+        allocation.delta.per_node
+          .filter((row) => row.band_before !== row.band_after)
+          .map((row) => [row.node_id, row.band_before] as const),
+      );
+      for (const row of allocation.allocations) {
+        if (!ids.has(row.node_id)) ids.set(row.node_id, row.band_before);
+      }
+      return ids;
+    }
+    if (!intervention || counterfactual) return null;
+    const ids = new Map<string, RiskBand>(
+      intervention.delta.per_node
+        .filter((row) => row.band_before !== row.band_after)
+        .map((row) => [row.node_id, row.band_before] as const),
+    );
+    // The funded supplier belongs on the marker whether or not its own band
+    // moved — it is the node the money went into.
+    const fundedId = funded?.node_id;
+    if (fundedId && !ids.has(fundedId)) {
+      const before = intervention.before.scores.find((row) => row.node_id === fundedId);
+      if (before) ids.set(fundedId, before.risk_band);
+    }
+    return ids;
+  }, [step, allocation, intervention, counterfactual, funded]);
 
   const anchorBefore = intervention ? anchorAtRisk(intervention.before.summary) : null;
   // THE SAME anchor after, found by id.
@@ -464,17 +857,28 @@ export default function Console() {
             Fray<span>Fuse</span>
           </span>
           <span className="ff-dataset">
-            {api.live ? 'live engine' : 'committed engine output'} · schema{' '}
-            {network?.meta.schema_version ?? '—'}
+            {ingested
+              ? `built from your upload · ${num(network?.meta.node_count ?? 0)} companies`
+              : `${api.live ? 'live engine' : 'committed engine output'} · schema ${
+                  network?.meta.schema_version ?? '—'
+                }`}
           </span>
         </div>
 
         <button
           className="ff-primary"
-          onClick={() => (primary.to ? goTo(primary.to) : restart())}
+          onClick={() => {
+            if (primary.to) goTo(primary.to);
+            else if ('act' in primary && primary.act === 'fund') {
+              if (plan?.intervention)
+                fund(plan.intervention.node_id, plan.intervention.amount_cr);
+            } else restart();
+          }}
           disabled={scoring && step === 'act'}
         >
-          <span className="ff-primary-step">{primary.code}</span>
+          <span className="ff-primary-disc" aria-hidden="true">
+            {primary.code}
+          </span>
           {primary.label}
         </button>
 
@@ -487,6 +891,9 @@ export default function Console() {
               Reset
             </button>
           )}
+          <button className="ff-ghost" onClick={onBuildPage}>
+            {ingested ? 'Rebuild' : 'Build from filings'}
+          </button>
         </div>
       </header>
 
@@ -512,6 +919,9 @@ export default function Console() {
               pathEdgeIds={pathEdgeIds}
               selectedId={selectedId}
               triggerNode={triggerNode}
+              changedIds={changedIds}
+              changedAt={fundedAt}
+              bottomInset={(showWhatIf ? 112 : 0) + (step === 'cascade' || step === 'path' ? 76 : 0)}
               onSelect={setSelectedId}
             />
           ) : (
@@ -556,7 +966,8 @@ export default function Console() {
                     return (
                       <span key={nodeId} style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
                         <span className="ff-path-node">
-                          {nodeId} <em>{node?.name ?? ''}</em>
+                          <span className="ff-path-id">{nodeId}</span>
+                          <span className="ff-path-name">{node?.name ?? ''}</span>
                         </span>
                         {hop && (
                           <span
@@ -606,11 +1017,11 @@ export default function Console() {
             summary && <RiskStats summary={summary} />
           )}
 
-          {intervention && demo && index && (
+          {intervention && funded && index && (
             <Outcome
               delta={intervention.delta}
-              fundedName={index.nodeById.get(demo.intervention.node_id)?.name ?? demo.intervention.node_id}
-              fundedAmount={demo.intervention.amount_cr}
+              fundedName={index.nodeById.get(funded.node_id)?.name ?? funded.node_id}
+              fundedAmount={funded.amount_cr}
               anchorBefore={anchorBefore}
               anchorAfter={anchorAfterSame}
               anchorName={anchorPairName}
@@ -620,12 +1031,62 @@ export default function Console() {
             />
           )}
 
+          {step === 'allocate' && (
+            <BudgetPanel
+              budgets={BUDGET_LEVELS}
+              budgetIndex={budgetIndex}
+              result={allocation}
+              busy={allocating}
+              error={allocError}
+              onBudget={(index_) => {
+                setBudgetIndex(index_);
+                setAllocation(null);
+                setAllocError(null);
+              }}
+              onRun={runAllocation}
+              onSelect={setSelectedId}
+            />
+          )}
+
           {selectedNode && index && (
             <Dossier
               node={selectedNode}
               score={scores.get(selectedNode.node_id)}
               hasFilings={(index.signalsByNode.get(selectedNode.node_id) ?? []).length > 0}
               onEvidence={() => setSheetNodeId(selectedNode.node_id)}
+            />
+          )}
+
+          {shownDecision && (
+            <DeriskPanel
+              plan={shownDecision}
+              queued={watchlist.includes(shownDecision.node_id)}
+              fundable={fundableNode}
+              busy={scoring}
+              onFund={(nodeId, amount) => {
+                setStep('act');
+                setReachedIndex((current) => Math.max(current, STEP_INDEX.get('act') ?? 0));
+                fund(nodeId, amount);
+              }}
+              onQueue={toggleWatch}
+            />
+          )}
+
+          <WatchQueue
+            nodeIds={watchlist}
+            scores={scores}
+            nodeById={index?.nodeById ?? new Map()}
+            onSelect={setSelectedId}
+            onRemove={toggleWatch}
+          />
+
+          {planStep && index && (
+            <QueueBoard
+              scores={scores}
+              nodeById={index.nodeById}
+              selectedId={selectedId}
+              watchlist={new Set(watchlist)}
+              onSelect={setSelectedId}
             />
           )}
 
@@ -651,6 +1112,9 @@ export default function Console() {
           score={scores.get(sheetNode.node_id)}
           inheritedFrom={sheetInheritedFrom}
           onClose={() => setSheetNodeId(null)}
+          onContinue={
+            step === 'evidence' ? { label: 'Run the cascade →', run: () => goTo('cascade') } : null
+          }
         />
       )}
     </div>

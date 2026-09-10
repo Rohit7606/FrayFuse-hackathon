@@ -19,21 +19,29 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 import {
   BAND_COLOR,
-  CHROME,
-  NEUTRAL,
-  NEUTRAL_ANCHOR,
+  PAPER,
+  UNSCORED,
+  UNSCORED_ANCHOR,
   easeOut,
   mix,
   rgba,
 } from '../lib/bands';
-import type { Edge, Node, Score } from '../types';
+import type { Edge, Node, RiskBand, Score } from '../types';
 
-export type StageMode = 'network' | 'observability' | 'cascade' | 'focus';
+export type StageMode = 'network' | 'observability' | 'cascade' | 'focus' | 'build';
 
 /** How long one node takes to take on its band colour. */
 const ARRIVE_MS = 620;
+/** How long one node takes to appear during the live build. */
+const PLACE_MS = 420;
 /** How long the ring that marks an arrival lives. */
 const PULSE_MS = 1100;
+/**
+ * Pixels the caption occupies at the top of the stage. The bottom overlays
+ * vary with the step and arrive as a prop; the caption is always there.
+ */
+const TOP_INSET = 96;
+
 /** Ceiling on the focus-mode zoom, so a two-node path is not magnified absurdly. */
 const MAX_FOCUS_ZOOM = 2.2;
 
@@ -44,8 +52,6 @@ const TIER_BANDS = [
   { tier: 2, label: 'TIER 2' },
   { tier: 3, label: 'TIER 3 · DEEPEST' },
 ];
-
-const bandY = (tier: number) => -390 + Math.min(tier, 3) * 260;
 
 interface GraphNode extends Node {
   id: string;
@@ -74,36 +80,67 @@ interface Props {
   pathEdgeIds: Set<string> | null;
   selectedId: string | null;
   triggerNode: string | null;
+  /**
+   * nodeId → the band it held BEFORE the funding, and when the funding landed.
+   *
+   * Two dots changing colour among four hundred is a change nobody sees. A
+   * changed node is drawn twice over: the band it left as a heavy outer ring,
+   * the band it moved to as the fill, with its name printed and everything else
+   * stepped back. The reader can then see "critical → stable" on the graph
+   * without being told to look at a specific pixel.
+   */
+  changedIds: Map<string, RiskBand> | null;
+  changedAt: number | null;
+  /**
+   * Pixels of the canvas covered by the overlays that sit on top of it — the
+   * what-if bar and the wave or path banner. The canvas fills the whole stage
+   * so that panning works everywhere, but a fit that ignores this puts the
+   * deepest tier, and the deepest node of a highlighted path, underneath the
+   * furniture.
+   */
+  bottomInset: number;
   onSelect: (nodeId: string | null) => void;
 }
 
 /**
- * Tiers are laid out top to bottom instead of left as a hairball.
+ * Tiers are laid out as strata instead of as one hairball.
  *
  * A force-directed blob is honest about connectivity and useless for the
- * question on screen, which is how far down the chain something sits. This
- * pins each tier to a band with a custom y force — the same thing d3's
- * forceY does, written out so the app does not take a direct dependency on
- * a package it gets transitively.
+ * question on screen, which is how far down the chain something sits.
+ *
+ * The first attempt pulled each tier toward a line with a spring. It lost:
+ * tier 3 has 251 nodes, every one of them linked upward, and the link force
+ * dragged the whole stratum up into tier 2 — the guide lines and the nodes
+ * stopped agreeing, which is worse than no guides at all. So `y` is PINNED and
+ * only `x` is simulated.
+ *
+ * Within a tier the exact row is meaningless, so nodes are spread across a few
+ * sub-rows inside the band. That is what keeps 251 nodes from forming a single
+ * strip five times wider than the stage, and it is deterministic — derived
+ * from the node id, so the layout is identical on every run.
  */
-function tierBandForce(strength: number) {
-  // Wide bands, strongly held. The first attempt used a soft force and the
-  // tiers collapsed into one pyramid — connectivity won and the picture stopped
-  // answering "how far down the chain is this", which is the only question the
-  // layout exists to answer.
-  let nodes: GraphNode[] = [];
+const BAND_GAP = 280;
+const SUB_ROWS = 5;
+const SUB_ROW_GAP = 26;
 
-  const force = (alpha: number) => {
-    for (const node of nodes) {
-      if (typeof node.y !== 'number') continue;
-      // @ts-expect-error d3 writes velocity onto the node
-      node.vy += (bandY(node.tier) - node.y) * strength * alpha;
-    }
-  };
-  force.initialize = (simulationNodes: GraphNode[]) => {
-    nodes = simulationNodes;
-  };
-  return force;
+const bandY = (tier: number) => -420 + Math.min(tier, 3) * BAND_GAP;
+
+/**
+ * Sub-rows only where a tier is crowded. Splitting 28 tier-1 suppliers across
+ * five rows turns a band into a column and makes a small tier look like a
+ * cluster; 251 tier-3 suppliers on one row is a strip five times wider than
+ * the stage. The count decides.
+ */
+function subRowsFor(tierSize: number): number {
+  return tierSize > 60 ? SUB_ROWS : tierSize > 16 ? 2 : 1;
+}
+
+function subRowOffset(nodeId: string, tierSize: number): number {
+  const rows = subRowsFor(tierSize);
+  if (rows === 1) return 0;
+  let hash = 0;
+  for (let i = 0; i < nodeId.length; i += 1) hash = (hash * 31 + nodeId.charCodeAt(i)) >>> 0;
+  return ((hash % rows) - (rows - 1) / 2) * SUB_ROW_GAP;
 }
 
 export default function GraphStage({
@@ -117,11 +154,16 @@ export default function GraphStage({
   pathEdgeIds,
   selectedId,
   triggerNode,
+  changedIds,
+  changedAt,
+  bottomInset,
   onSelect,
 }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<any>(null);
   const hoverRef = useRef<GraphNode | null>(null);
+  const insetRef = useRef(bottomInset);
+  const tierSizeRef = useRef(new Map<number, number>());
   const [size, setSize] = useState({ width: 900, height: 600 });
 
   const reducedMotion = useRef(false);
@@ -147,8 +189,26 @@ export default function GraphStage({
     selectedId,
     triggerNode,
     scores,
+    changedIds,
+    changedAt,
   });
-  live.current = {
+  // Written after commit, not during render. The canvas paints on the next
+  // animation frame, so an effect is early enough, and assigning during render
+  // is not safe under concurrent rendering.
+  useEffect(() => {
+    live.current = {
+      mode,
+      arrival,
+      cascadeStartedAt,
+      pathNodeIds,
+      pathEdgeIds,
+      selectedId,
+      triggerNode,
+      scores,
+      changedIds,
+      changedAt,
+    };
+  }, [
     mode,
     arrival,
     cascadeStartedAt,
@@ -157,7 +217,20 @@ export default function GraphStage({
     selectedId,
     triggerNode,
     scores,
-  };
+    changedIds,
+    changedAt,
+  ]);
+
+  // Read back inside a timeout after a fit, so it is written after commit.
+  useEffect(() => {
+    insetRef.current = bottomInset;
+  }, [bottomInset]);
+
+  useEffect(() => {
+    const sizes = new Map<number, number>();
+    for (const node of nodes) sizes.set(node.tier, (sizes.get(node.tier) ?? 0) + 1);
+    tierSizeRef.current = sizes;
+  }, [nodes]);
 
   useEffect(() => {
     const measure = () => {
@@ -173,16 +246,53 @@ export default function GraphStage({
     return () => observer.disconnect();
   }, []);
 
-  const graphData = useMemo(
-    () => ({
-      nodes: nodes.map((node) => ({ ...node, id: node.node_id })) as GraphNode[],
+  const graphData = useMemo(() => {
+    const tierSize = new Map<number, number>();
+    for (const node of nodes) tierSize.set(node.tier, (tierSize.get(node.tier) ?? 0) + 1);
+
+    return {
+      nodes: nodes.map((node) => ({
+        ...node,
+        id: node.node_id,
+        // fy pins the row; fx is left free so the simulation still spreads the
+        // stratum horizontally and keeps linked partners near each other.
+        fy: bandY(node.tier) + subRowOffset(node.node_id, tierSize.get(node.tier) ?? 1),
+      })) as GraphNode[],
       links: edges.map((edge) => ({
         ...edge,
         source: edge.supplier_id,
         target: edge.buyer_id,
       })) as GraphLink[],
-    }),
-    [nodes, edges],
+    };
+  }, [nodes, edges]);
+
+  /**
+   * Fit, then lift the view clear of the bottom overlays.
+   *
+   * `zoomToFit` centres on the whole canvas, including the strip the what-if
+   * bar covers. Raising the camera's centre by half the inset shifts the
+   * content up by exactly the covered height, so nothing the fit just framed
+   * ends up behind the furniture.
+   */
+  const fitWithInset = useCallback(
+    (ms: number, padding: number, filter?: (node: GraphNode) => boolean) => {
+      const graph = graphRef.current;
+      if (!graph) return () => {};
+      graph.zoomToFit?.(ms, padding, filter);
+      const lift = window.setTimeout(() => {
+        const zoom = graph.zoom?.() ?? 1;
+        const centre = graph.centerAt?.() ?? { x: 0, y: 0 };
+        // Centre on the VISIBLE rectangle, not the canvas. Lifting by the
+        // bottom inset alone cleared the what-if bar and pushed the topmost
+        // node straight under the caption instead.
+        const shift = (insetRef.current - TOP_INSET) / 2;
+        if (Math.abs(shift) > 1) {
+          graph.centerAt?.(centre.x ?? 0, (centre.y ?? 0) + shift / zoom, 260);
+        }
+      }, ms + 40);
+      return () => window.clearTimeout(lift);
+    },
+    [],
   );
 
   // Forces are configured once. Re-applying them on a data change restarts the
@@ -190,14 +300,19 @@ export default function GraphStage({
   useEffect(() => {
     const graph = graphRef.current;
     if (!graph || graphData.nodes.length === 0) return;
-    graph.d3Force('tier', tierBandForce(1));
-    // Repulsion spreads a tier along its band; a weak, short link force keeps
-    // partners near each other without dragging them out of their tier.
-    graph.d3Force('charge')?.strength(-72);
-    graph.d3Force('link')?.distance(22).strength(0.07);
-    const fit = window.setTimeout(() => graph.zoomToFit?.(600, 46), 420);
-    return () => window.clearTimeout(fit);
-  }, [graphData]);
+    // Repulsion spreads a stratum sideways; a short link force pulls partners
+    // towards each other's column. Neither can move a node off its row.
+    graph.d3Force('charge')?.strength(-46);
+    graph.d3Force('link')?.distance(18).strength(0.08);
+    let cancelLift = () => {};
+    const fit = window.setTimeout(() => {
+      cancelLift = fitWithInset(600, 46);
+    }, 420);
+    return () => {
+      window.clearTimeout(fit);
+      cancelLift();
+    };
+  }, [graphData, fitWithInset]);
 
   // Entering focus mode frames the path. This is spatial consistency, not
   // decoration: the path is four nodes out of 412 and would otherwise be a
@@ -207,11 +322,14 @@ export default function GraphStage({
     if (!graph) return;
     if (mode === 'focus' && pathNodeIds && pathNodeIds.size > 0) {
       const onPath = (node: GraphNode) => pathNodeIds.has(node.id);
-      graph.zoomToFit?.(700, 150, onPath);
+      let cancelFirst = fitWithInset(700, 150, onPath);
       // Fit twice. The first fit can land while the layout is still settling
       // from the previous step, which left the deepest node of the path just
       // outside the frame with its edge running off the corner.
-      const refit = window.setTimeout(() => graph.zoomToFit?.(420, 150, onPath), 900);
+      let cancelSecond = () => {};
+      const refit = window.setTimeout(() => {
+        cancelSecond = fitWithInset(420, 150, onPath);
+      }, 900);
       // And cap the result: fitting two nodes to a 1,200px stage magnifies them
       // to the size of saucers and pushes their labels off the bottom edge.
       const clamp = window.setTimeout(() => {
@@ -219,29 +337,46 @@ export default function GraphStage({
         if (typeof level === 'number' && level > MAX_FOCUS_ZOOM) {
           graph.zoom?.(MAX_FOCUS_ZOOM, 320);
         }
-      }, 1400);
+      }, 1500);
       return () => {
         window.clearTimeout(refit);
         window.clearTimeout(clamp);
+        cancelFirst();
+        cancelSecond();
       };
     }
-    graph.zoomToFit?.(700, 46);
-  }, [mode, pathNodeIds]);
+    return fitWithInset(700, 46);
+  }, [mode, pathNodeIds, fitWithInset]);
 
-  /** 0 → still neutral, 1 → fully in its band colour. */
-  const revealOf = useCallback((nodeId: string, now: number) => {
+  /**
+   * 0 → not yet, 1 → fully arrived.
+   *
+   * One ramp, two jobs: during the cascade it is how far a node has taken on
+   * its band colour, during the build it is how far it has been placed on the
+   * page. The brief for the build said to extend this mechanism rather than
+   * invent a second one, and there was nothing to add — the shape is the same.
+   */
+  const revealOf = useCallback((nodeId: string, now: number, span = ARRIVE_MS) => {
     const { arrival: offsets, cascadeStartedAt: startedAt } = live.current;
     if (!offsets) return 1;
     const offset = offsets.get(nodeId);
     if (offset === undefined) return 0;
     if (startedAt === null) return 0;
-    return easeOut((now - startedAt - offset) / ARRIVE_MS);
+    return easeOut((now - startedAt - offset) / span);
   }, []);
 
+  /**
+   * Node radius, in graph units.
+   *
+   * These used to start at 3.6, which the fit then shrank to about two screen
+   * pixels on a four-hundred-node network — a dot too small to read a colour
+   * off, let alone aim at. The whole layout is pinned to tier bands 280 apart,
+   * so there is room; the earlier figures were simply timid.
+   */
   const radiusOf = useCallback((node: GraphNode, score: Score | undefined) => {
-    const base = 3 + (3 - Math.min(node.tier, 3)) * 0.95;
+    const base = 6.4 + (3 - Math.min(node.tier, 3)) * 1.4;
     const band = score?.risk_band;
-    const bump = band === 'critical' ? 1.5 : band === 'high' ? 0.8 : 0;
+    const bump = band === 'critical' ? 2.4 : band === 'high' ? 1.3 : 0;
     return base + bump;
   }, []);
 
@@ -262,23 +397,46 @@ export default function GraphStage({
       let radius = radiusOf(node, score);
 
       if (state.mode === 'network') {
-        fill = isAnchor ? NEUTRAL_ANCHOR : NEUTRAL;
+        fill = isAnchor ? UNSCORED_ANCHOR : UNSCORED;
         alpha = 0.9;
       } else if (state.mode === 'observability') {
         // Step 2 makes the product's premise visible: 8 of 412 companies
         // publish anything at all. The other 404 are not dim for effect —
         // being unobservable is the finding.
-        fill = node.is_observable ? CHROME.inkHi : NEUTRAL;
+        fill = node.is_observable ? PAPER.forest : UNSCORED;
         alpha = node.is_observable ? 1 : 0.22;
         radius = node.is_observable ? radius + 1.2 : radius * 0.8;
+      } else if (state.mode === 'build') {
+        // Structure first, colour second — two beats, not one. During the
+        // build a node is only ever ink on paper; nothing here knows its band.
+        const placed = revealOf(node.id, now, PLACE_MS);
+        if (placed <= 0) return;
+        fill = isAnchor ? UNSCORED_ANCHOR : UNSCORED;
+        alpha = placed;
+        radius *= 0.55 + 0.45 * placed;
       } else {
         const band = score?.risk_band ?? 'stable';
         const reveal = revealOf(node.id, now);
         const target = BAND_COLOR[band];
         const touched = state.arrival?.has(node.id) ?? true;
-        fill = touched ? mix(NEUTRAL, target, reveal) : BAND_COLOR.stable;
+        fill = touched ? mix(UNSCORED, target, reveal) : BAND_COLOR.stable;
         alpha = touched ? 0.55 + 0.45 * reveal : 0.4;
         radius = touched ? radius * (0.86 + 0.14 * reveal) : radius * 0.78;
+      }
+
+      // What the money moved. While the marker is up, a node whose band changed
+      // grows and everything else steps back, so the closing beat has something
+      // to look at on the graph and not only in the panel.
+      const bandBefore = state.changedIds?.get(node.id);
+      const changed = bandBefore !== undefined;
+      const marking = (state.changedIds?.size ?? 0) > 0 && state.mode === 'cascade';
+      if (marking) {
+        if (changed) {
+          radius += 4.5;
+          alpha = 1;
+        } else {
+          alpha *= 0.3;
+        }
       }
 
       // Focus dims everything off the path. Everything, including the anchor's
@@ -316,22 +474,59 @@ export default function GraphStage({
         }
       }
 
+      // A ring that keeps expanding for as long as the marker is up, so a
+      // change that happened while the reader was looking at the side panel is
+      // still announcing itself when they look back.
+      if (changed && state.changedAt !== null && !reducedMotion.current) {
+        const k = ((now - state.changedAt) / 1400) % 1;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius + easeOut(k) * 26, 0, 2 * Math.PI);
+        ctx.strokeStyle = rgba(PAPER.forest, (1 - k) * 0.7);
+        ctx.lineWidth = 2 / globalScale;
+        ctx.stroke();
+      }
+
+      // The band it LEFT, as a thick collar around the band it moved to. Both
+      // facts are on the node at once, which is the only way "critical became
+      // stable" reads as a change rather than as a colour.
+      if (changed && bandBefore) {
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius + 4.2, 0, 2 * Math.PI);
+        ctx.strokeStyle = BAND_COLOR[bandBefore];
+        ctx.lineWidth = 5.5;
+        ctx.stroke();
+        // A hairline on each side of the collar, so the old band reads as a
+        // deliberate band of colour and not as a blurred edge on the fill.
+        ctx.strokeStyle = rgba(PAPER.sheet, 0.9);
+        ctx.lineWidth = 1 / globalScale;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius + 1.4, 0, 2 * Math.PI);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius + 7.0, 0, 2 * Math.PI);
+        ctx.stroke();
+      }
+
       ctx.beginPath();
       ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
       ctx.fillStyle = fill;
       ctx.fill();
+      // A hairline edge, so a pale node still has a boundary against paper.
+      ctx.strokeStyle = rgba(PAPER.ink, 0.3);
+      ctx.lineWidth = 0.7 / globalScale;
+      ctx.stroke();
 
       // Chrome rings: selection, path membership, observability, the trigger.
       // Lime only ever appears as a ring, never as the fill, so it can never
       // be misread as a severity value.
       const ring =
-        selected || onPath
-          ? CHROME.lime
+        changed
+          ? null
+          : selected || onPath || (node.id === state.triggerNode && state.mode !== 'network')
+          ? PAPER.forest
           : state.mode === 'observability' && node.is_observable
-            ? CHROME.limeDeep
-            : node.id === state.triggerNode && state.mode !== 'network'
-              ? CHROME.lime
-              : null;
+            ? PAPER.forest
+            : null;
 
       if (ring) {
         ctx.beginPath();
@@ -346,7 +541,7 @@ export default function GraphStage({
       if (isAnchor && state.mode !== 'observability') {
         ctx.beginPath();
         ctx.rect(node.x - radius - 4.5, node.y - radius - 4.5, (radius + 4.5) * 2, (radius + 4.5) * 2);
-        ctx.strokeStyle = rgba(CHROME.ink, state.mode === 'focus' && !onPath ? 0.1 : 0.32);
+        ctx.strokeStyle = rgba(PAPER.ink, state.mode === 'focus' && !onPath ? 0.08 : 0.38);
         ctx.lineWidth = 1 / globalScale;
         ctx.stroke();
       }
@@ -355,7 +550,7 @@ export default function GraphStage({
 
       // Labels are earned, not sprayed: the node under the pointer, the
       // selected node, and the nodes on a highlighted path.
-      const labelled = hovered || selected || (state.mode === 'focus' && onPath);
+      const labelled = hovered || selected || changed || (state.mode === 'focus' && onPath);
       if (!labelled) return;
 
       const fontSize = Math.max(11 / globalScale, 3.4);
@@ -370,8 +565,8 @@ export default function GraphStage({
       const padY = fontSize * 0.32;
       const top = node.y + radius + 5;
 
-      ctx.fillStyle = 'rgba(1, 18, 7, 0.92)';
-      ctx.strokeStyle = rgba(CHROME.lime, 0.35);
+      ctx.fillStyle = PAPER.sheet;
+      ctx.strokeStyle = rgba(PAPER.ink, 0.3);
       ctx.lineWidth = 1 / globalScale;
       ctx.beginPath();
       const boxX = node.x - width / 2 - padX;
@@ -382,7 +577,7 @@ export default function GraphStage({
       ctx.fill();
       ctx.stroke();
 
-      ctx.fillStyle = CHROME.inkHi;
+      ctx.fillStyle = PAPER.ink;
       ctx.fillText(text, node.x, top + padY);
       ctx.restore();
     },
@@ -411,39 +606,59 @@ export default function GraphStage({
     ctx.textBaseline = 'bottom';
     for (const band of TIER_BANDS) {
       const y = bandY(band.tier);
-      ctx.strokeStyle = rgba(CHROME.ink, 0.07);
+      ctx.strokeStyle = rgba(PAPER.ink, 0.1);
       ctx.beginPath();
       ctx.moveTo(left, y);
       ctx.lineTo(right, y);
       ctx.stroke();
 
-      ctx.fillStyle = rgba(CHROME.ink, 0.3);
+      // Above the topmost sub-row, not on the band's centre line — a tier
+      // spread across sub-rows would otherwise print its label through its
+      // own nodes. Measured against the rows THIS tier actually uses: a tier of
+      // eleven suppliers occupies one row, and clearing five left its label
+      // floating in empty space forty pixels above the rule it belongs to.
+      const rows = subRowsFor(tierSizeRef.current.get(band.tier) ?? 1);
+      const clearance = ((rows - 1) / 2) * SUB_ROW_GAP + 16;
+      ctx.fillStyle = rgba(PAPER.ink, 0.34);
       ctx.textAlign = 'left';
-      ctx.fillText(band.label, left + 14 / globalScale, y - 5 / globalScale);
+      ctx.fillText(band.label, left + 14 / globalScale, y - clearance);
     }
     ctx.restore();
   }, [size.width]);
 
   const linkColor = useCallback((link: GraphLink) => {
     const state = live.current;
+
+    if (state.mode === 'build') {
+      // An edge cannot be drawn to a node that is not there yet. Waiting for
+      // both endpoints is what makes the build read as a chain assembling
+      // rather than a mesh fading up.
+      const now = performance.now();
+      const source = typeof link.source === 'object' ? link.source.id : link.source;
+      const target = typeof link.target === 'object' ? link.target.id : link.target;
+      const ready = Math.min(revealOf(source, now, PLACE_MS), revealOf(target, now, PLACE_MS));
+      if (ready <= 0.35) return 'rgba(0,0,0,0)';
+      return rgba(PAPER.ink, 0.05 + 0.05 * ready);
+    }
+
     if (state.mode === 'focus' && state.pathEdgeIds) {
       return state.pathEdgeIds.has(link.edge_id)
-        ? rgba(CHROME.lime, 0.9)
-        : rgba(CHROME.ink, 0.025);
+        ? rgba(PAPER.forest, 0.85)
+        : rgba(PAPER.ink, 0.04);
     }
-    if (state.mode === 'observability') return rgba(CHROME.ink, 0.04);
+    if (state.mode === 'observability') return rgba(PAPER.ink, 0.05);
     const hover = hoverRef.current;
     if (hover) {
       const source = typeof link.source === 'object' ? link.source.id : link.source;
       const target = typeof link.target === 'object' ? link.target.id : link.target;
-      if (source === hover.id || target === hover.id) return rgba(CHROME.lime, 0.55);
-      return rgba(CHROME.ink, 0.03);
+      if (source === hover.id || target === hover.id) return rgba(PAPER.forest, 0.5);
+      return rgba(PAPER.ink, 0.045);
     }
     // Sole-source edges read slightly stronger at rest. They are the edges
     // that make a supplier irreplaceable, so they are worth seeing before
     // anyone clicks anything.
-    return link.is_single_source === true ? rgba(CHROME.ink, 0.14) : rgba(CHROME.ink, 0.06);
-  }, []);
+    return link.is_single_source === true ? rgba(PAPER.ink, 0.16) : rgba(PAPER.ink, 0.055);
+  }, [revealOf]);
 
   const linkWidth = useCallback((link: GraphLink) => {
     const state = live.current;
@@ -469,31 +684,48 @@ export default function GraphStage({
         height={size.height}
         graphData={graphData}
         backgroundColor="rgba(0,0,0,0)"
+        /**
+         * THE FIX FOR "the graph never changes".
+         *
+         * force-graph defaults to `autoPauseRedraw`, which skips a frame when
+         * nothing IT tracks has changed — node positions, the camera, the link
+         * particles. Everything this component animates is invisible to that
+         * test: the cascade reveal, the arrival rings, the funding marker and
+         * every band colour are read out of `live.current` and
+         * `performance.now()` inside the paint callbacks.
+         *
+         * So after the layout cooled, a data-only change painted nothing at
+         * all. Re-scoring at a new stress level, funding a supplier, turning
+         * the funding back off — all of it updated the side panel and left the
+         * canvas showing the previous scenario until someone happened to pan or
+         * zoom, which is exactly when it finally repainted. It was not a
+         * colour that was too subtle; the frame was never drawn.
+         */
+        autoPauseRedraw={false}
         nodeRelSize={5}
         nodeLabel={() => ''}
         cooldownTime={4200}
         d3AlphaDecay={0.026}
         d3VelocityDecay={0.32}
-        linkDirectionalArrowLength={2.6}
+        linkDirectionalArrowLength={((link: GraphLink) =>
+          live.current.mode === 'focus' && live.current.pathEdgeIds?.has(link.edge_id) ? 4 : 0) as any}
         linkDirectionalArrowRelPos={1}
-        linkDirectionalArrowColor={((link: GraphLink) => {
-          const state = live.current;
-          if (state.mode === 'focus' && state.pathEdgeIds) {
-            return state.pathEdgeIds.has(link.edge_id)
-              ? rgba(CHROME.lime, 0.9)
-              : rgba(CHROME.ink, 0.02);
-          }
-          if (state.mode === 'observability') return rgba(CHROME.ink, 0.03);
-          return rgba(CHROME.ink, 0.18);
-        }) as any}
+        linkDirectionalArrowColor={(() => rgba(PAPER.forest, 0.85)) as any}
         linkColor={linkColor as any}
         linkWidth={linkWidth as any}
         onRenderFramePre={paintGuides as any}
         nodeCanvasObject={paintNode as any}
         nodePointerAreaPaint={(node: GraphNode, colour: string, ctx: CanvasRenderingContext2D) => {
           if (typeof node.x !== 'number' || typeof node.y !== 'number') return;
+          // In GRAPH units the target shrinks with the zoom, and the fit for a
+          // four-hundred-node network sits around 0.55 — which turned a nominal
+          // 9-unit target into a five-pixel one and made most of the graph
+          // unclickable. Dividing by the current zoom keeps it a constant
+          // ~13px on screen however far out the view is.
+          const zoom = graphRef.current?.zoom?.() ?? 1;
+          const radius = Math.max(radiusOf(node, live.current.scores.get(node.id)), 13 / zoom);
           ctx.beginPath();
-          ctx.arc(node.x, node.y, 9, 0, 2 * Math.PI);
+          ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
           ctx.fillStyle = colour;
           ctx.fill();
         }}
@@ -504,10 +736,11 @@ export default function GraphStage({
         onNodeClick={(node: GraphNode) => onSelect(node.id)}
         onBackgroundClick={() => onSelect(null)}
         onNodeDragEnd={(node: GraphNode) => {
-          // Release the node so the layout stays one coherent picture rather
-          // than accumulating hand-placed outliers over a long demo.
+          // Release the horizontal pin only. `fy` is the node's tier and is
+          // not the user's to move — a dragged node that keeps a hand-placed
+          // row would put a tier-3 supplier in the anchor's stratum.
           delete (node as any).fx;
-          delete (node as any).fy;
+          (node as any).fy = bandY(node.tier) + subRowOffset(node.node_id, tierSizeRef.current.get(node.tier) ?? 1);
         }}
       />
     </div>

@@ -71,6 +71,24 @@ Every constant lives in `engine/config.py` with the evidence for its value. Seve
 
 Funding `N042` with **₹2.04 cr** takes it `critical → stable`, takes `N118` `high → stable`, and drains the anchor's supply risk from **₹848.96 cr → ₹308.36 cr**.
 
+Those 15 do not all want the same response. Triage splits them on the two
+factors separately rather than on their product: **6 to fund**, fragile and
+hard to replace; **11 to watch and second-source**, fragile but not
+chokepoints — 6 of which never reach the ranked list at all, because
+`final_score` multiplies their replaceability away.
+
+Hand the optimiser a budget and it spreads it rather than spending it all on
+the top of the list:
+
+| Budget | Committed | Suppliers | Anchor inflow at risk, removed |
+|---|---|---|---|
+| ₹1 cr | ₹1.00 cr | 2 | ₹359 cr |
+| ₹5 cr | ₹5.00 cr | 5 | ₹914 cr |
+| ₹25 cr | ₹14.44 cr | 8 | ₹1,224 cr |
+
+The largest budget cannot spend itself: past ₹14.44 cr there is nobody left in
+the candidate pool worth funding, and the rest is reported unallocated.
+
 **On the real dataset** (298 nodes — 43 real companies from published filings, plus a generated deep tier):
 
 Hero MotoCorp Limited, a real tier-0 anchor, reaches `critical` supply disruption at **0.2089**, ₹37.94 cr of inbound supply at risk, stopped by Shivam Autotech Limited — whose stress comes from its own MSMED disclosures.
@@ -95,10 +113,10 @@ Tier-2 and tier-3 companies are **generated**, with names drawn from a fictional
 ```
 engine/     the model — graph, stress, contagion, criticality, ranking,
             intervention, disruption, plus mockgen and the CSV transform
-api/        FastAPI, four endpoints, stateless
+api/        FastAPI, six endpoints, stateless
 web/        React + TypeScript frontend, force-directed graph
 data/       mock network, demo fixture, real collection CSVs
-tests/      85 tests across all three tracks
+tests/      169 tests across all three tracks
 ```
 
 Contracts and briefs, all worth reading before changing anything:
@@ -126,6 +144,14 @@ cd web && npm install && npm run dev                  # mocks; dev:live for the 
 
 `FRAYFUSE_NETWORK` selects the dataset the API serves. That one variable is the entire real-data switch.
 
+`POST /api/derisk` returns the plan for one supplier — its queue, its
+stabilisation cost, the exposure through it, and the thresholds that would move
+it between queues. `POST /api/allocate` spreads a budget across several. Both
+are additive in schema 1.4 and take the same optional `network` and scenario as
+`/api/simulate`. See `SCHEMA.md` §4.7, §5.9 and §5.10.
+
+`GET /api/network` also returns `stress_signals` — optional and additive in schema 1.2 — so the evidence panel can print a filer's own ageing and MSMED rows instead of restating them. See `SCHEMA.md` §5.2.
+
 **Determinism is mandatory** — the same input must give byte-identical output, because a judge will re-run the counterfactual on stage:
 
 ```bash
@@ -138,11 +164,32 @@ diff run1.json run2.json && echo DETERMINISTIC
 
 ## Status
 
-Engine, API, data pipeline and frontend are integrated on `main` and tested end to end. 85 Python tests plus the web suite, lint clean, determinism verified for scoring, mock generation and the CSV transform.
+Engine, API, data pipeline and frontend are integrated and tested end to end. 169 Python tests plus 26 web tests, lint clean, determinism verified for scoring, mock generation and the CSV transform.
 
-The UI is TypeScript + React with a force-directed network graph, ranked list, intervention card and the anchor counterfactual. It runs against committed mocks with the backend switched off (`npm run dev`) or against the live API (`npm run dev:live`), and both return identical figures.
+The UI is the **v2 console** (`web/src/v2/`): an eight-step walkthrough over one network canvas, with the features the demo is built on.
 
-**What is not finished:** `handleRunCascade` is still a timed animation rather than a call to `/api/simulate`, so the cascade is staged rather than driven by the engine. The scores it animates are real; the propagation you watch is not yet live.
+| Step | What it shows | Where the numbers come from |
+|---|---|---|
+| 01–02 | The chain, and how little of it the anchor can see | `GET /api/network` |
+| 03 | **Ageing vs reality** — the trigger's filed ageing table beside its whole-year MSMED lines | `stress_signals` on `GET /api/network` |
+| 04 | **Cascade** — stress revealed one propagation hop at a time | `propagation_depth` from `POST /api/simulate` |
+| 05 | The ranked list, and why the origin is not the rescue | `ranking` + `scores` |
+| 06 | **Path focus** — the dependency chain from a deep-tier supplier to the anchor | walked over `edges` by `exposure_pct` |
+| 07 | **Fund it, then undo it** — before, after, and the counterfactual | `POST /api/intervene` |
+| 08 | **Spread a budget** — a fixed sum split across several suppliers, best ratio first | `POST /api/allocate` |
+
+Alongside the walkthrough, selecting any supplier opens its **decision panel**:
+which queue it is in, what is at risk through it, what stabilising it would
+cost, and the review triggers that would escalate it. Suppliers in the watch
+queue can be moved into a session watch list — capital held **contingent**, not
+committed — and a supplier in the funding queue can be funded straight from the
+panel, which runs the same counterfactual the closing beat does.
+
+A **what-if slider** re-scores the trigger's `own_stress` at any point from step 04 onwards. Live it posts to `/api/simulate`; offline it reads `web/src/mocks/simulate-sweep.json`, where every stop was produced by that same engine call ahead of time. Nothing in the frontend computes a risk figure.
+
+The cascade animation is now driven by the engine: it reveals the `propagation_depth` each node was actually assigned, in order. It no longer stages a fixed sequence on a timer.
+
+`npm run dev` (committed mocks, backend off) and `npm run dev:live` (live API) return identical figures, which is what `scripts/refresh_web_mocks.py` exists to guarantee.
 
 ---
 
