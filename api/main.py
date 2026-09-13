@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import tempfile
 import time
 from contextlib import asynccontextmanager
@@ -49,6 +50,19 @@ from engine.ingest import IngestError, ingest_zip
 from engine.pipeline import UnknownNodeError
 
 logger = logging.getLogger("frayfuse")
+
+# Give the logger somewhere to write.
+#
+# uvicorn installs handlers on its own `uvicorn.*` loggers and leaves root bare,
+# so without this every logger.info below is formatted and then dropped — the
+# startup line and the whole request-timing middleware were silently doing
+# nothing. basicConfig only acts when root has no handler, so a host that has
+# already configured logging keeps its own setup.
+logging.basicConfig(
+    level=os.getenv("FRAYFUSE_LOG_LEVEL", "INFO").upper(),
+    format="%(levelname)s:     %(message)s",
+)
+logger.setLevel(os.getenv("FRAYFUSE_LOG_LEVEL", "INFO").upper())
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):

@@ -144,6 +144,21 @@ cd web && npm install && npm run dev                  # mocks; dev:live for the 
 
 `FRAYFUSE_NETWORK` selects the dataset the API serves. That one variable is the entire real-data switch.
 
+Three others exist and none is needed to run the demo:
+
+| Variable | Side | Default | What it is for |
+| --- | --- | --- | --- |
+| `FRAYFUSE_CORS_ORIGINS` | API | the four dev origins below | Serving the frontend from somewhere other than a local dev server. Comma-separated. |
+| `FRAYFUSE_LOG_LEVEL` | API | `INFO` | `DEBUG` for more, `WARNING` to quieten the per-request timing line. |
+| `VITE_API_BASE` | web | `http://127.0.0.1:8000` | Pointing the console at a backend on another host or port. |
+
+CORS permits `localhost` **and** `127.0.0.1` on ports 5173 and 3000. Both
+spellings, because a browser treats them as different origins and Vite prints
+both when started with `--host` — clicking the wrong one used to fail the whole
+app with nothing on screen to explain why. Anything `VITE_API_BASE` is set to
+must be reachable from the browser, and the origin serving the page must appear
+in `FRAYFUSE_CORS_ORIGINS`.
+
 `POST /api/derisk` returns the plan for one supplier — its queue, its
 stabilisation cost, the exposure through it, and the thresholds that would move
 it between queues. `POST /api/allocate` spreads a budget across several. Both

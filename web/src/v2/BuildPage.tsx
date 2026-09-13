@@ -267,7 +267,9 @@ export default function BuildPage({ onEnterConsole, onUseCommittedNetwork }: Pro
     <div className="ff-shell">
       <header className="ff-topbar">
         <div className="ff-brand">
-          <span className="ff-brand-name">FrayFuse</span>
+          {/* This screen's h1, as on the console. Both screens otherwise
+              started their outline at h2, leaving the page with no root. */}
+          <h1 className="ff-brand-name">FrayFuse</h1>
           <span className="ff-dataset">
             {api.live ? 'live ingest' : 'committed ingest output'} · offline, no lookups
           </span>

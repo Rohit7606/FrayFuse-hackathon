@@ -893,9 +893,12 @@ export default function Console({ ingested, onBuildPage }: Props) {
       <header className="ff-topbar">
         <div className="ff-brand">
           <BrandMark />
-          <span className="ff-brand-name">
+          {/* The document's one h1. Styled to match the span it replaced, so
+              this is a change to the outline a screen reader reads and to
+              nothing a sighted reader sees. */}
+          <h1 className="ff-brand-name">
             Fray<span>Fuse</span>
-          </span>
+          </h1>
           <span className="ff-dataset">
             {ingested
               ? `built from your upload · ${num(network?.meta.node_count ?? 0)} companies`

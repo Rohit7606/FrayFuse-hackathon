@@ -267,7 +267,7 @@ data: regenerate mock network with seed 42
 - [ ] No server-side state introduced (§3.4)
 - [ ] Malformed request body returns 422 with a readable message, not a 500
 - [ ] Unknown `node_id` in a scenario returns 400 naming the offending ID
-- [ ] CORS still permits the frontend dev origin
+- [ ] CORS still permits the frontend dev origin, in BOTH its localhost and 127.0.0.1 spellings
 
 **If the PR touches `web/`:**
 
@@ -346,7 +346,7 @@ ruff check .
 cd web
 npm install
 npm run dev        # uses committed mocks by default
-npm run dev:live   # points at http://localhost:8000
+npm run dev:live   # points at http://127.0.0.1:8000, or $VITE_API_BASE
 npm run build
 npm run lint
 ```

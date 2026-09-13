@@ -21,7 +21,19 @@ import type {
 } from './types';
 
 const LIVE = import.meta.env.MODE === 'live';
-const BASE = 'http://localhost:8000';
+
+/**
+ * Where the API lives.
+ *
+ * 127.0.0.1 rather than localhost for the same reason the scripts use it: on
+ * Windows localhost resolves to ::1 first, and a backend bound to IPv4 only
+ * makes every request wait out a connect timeout before it falls back.
+ *
+ * VITE_API_BASE overrides it, so the console can be pointed at a deployed
+ * backend without editing this file. Whatever it is set to must also appear in
+ * the API's own CORS_ORIGINS, or the browser refuses the response.
+ */
+const BASE = (import.meta.env.VITE_API_BASE ?? 'http://127.0.0.1:8000').replace(/\/+$/, '');
 
 /**
  * The slider stops.

@@ -488,7 +488,7 @@ band or ranking moves.
 
 ## 5. API contract
 
-Base URL: `http://localhost:8000`. All responses `application/json`. The API is **stateless** — see `AGENTS.md` §3.4.
+Base URL: `http://127.0.0.1:8000` by default, overridable with `VITE_API_BASE` on the web side. All responses `application/json`. The API is **stateless** — see `AGENTS.md` §3.4.
 
 ### 5.1 The `Scenario` object
 

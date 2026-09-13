@@ -19,6 +19,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 import {
   BAND_COLOR,
+  BAND_ORDER,
   PAPER,
   UNSCORED,
   UNSCORED_ANCHOR,
@@ -676,8 +677,63 @@ export default function GraphStage({
     return <div className="ff-boot">Loading network…</div>;
   }
 
+  /**
+   * What the canvas is showing, in words.
+   *
+   * force-graph paints into a bare <canvas>, which is nothing at all to a
+   * screen reader — the centre of the screen would otherwise be a hole. The
+   * figures here are the same ones the side panel prints, so the description
+   * stays true as the scenario is re-scored rather than going stale.
+   */
+  const description = (() => {
+    const tiers = new Map<number, number>();
+    for (const node of nodes) tiers.set(node.tier, (tiers.get(node.tier) ?? 0) + 1);
+    const shape = [...tiers.entries()]
+      .sort((a, b) => a[0] - b[0])
+      .map(([tier, count]) => `tier ${tier}: ${count}`)
+      .join(', ');
+
+    // The first two beats deliberately withhold the bands — the graph is grey
+    // until the cascade reveals them, because the argument is that the anchor
+    // cannot see any of this yet. Reading the counts out early would hand a
+    // screen reader the answer the screen is still building up to.
+    const bandsShown = mode !== 'network' && mode !== 'observability';
+
+    const bands = new Map<RiskBand, number>();
+    for (const score of scores.values()) {
+      if (score.risk_band && score.risk_band !== 'stable') {
+        bands.set(score.risk_band, (bands.get(score.risk_band) ?? 0) + 1);
+      }
+    }
+    // Severity order, not whichever band the score list happened to mention
+    // first, so the sentence descends the same ramp the legend does.
+    const atRisk = BAND_ORDER.filter((band) => bands.has(band))
+      .map((band) => `${bands.get(band)} ${band}`)
+      .join(', ');
+
+    const selected = selectedId ? nodes.find((n) => n.node_id === selectedId) : null;
+
+    return [
+      `Supply chain of ${nodes.length} companies and ${edges.length} supply relationships, drawn in tiers from the anchor down (${shape}).`,
+      bandsShown
+        ? atRisk
+          ? `Currently at risk: ${atRisk}.`
+          : 'No supplier is currently at risk.'
+        : 'No supplier is scored yet at this step.',
+      selected ? `Selected: ${selected.name}.` : null,
+      'Every figure this shows is also printed in the panels beside it.',
+    ]
+      .filter(Boolean)
+      .join(' ');
+  })();
+
   return (
-    <div ref={hostRef} className="ff-canvas-host">
+    <div
+      ref={hostRef}
+      className="ff-canvas-host"
+      role="img"
+      aria-label={description}
+    >
       <ForceGraph2D
         ref={graphRef}
         width={size.width}
