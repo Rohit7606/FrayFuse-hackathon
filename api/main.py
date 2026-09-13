@@ -58,6 +58,11 @@ async def lifespan(_app: FastAPI):
     """
     try:
         net = load_network()
+        # Score the baseline now so the first request does not pay for the
+        # contagion pass. The function this branch originally called was
+        # refactored into api.scoring; the cache it fills is the same one
+        # every read path goes through.
+        scoring.baseline(net)
         logger.info("Loaded network from %s (%d nodes)", NETWORK_PATH, len(net["nodes"]))
     except FileNotFoundError:
         raise SystemExit(f"FATAL: network file not found: {NETWORK_PATH}") from None
