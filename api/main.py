@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import logging
 import tempfile
+import time
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Annotated
@@ -83,6 +84,25 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    """One line per request, with how long it took.
+
+    The demo is judged live, so a slow beat has to be attributable to an
+    endpoint rather than guessed at from the far side of the wire.
+    """
+    started = time.perf_counter()
+    response = await call_next(request)
+    latency_ms = (time.perf_counter() - started) * 1000
+    logger.info(
+        "%s %s - %s - %.2fms",
+        request.method,
+        request.url.path,
+        response.status_code,
+        latency_ms,
+    )
+    return response
 
 
 # ---------------------------------------------------------------------------

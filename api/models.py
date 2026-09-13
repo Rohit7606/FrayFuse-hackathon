@@ -4,7 +4,7 @@ Pydantic v2 models mirroring the runtime contract.
 from datetime import datetime
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 NodeId = Annotated[str, Field(pattern=r"^N[0-9]{3,}$")]
 EdgeId = Annotated[str, Field(pattern=r"^E[0-9]{3,}$")]
@@ -241,6 +241,10 @@ class Intervention(BaseModel):
     # failed Delta's own ge=0 constraint at *response* construction, which the
     # catch-all turned into a 500 — SCHEMA.md §5.6 forbids a 500 for a bad
     # request. Constrained here, it is a 422 naming the field.
+    #
+    # ge, not gt: a zero-rupee intervention is a real request. The engine's own
+    # intervention_cost_cr is 0 for a supplier that needs no money, and the
+    # console funds a node at exactly that figure.
     amount_cr: Annotated[float, Field(ge=0.0)]
 
 
@@ -249,6 +253,16 @@ class Scenario(BaseModel):
 
     stress_overrides: list[StressOverride] = Field(default_factory=list)
     interventions: list[Intervention] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def check_unique_node_ids(self) -> "Scenario":
+        override_ids = [o.node_id for o in self.stress_overrides]
+        if len(override_ids) != len(set(override_ids)):
+            raise ValueError("duplicate node_ids in stress_overrides")
+        intervention_ids = [i.node_id for i in self.interventions]
+        if len(intervention_ids) != len(set(intervention_ids)):
+            raise ValueError("duplicate node_ids in interventions")
+        return self
 
 
 class SimulateRequest(BaseModel):
@@ -274,6 +288,16 @@ class InterveneRequest(BaseModel):
     baseline_scenario: Scenario | None = None
     # As on SimulateRequest — the client's own network, or the default.
     network: NetworkInput | None = None
+
+    @model_validator(mode="after")
+    def check_unique_node_ids(self) -> "InterveneRequest":
+        # Two interventions on one node is an ambiguous request, not a bigger
+        # one: nothing here says whether they add up or the later wins. A 422
+        # naming the field beats silently picking an interpretation.
+        intervention_ids = [i.node_id for i in self.interventions]
+        if len(intervention_ids) != len(set(intervention_ids)):
+            raise ValueError("duplicate node_ids in interventions")
+        return self
 
 
 class IngestReport(BaseModel):

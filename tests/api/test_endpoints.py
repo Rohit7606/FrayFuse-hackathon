@@ -88,7 +88,12 @@ def test_stateless(client):
         "interventions": [{"node_id": "N042", "amount_cr": 4.8}],
         "baseline_scenario": {"stress_overrides": [], "interventions": []}
     }
-    client.post("/api/intervene", json=payload)
+    resp_int1 = client.post("/api/intervene", json=payload)
+    resp_int2 = client.post("/api/intervene", json=payload)
+    
+    assert resp_int1.status_code == 200
+    assert resp_int2.status_code == 200
+    assert resp_int1.content == resp_int2.content, "Two identical intervene calls must be byte-identical"
 
     # Call at-risk again
     resp3 = client.get("/api/at-risk")
@@ -136,3 +141,84 @@ def test_empty_scenario(client):
         node_id = risk_score["node_id"]
         assert node_id in sim_scores_by_id, f"{node_id} in at-risk but missing from simulate"
         assert risk_score == sim_scores_by_id[node_id]
+
+
+def test_empty_interventions(client):
+    payload = {
+        "interventions": [],
+        "baseline_scenario": {"stress_overrides": [], "interventions": []}
+    }
+    response = client.post("/api/intervene", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["delta"]["total_intervention_cost_cr"] == 0.0
+
+
+def test_negative_amount_is_rejected_but_zero_is_not(client):
+    """Funding is bounded below at zero, not above it.
+
+    A negative intervention is meaningless and used to reach compute_delta and
+    fail Delta's own ge=0 at response construction — a 500 for what is really a
+    bad request. Zero is a different case: the engine reports
+    intervention_cost_cr = 0 for a supplier that needs no money, and the
+    console funds a node at exactly that figure, so 0 has to be accepted.
+    """
+    negative = {
+        "interventions": [{"node_id": "N042", "amount_cr": -10.0}],
+        "baseline_scenario": {"stress_overrides": [], "interventions": []},
+    }
+    assert client.post("/api/intervene", json=negative).status_code == 422
+
+    zero = {
+        "interventions": [{"node_id": "N042", "amount_cr": 0.0}],
+        "baseline_scenario": {"stress_overrides": [], "interventions": []},
+    }
+    assert client.post("/api/intervene", json=zero).status_code == 200
+
+
+def test_limit_edge_cases(client):
+    # limit=0 asks for nothing; that is a malformed request, not an empty one.
+    assert client.get("/api/at-risk?limit=0").status_code == 422
+
+    # The bound is declared (ge=1, le=1000) rather than clamped silently, so a
+    # limit past it is a 422 naming the field instead of a response that quietly
+    # ignores what was asked for.
+    assert client.get("/api/at-risk?limit=999999").status_code == 422
+
+    # Anything inside the bound is served, even well past the at-risk count.
+    assert client.get("/api/at-risk?limit=1000").status_code == 200
+
+
+def test_duplicate_node_ids(client):
+    payload = {
+        "scenario": {
+            "stress_overrides": [
+                {"node_id": "N042", "own_stress": 0.5},
+                {"node_id": "N042", "own_stress": 0.8}
+            ],
+            "interventions": []
+        }
+    }
+    response = client.post("/api/simulate", json=payload)
+    assert response.status_code == 422
+    assert "duplicate node_ids" in response.text
+
+    payload_int = {
+        "interventions": [
+            {"node_id": "N042", "amount_cr": 5.0},
+            {"node_id": "N042", "amount_cr": 10.0}
+        ],
+        "baseline_scenario": {"stress_overrides": [], "interventions": []}
+    }
+    response_int = client.post("/api/intervene", json=payload_int)
+    assert response_int.status_code == 422
+    assert "duplicate node_ids" in response_int.text
+
+
+def test_missing_optional_fields(client):
+    # baseline_scenario is optional on intervene
+    payload = {
+        "interventions": [{"node_id": "N042", "amount_cr": 4.8}]
+    }
+    response = client.post("/api/intervene", json=payload)
+    assert response.status_code == 200
