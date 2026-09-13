@@ -107,8 +107,17 @@ export default function Console({ ingested, onBuildPage }: Props) {
   const [cascadeAt, setCascadeAt] = useState<number | null>(null);
   const [waveIndex, setWaveIndex] = useState(-1);
 
-  const [levelIndex, setLevelIndex] = useState<number | null>(null);
-  const [stressStep, setStressStep] = useState<StressStep | null>(null);
+  /**
+   * The what-if scenario on screen, tagged with the node it was asked about.
+   * Carrying the node alongside the result is what keeps a scenario from
+   * outliving its target; `null` means the slider sits at that target's own
+   * filed stress, whatever that turns out to be.
+   */
+  const [whatIf, setWhatIf] = useState<{
+    node: string;
+    index: number;
+    step: StressStep | null;
+  } | null>(null);
   const [scoring, setScoring] = useState(false);
 
   const [intervention, setIntervention] = useState<InterveneResponse | null>(null);
@@ -291,6 +300,30 @@ export default function Console({ ingested, onBuildPage }: Props) {
     [ingested],
   );
 
+  /**
+   * Whether the what-if control has data for whatever is currently targeted.
+   *
+   * Live the engine scores any node, so this is always true. Offline the
+   * slider reads one committed sweep built around one trigger — so retargeting
+   * to another supplier has to hide the control rather than move that other
+   * company's numbers under this one's name.
+   */
+  // Held as the node that was cleared rather than a bare boolean, so the flag
+  // cannot read true for a new target while its own check is still in flight.
+  const [sweepableNode, setSweepableNode] = useState<string | null>(null);
+  useEffect(() => {
+    if (!activeTriggerId) return;
+    let cancelled = false;
+    api.canSweep(activeTriggerId, networkOverride).then(
+      (ok) => !cancelled && setSweepableNode(ok ? activeTriggerId : null),
+      () => !cancelled && setSweepableNode(null),
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [activeTriggerId, networkOverride]);
+  const sweepable = activeTriggerId !== null && sweepableNode === activeTriggerId;
+
   /** The slider's home position: the trigger's own filed stress. */
   const baselineLevelIndex = useMemo(() => {
     if (!baseline || !activeTriggerId) return STRESS_LEVELS.length - 1;
@@ -307,7 +340,15 @@ export default function Console({ ingested, onBuildPage }: Props) {
     return nearest;
   }, [baseline, activeTriggerId]);
 
-  const activeLevelIndex = levelIndex ?? baselineLevelIndex;
+  // A scenario belongs to the node it was scored against, so it is read back
+  // only while that node is still the target. Selecting a different supplier
+  // retargets the what-if and this derivation drops the old result rather than
+  // leaving it on screen under a caption naming the new one — the readout used
+  // to claim a level the engine had never been asked for. It also settles the
+  // race where a slow /api/simulate lands after the selection has moved on.
+  const scenario = whatIf && whatIf.node === activeTriggerId ? whatIf : null;
+  const stressStep = scenario?.step ?? null;
+  const activeLevelIndex = scenario?.index ?? baselineLevelIndex;
   const atBaselineLevel = activeLevelIndex === baselineLevelIndex;
 
   // ---- Which scored network the screen is reading ------------------------
@@ -386,7 +427,11 @@ export default function Console({ ingested, onBuildPage }: Props) {
   const changeLevel = useCallback(
     async (nextIndex: number) => {
       if (!activeTriggerId) return;
-      setLevelIndex(nextIndex);
+      // Captured, not re-read after the await: the result below belongs to the
+      // node that was targeted when the drag happened, even if the selection
+      // has moved on by the time the engine answers.
+      const target = activeTriggerId;
+      setWhatIf({ node: target, index: nextIndex, step: null });
       // Funding is applied against the baseline scenario, so an intervention
       // result and a re-scored trigger cannot both be on screen truthfully.
       setIntervention(null);
@@ -394,18 +439,15 @@ export default function Console({ ingested, onBuildPage }: Props) {
       setFundedAt(null);
       setFunded(null);
 
-      if (nextIndex === baselineLevelIndex) {
-        setStressStep(null);
-        return;
-      }
+      if (nextIndex === baselineLevelIndex) return;
       setScoring(true);
       try {
         const next = await api.atStressLevel(
-          activeTriggerId,
+          target,
           STRESS_LEVELS[nextIndex],
           networkOverride,
         );
-        setStressStep(next);
+        setWhatIf({ node: target, index: nextIndex, step: next });
         setError(null);
       } catch (cause) {
         setError(cause instanceof Error ? cause.message : String(cause));
@@ -475,8 +517,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
 
         case 'allocate':
           setSheetNodeId(null);
-          setLevelIndex(baselineLevelIndex);
-          setStressStep(null);
+          setWhatIf(null);
           // Jumping straight here from the rail must still show a settled
           // cascade rather than an unlit graph, exactly as 'rank' does.
           if (cascadeAt === null) {
@@ -496,8 +537,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
           // before/after the step exists to show had happened off-screen before
           // anyone looked. The step now lands on the unfunded network and the
           // primary action releases the money.
-          setLevelIndex(baselineLevelIndex);
-          setStressStep(null);
+          setWhatIf(null);
           setCounterfactual(false);
           if (plan?.intervention) setSelectedId(plan.intervention.node_id);
           break;
@@ -512,7 +552,6 @@ export default function Console({ ingested, onBuildPage }: Props) {
       watchedId,
       ranking,
       plan,
-      baselineLevelIndex,
     ],
   );
 
@@ -588,15 +627,14 @@ export default function Console({ ingested, onBuildPage }: Props) {
     setAllocation(null);
     setAllocError(null);
     setBudgetIndex(2);
-    setStressStep(null);
-    setLevelIndex(baselineLevelIndex);
+    setWhatIf(null);
     setCascadeAt(null);
     setWaveIndex(-1);
     setSelectedId(null);
     setSheetNodeId(null);
     setReachedIndex(0);
     setStep('network');
-  }, [baselineLevelIndex]);
+  }, []);
 
   // ---- The decision for the selected supplier ----------------------------
 
@@ -666,7 +704,8 @@ export default function Console({ ingested, onBuildPage }: Props) {
     step !== 'visibility' &&
     step !== 'act' &&
     step !== 'allocate' &&
-    summary !== null;
+    summary !== null &&
+    sweepable;
 
   const caption = (() => {
     switch (step) {

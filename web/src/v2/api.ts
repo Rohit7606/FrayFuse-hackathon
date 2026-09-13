@@ -151,6 +151,22 @@ export const api = {
    * prove it. `ingest-sweep.json` is that network's own sweep, built by
    * refresh_web_mocks.py against the same trigger the console derives.
    */
+  /**
+   * Whether the what-if slider can actually answer for `triggerNode`.
+   *
+   * Live, the engine scores whatever it is handed, so anything goes. Offline
+   * the answer comes from one committed sweep built around one trigger, and
+   * every other node has no data at all — so the console hides the control
+   * rather than showing a slider whose every stop reports another company.
+   */
+  async canSweep(triggerNode: string, network?: NetworkOverride): Promise<boolean> {
+    if (LIVE) return true;
+    const sweep = network
+      ? ((await import('../mocks/ingest-sweep.json')).default as unknown as Sweep)
+      : ((await import('../mocks/simulate-sweep.json')).default as unknown as Sweep);
+    return triggerNode === sweep.trigger_node;
+  },
+
   async atStressLevel(
     triggerNode: string,
     level: number,
@@ -175,6 +191,18 @@ export const api = {
     const sweep = network
       ? ((await import('../mocks/ingest-sweep.json')).default as unknown as Sweep)
       : ((await import('../mocks/simulate-sweep.json')).default as unknown as Sweep);
+    // One trigger's sweep is committed, and it is the one refresh_web_mocks.py
+    // named. Answering for any other node would hand back that company's
+    // numbers under this one's name — the exact failure the generator's own
+    // docstring warns about ("a slider that moves a company"). The console
+    // asks `canSweep` before offering the control, so reaching here with a
+    // different node is a bug rather than a user action.
+    if (triggerNode !== sweep.trigger_node) {
+      throw new Error(
+        `offline sweep covers ${sweep.trigger_node}, not ${triggerNode}; ` +
+          're-run scripts/refresh_web_mocks.py to sweep a different trigger',
+      );
+    }
     const step = sweep.steps.find((candidate) => candidate.own_stress === level);
     if (!step) {
       // A level the sweep does not carry is a build-time mismatch between this

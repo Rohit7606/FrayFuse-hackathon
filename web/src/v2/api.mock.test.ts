@@ -11,7 +11,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { BUDGET_LEVELS, api } from './api';
+import { BUDGET_LEVELS, STRESS_LEVELS, api } from './api';
 import type { ScoredNetwork } from './types';
 
 describe('offline decision layer', () => {
@@ -63,5 +63,47 @@ describe('offline decision layer', () => {
     const fundable = await api.fundable();
     const demo = await api.demoScenario();
     expect(fundable).toBe(demo.intervention.node_id);
+  });
+});
+
+/**
+ * The what-if slider retargets to whatever node is selected. Offline there is
+ * exactly one committed sweep, so the client has to say which node it can
+ * answer for and refuse the rest — otherwise the slider reports the swept
+ * company's numbers under the selected company's name.
+ */
+describe('offline what-if targeting', () => {
+  it('can sweep the trigger the committed sweep was built around', async () => {
+    const demo = await api.demoScenario();
+    expect(await api.canSweep(demo.trigger_node)).toBe(true);
+
+    // At zero stress nothing is at risk and nothing ranks, so the step that
+    // proves the sweep carries real scores is the one at the top of the range.
+    const top = STRESS_LEVELS[STRESS_LEVELS.length - 1];
+    const step = await api.atStressLevel(demo.trigger_node, top);
+    expect(step.own_stress).toBe(top);
+    expect(step.ranking.length).toBeGreaterThan(0);
+  });
+
+  it('refuses to sweep any other node rather than answering for the wrong one', async () => {
+    const baseline = (await api.baseline()) as ScoredNetwork;
+    const demo = await api.demoScenario();
+    const other = baseline.scores
+      .map((row) => row.node_id)
+      .find((id) => id !== demo.trigger_node);
+    expect(other).toBeDefined();
+
+    expect(await api.canSweep(other as string)).toBe(false);
+    await expect(api.atStressLevel(other as string, STRESS_LEVELS[0])).rejects.toThrow(
+      /offline sweep covers/,
+    );
+  });
+
+  it('offers every stop the slider can land on', async () => {
+    const demo = await api.demoScenario();
+    for (const level of STRESS_LEVELS) {
+      const step = await api.atStressLevel(demo.trigger_node, level);
+      expect(step.own_stress).toBe(level);
+    }
   });
 });
