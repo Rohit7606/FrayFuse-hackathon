@@ -372,10 +372,10 @@ code { font-family: var(--mono); font-size: 0.92em; }
 
 .ff-side {
   background: var(--sheet); display: flex; flex-direction: column;
-  min-height: 0; overflow-y: auto;
+  min-height: 0; overflow-y: auto; overflow-x: hidden;
 }
 
-.ff-block { padding: 20px 22px; border-bottom: 1px solid var(--rule); }
+.ff-block { padding: 20px 22px; border-bottom: 1px solid var(--rule); min-width: 0; overflow-wrap: anywhere; }
 .ff-block:last-child { border-bottom: none; }
 .ff-block-head {
   display: flex; align-items: flex-start; justify-content: space-between;
@@ -824,9 +824,6 @@ code { font-family: var(--mono); font-size: 0.92em; }
 /* ---- Two queues, side by side ---- */
 
 .ff-queues { display: grid; grid-template-columns: 1fr; gap: 14px; }
-@media (min-width: 1500px) {
-  .ff-queues { grid-template-columns: 1fr 1fr; }
-}
 
 .ff-queue {
   padding: 13px;
@@ -995,3 +992,137 @@ code { font-family: var(--mono); font-size: 0.92em; }
   font-family: var(--mono); font-size: 10.5px; color: var(--ink-dim);
 }
 .ff-alloc-bands { display: inline-flex; align-items: center; gap: 6px; }
+
+/* ===================================================================
+   Stage-specific sidebar components
+   =================================================================== */
+
+/* ---- VisibilityBreakdown (step 02) ---- */
+.ff-tier-breakdown { display: flex; flex-direction: column; gap: 10px; }
+.ff-tier-row { display: flex; flex-direction: column; gap: 4px; }
+.ff-tier-label {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+}
+.ff-tier-name { font-size: 12.5px; font-weight: 500; }
+.ff-tier-count {
+  font-family: var(--mono); font-size: 10.5px; color: var(--ink-dim);
+  font-variant-numeric: tabular-nums;
+}
+.ff-tier-track {
+  height: 6px; background: rgba(20, 20, 20, 0.06); border-radius: 3px;
+  overflow: hidden;
+}
+.ff-tier-fill {
+  height: 100%; background: var(--forest); border-radius: 3px;
+  transform-origin: left center;
+  transition: transform 0.4s var(--ease-out);
+}
+.ff-tier-fill[data-full='true'] { background: var(--apple); }
+
+/* ---- TriggerEvidence (step 03) ---- */
+.ff-ageing { display: flex; flex-direction: column; }
+.ff-ageing-row {
+  display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: baseline;
+  padding: 7px 0; border-bottom: 1px solid var(--rule);
+}
+.ff-ageing-row:last-child { border-bottom: none; }
+.ff-ageing-label { font-size: 12px; color: var(--ink-mid); }
+.ff-ageing-value {
+  font-family: var(--mono); font-size: 13px; font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.ff-yoy { display: flex; flex-direction: column; gap: 2px; }
+.ff-yoy-row {
+  display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: baseline;
+  padding: 7px 0; border-bottom: 1px solid var(--rule);
+}
+.ff-yoy-row:last-child { border-bottom: none; }
+.ff-yoy-label { font-size: 12px; color: var(--ink-mid); }
+.ff-yoy-values {
+  font-family: var(--mono); font-size: 11px; color: var(--ink-dim);
+  font-variant-numeric: tabular-nums;
+}
+.ff-yoy-change {
+  font-family: var(--mono); font-size: 12px; font-weight: 600;
+  font-variant-numeric: tabular-nums; min-width: 36px; text-align: right;
+}
+.ff-yoy-change[data-dir='up'] { color: var(--critical); }
+.ff-yoy-change[data-dir='down'] { color: var(--forest); }
+.ff-yoy-change[data-dir='flat'] { color: var(--ink-dim); }
+
+/* ---- CascadeProgress (step 04) ---- */
+.ff-wave-log { display: flex; flex-direction: column; }
+.ff-wave-entry {
+  display: grid; grid-template-columns: 54px 1fr auto; gap: 10px; align-items: baseline;
+  padding: 8px 10px; border-bottom: 1px solid var(--rule);
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+.ff-wave-entry:last-child { border-bottom: none; }
+.ff-wave-entry[data-active='true'] {
+  background: rgba(1, 47, 19, 0.06);
+}
+.ff-wave-depth {
+  font-family: var(--mono); font-size: 11px; font-weight: 600;
+  color: var(--ink-mid);
+}
+.ff-wave-entry[data-active='true'] .ff-wave-depth { color: var(--forest); }
+.ff-wave-count { font-size: 12px; color: var(--ink); }
+.ff-wave-cumulative {
+  font-family: var(--mono); font-size: 10.5px; color: var(--ink-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- PathBreakdown (step 06) ---- */
+.ff-hop-list { display: flex; flex-direction: column; }
+.ff-hop {
+  padding: 12px 0; border-bottom: 1px solid var(--rule);
+}
+.ff-hop:last-child { border-bottom: none; }
+.ff-hop-header {
+  display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;
+}
+.ff-hop-no {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 600;
+  color: var(--ink-dim); min-width: 16px;
+}
+.ff-hop-names {
+  display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+  font-size: 13px; font-weight: 500;
+}
+.ff-hop-from { color: var(--ink); }
+.ff-hop-arrow { color: var(--ink-dim); font-size: 11px; }
+.ff-hop-to { color: var(--ink); }
+.ff-hop-detail {
+  display: flex; flex-wrap: wrap; gap: 6px 14px;
+  padding-left: 26px;
+}
+.ff-hop-meta {
+  font-family: var(--mono); font-size: 10.5px; color: var(--ink-dim);
+  font-variant-numeric: tabular-nums;
+}
+.ff-hop-sole {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  color: var(--critical); text-transform: uppercase; letter-spacing: 0.04em;
+}
+.ff-hop-bands {
+  display: flex; flex-wrap: wrap; gap: 8px; padding-left: 26px; margin-top: 6px;
+}
+.ff-hop-band { display: inline-flex; align-items: center; gap: 6px; }
+
+/* ---- AllocationSummary (step 08) ---- */
+.ff-efficiency { display: flex; flex-direction: column; }
+.ff-efficiency-row {
+  display: grid; grid-template-columns: 20px 1fr auto; gap: 10px; align-items: baseline;
+  padding: 7px 0; border-bottom: 1px solid var(--rule);
+}
+.ff-efficiency-row:last-child { border-bottom: none; }
+.ff-efficiency-rank {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 600;
+  color: var(--ink-dim); text-align: right;
+}
+.ff-efficiency-name { font-size: 12.5px; font-weight: 500; min-width: 0; overflow-wrap: anywhere; }
+.ff-efficiency-value {
+  font-family: var(--mono); font-size: 13px; font-weight: 500;
+  font-variant-numeric: tabular-nums; color: var(--forest);
+}
