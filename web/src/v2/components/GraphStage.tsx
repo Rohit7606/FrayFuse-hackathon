@@ -58,6 +58,14 @@ interface GraphNode extends Node {
   id: string;
   x?: number;
   y?: number;
+  /**
+   * d3's position pins. `fy` holds a node on its tier's row for the life of
+   * the layout; `fx` is left undefined so the strata can spread sideways. Both
+   * were reached for through `as any` before the separation force needed to
+   * read a row off `fy`.
+   */
+  fx?: number;
+  fy?: number;
 }
 
 interface GraphLink extends Edge {
@@ -120,11 +128,20 @@ interface Props {
  * strip five times wider than the stage, and it is deterministic — derived
  * from the node id, so the layout is identical on every run.
  */
-const BAND_GAP = 280;
+/**
+ * Vertical distance between tier rows.
+ *
+ * Once the separation force stopped the strata piling up, tier 3 became the
+ * thing that sets the fit — the layout is far wider than it is tall, so the
+ * fit is width-bound and the canvas had roughly half its height going spare.
+ * Spending it here buys clear air between the tiers, and costs no zoom until
+ * height becomes the binding dimension.
+ */
+const BAND_GAP = 330;
 const SUB_ROWS = 5;
 const SUB_ROW_GAP = 26;
 
-const bandY = (tier: number) => -420 + Math.min(tier, 3) * BAND_GAP;
+const bandY = (tier: number) => -0.5 * 3 * BAND_GAP + Math.min(tier, 3) * BAND_GAP;
 
 /**
  * Sub-rows only where a tier is crowded. Splitting 28 tier-1 suppliers across
@@ -142,6 +159,81 @@ function subRowOffset(nodeId: string, tierSize: number): number {
   let hash = 0;
   for (let i = 0; i < nodeId.length; i += 1) hash = (hash * 31 + nodeId.charCodeAt(i)) >>> 0;
   return ((hash % rows) - (rows - 1) / 2) * SUB_ROW_GAP;
+}
+
+/**
+ * The radius the LAYOUT reserves for a node, which is not the radius it is
+ * drawn at.
+ *
+ * `radiusOf` adds up to 2.4 for a critical band, and spacing that moved with
+ * the score would make the strata visibly reshuffle every time the what-if
+ * slider re-scored the network — the graph would read as having changed shape
+ * when only a colour changed. Reserve the tier's base size and let the bump
+ * spend the padding.
+ */
+const layoutRadius = (tier: number) => 6.4 + (3 - Math.min(tier, 3)) * 1.4;
+
+/** Clear air between two neighbours in a row, in graph units. */
+const ROW_PAD = 5.5;
+
+/**
+ * Keep the nodes in a row off each other.
+ *
+ * Charge and the link force were the only things spreading a stratum
+ * sideways, and against 1,339 links pulling everything towards the anchor's
+ * column they lost: tier 1's 28 suppliers landed inside about a hundred
+ * pixels, drawn over one another, while the canvas either side of them sat
+ * empty. Repulsion cannot fix that — it is a soft force being asked to do a
+ * hard job.
+ *
+ * `fy` already pins every node to its tier's row, so the overlap is purely
+ * one-dimensional and can be resolved exactly. Sort each row by x, walk it
+ * once pushing each node clear of the one before, then recentre. That is a
+ * guarantee of separation rather than a tendency towards it, and it costs one
+ * sort per row per tick.
+ *
+ * Widening the inner tiers does not cost any zoom: tier 3 is five times the
+ * size of tier 1 and already sets the width the fit has to accommodate, so
+ * this spends space that was empty.
+ */
+function rowSeparationForce() {
+  let rows: GraphNode[][] = [];
+
+  const force = () => {
+    for (const row of rows) {
+      if (row.length < 2) continue;
+      row.sort((a, b) => (a.x ?? 0) - (b.x ?? 0));
+
+      // One left-to-right pass. Each node moves only as far right as it must.
+      let edge = -Infinity;
+      for (const node of row) {
+        const r = layoutRadius(node.tier);
+        const need = edge + ROW_PAD + r;
+        if ((node.x ?? 0) < need) node.x = need;
+        edge = (node.x ?? 0) + r;
+      }
+
+      // That pass only ever pushes right, so the row drifts off centre. Put it
+      // back, or the strata stop sharing an axis and the pyramid leans.
+      const mid = ((row[0].x ?? 0) + (row[row.length - 1].x ?? 0)) / 2;
+      for (const node of row) node.x = (node.x ?? 0) - mid;
+    }
+  };
+
+  // d3 hands every node to the force once; the rows never change after that,
+  // because `fy` is fixed for the life of the layout.
+  force.initialize = (nodes: GraphNode[]) => {
+    const byRow = new Map<number, GraphNode[]>();
+    for (const node of nodes) {
+      const key = Math.round(node.fy ?? 0);
+      const bucket = byRow.get(key);
+      if (bucket) bucket.push(node);
+      else byRow.set(key, [node]);
+    }
+    rows = [...byRow.values()];
+  };
+
+  return force;
 }
 
 export default function GraphStage({
@@ -305,6 +397,9 @@ export default function GraphStage({
     // towards each other's column. Neither can move a node off its row.
     graph.d3Force('charge')?.strength(-46);
     graph.d3Force('link')?.distance(18).strength(0.08);
+    // Runs after the two above, so it has the last word on x and no node can
+    // be left sitting on top of another.
+    graph.d3Force('rowSeparation', rowSeparationForce());
     let cancelLift = () => {};
     const fit = window.setTimeout(() => {
       cancelLift = fitWithInset(600, 46);
@@ -658,7 +753,14 @@ export default function GraphStage({
     // Sole-source edges read slightly stronger at rest. They are the edges
     // that make a supplier irreplaceable, so they are worth seeing before
     // anyone clicks anything.
-    return link.is_single_source === true ? rgba(PAPER.ink, 0.16) : rgba(PAPER.ink, 0.055);
+    //
+    // The ordinary ones were lightened once the tiers stopped overlapping.
+    // 1,339 edges nearly all converging on three anchors stack into a haze
+    // whichever way they are drawn, and with the strata now spread apart there
+    // is more edge on screen, not less. Dropping them keeps the fan legible as
+    // a shape while letting the nodes sit in front of it; sole-source holds its
+    // weight, so the contrast between the two carries more than it did.
+    return link.is_single_source === true ? rgba(PAPER.ink, 0.16) : rgba(PAPER.ink, 0.032);
   }, [revealOf]);
 
   const linkWidth = useCallback((link: GraphLink) => {
