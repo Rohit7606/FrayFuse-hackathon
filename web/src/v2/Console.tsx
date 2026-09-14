@@ -41,7 +41,18 @@ import {
   QueueBoard,
   WatchQueue,
 } from './components/DecisionPanel';
-import { Dossier, NetworkStats, Outcome, RankList, RiskStats } from './components/SidePanel';
+import {
+  AllocationSummary,
+  CascadeProgress,
+  Dossier,
+  NetworkStats,
+  Outcome,
+  PathBreakdown,
+  RankList,
+  RiskStats,
+  TriggerEvidence,
+  VisibilityBreakdown,
+} from './components/SidePanel';
 import StoryRail, { STEPS, type StepId } from './components/StoryRail';
 import WhatIfBar from './components/WhatIfBar';
 import type {
@@ -122,8 +133,6 @@ export default function Console({ ingested, onBuildPage }: Props) {
   // PERSON_C.md rules out browser storage.
   const [decision, setDecision] = useState<DeriskPlan | null>(null);
   const [watchlist, setWatchlist] = useState<string[]>([]);
-  const [fundableNode, setFundableNode] = useState<string | null>(null);
-
   const [budgetIndex, setBudgetIndex] = useState(2);
   const [allocation, setAllocation] = useState<AllocateResponse | null>(null);
   const [allocating, setAllocating] = useState(false);
@@ -166,24 +175,6 @@ export default function Console({ ingested, onBuildPage }: Props) {
         if (!cancelled) setError(cause instanceof Error ? cause.message : String(cause));
       }
     })();
-    return () => {
-      cancelled = true;
-    };
-  }, [ingested]);
-
-  // Which supplier this mode can fund. Live that is any of them; offline it is
-  // the one the committed intervention covers, and the plan panel says so on
-  // the button rather than replaying somebody else's numbers.
-  useEffect(() => {
-    let cancelled = false;
-    api
-      .fundable(ingested ? { meta: ingested.meta, nodes: ingested.nodes, edges: ingested.edges } : undefined)
-      .then((nodeId) => {
-        if (!cancelled) setFundableNode(nodeId);
-      })
-      .catch(() => {
-        if (!cancelled) setFundableNode(null);
-      });
     return () => {
       cancelled = true;
     };
@@ -1011,13 +1002,73 @@ export default function Console({ ingested, onBuildPage }: Props) {
         <aside className="ff-side">
           {error && network && <div className="ff-error">{error}</div>}
 
-          {step === 'network' || step === 'visibility' ? (
-            network && <NetworkStats meta={network.meta} nodes={network.nodes} />
-          ) : (
-            summary && <RiskStats summary={summary} />
+          {/* ---- 01 CHAIN: the raw topology ---- */}
+          {step === 'network' && network && (
+            <NetworkStats meta={network.meta} nodes={network.nodes} />
           )}
 
-          {intervention && funded && index && (
+          {/* ---- 02 VISIBILITY: observability by tier ---- */}
+          {step === 'visibility' && network && (
+            <VisibilityBreakdown nodes={network.nodes} meta={network.meta} />
+          )}
+
+          {/* ---- 03 EVIDENCE: the trigger's own filing ---- */}
+          {step === 'evidence' && (() => {
+            const trigNode = triggerNode && index ? index.nodeById.get(triggerNode) : null;
+            const trigSignals = triggerNode && index ? index.signalsByNode.get(triggerNode) ?? [] : [];
+            const trigScore = triggerNode ? scores.get(triggerNode) : undefined;
+            return trigNode ? (
+              <TriggerEvidence node={trigNode} signals={trigSignals} score={trigScore} />
+            ) : null;
+          })()}
+
+          {/* ---- 04 CASCADE: live wave tracker ---- */}
+          {step === 'cascade' && summary && (
+            <CascadeProgress
+              waves={waves}
+              waveIndex={waveIndex}
+              summary={summary}
+              running={cascadeRunning}
+            />
+          )}
+
+          {/* ---- 05 RANK: the ranking IS the point ---- */}
+          {step === 'rank' && summary && <RiskStats summary={summary} />}
+          {step === 'rank' && index && (
+            <>
+              <RankList
+                ranking={ranking}
+                scores={scores}
+                nodeById={index.nodeById}
+                selectedId={selectedId}
+                limit={8}
+                onSelect={(nodeId) => {
+                  setSelectedId(nodeId);
+                  goTo('path', nodeId);
+                }}
+              />
+              <QueueBoard
+                scores={scores}
+                nodeById={index.nodeById}
+                selectedId={selectedId}
+                watchlist={new Set(watchlist)}
+                onSelect={setSelectedId}
+              />
+            </>
+          )}
+
+          {/* ---- 06 PATH: hop-by-hop dependency chain ---- */}
+          {step === 'path' && path && index && (
+            <PathBreakdown
+              path={path}
+              scores={scores}
+              nodeById={index.nodeById}
+            />
+          )}
+
+
+          {/* ---- 07 ACT: intervention outcome ---- */}
+          {step === 'act' && intervention && funded && index && (
             <Outcome
               delta={intervention.delta}
               fundedName={index.nodeById.get(funded.node_id)?.name ?? funded.node_id}
@@ -1030,7 +1081,10 @@ export default function Console({ ingested, onBuildPage }: Props) {
               onToggleCounterfactual={() => setCounterfactual((current) => !current)}
             />
           )}
+          {step === 'act' && !intervention && summary && <RiskStats summary={summary} />}
 
+
+          {/* ---- 08 ALLOCATE: budget allocation ---- */}
           {step === 'allocate' && (
             <BudgetPanel
               budgets={BUDGET_LEVELS}
@@ -1047,7 +1101,23 @@ export default function Console({ ingested, onBuildPage }: Props) {
               onSelect={setSelectedId}
             />
           )}
+          {step === 'allocate' && allocation && index && (
+            <AllocationSummary
+              allocation={allocation}
+              nodeById={index.nodeById}
+            />
+          )}
+          {step === 'allocate' && index && (
+            <QueueBoard
+              scores={scores}
+              nodeById={index.nodeById}
+              selectedId={selectedId}
+              watchlist={new Set(watchlist)}
+              onSelect={setSelectedId}
+            />
+          )}
 
+          {/* ---- Global Panel Sections: Node details, decisions, and queues ---- */}
           {selectedNode && index && (
             <Dossier
               node={selectedNode}
@@ -1061,7 +1131,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
             <DeriskPanel
               plan={shownDecision}
               queued={watchlist.includes(shownDecision.node_id)}
-              fundable={fundableNode}
+              fundable={null}
               busy={scoring}
               onFund={(nodeId, amount) => {
                 setStep('act');
@@ -1072,25 +1142,18 @@ export default function Console({ ingested, onBuildPage }: Props) {
             />
           )}
 
-          <WatchQueue
-            nodeIds={watchlist}
-            scores={scores}
-            nodeById={index?.nodeById ?? new Map()}
-            onSelect={setSelectedId}
-            onRemove={toggleWatch}
-          />
-
-          {planStep && index && (
-            <QueueBoard
+          {watchlist.length > 0 && (
+            <WatchQueue
+              nodeIds={watchlist}
               scores={scores}
-              nodeById={index.nodeById}
-              selectedId={selectedId}
-              watchlist={new Set(watchlist)}
+              nodeById={index?.nodeById ?? new Map()}
               onSelect={setSelectedId}
+              onRemove={toggleWatch}
             />
           )}
 
-          {step !== 'network' && step !== 'visibility' && index && (
+          {/* Compact rank list at path and act for reference */}
+          {(step === 'path' || step === 'act') && index && (
             <RankList
               ranking={ranking}
               scores={scores}
@@ -1098,7 +1161,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
               selectedId={selectedId}
               onSelect={(nodeId) => {
                 setSelectedId(nodeId);
-                if (step === 'rank') goTo('path', nodeId);
+                if (step === 'path') goTo('path', nodeId);
               }}
             />
           )}
