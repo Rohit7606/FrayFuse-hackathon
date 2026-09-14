@@ -714,7 +714,14 @@ export function CascadeProgress({
   running: boolean;
 }) {
   const visibleWaves = waves.slice(0, waveIndex + 1);
-  let cumulative = 0;
+  // Running totals computed up front rather than by mutating a counter inside
+  // the map. The counter happened to work because it is re-initialised on every
+  // render, but it makes the row's value depend on the order React calls the
+  // callback in, which is not a guarantee worth relying on.
+  const runningTotals = visibleWaves.reduce<number[]>((acc, wave) => {
+    acc.push((acc[acc.length - 1] ?? 0) + wave.nodeIds.length);
+    return acc;
+  }, []);
 
   return (
     <div className="ff-block">
@@ -727,7 +734,6 @@ export function CascadeProgress({
 
       <div className="ff-wave-log">
         {visibleWaves.map((wave, i) => {
-          cumulative += wave.nodeIds.length;
           const isActive = i === waveIndex && running;
           return (
             <div
@@ -743,7 +749,7 @@ export function CascadeProgress({
                 {num(wave.nodeIds.length)} {wave.nodeIds.length === 1 ? 'supplier' : 'suppliers'}
               </span>
               <span className="ff-wave-cumulative">
-                {num(cumulative)} total
+                {num(runningTotals[i])} total
               </span>
             </div>
           );

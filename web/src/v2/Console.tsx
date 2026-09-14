@@ -142,6 +142,8 @@ export default function Console({ ingested, onBuildPage }: Props) {
   // PERSON_C.md rules out browser storage.
   const [decision, setDecision] = useState<DeriskPlan | null>(null);
   const [watchlist, setWatchlist] = useState<string[]>([]);
+  const [fundableNode, setFundableNode] = useState<string | null>(null);
+
   const [budgetIndex, setBudgetIndex] = useState(2);
   const [allocation, setAllocation] = useState<AllocateResponse | null>(null);
   const [allocating, setAllocating] = useState(false);
@@ -184,6 +186,24 @@ export default function Console({ ingested, onBuildPage }: Props) {
         if (!cancelled) setError(cause instanceof Error ? cause.message : String(cause));
       }
     })();
+    return () => {
+      cancelled = true;
+    };
+  }, [ingested]);
+
+  // Which supplier this mode can fund. Live that is any of them; offline it is
+  // the one the committed intervention covers, and the plan panel says so on
+  // the button rather than replaying somebody else's numbers.
+  useEffect(() => {
+    let cancelled = false;
+    api
+      .fundable(ingested ? { meta: ingested.meta, nodes: ingested.nodes, edges: ingested.edges } : undefined)
+      .then((nodeId) => {
+        if (!cancelled) setFundableNode(nodeId);
+      })
+      .catch(() => {
+        if (!cancelled) setFundableNode(null);
+      });
     return () => {
       cancelled = true;
     };
@@ -1174,7 +1194,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
             <DeriskPanel
               plan={shownDecision}
               queued={watchlist.includes(shownDecision.node_id)}
-              fundable={null}
+              fundable={fundableNode}
               busy={scoring}
               onFund={(nodeId, amount) => {
                 setStep('act');
