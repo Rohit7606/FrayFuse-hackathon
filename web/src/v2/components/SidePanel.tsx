@@ -151,7 +151,16 @@ export function RankList({
                     {nodeId} · tier {node.tier} · depth {row.propagation_depth}
                   </span>
                   <Chip band={row.risk_band} />
-                  {row.reason_text && <span className="ff-rank-why">{row.reason_text}</span>}
+                  {/*
+                    The reason is a paragraph, and eight paragraphs is most of
+                    the panel's height — a ranked list nobody can see the bottom
+                    of stops being a ranking. Only the row being looked at
+                    explains itself; the rest stay one line each, which is what
+                    makes the order readable at a glance.
+                  */}
+                  {row.reason_text && selectedId === nodeId && (
+                    <span className="ff-rank-why">{row.reason_text}</span>
+                  )}
                 </span>
                 <span className="ff-rank-figs">
                   <span className="ff-rank-cost">{cr(row.intervention_cost_cr)}</span>

@@ -1099,6 +1099,13 @@ export default function Console({ ingested, onBuildPage }: Props) {
           {step === 'rank' && summary && <RiskStats summary={summary} />}
           {step === 'rank' && index && (
             <>
+              {/*
+                The ranking alone. The queue board sat under it here and put a
+                second list of the same suppliers, split a different way,
+                directly below the first — 911px answering a question this beat
+                has not asked yet. Triage is step eight's subject, and that is
+                where the board stayed.
+              */}
               <RankList
                 ranking={ranking}
                 scores={scores}
@@ -1109,13 +1116,6 @@ export default function Console({ ingested, onBuildPage }: Props) {
                   setSelectedId(nodeId);
                   goTo('path', nodeId);
                 }}
-              />
-              <QueueBoard
-                scores={scores}
-                nodeById={index.nodeById}
-                selectedId={selectedId}
-                watchlist={new Set(watchlist)}
-                onSelect={setSelectedId}
               />
             </>
           )}
@@ -1180,8 +1180,32 @@ export default function Console({ ingested, onBuildPage }: Props) {
             />
           )}
 
-          {/* ---- Global Panel Sections: Node details, decisions, and queues ---- */}
-          {selectedNode && index && (
+          {/*
+            Below here is what SUPPORTS the step above, and it is deliberately
+            not the same on every beat.
+
+            These two blocks used to render wherever a node happened to be
+            selected, which is nearly everywhere — step navigation selects one
+            for you. That put 1,800px of node detail under a 470px answer on
+            five of the eight beats, and the beat's own content stopped being
+            the thing the panel was about.
+
+            Worse than the height was the repetition. On the chain beat the
+            dependency rows, the dossier and the plan each described the same
+            supplier: fragility 0.350 printed three times, criticality 0.584
+            three times, "78% revenue dependency" three times, ₹2.04 cr three
+            times. Reading felt heavy not because there was much to know but
+            because the same thing kept being said, and a figure repeated three
+            ways invites the reader to check whether it is really the same
+            figure.
+
+            So each block gets one beat and one job. The dossier is what drives
+            this supplier, and belongs to the beat that asks why it matters. The
+            plan is a decision, and belongs to the beat that acts — where it
+            also carries the supplier's own numbers, so nothing is lost by the
+            dossier standing down there.
+          */}
+          {selectedNode && index && step === 'path' && (
             <Dossier
               node={selectedNode}
               score={scores.get(selectedNode.node_id)}
@@ -1190,7 +1214,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
             />
           )}
 
-          {shownDecision && (
+          {shownDecision && step === 'act' && (
             <DeriskPanel
               plan={shownDecision}
               queued={watchlist.includes(shownDecision.node_id)}
@@ -1215,19 +1239,14 @@ export default function Console({ ingested, onBuildPage }: Props) {
             />
           )}
 
-          {/* Compact rank list at path and act for reference */}
-          {(step === 'path' || step === 'act') && index && (
-            <RankList
-              ranking={ranking}
-              scores={scores}
-              nodeById={index.nodeById}
-              selectedId={selectedId}
-              onSelect={(nodeId) => {
-                setSelectedId(nodeId);
-                if (step === 'path') goTo('path', nodeId);
-              }}
-            />
-          )}
+          {/*
+            No second copy of the ranking down here. It used to render in full,
+            with no limit, on both the chain beat and the funding one — 1,449px
+            of a list the reader has just been through, underneath the answer
+            they came for, with the selected supplier's reason repeated once
+            more at the bottom of it. The ranking has its own beat, one click
+            away on the rail, and the graph selects a supplier directly.
+          */}
         </aside>
       </div>
 
