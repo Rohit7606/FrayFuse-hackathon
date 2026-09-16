@@ -316,6 +316,38 @@ export const api = {
    * for that reason, and an unlisted budget is a build-time mismatch rather
    * than something to approximate with a neighbouring figure.
    */
+  /**
+   * The budget stops the optimiser offers, for THIS network.
+   *
+   * They were a fixed ladder — ₹1, 2.5, 5, 10, 25 cr — chosen against the mock
+   * network, whose whole funding queue costs ₹17 cr to stabilise. Pointed at
+   * the collected dataset, which needs ₹41.49 cr, the largest stop on offer
+   * could not buy even two thirds of the answer, and the top of the range said
+   * nothing about the network on screen.
+   *
+   * Live, they are derived: fractions of what stabilising every fundable
+   * supplier actually costs, so the last stop is always "enough for all of it"
+   * and the first is always "barely anything", whatever the dataset. Offline
+   * they are read from the committed runs themselves rather than from a
+   * constant that has to be kept in step with them — a stop the mocks cannot
+   * answer is a dead button.
+   */
+  async budgetLevels(totalCostCr: number, network?: NetworkOverride): Promise<number[]> {
+    if (LIVE) {
+      const total = totalCostCr > 0 ? totalCostCr : 1;
+      // Round to something a person would say out loud, then de-duplicate: on
+      // a small network several fractions land on the same figure.
+      const round = (value: number) =>
+        value >= 20 ? Math.round(value) : value >= 5 ? Math.round(value * 2) / 2 : Math.round(value * 10) / 10;
+      const stops = [0.1, 0.25, 0.5, 0.75, 1].map((share) => round(total * share));
+      return [...new Set(stops)].filter((stop) => stop > 0).sort((a, b) => a - b);
+    }
+    const runs = network
+      ? ((await import('../mocks/ingest-allocate.json')).default as unknown as AllocateResponse[])
+      : ((await import('../mocks/allocate.json')).default as unknown as AllocateResponse[]);
+    return runs.map((run) => run.budget_cr).sort((a, b) => a - b);
+  },
+
   async allocate(budgetCr: number, network?: NetworkOverride): Promise<AllocateResponse> {
     if (LIVE) {
       return post<AllocateResponse>('/api/allocate', {

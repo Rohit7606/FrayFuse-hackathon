@@ -75,6 +75,22 @@ interface QueueRow {
   score: Score;
 }
 
+/**
+ * How much of the anchor's inbound value this supplier is holding up.
+ *
+ * Printed at nought decimals, ₹0.4 cr came out as "₹0 cr at risk", which next
+ * to a ₹1.3 cr price tag reads as a missing figure rather than a small one. A
+ * genuine zero — a supplier that routes nothing to any anchor in this dataset,
+ * which several in the collected network do — says so in words, because that
+ * is a different fact from a small number and the reader is entitled to tell
+ * them apart.
+ */
+function atRisk(exposureCr: number): string {
+  if (exposureCr <= 0) return 'nothing routed to an anchor';
+  if (exposureCr < 1) return `${cr(exposureCr, 1)} at risk`;
+  return `${cr(exposureCr, 0)} at risk`;
+}
+
 function collect(
   scores: Map<string, Score>,
   nodeById: Map<string, Node>,
@@ -92,10 +108,31 @@ function collect(
     cost += row.intervention_cost_cr;
     exposure += row.estimated_exposure_cr;
   }
-  // Worst first, ties on node_id — the engine's own tiebreak.
-  all.sort(
-    (a, b) => b.score.final_score - a.score.final_score || a.nodeId.localeCompare(b.nodeId),
-  );
+  if (queue === 'fund_now') {
+    // What the money buys, worst first — the optimiser's own criterion.
+    //
+    // This column used to order on final_score like the other one, which reads
+    // the supplier's risk rather than the value of rescuing it. On the
+    // collected dataset several fragile, irreplaceable suppliers route nothing
+    // to an anchor at all, so they have zero exposure; ordering on risk put
+    // them at the top of a queue headed "money is the answer", asking for
+    // ₹6.95 cr against ₹0 at risk, directly above an optimiser that then
+    // declines to fund them and hands the money back. Both were right and the
+    // pair read as a contradiction. Ordering on exposure removed per rupee
+    // makes the list agree with the allocation underneath it.
+    all.sort(
+      (a, b) =>
+        b.score.estimated_exposure_cr / Math.max(b.score.intervention_cost_cr, 0.01) -
+          a.score.estimated_exposure_cr / Math.max(a.score.intervention_cost_cr, 0.01) ||
+        b.score.final_score - a.score.final_score ||
+        a.nodeId.localeCompare(b.nodeId),
+    );
+  } else {
+    // Worst first, ties on node_id — the engine's own tiebreak.
+    all.sort(
+      (a, b) => b.score.final_score - a.score.final_score || a.nodeId.localeCompare(b.nodeId),
+    );
+  }
   return { rows: all.slice(0, limit), total: all.length, cost, exposure };
 }
 
@@ -161,9 +198,7 @@ export function QueueBoard({
               </span>
               <span className="ff-queue-figs">
                 <span>{cr(row.score.intervention_cost_cr)}</span>
-                <span className="ff-queue-exposure">
-                  {cr(row.score.estimated_exposure_cr, 0)} at risk
-                </span>
+                <span className="ff-queue-exposure">{atRisk(row.score.estimated_exposure_cr)}</span>
               </span>
             </button>
           ))}

@@ -22,7 +22,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import './console.css';
-import { BUDGET_LEVELS, STRESS_LEVELS, api, type StressStep } from './api';
+import { STRESS_LEVELS, api, type StressStep } from './api';
 import { PAPER } from './lib/bands';
 import {
   anchorAtRisk,
@@ -70,6 +70,15 @@ import type {
 const WAVE_MS = 900;
 
 const STEP_INDEX = new Map(STEPS.map((step, index) => [step.id, index]));
+
+/**
+ * Beats where clicking a supplier is something the reader does, and therefore
+ * where the panel owes them that supplier's figures.
+ *
+ * The first two beats are about the shape of the chain rather than any one
+ * company, and the evidence beat is already one company in full.
+ */
+const SELECTABLE_STEPS = new Set<StepId>(['cascade', 'rank', 'path', 'act', 'allocate']);
 
 function BrandMark() {
   return (
@@ -145,6 +154,12 @@ export default function Console({ ingested, onBuildPage }: Props) {
   const [fundableNode, setFundableNode] = useState<string | null>(null);
 
   const [budgetIndex, setBudgetIndex] = useState(2);
+  /**
+   * The stops this network's optimiser offers. Derived from what stabilising
+   * its funding queue actually costs, so the ladder means something on a
+   * dataset other than the one it was first written against.
+   */
+  const [budgetLevels, setBudgetLevels] = useState<number[]>([]);
   const [allocation, setAllocation] = useState<AllocateResponse | null>(null);
   const [allocating, setAllocating] = useState(false);
   const [allocError, setAllocError] = useState<string | null>(null);
@@ -295,7 +310,8 @@ export default function Console({ ingested, onBuildPage }: Props) {
   }, [baseline, demo, ingested, index]);
 
   const triggerNode = plan?.trigger ?? null;
-  const activeTriggerId = selectedId ?? triggerNode;
+  /** The node the what-if would target if the data could answer for it. */
+  const preferredTrigger = selectedId ?? triggerNode;
 
   /** The network every scenario request carries, or undefined for the default. */
   const networkOverride = useMemo(
@@ -323,17 +339,32 @@ export default function Console({ ingested, onBuildPage }: Props) {
   // cannot read true for a new target while its own check is still in flight.
   const [sweepableNode, setSweepableNode] = useState<string | null>(null);
   useEffect(() => {
-    if (!activeTriggerId) return;
+    if (!preferredTrigger) return;
     let cancelled = false;
-    api.canSweep(activeTriggerId, networkOverride).then(
-      (ok) => !cancelled && setSweepableNode(ok ? activeTriggerId : null),
+    api.canSweep(preferredTrigger, networkOverride).then(
+      (ok) => !cancelled && setSweepableNode(ok ? preferredTrigger : null),
       () => !cancelled && setSweepableNode(null),
     );
     return () => {
       cancelled = true;
     };
-  }, [activeTriggerId, networkOverride]);
-  const sweepable = activeTriggerId !== null && sweepableNode === activeTriggerId;
+  }, [preferredTrigger, networkOverride]);
+
+  /**
+   * The node the what-if actually simulates.
+   *
+   * Live, the engine scores whatever it is handed and this is always the
+   * selection. Offline there is one committed sweep, and the control used to
+   * be hidden outright for every other supplier — which read as the slider
+   * vanishing whenever you clicked the wrong company, a worse answer than the
+   * wrong numbers it was protecting against.
+   *
+   * So it falls back to the trigger the sweep was built around instead of
+   * disappearing. The label prints whichever node this resolves to, so the bar
+   * always names the company it is really simulating.
+   */
+  const activeTriggerId =
+    preferredTrigger !== null && sweepableNode === preferredTrigger ? preferredTrigger : triggerNode;
 
   /** The slider's home position: the trigger's own filed stress. */
   const baselineLevelIndex = useMemo(() => {
@@ -377,6 +408,28 @@ export default function Console({ ingested, onBuildPage }: Props) {
 
   const scores = useMemo(() => scoresById(scored?.scores ?? []), [scored]);
   const summary = scored?.summary ?? null;
+
+  // The optimiser's stops, once this network has told us what it costs to
+  // stabilise. Read off the BASELINE rather than the scenario on screen, so
+  // dragging the what-if slider does not renumber the budget chips underneath
+  // the reader's cursor.
+  const totalStabiliseCost = baseline?.summary.total_intervention_cost_cr ?? 0;
+  useEffect(() => {
+    if (totalStabiliseCost <= 0) return;
+    let cancelled = false;
+    api.budgetLevels(totalStabiliseCost, networkOverride).then(
+      (levels) => {
+        if (cancelled || levels.length === 0) return;
+        setBudgetLevels(levels);
+        // Keep the selection inside the new ladder.
+        setBudgetIndex((current) => Math.min(current, levels.length - 1));
+      },
+      () => {},
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [totalStabiliseCost, networkOverride]);
   const ranking = useMemo(() => scored?.ranking ?? [], [scored]);
 
   const waves = useMemo(
@@ -608,7 +661,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
     setAllocating(true);
     setAllocError(null);
     try {
-      setAllocation(await api.allocate(BUDGET_LEVELS[budgetIndex], networkOverride));
+      setAllocation(await api.allocate(budgetLevels[budgetIndex], networkOverride));
       // The graph marks what the money moved, on the same clock the single
       // funding uses.
       setFundedAt(performance.now());
@@ -618,7 +671,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
     } finally {
       setAllocating(false);
     }
-  }, [budgetIndex, networkOverride]);
+  }, [budgetIndex, budgetLevels, networkOverride]);
 
   const toggleWatch = useCallback((nodeId: string) => {
     setWatchlist((current) =>
@@ -716,7 +769,10 @@ export default function Console({ ingested, onBuildPage }: Props) {
     step !== 'act' &&
     step !== 'allocate' &&
     summary !== null &&
-    sweepable;
+    // Resolves to the committed trigger rather than to nothing when the
+    // selected supplier has no sweep, so the control does not come and go as
+    // the reader clicks around the graph.
+    activeTriggerId !== null;
 
   const caption = (() => {
     switch (step) {
@@ -1150,7 +1206,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
           {/* ---- 08 ALLOCATE: budget allocation ---- */}
           {step === 'allocate' && (
             <BudgetPanel
-              budgets={BUDGET_LEVELS}
+              budgets={budgetLevels}
               budgetIndex={budgetIndex}
               result={allocation}
               busy={allocating}
@@ -1205,7 +1261,7 @@ export default function Console({ ingested, onBuildPage }: Props) {
             also carries the supplier's own numbers, so nothing is lost by the
             dossier standing down there.
           */}
-          {selectedNode && index && step === 'path' && (
+          {selectedNode && index && SELECTABLE_STEPS.has(step) && (
             <Dossier
               node={selectedNode}
               score={scores.get(selectedNode.node_id)}

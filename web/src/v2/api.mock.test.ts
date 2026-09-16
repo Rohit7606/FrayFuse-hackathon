@@ -43,6 +43,20 @@ describe('offline decision layer', () => {
     expect(plan.recommended_action.amount_cr ?? null).toBeNull();
   });
 
+  it('offers exactly the budget stops the committed runs can answer', async () => {
+    // The stops are derived from the network live, and read off the committed
+    // runs offline. Reading them from a constant instead is what lets the two
+    // drift into a chip that throws when pressed.
+    const offered = await api.budgetLevels(999);
+    const committed = [...BUDGET_LEVELS].sort((a, b) => a - b);
+    expect(offered).toEqual(committed);
+
+    for (const budget of offered) {
+      const run = await api.allocate(budget);
+      expect(run.budget_cr).toBe(budget);
+    }
+  });
+
   it('has a committed allocation for every budget stop the UI offers', async () => {
     for (const budget of BUDGET_LEVELS) {
       const run = await api.allocate(budget);
