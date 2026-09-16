@@ -71,15 +71,6 @@ const WAVE_MS = 900;
 
 const STEP_INDEX = new Map(STEPS.map((step, index) => [step.id, index]));
 
-/**
- * Beats where clicking a supplier is something the reader does, and therefore
- * where the panel owes them that supplier's figures.
- *
- * The first two beats are about the shape of the chain rather than any one
- * company, and the evidence beat is already one company in full.
- */
-const SELECTABLE_STEPS = new Set<StepId>(['cascade', 'rank', 'path', 'act', 'allocate']);
-
 function BrandMark() {
   return (
     <svg className="ff-brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -1255,13 +1246,22 @@ export default function Console({ ingested, onBuildPage }: Props) {
             ways invites the reader to check whether it is really the same
             figure.
 
-            So each block gets one beat and one job. The dossier is what drives
-            this supplier, and belongs to the beat that asks why it matters. The
-            plan is a decision, and belongs to the beat that acts — where it
-            also carries the supplier's own numbers, so nothing is lost by the
-            dossier standing down there.
+            The plan is the block that moves: it is a decision, so it belongs to
+            the beat that acts, where it carries the supplier's own numbers
+            anyway. The queue board belongs to the beat that triages, and the
+            ranking is not repeated underneath later beats.
+
+            The dossier does NOT move. Clicking a supplier is a request for that
+            supplier's figures, and the answer cannot depend on which beat the
+            reader happens to be standing on. Restricting it to the beats where
+            selecting "is the activity" looked reasonable and was wrong in
+            practice: on the evidence beat the selection updated, the graph
+            highlighted the node, the what-if retargeted to it — and the panel
+            showed nothing, so clicking simply appeared broken. A control that
+            answers on five beats out of eight is harder to trust than one that
+            always answers.
           */}
-          {selectedNode && index && SELECTABLE_STEPS.has(step) && (
+          {selectedNode && index && (
             <Dossier
               node={selectedNode}
               score={scores.get(selectedNode.node_id)}
