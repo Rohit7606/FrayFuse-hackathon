@@ -56,7 +56,14 @@ try {
         Start-Sleep -Milliseconds 500
         if ($api.HasExited) { throw "API exited during startup (exit $($api.ExitCode))" }
         try {
-            Invoke-RestMethod "http://localhost:$Port/health" -TimeoutSec 2 | Out-Null
+            # 127.0.0.1, not localhost. uvicorn binds IPv4 only, and on Windows
+            # localhost resolves to ::1 first — so this call times out against
+            # an address nothing is listening on while the server sits there
+            # answering. The symptom is the worst kind: /health logs 200 OK
+            # nineteen times and the script still concludes the API never came
+            # up, then kills it in the finally block. Same trap eea6744 removed
+            # from the other scripts; this one was missed.
+            Invoke-RestMethod "http://127.0.0.1:$Port/health" -TimeoutSec 2 | Out-Null
             $up = $true
             break
         } catch { }
